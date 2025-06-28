@@ -19,7 +19,7 @@
         </a>
         <!-- Dropdown Menu -->
         <div class="absolute left-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-            <a href="/find-doctor" class="block px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800">Doctor</a>
+            <a href="{{route('our-doctors')}}" class="block px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800">Doctor</a>
             <a href="/find-hospital" class="block px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800">Hospital</a>
             <a href="/find-clinic" class="block px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800">Clinic</a>
         </div>
