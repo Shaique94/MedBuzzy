@@ -24,9 +24,7 @@
             <a href="/find-clinic" class="block px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800">Clinic</a>
         </div>
     </div>
-
-    <a href="/services" class="text-gray-600 hover:text-gray-800">Services</a>
-    <a href="/contact" class="text-gray-600 hover:text-gray-800">Contact</a>
+    <a href="{{route('contact-us')}}" class="text-gray-600 hover:text-gray-800">Contact</a>
 </nav>
 
         <!-- Call to Action -->
