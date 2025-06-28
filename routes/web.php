@@ -1,7 +1,7 @@
 <?php
 
+use App\Livewire\Public\Hero;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Public Routes
+Route::get('/',Hero::class)->name('hero');
