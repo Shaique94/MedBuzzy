@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Admin\Sections\Dashboard;
+use App\Livewire\Admin\Sections\ManageDoctor;
 use App\Livewire\Public\Contact\ContactUs;
 use App\Livewire\Public\Hero;
 use App\Livewire\Public\LandingPage;
@@ -15,3 +16,4 @@ Route::get('/contact-us',ContactUs::class)->name('contact-us');
 
 // Admin Routes
 Route::get('/admin/dashboard', Dashboard::class)->name('admin.dashboard');
+Route::get('/admin/manage-doctors', ManageDoctor::class)->name('admin.appointments');
