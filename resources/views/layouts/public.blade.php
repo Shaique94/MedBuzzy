@@ -6,29 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="https://cdn.tailwindcss.com"></script>
-   
+
     <meta property="og:url" content="{{ url()->current() }}">
     <link rel="canonical" href="{{ url()->current() }}">
 
-   
+
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 
 </head>
+<body class="flex flex-col min-h-screen">
+    <!-- Header -->
+    <livewire:public.header />
 
-<body >
- <livewire:public.header />
+    <!-- Page Content -->
+    <main class="flex-grow">
+        {{ $slot }}
+    </main>
 
-        <!-- Page Content -->
-        <main>
-            {{ $slot }}
-        </main>
-
-<livewire:public.footer />
+    <!-- Footer -->
+    <livewire:public.footer />
     @livewireScripts
-
 </body>
 
 </html>
