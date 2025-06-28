@@ -25,7 +25,6 @@
         <main>
             {{ $slot }}
         </main>
-    <livewire:public.about-us />
 
 <livewire:public.footer />
     @livewireScripts

@@ -8,6 +8,7 @@ use Livewire\Component;
 class AboutUs extends Component
 {
 
+    #[Layout('layouts.public')]
     public function render()
     {
         return view('livewire.public.about-us');
