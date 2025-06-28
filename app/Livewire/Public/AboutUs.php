@@ -5,11 +5,11 @@ namespace App\Livewire\Public;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
-class Header extends Component
+class AboutUs extends Component
 {
 
     public function render()
     {
-        return view('livewire.public.header');
+        return view('livewire.public.about-us');
     }
 }

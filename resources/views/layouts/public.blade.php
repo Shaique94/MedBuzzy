@@ -10,10 +10,7 @@
     <meta property="og:url" content="{{ url()->current() }}">
     <link rel="canonical" href="{{ url()->current() }}">
 
-    <meta name="description"
-        content="Healing Touch Hospital, Linebazar, Purnea offers online appointments, specialist doctors, and complete healthcare services.">
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+   
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -21,13 +18,16 @@
 
 </head>
 
-<body class="font-sans antialiased">
+<body >
  <livewire:public.header />
 
         <!-- Page Content -->
         <main>
             {{ $slot }}
         </main>
+    <livewire:public.about-us />
+
+<livewire:public.footer />
     @livewireScripts
 
 </body>
