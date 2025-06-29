@@ -8,8 +8,8 @@
             <a href="/admin/dashboard" class="block text-gray-700 hover:text-blue-600 font-semibold">
                 Dashboard
             </a>
-            <a href="/admin/users" class="block text-gray-700 hover:text-blue-600 font-semibold">
-                Manage Users
+            <a href="{{route('admin.departments')}}" class="block text-gray-700 hover:text-blue-600 font-semibold">
+                Manage Departments
             </a>
             <a href="{{route('admin.appointments')}}" class="block text-gray-700 hover:text-blue-600 font-semibold">
                 Manage Doctors
