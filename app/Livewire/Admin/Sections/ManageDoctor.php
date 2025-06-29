@@ -41,17 +41,15 @@ class ManageDoctor extends Component
             'password' => bcrypt('password'),
             'phone' => $this->phone,
         ]);
-        // Assuming you have a Doctor model that relates to User
-        // You can create a doctor record here after creating the user
-        // Example:
+        
         $doctor = Doctor::create([
             'user_id' => $user->id,
             'department_id' => $this->department_id,
             'fees' => $this->fees,
-            'status' => 1, // Assuming status is active by default
-            'image' => null, // Handle image upload if needed
-            'qualification' => null, // Handle qualification if needed
-            'slug' => Str::Slug($this->name), // Generate a slug from the name
+            'status' => 1, 
+            'image' => null, 
+            'qualification' => null,
+            'slug' => Str::Slug($this->name),
         ]);
        
         $this->reset(['name', 'email', 'phone', 'fees', 'department_id', 'showModal']);
