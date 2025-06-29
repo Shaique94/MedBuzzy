@@ -3,7 +3,7 @@
 
     <!-- Add Doctor Button -->
     <div class="mb-6">
-        <a href="/admin/doctors/create" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+        <a wire:click="create" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
             Add New Doctor
         </a>
     </div>
