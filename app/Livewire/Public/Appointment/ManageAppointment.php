@@ -109,7 +109,7 @@ class ManageAppointment extends Component
         $appointment = Appointment::create([
             'doctor_id' => $this->doctor_id,
             'patient_id' => $patient->id,
-            'appointment_date' => $this->appointment_date ?? now()->toDateString(),
+            'appointment_date' => $this->appointment_date ?? now()->addDay()->toDateString(),
             'appointment_time' => $this->slot_enabled ? $this->appointment_time : now()->format('H:i'),
             'notes' => $this->notes,
             'status' => 'scheduled',
@@ -118,10 +118,6 @@ class ManageAppointment extends Component
         $doctor = Doctor::find($this->doctor_id);
         $amount = $doctor && isset($doctor->fee) ? $doctor->fee : 0;
 
-        // $method = strtolower($this->payment_method);
-        // if ($method === 'cod') {
-        //     $method = 'cash';
-        // }
 
         Payment::create([
             'appointment_id' => $appointment->id,
@@ -133,7 +129,7 @@ class ManageAppointment extends Component
         ]);
 
         session()->flash('success', 'Appointment booked successfully!');
-        return redirect()->back();
+        return redirect()->route('appointment');
     }
     #[Layout('layouts.public')]
     public function render()
