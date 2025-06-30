@@ -94,8 +94,7 @@ class ManageAppointment extends Component
     {
         $this->validateStep(4);
 
-     
-
+     //appoint booking logic
         $patient = Patient::create([
             'name' => $this->newPatient['name'],
             'email' => $this->newPatient['email'],
