@@ -46,91 +46,24 @@
         <main class="md:w-3/4 overflow-y-auto pr-2">
             <h2 class="text-2xl font-bold mb-6">Our Doctors</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+               
                 <!-- Doctor Card -->
+                @forelse($doctors as $doctor)
                 <div class="bg-white p-4 rounded-lg shadow-lg">
                     <img src="/images/doctor-placeholder.jpg" alt="Doctor" class="w-full h-40 object-cover rounded-lg mb-4">
-                    <h3 class="text-xl font-bold text-gray-800">Dr. John Doe</h3>
-                    <p class="text-gray-600">Cardiologist</p>
+                    <h3 class="text-xl font-bold text-gray-800">{{$doctor->user->name}}</h3>
+                    <p class="text-gray-600">{{$doctor->department->name}}</p>
                     <p class="text-gray-600 text-sm">MBBS, MD - Cardiology</p>
                     <p class="text-gray-600 text-sm">10+ years of experience</p>
                     <button class="mt-4 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
                         Book Appointment
                     </button>
                 </div>
-
-                <!-- Doctor Card -->
-                <div class="bg-white p-4 rounded-lg shadow-lg">
-                    <img src="/images/doctor-placeholder.jpg" alt="Doctor" class="w-full h-40 object-cover rounded-lg mb-4">
-                    <h3 class="text-xl font-bold text-gray-800">Dr. John Doe</h3>
-                    <p class="text-gray-600">Cardiologist</p>
-                    <p class="text-gray-600 text-sm">MBBS, MD - Cardiology</p>
-                    <p class="text-gray-600 text-sm">10+ years of experience</p>
-                    <button class="mt-4 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
-                        Book Appointment
-                    </button>
+                @empty
+                <div class="bg-white p-4 rounded-lg shadow-lg col-span-3">
+                    <p class="text-gray-600 text-center">No doctors available at the moment.</p>
                 </div>
-
-                <!-- Doctor Card -->
-                <div class="bg-white p-4 rounded-lg shadow-lg">
-                    <img src="/images/doctor-placeholder.jpg" alt="Doctor" class="w-full h-40 object-cover rounded-lg mb-4">
-                    <h3 class="text-xl font-bold text-gray-800">Dr. John Doe</h3>
-                    <p class="text-gray-600">Cardiologist</p>
-                    <p class="text-gray-600 text-sm">MBBS, MD - Cardiology</p>
-                    <p class="text-gray-600 text-sm">10+ years of experience</p>
-                    <button class="mt-4 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
-                        Book Appointment
-                    </button>
-                </div>
-
-                <!-- Doctor Card -->
-                <div class="bg-white p-4 rounded-lg shadow-lg">
-                    <img src="/images/doctor-placeholder.jpg" alt="Doctor" class="w-full h-40 object-cover rounded-lg mb-4">
-                    <h3 class="text-xl font-bold text-gray-800">Dr. John Doe</h3>
-                    <p class="text-gray-600">Cardiologist</p>
-                    <p class="text-gray-600 text-sm">MBBS, MD - Cardiology</p>
-                    <p class="text-gray-600 text-sm">10+ years of experience</p>
-                    <button class="mt-4 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
-                        Book Appointment
-                    </button>
-                </div>
-
-
-                <!-- Doctor Card -->
-                <div class="bg-white p-4 rounded-lg shadow-lg">
-                    <img src="/images/doctor-placeholder.jpg" alt="Doctor" class="w-full h-40 object-cover rounded-lg mb-4">
-                    <h3 class="text-xl font-bold text-gray-800">Dr. John Doe</h3>
-                    <p class="text-gray-600">Cardiologist</p>
-                    <p class="text-gray-600 text-sm">MBBS, MD - Cardiology</p>
-                    <p class="text-gray-600 text-sm">10+ years of experience</p>
-                    <button class="mt-4 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
-                        Book Appointment
-                    </button>
-                </div>
-
-
-                <!-- Doctor Card -->
-                <div class="bg-white p-4 rounded-lg shadow-lg">
-                    <img src="/images/doctor-placeholder.jpg" alt="Doctor" class="w-full h-40 object-cover rounded-lg mb-4">
-                    <h3 class="text-xl font-bold text-gray-800">Dr. John Doe</h3>
-                    <p class="text-gray-600">Cardiologist</p>
-                    <p class="text-gray-600 text-sm">MBBS, MD - Cardiology</p>
-                    <p class="text-gray-600 text-sm">10+ years of experience</p>
-                    <button class="mt-4 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
-                        Book Appointment
-                    </button>
-                </div>
-
-                <!-- Doctor Card -->
-                <div class="bg-white p-4 rounded-lg shadow-lg">
-                    <img src="/images/doctor-placeholder.jpg" alt="Doctor" class="w-full h-40 object-cover rounded-lg mb-4">
-                    <h3 class="text-xl font-bold text-gray-800">Dr. John Doe</h3>
-                    <p class="text-gray-600">Cardiologist</p>
-                    <p class="text-gray-600 text-sm">MBBS, MD - Cardiology</p>
-                    <p class="text-gray-600 text-sm">10+ years of experience</p>
-                    <button class="mt-4 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
-                        Book Appointment
-                    </button>
-                </div>
+                @endforelse
             </div>
         </main>
     </div>
