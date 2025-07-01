@@ -26,7 +26,6 @@
             </div>
         </div>
     </div>
-
     <!-- Main Header -->
     <div class="container bg-white border-b shadow-sm mx-auto px-4 py-4">
         <div class="flex justify-between items-center">
