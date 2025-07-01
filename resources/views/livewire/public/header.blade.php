@@ -52,7 +52,7 @@
                             </svg>
                         </button>
                         <div class="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                            <a href="/find-doctor" class="block px-4 py-3 text-gray-600 hover:bg-brand-orange-50 hover:text-brand-orange-600 first:rounded-t-lg">Find Doctor</a>
+                            <a href="{{route('our-doctors')}}" class="block px-4 py-3 text-gray-600 hover:bg-brand-orange-50 hover:text-brand-orange-600 first:rounded-t-lg">Find Doctor</a>
                             <a href="/find-hospital" class="block px-4 py-3 text-gray-600 hover:bg-brand-orange-50 hover:text-brand-orange-600">Find Hospital</a>
                             <a href="/find-clinic" class="block px-4 py-3 text-gray-600 hover:bg-brand-orange-50 hover:text-brand-orange-600 last:rounded-b-lg">Find Clinic</a>
                         </div>
