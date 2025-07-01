@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    
+
     <!-- Tailwind CSS with full config -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -42,17 +42,14 @@
             }
         }
     </script>
-    
-    <!-- Custom CSS for gradients that definitely work -->
+
+    <!-- Custom CSS for gradients -->
     <style>
         .hero-gradient {
-            background: linear-gradient(135deg, #f0fdfa 0%, #ffffff 50%, #fff7ed 100%);
+            background: linear-gradient(135deg, #f0fdfa 0%, #ffffff 70%, #fff7ed 100%);
         }
         .search-gradient {
-            background: linear-gradient(135deg, #14b8a6 0%, #2dd4bf 100%);
-        }
-        .search-gradient-alt {
-            background: linear-gradient(to right, #0d9488, #14b8a6);
+            background: linear-gradient(90deg, #14b8a6 0%, #2dd4bf 100%);
         }
     </style>
 
@@ -62,9 +59,9 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
-
 </head>
-<body class="flex flex-col min-h-screen">
+
+<body class="flex flex-col min-h-screen bg-gray-50">
     <!-- Header -->
     <livewire:public.header />
 
