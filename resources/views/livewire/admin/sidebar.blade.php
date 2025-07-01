@@ -20,6 +20,12 @@
             <a href="/admin/settings" class="block text-gray-700 hover:text-blue-600 font-semibold">
                 Settings
             </a>
+            <form method="POST" action="{{ route('logout') }}" class="block">
+                @csrf
+                <button type="submit" class="text-gray-700 hover:text-blue-600 font-semibold w-full text-left">
+                    Logout
+                </button>
+            </form>
         </nav>
     </div>
 </aside>
