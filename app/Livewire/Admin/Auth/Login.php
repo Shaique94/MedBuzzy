@@ -12,16 +12,31 @@ class Login extends Component
 
     public function login()
     {
-        $this->validate([
+        $data = $this->validate([
             'email' => 'required|email',
             'password' => 'required|min:6',
         ]);
 
-        if (Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
-            return redirect()->route('admin.dashboard');
+        // if (Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
+        //     return redirect()->route('admin.dashboard');
+        // } else {
+        //     session()->flash('error', 'Invalid email or password.');
+        // }
+        if (Auth::attempt($data)) {
+            $user = Auth::user();
+
+            if ($user->role === 'admin') {
+                return redirect()->route('admin.dashboard');
+            } elseif ($user->role === 'doctor') {
+                return redirect()->route('doctor.dashboard');
+            } else {
+                Auth::logout();
+                return redirect()->back()->withErrors(['role' => 'Unauthorized role']);
+            }
         } else {
-            session()->flash('error', 'Invalid email or password.');
+            return redirect()->back()->withErrors(['email' => 'Invalid credentials']);
         }
+
     }
     #[Layout('layouts.public')]
 
