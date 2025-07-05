@@ -40,6 +40,8 @@ class ManageDoctor extends Component
             'email' => $this->email,
             'password' => bcrypt('password'),
             'phone' => $this->phone,
+             'role' => 'doctor',
+            
         ]);
         
         $doctor = Doctor::create([
