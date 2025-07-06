@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Sections;
 use App\Models\Department;
 use App\Models\Doctor;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Illuminate\Support\Str;
@@ -20,6 +21,8 @@ class ManageDoctor extends Component
     public $department_id;
     public $phone;
     public $fees;
+    public $password;
+    public $password_confirmation;
     public function mount()
     {
         $this->doctors = Doctor::all();
@@ -33,15 +36,15 @@ class ManageDoctor extends Component
             'department_id' => 'required|exists:departments,id',
             'phone' => 'required|string|max:15',
             'fees' => 'required|numeric',
+            'password' => 'required|string|min:6|confirmed',
         ]);
 
         $user = User::create([
             'name' => $this->name,
             'email' => $this->email,
-            'password' => bcrypt('password'),
+            'password' => Hash::make($this->password),
             'phone' => $this->phone,
              'role' => 'doctor',
-            
         ]);
         
         $doctor = Doctor::create([
@@ -54,7 +57,7 @@ class ManageDoctor extends Component
             'slug' => Str::Slug($this->name),
         ]);
        
-        $this->reset(['name', 'email', 'phone', 'fees', 'department_id', 'showModal']);
+        $this->reset(['name', 'email','password','password_confirmation','phone', 'fees', 'department_id', 'showModal']);
         $this->doctors = Doctor::all(); // Refresh the list of doctors
         session()->flash('message', 'Doctor saved successfully.');
     }
