@@ -91,7 +91,7 @@
                         </select>
                     </div>
                 </div>
-
+                @foreach ($doctors as $doctor)
                 <!-- Doctor Cards in Row -->
                 <div class="space-y-6 sm:space-y-8">
                     <!-- Doctor Card 1 -->
@@ -110,11 +110,11 @@
                         </div>
                         <div class="flex-1 ml-0 md:ml-6 mt-4 md:mt-0 w-full">
                             <div class="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-2 mb-1">
-                                <h3 class="text-base sm:text-lg font-bold text-teal-900">Dr. ABC Anand</h3>
+                                <h3 class="text-base sm:text-lg font-bold text-teal-900">{{$doctor->user->name ?? 'N/A'}}</h3>
                                 <span
-                                    class="bg-teal-100 text-teal-700 text-xs px-2 py-1 rounded-full font-semibold">Urologist</span>
+                                    class="bg-teal-100 text-teal-700 text-xs px-2 py-1 rounded-full font-semibold">{{$doctor->department->name}}</span>
                             </div>
-                            <p class="text-gray-500 mb-1 text-xs sm:text-base">Dr., MD, MDS</p>
+                            <p class="text-gray-500 mb-1 text-xs sm:text-base">{{$doctor->qualification ?? 'N/A'}}</p>
                             <div class="flex items-center gap-1 mb-1">
                                 <span class="flex text-yellow-400 text-base sm:text-lg">★★★★★</span>
                                 <span class="text-teal-700 font-semibold ml-1 text-xs sm:text-base">4.9</span>
@@ -138,114 +138,7 @@
                         <div class="text-right mt-4 md:mt-0 md:ml-6 flex flex-col items-end gap-1 sm:gap-2 w-full md:w-auto">
                             <span class="bg-green-100 text-green-700 px-2 sm:px-3 py-1 rounded-full text-xs font-semibold">98% Positive</span>
                             <span class="text-gray-500 text-xs sm:text-sm">17 Feedback</span>
-                            <span class="text-teal-700 font-bold text-base sm:text-lg">₹500</span>
-                            <div class="flex flex-col gap-1 sm:gap-2 mt-2 w-full md:w-auto">
-                                <button
-                                    class="bg-orange-500 text-white px-3 sm:px-4 py-2 rounded-lg font-semibold shadow hover:from-teal-600 hover:to-teal-500 transition text-xs sm:text-base">View Profile</button>
-                                <button
-                                    class="bg-teal-500 text-white px-3 sm:px-4 py-2 rounded-lg font-semibold shadow hover:from-teal-500 hover:to-teal-700 transition text-xs sm:text-base">Book Appointment</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Doctor Card 2 -->
-                    <div
-                        class="bg-white/95 p-4 sm:p-6 rounded-2xl shadow-xl flex flex-col md:flex-row items-center border border-teal-100 hover:shadow-2xl transition group">
-                        <div class="relative">
-                            <img src="https://via.placeholder.com/100" alt="Dr. D vb"
-                                class="w-20 h-20 sm:w-28 sm:h-28 rounded-full border-4 border-teal-100 shadow-md object-cover">
-                            <span class="absolute bottom-1 right-1 bg-teal-500 text-white rounded-full p-1 shadow"
-                                title="Verified">
-                                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2"
-                                    viewBox="0 0 24 24">
-                                    <path d="M5 13l4 4L19 7" />
-                                </svg>
-                            </span>
-                        </div>
-                        <div class="flex-1 ml-0 md:ml-6 mt-4 md:mt-0 w-full">
-                            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-2 mb-1">
-                                <h3 class="text-base sm:text-lg font-bold text-teal-900">Dr. D vb</h3>
-                                <span
-                                    class="bg-teal-100 text-teal-700 text-xs px-2 py-1 rounded-full font-semibold">Urologist</span>
-                            </div>
-                            <p class="text-gray-500 mb-1 text-xs sm:text-base">xv</p>
-                            <div class="flex items-center gap-1 mb-1">
-                                <span class="flex text-yellow-400 text-base sm:text-lg">★★★★★</span>
-                                <span class="text-teal-700 font-semibold ml-1 text-xs sm:text-base">4.9</span>
-                                <span class="text-gray-400 text-xs sm:text-sm">(17 reviews)</span>
-                            </div>
-                            <p class="text-gray-600 flex items-center gap-1 text-xs sm:text-base">
-                                <svg class="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" stroke-width="2"
-                                    viewBox="0 0 24 24">
-                                    <path
-                                        d="M17.657 16.657L13.414 12.414a4 4 0 10-5.657 5.657l4.243 4.243a8 8 0 1011.314-11.314l-4.243 4.243z" />
-                                </svg>
-                                Purnea, Bihar
-                            </p>
-                            <div class="flex space-x-2 mt-2 sm:mt-3">
-                                <img src="https://via.placeholder.com/50" alt="Service"
-                                    class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg shadow object-cover">
-                                <img src="https://via.placeholder.com/50" alt="Service"
-                                    class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg shadow object-cover">
-                            </div>
-                        </div>
-                        <div class="text-right mt-4 md:mt-0 md:ml-6 flex flex-col items-end gap-1 sm:gap-2 w-full md:w-auto">
-                            <span class="bg-green-100 text-green-700 px-2 sm:px-3 py-1 rounded-full text-xs font-semibold">98% Positive</span>
-                            <span class="text-gray-500 text-xs sm:text-sm">17 Feedback</span>
-                            <span class="text-teal-700 font-bold text-base sm:text-lg">₹500</span>
-                            <div class="flex flex-col gap-1 sm:gap-2 mt-2 w-full md:w-auto">
-                                <button
-                                    class="bg-orange-500 text-white px-3 sm:px-4 py-2 rounded-lg font-semibold shadow hover:from-teal-600 hover:to-teal-500 transition text-xs sm:text-base">View Profile</button>
-                                <button
-                                    class="bg-teal-500 text-white px-3 sm:px-4 py-2 rounded-lg font-semibold shadow hover:from-teal-500 hover:to-teal-700 transition text-xs sm:text-base">Book Appointment</button>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Doctor Card 1 (Duplicate) -->
-                    <div
-                        class="bg-white/95 p-4 sm:p-6 rounded-2xl shadow-xl flex flex-col md:flex-row items-center border border-teal-100 hover:shadow-2xl transition group">
-                        <div class="relative">
-                            <img src="https://via.placeholder.com/100" alt="Dr. ABC Anand"
-                                class="w-20 h-20 sm:w-28 sm:h-28 rounded-full border-4 border-teal-100 shadow-md object-cover">
-                            <span class="absolute bottom-1 right-1 bg-teal-500 text-white rounded-full p-1 shadow"
-                                title="Verified">
-                                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2"
-                                    viewBox="0 0 24 24">
-                                    <path d="M5 13l4 4L19 7" />
-                                </svg>
-                            </span>
-                        </div>
-                        <div class="flex-1 ml-0 md:ml-6 mt-4 md:mt-0 w-full">
-                            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-2 mb-1">
-                                <h3 class="text-base sm:text-lg font-bold text-teal-900">Dr. ABC Anand</h3>
-                                <span
-                                    class="bg-teal-100 text-teal-700 text-xs px-2 py-1 rounded-full font-semibold">Urologist</span>
-                            </div>
-                            <p class="text-gray-500 mb-1 text-xs sm:text-base">Dr., MD, MDS</p>
-                            <div class="flex items-center gap-1 mb-1">
-                                <span class="flex text-yellow-400 text-base sm:text-lg">★★★★★</span>
-                                <span class="text-teal-700 font-semibold ml-1 text-xs sm:text-base">4.9</span>
-                                <span class="text-gray-400 text-xs sm:text-sm">(17 reviews)</span>
-                            </div>
-                            <p class="text-gray-600 flex items-center gap-1 text-xs sm:text-base">
-                                <svg class="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" stroke-width="2"
-                                    viewBox="0 0 24 24">
-                                    <path
-                                        d="M17.657 16.657L13.414 12.414a4 4 0 10-5.657 5.657l4.243 4.243a8 8 0 1011.314-11.314l-4.243 4.243z" />
-                                </svg>
-                                Purnea, Bihar
-                            </p>
-                            <div class="flex space-x-2 mt-2 sm:mt-3">
-                                <img src="https://via.placeholder.com/50" alt="Service"
-                                    class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg shadow object-cover">
-                                <img src="https://via.placeholder.com/50" alt="Service"
-                                    class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg shadow object-cover">
-                            </div>
-                        </div>
-                        <div class="text-right mt-4 md:mt-0 md:ml-6 flex flex-col items-end gap-1 sm:gap-2 w-full md:w-auto">
-                            <span class="bg-green-100 text-green-700 px-2 sm:px-3 py-1 rounded-full text-xs font-semibold">98% Positive</span>
-                            <span class="text-gray-500 text-xs sm:text-sm">17 Feedback</span>
-                            <span class="text-teal-700 font-bold text-base sm:text-lg">₹500</span>
+                            <span class="text-teal-700 font-bold text-base sm:text-lg">{{$doctor->fees ?? 'N/A'}}</span>
                             <div class="flex flex-col gap-1 sm:gap-2 mt-2 w-full md:w-auto">
                                 <button
                                     class="bg-orange-500 text-white px-3 sm:px-4 py-2 rounded-lg font-semibold shadow hover:from-teal-600 hover:to-teal-500 transition text-xs sm:text-base">View Profile</button>
@@ -255,6 +148,7 @@
                         </div>
                     </div>
                 </div>
+                @endforeach
 
             </section>
         </div>
