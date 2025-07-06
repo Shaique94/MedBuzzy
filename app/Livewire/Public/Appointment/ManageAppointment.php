@@ -31,12 +31,28 @@ class ManageAppointment extends Component
     public $notes;
     public $available_payment_methods = [];
     public $slot_enabled;
+ 
 
     public function mount()
     {
         $this->doctors = Doctor::with('user')
             ->get();
         $this->available_payment_methods = ['cash', 'card', 'upi'];
+        
+        // Check if a specific doctor is passed via query string
+        if (request()->has('doctor_id')) {
+        $this->doctor_id = request()->query('doctor_id');
+
+        // Filter the doctors to show only the selected doctor
+        $this->doctors = $this->doctors->filter(function ($doctor) {
+            return $doctor->id == $this->doctor_id;
+        });
+
+        // If only one doctor is available, skip the "Choose Doctor" step
+        if ($this->doctors->count() === 1) {
+            $this->step = 2; // Move to the next step
+        }
+    }
        
     }
 
