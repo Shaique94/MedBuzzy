@@ -9,16 +9,23 @@
     </div>
 
     <!-- Navigation -->
-    <nav class="flex-1 p-4">
-        <a href="{{ route('doctor.dashboard') }}" class="flex items-center px-4 py-2 mt-2 text-gray-700 hover:bg-blue-100 rounded-lg transition">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <nav class="flex-1 p-4 space-y-1">
+        <a wire:navigate href="{{ route('doctor.dashboard') }}" class="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-100 rounded-lg transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6m-6 0l2 2m-2-2l-2 2m4 0v6" />
             </svg>
             Dashboard
         </a>
 
-      
-      
+        <!-- Create Manager -->
+        <a wire:navigate href="{{ route('doctor.create-manager') }}" class="flex items-center px-4 py-2 text-gray-700 hover:bg-green-100 rounded-lg transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            Create Manager
+        </a>
+
+        <!-- Add more doctor links here -->
     </nav>
 
     <!-- Logout -->
