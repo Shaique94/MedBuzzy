@@ -4,7 +4,9 @@ use App\Livewire\Admin\Auth\Login;
 use App\Livewire\Admin\Sections\Dashboard;
 use App\Livewire\Admin\Sections\ManageDepartment;
 use App\Livewire\Admin\Sections\ManageDoctor;
+use App\Livewire\Doctor\Section\Manager\CreateManger;
 use App\Livewire\Doctor\Section\Doctordashboard;
+use App\Livewire\Manager\Sections\Managerdashboard;
 use App\Livewire\Public\Appointment\ManageAppointment;
 use App\Livewire\Public\Contact\ContactUs;
 use App\Livewire\Public\Hero;
@@ -27,7 +29,15 @@ Route::get('/login', Login::class)->name('admin.dashboard');
 //doctor Routes
 Route::prefix('doctor')->group(function(){
 Route::get('/dashboard',Doctordashboard::class)->name('doctor.dashboard');
+Route::get('/manager',CreateManger::class)->name('doctor.create-manager');
 
+});
+
+
+//manager Routes
+
+Route::prefix('manager')->group(function(){
+    Route::get('/dashboard',Managerdashboard::class)->name('manager.dashboard');
 });
 
 
