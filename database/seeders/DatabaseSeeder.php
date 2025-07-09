@@ -20,9 +20,9 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Call PatientSeeder
-        $this->call(PatientSeeder::class);
-        //call appoinment
-        $this->call(AppointmentSeeder::class);
+        // $this->call(PatientSeeder::class);
+        // //call appoinment
+        // $this->call(AppointmentSeeder::class);
 
 
     }

@@ -3,7 +3,7 @@
     <div class="p-6 border-b flex items-center space-x-4">
         <img src="https://i.pravatar.cc/100?img=12" alt="Doctor Avatar" class="w-12 h-12 rounded-full object-cover">
         <div>
-            <h2 class="font-semibold text-gray-800 text-lg">Dr. John Doe</h2>
+            <h2 class="font-semibold text-gray-800 text-lg">{{$doctor->user->name}}</h2>
             <p class="text-gray-500 text-sm">Cardiologist</p>
         </div>
     </div>
