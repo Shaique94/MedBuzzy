@@ -1,17 +1,17 @@
 <?php
 
 namespace App\Livewire\Doctor\Section\Manager;
-
 use App\Models\Manager;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use Illuminate\Support\Facades\Hash;
+
 
 class CreateManger extends Component
 {
-    use WithFileUploads;
+     use WithFileUploads;
 
     public $showForm = false;
     public $name, $email, $phone, $address, $gender, $dob, $status = 'active', $photo;
@@ -21,8 +21,10 @@ class CreateManger extends Component
     #[Layout('layouts.doctor')]
     public function render()
     {
+        $doctor = auth()->user()->doctor;
+
         $managers = Manager::with('user')
-            ->where('doctor_id', auth()->id())
+            ->where('doctor_id', $doctor->id)
             ->latest()
             ->paginate(10);
 
@@ -57,22 +59,21 @@ class CreateManger extends Component
             'photo' => 'nullable|image|max:1024',
         ]);
 
-        // Create user
         $user = User::create([
             'name' => $this->name,
             'email' => $this->email,
             'phone' => $this->phone,
             'password' => Hash::make('password'), // Default password
             'role' => 'manager',
-
         ]);
 
         $photoPath = $this->photo ? $this->photo->store('manager_photos', 'public') : null;
 
-        // Create manager
+        $doctor = auth()->user()->doctor; // ✅ Get the actual doctor model
+
         Manager::create([
             'user_id' => $user->id,
-            'doctor_id' => auth()->id(),
+            'doctor_id' => $doctor->id, // ✅ Use doctor table ID, not user ID
             'address' => $this->address,
             'photo' => $photoPath,
             'gender' => $this->gender,
@@ -159,7 +160,6 @@ class CreateManger extends Component
 
     public function confirmDelete($id)
     {
-        // You can implement modal confirmation if needed
         $this->delete($id);
     }
 }
