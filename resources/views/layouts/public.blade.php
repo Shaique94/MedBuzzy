@@ -5,7 +5,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
     <!-- Tailwind CSS with full config -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -48,6 +47,7 @@
         .hero-gradient {
             background: linear-gradient(135deg, #f0fdfa 0%, #ffffff 70%, #fff7ed 100%);
         }
+
         .search-gradient {
             background: linear-gradient(90deg, #14b8a6 0%, #2dd4bf 100%);
         }
@@ -59,19 +59,29 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
+    <!-- Alpine.js for interactivity -->
+
+    {{-- <script src="//unpkg.com/alpinejs" defer></script> --}}
+
 </head>
 
 <body class="flex flex-col min-h-screen bg-gray-50">
-    <!-- Header -->
-    <livewire:public.header />
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col  transition-all duration-300">
 
-    <!-- Page Content -->
-    <main class="flex-grow">
-        {{ $slot }}
-    </main>
+        <!-- Header -->
+        <livewire:public.header />
 
-    <!-- Footer -->
-    <livewire:public.footer />
+        <!-- Page Content -->
+        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
+            <div class="container mx-auto px-6 py-8">
+                {{ $slot }}
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <livewire:public.footer />
+    </div>
     @livewireScripts
 </body>
 

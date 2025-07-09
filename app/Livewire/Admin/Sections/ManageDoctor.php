@@ -21,21 +21,25 @@ class ManageDoctor extends Component
     public $department_id;
     public $phone;
     public $fees;
+    public $qualification;
     public $password;
     public $password_confirmation;
+
     public function mount()
     {
         $this->doctors = Doctor::all();
         $this->departments = Department::all();
     }
 
-    public function save() {
+    public function save()
+    {
         $this->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email',
             'department_id' => 'required|exists:departments,id',
             'phone' => 'required|string|max:15',
             'fees' => 'required|numeric',
+            'qualification' => 'nullable|string|max:255',
             'password' => 'required|string|min:6|confirmed',
         ]);
 
@@ -44,23 +48,25 @@ class ManageDoctor extends Component
             'email' => $this->email,
             'password' => Hash::make($this->password),
             'phone' => $this->phone,
-             'role' => 'doctor',
+            'role' => 'doctor',
         ]);
-        
+
         $doctor = Doctor::create([
             'user_id' => $user->id,
             'department_id' => $this->department_id,
             'fees' => $this->fees,
-            'status' => 1, 
-            'image' => null, 
-            'qualification' => null,
-            'slug' => Str::Slug($this->name),
+            'qualification' => $this->qualification,
+            'status' => 1,
+            'image' => null,
+            'slug' => Str::slug($this->name),
         ]);
-       
-        $this->reset(['name', 'email','password','password_confirmation','phone', 'fees', 'department_id', 'showModal']);
-        $this->doctors = Doctor::all(); // Refresh the list of doctors
+
+        $this->reset(['name', 'email', 'password', 'password_confirmation', 'phone', 'fees', 'department_id', 'qualification', 'showModal']);
+        $this->doctors = Doctor::all(); // Refresh list
+
         session()->flash('message', 'Doctor saved successfully.');
     }
+
     #[Layout('layouts.admin')]
     public function render()
     {

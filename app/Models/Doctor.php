@@ -14,7 +14,11 @@ class Doctor extends Model
         'status',
         'image',
         'qualification',
-        'slug'
+        'slug',
+    ];
+
+    protected $casts = [
+        'qualification' => 'array',
     ];
 
     public function user()
