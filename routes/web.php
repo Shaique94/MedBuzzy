@@ -34,7 +34,7 @@ Route::get('/appointment/receipt/{appointment}', [\App\Http\Controllers\Appointm
 Route::get('/login', Login::class)->name('admin.dashboard');
 
 //doctor Routes
-Route::prefix('doctor')->group(function(){
+Route::prefix('doc')->group(function(){
 Route::get('/dashboard',Doctordashboard::class)->name('doctor.dashboard');
 Route::get('/manager',CreateManger::class)->name('doctor.create-manager');
 
