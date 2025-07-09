@@ -6,6 +6,7 @@ use App\Models\Appointment;
 use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Payment;
+use Illuminate\Support\Facades\Http;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -14,7 +15,8 @@ class ManageAppointment extends Component
     public $doctors;
     public int $step = 1;
 
-    // Form fields
+    public $pincode;
+
     public $doctor_id;
     public $appointment_date;
     public $appointment_time;
@@ -26,34 +28,26 @@ class ManageAppointment extends Component
         'gender' => '',
         'pincode' => '',
         'address' => '',
+        'district' => '',
+        'state' => '',
     ];
     public $payment_method;
     public $notes;
     public $available_payment_methods = [];
     public $slot_enabled;
- 
 
     public function mount()
     {
-        $this->doctors = Doctor::with('user')
-            ->get();
+        $this->doctors = Doctor::with('user')->get();
         $this->available_payment_methods = ['cash', 'card', 'upi'];
-        
-        // Check if a specific doctor is passed via query string
+
         if (request()->has('doctor_id')) {
-        $this->doctor_id = request()->query('doctor_id');
-
-        // Filter the doctors to show only the selected doctor
-        $this->doctors = $this->doctors->filter(function ($doctor) {
-            return $doctor->id == $this->doctor_id;
-        });
-
-        // If only one doctor is available, skip the "Choose Doctor" step
-        if ($this->doctors->count() === 1) {
-            $this->step = 2; // Move to the next step
+            $this->doctor_id = request()->query('doctor_id');
+            $this->doctors = $this->doctors->filter(fn($doctor) => $doctor->id == $this->doctor_id);
+            if ($this->doctors->count() === 1) {
+                $this->step = 2;
+            }
         }
-    }
-       
     }
 
     public function updatedDoctorId()
@@ -68,7 +62,36 @@ class ManageAppointment extends Component
         $this->generateAvailableSlots();
     }
 
-    
+    //  Integrate pincode API when pincode changes
+    public function updatedPincode($value)
+    {
+        if (strlen($value) === 6) {
+            $this->fetchPincodeDetails($value);
+        } else {
+            $this->newPatient['district'] = '';
+            $this->newPatient['state'] = '';
+        }
+    }
+
+    public function fetchPincodeDetails($pincode)
+    {
+        try {
+            $response = Http::get("https://api.postalpincode.in/pincode/{$pincode}");
+            $data = $response->json();
+
+            if ($data[0]['Status'] === 'Success' && !empty($data[0]['PostOffice'])) {
+                $postOffice = $data[0]['PostOffice'][0];
+                $this->newPatient['district'] = $postOffice['District'] ?? '';
+                $this->newPatient['state'] = $postOffice['State'] ?? '';
+            } else {
+                $this->newPatient['district'] = '';
+                $this->newPatient['state'] = '';
+            }
+        } catch (\Exception $e) {
+            $this->newPatient['district'] = '';
+            $this->newPatient['state'] = '';
+        }
+    }
 
     public function nextStep()
     {
@@ -76,14 +99,19 @@ class ManageAppointment extends Component
         $this->step++;
     }
 
+    public function previousStep()
+    {
+        if ($this->step > 1) {
+            $this->step--;
+        }
+    }
+
+
     protected function validateStep($step)
     {
         if ($step === 1) {
-            $rules = [
-                'doctor_id' => 'required|exists:doctors,id',
-            ];
             
-            $this->validate($rules);
+            $this->validate(['doctor_id' => 'required|exists:doctors,id']);
         }
 
         if ($step === 2) {
@@ -94,7 +122,7 @@ class ManageAppointment extends Component
                 'newPatient.gender' => 'required|string|in:male,female,other',
                 'newPatient.address' => 'required|string',
                 'newPatient.email' => 'nullable|email',
-                'newPatient.pincode' => 'nullable|digits_between:5,10',
+                'newPatient.pincode' => 'nullable|digits:6',
             ]);
         }
 
@@ -110,7 +138,6 @@ class ManageAppointment extends Component
     {
         $this->validateStep(4);
 
-     //appoint booking logic
         $patient = Patient::create([
             'name' => $this->newPatient['name'],
             'email' => $this->newPatient['email'],
@@ -118,7 +145,9 @@ class ManageAppointment extends Component
             'age' => $this->newPatient['age'],
             'gender' => $this->newPatient['gender'],
             'pincode' => $this->newPatient['pincode'],
-            'address' => $this->newPatient['address'],           
+            'address' => $this->newPatient['address'],
+            'district' => $this->newPatient['district'] ?? null,
+            'state' => $this->newPatient['state'] ?? null,
         ]);
 
         $appointment = Appointment::create([
@@ -133,7 +162,6 @@ class ManageAppointment extends Component
         $doctor = Doctor::find($this->doctor_id);
         $amount = $doctor && isset($doctor->fee) ? $doctor->fee : 0;
 
-
         Payment::create([
             'appointment_id' => $appointment->id,
             'patient_id' => $patient->id,
@@ -143,9 +171,10 @@ class ManageAppointment extends Component
             'transaction_id' => null,
         ]);
 
-        session()->flash('success', 'Appointment booked successfully!');
-        return redirect()->route('appointment');
+        // Redirect to confirmation page with appointment id
+        return redirect()->route('appointment.confirmation', ['appointment' => $appointment->id]);
     }
+
     #[Layout('layouts.public')]
     public function render()
     {
