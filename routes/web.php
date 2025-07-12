@@ -1,5 +1,9 @@
 <?php
 
+use App\Livewire\Admin\Appointment\Add;
+use App\Livewire\Admin\Appointment\All;
+use App\Livewire\Admin\Appointment\Update;
+use App\Livewire\Admin\Appointment\ViewDetails;
 use App\Livewire\Admin\Auth\Login;
 use App\Livewire\Admin\Sections\Dashboard;
 use App\Livewire\Admin\Sections\ManageDepartment;
@@ -55,8 +59,12 @@ Route::prefix('manager')->group(function(){
 
 Route::prefix('admin')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('admin.dashboard');
-    Route::get('/manage-doctors', ManageDoctor::class)->name('admin.appointments');
+    Route::get('/manage-doctors', ManageDoctor::class)->name('manage.doctors');
     Route::get('/manage-departments', ManageDepartment::class)->name('admin.departments');
+    Route::get('/appointment',All::class)->name('admin.appointment');
+    Route::get('/appointment/add',Add::class)->name('add.appointment');
+    Route::get('/appointment/update/{id}',Update::class)->name('update.appointment');
+    Route::get('/appointment/view/{id}',ViewDetails::class)->name('view.appointment');
 });
 
 

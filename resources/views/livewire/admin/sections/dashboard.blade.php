@@ -1,59 +1,159 @@
-<div class="min-h-screen flex flex-col bg-gray-100">
-    <!-- Header -->
-   
+ <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50">
+                <div class="container mx-auto px-4 py-6">
+                    <!-- Stats Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500">
+                            <div class="flex items-center">
+                                <div class="bg-blue-100 p-3 rounded-lg">
+                                    <i class="bi bi-calendar-check-fill fs-3 text-blue-600 text-xl"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-2xl font-bold text-gray-800">24</h3>
+                                    <p class="text-gray-600"> Appointments</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500">
+                            <div class="flex items-center">
+                                <div class="bg-green-100 p-3 rounded-lg">
+                                    <i class="bi bi-people-fill fs-3 text-green-600 text-xl"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-2xl font-bold text-gray-800">142</h3>
+                                    <p class="text-gray-600">Patients</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-amber-500">
+                            <div class="flex items-center">
+                                <div class="bg-amber-100 p-3 rounded-lg">
+                                    <i class="bi bi-heart-pulse-fill fs-3 text-amber-600 text-xl"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-2xl font-bold text-gray-800">32</h3>
+                                    <p class="text-gray-600">Doctors</p>
+                                </div>
+                                
+                            </div>
+                        </div>
 
-    <!-- Main Content -->
-    <div class="flex flex-grow">
-      
-        <!-- Dashboard Content -->
-        <main class="flex-grow p-6">
-            <h2 class="text-xl font-bold text-gray-800 mb-6">Welcome, Admin!</h2>
+                        <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-amber-500">
+                            <div class="flex items-center">
+                                <div class="bg-amber-100 p-3 rounded-lg">
+                                    <i class="bi bi-currency-rupee fs-3 text-amber-600 text-xl"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-2xl font-bold text-gray-800">32</h3>
+                                    <p class="text-gray-600">Revenue</p>
+                                </div>
+                                
+                            </div>
+                        </div>
+                       
+                    </div>                    
 
-            <!-- Stats Section -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                <div class="bg-white p-4 rounded-lg shadow-lg">
-                    <h3 class="text-lg font-semibold text-gray-800">Total Users</h3>
-                    <p class="text-2xl font-bold text-blue-600">1,234</p>
+                    <!-- Upcoming Appointments -->
+                    <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-lg font-bold text-gray-800">Upcoming Appointments</h2>
+                            <a href="#" class="text-blue-600 text-sm font-medium hover:underline">View All</a>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="text-left text-gray-500 border-b">
+                                    <tr>
+                                        <th class="pb-3 font-medium">Patient</th>
+                                        <th class="pb-3 font-medium">Time</th>
+                                        <th class="pb-3 font-medium">Type</th>
+                                        <th class="pb-3 font-medium">Status</th>
+                                        <th class="pb-3 font-medium">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y">
+                                    <tr>
+                                        <td class="py-4">
+                                            <div class="flex items-center">
+                                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=200&h=200&q=80" 
+                                                     class="w-10 h-10 rounded-full object-cover mr-3">
+                                                <div>
+                                                    <p class="font-medium text-gray-800">Robert Fox</p>
+                                                    <p class="text-sm text-gray-600">ID: #PT-0012</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="py-4">
+                                            <p class="font-medium">9:30 AM</p>
+                                            <p class="text-sm text-gray-600">Today</p>
+                                        </td>
+                                        <td class="py-4">
+                                            <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Consultation</span>
+                                        </td>
+                                        <td class="py-4">
+                                            <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Confirmed</span>
+                                        </td>
+                                        <td class="py-4">
+                                            <button class="text-blue-600 hover:text-blue-800">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-4">
+                                            <div class="flex items-center">
+                                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=200&h=200&q=80" 
+                                                     class="w-10 h-10 rounded-full object-cover mr-3">
+                                                <div>
+                                                    <p class="font-medium text-gray-800">Jenny Wilson</p>
+                                                    <p class="text-sm text-gray-600">ID: #PT-0034</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="py-4">
+                                            <p class="font-medium">10:45 AM</p>
+                                            <p class="text-sm text-gray-600">Today</p>
+                                        </td>
+                                        <td class="py-4">
+                                            <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">Follow Up</span>
+                                        </td>
+                                        <td class="py-4">
+                                            <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Confirmed</span>
+                                        </td>
+                                        <td class="py-4">
+                                            <button class="text-blue-600 hover:text-blue-800">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-4">
+                                            <div class="flex items-center">
+                                                <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=200&h=200&q=80" 
+                                                     class="w-10 h-10 rounded-full object-cover mr-3">
+                                                <div>
+                                                    <p class="font-medium text-gray-800">Jacob Jones</p>
+                                                    <p class="text-sm text-gray-600">ID: #PT-0078</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="py-4">
+                                            <p class="font-medium">1:15 PM</p>
+                                            <p class="text-sm text-gray-600">Today</p>
+                                        </td>
+                                        <td class="py-4">
+                                            <span class="bg-amber-100 text-amber-800 text-xs px-2 py-1 rounded-full">Checkup</span>
+                                        </td>
+                                        <td class="py-4">
+                                            <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Pending</span>
+                                        </td>
+                                        <td class="py-4">
+                                            <button class="text-blue-600 hover:text-blue-800">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <div class="bg-white p-4 rounded-lg shadow-lg">
-                    <h3 class="text-lg font-semibold text-gray-800">Total Doctors</h3>
-                    <p class="text-2xl font-bold text-blue-600">567</p>
-                </div>
-                <div class="bg-white p-4 rounded-lg shadow-lg">
-                    <h3 class="text-lg font-semibold text-gray-800">Appointments Today</h3>
-                    <p class="text-2xl font-bold text-blue-600">89</p>
-                </div>
-            </div>
-
-            <!-- Recent Appointments -->
-            <div class="bg-white p-6 rounded-lg shadow-lg">
-                <h3 class="text-lg font-bold text-gray-800 mb-4">Recent Appointments</h3>
-                <table class="w-full border-collapse border border-gray-200">
-                    <thead>
-                        <tr class="bg-gray-100">
-                            <th class="border border-gray-200 px-4 py-2 text-left">Patient</th>
-                            <th class="border border-gray-200 px-4 py-2 text-left">Doctor</th>
-                            <th class="border border-gray-200 px-4 py-2 text-left">Date</th>
-                            <th class="border border-gray-200 px-4 py-2 text-left">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="border border-gray-200 px-4 py-2">John Doe</td>
-                            <td class="border border-gray-200 px-4 py-2">Dr. Smith</td>
-                            <td class="border border-gray-200 px-4 py-2">2025-06-28</td>
-                            <td class="border border-gray-200 px-4 py-2 text-green-600">Confirmed</td>
-                        </tr>
-                        <tr>
-                            <td class="border border-gray-200 px-4 py-2">Jane Doe</td>
-                            <td class="border border-gray-200 px-4 py-2">Dr. Brown</td>
-                            <td class="border border-gray-200 px-4 py-2">2025-06-28</td>
-                            <td class="border border-gray-200 px-4 py-2 text-yellow-600">Pending</td>
-                        </tr>
-                        <!-- Add more rows as needed -->
-                    </tbody>
-                </table>
-            </div>
-        </main>
-    </div>
-</div>
+            </main>

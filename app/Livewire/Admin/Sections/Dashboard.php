@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\Sections;
 
+use App\Models\Appointment;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 

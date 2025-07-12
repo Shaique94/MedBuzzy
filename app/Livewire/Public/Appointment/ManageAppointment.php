@@ -63,7 +63,7 @@ class ManageAppointment extends Component
     }
 
     //  Integrate pincode API when pincode changes
-    public function updatedPincode($value)
+    public function updatedPincode($value) 
     {
         if (strlen($value) === 6) {
             $this->fetchPincodeDetails($value);
