@@ -118,7 +118,7 @@
                         class="w-full px-4 py-3 border {{ $errors->has('newPatient.email') ? 'border-red-500' : 'border-gray-300' }} rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition"
                         placeholder="john@example.com" />
                     @error('newPatient.email')
-                        <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                        <p class="mt-1 text-xs text-red-600">{{ $message}}</p>
                     @enderror
                 </div>
 
@@ -130,7 +130,7 @@
                         class="w-full px-4 py-3 border {{ $errors->has('newPatient.phone') ? 'border-red-500' : 'border-gray-300' }} rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition"
                         placeholder="+1 (555) 123-4567" />
                     @error('newPatient.phone')
-                        <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                        <p class="mt-1 text-xs text-red-600">{{ $message}}</p>
                     @enderror
                 </div>
 
@@ -142,7 +142,7 @@
                         class="w-full px-4 py-3 border {{ $errors->has('newPatient.age') ? 'border-red-500' : 'border-gray-300' }} rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition"
                         placeholder="30" min="0" />
                     @error('newPatient.age')
-                        <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                        <p class="mt-1 text-xs text-red-600">{{ $message}}</p>
                     @enderror
                 </div>
 
@@ -158,7 +158,7 @@
                         <option value="other">Other</option>
                     </select>
                     @error('newPatient.gender')
-                        <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                        <p class="mt-1 text-xs text-red-600">{{ $message}}</p>
                     @enderror
                 </div>
                 <div>
@@ -211,7 +211,7 @@
                         class="w-full px-4 py-3 border {{ $errors->has('newPatient.address') ? 'border-red-500' : 'border-gray-300' }} rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition"
                         placeholder="123 Main St, Apt 4B, City"></textarea>
                     @error('newPatient.address')
-                        <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                        <p class="mt-1 text-xs text-red-600">{{ $message}}</p>
                     @enderror
                 </div>
             </div>

@@ -6,31 +6,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <meta property="og:url" content="{{ url()->current() }}">
     <link rel="canonical" href="{{ url()->current() }}">
 
+    <style>
+        .sidebar-link:hover,
+        .sidebar-link.active {
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0) 100%);
+            border-left: 4px solid #3b82f6;
+        }
 
+        .notification-dot {
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #ef4444;
+        }
+
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+    </style>
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
-
 </head>
 
-
-
-<body class="bg-gray-100 font-sans antialiased">
+<body class="bg-gray-50 font-sans antialiased">
 
     <!-- Mobile Header with Toggle -->
-    <div class="md:hidden bg-white p-4 shadow flex items-center justify-between">
+    <div class="md:hidden bg-white p-4 shadow-md flex items-center justify-between sticky top-0 z-30">
         <button onclick="toggleSidebar()" class="text-gray-700">
-            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2"
-                 viewBox="0 0 24 24">
-                <path d="M4 6h16M4 12h16M4 18h16"/>
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M4 6h16M4 12h16M4 18h16" />
             </svg>
         </button>
-        <span class="font-semibold text-lg">Doctor Dashboard</span>
+        <span class="font-semibold text-lg text-blue-700">Doctor Dashboard</span>
+        <div class="relative">
+            <i class="fas fa-bell text-gray-600 text-xl"></i>
+            <span class="notification-dot"></span>
+        </div>
     </div>
 
     <!-- Page Container -->
@@ -46,14 +69,9 @@
             <livewire:admin.header />
 
             <!-- Page Content -->
-            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
-                <div class="container mx-auto px-6 py-8">
-                    {{ $slot }}
-                </div>
-            </main>
+            {{ $slot }}
 
             <!-- Footer -->
-            <livewire:admin.footer />
         </div>
     </div>
 
@@ -67,4 +85,5 @@
 
     @livewireScripts
 </body>
+
 </html>

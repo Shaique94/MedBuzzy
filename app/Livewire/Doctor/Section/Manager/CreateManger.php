@@ -4,6 +4,7 @@ namespace App\Livewire\Doctor\Section\Manager;
 use App\Models\Manager;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithFileUploads;
