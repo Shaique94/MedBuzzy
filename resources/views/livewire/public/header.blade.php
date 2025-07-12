@@ -58,8 +58,8 @@
                         </div>
                     </div>
                     <a href="/services" class="text-gray-700 hover:text-brand-teal-600 font-medium transition-colors">Services</a>
-                    <a href="/about" class="text-gray-700 hover:text-brand-teal-600 font-medium transition-colors">About</a>
-                    <a href="/contact" class="text-gray-700 hover:text-brand-teal-600 font-medium transition-colors">Contact</a>
+                    <a href="{{route('about-us')}}" class="text-gray-700 hover:text-brand-teal-600 font-medium transition-colors">About</a>
+                    <a href="{{route('contact-us')}}" class="text-gray-700 hover:text-brand-teal-600 font-medium transition-colors">Contact</a>
                 </nav>
 
                 <!-- Right Side Actions -->

@@ -14,6 +14,8 @@ use App\Livewire\Public\Hero;
 use App\Livewire\Public\LandingPage;
 use App\Livewire\Public\OurDoctors\OurDoctors;
 use App\Livewire\Public\OurDoctors\ViewDoctorDetail;
+use App\Livewire\Public\Section\About;
+use App\Livewire\Public\Section\Contact;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -29,7 +31,8 @@ Route::get('/appointment', ManageAppointment::class)->name('appointment');
 Route::get('/appointment/confirmation/{appointment}', AppointmentConfirmation::class)->name('appointment.confirmation');
 Route::get('/appointment/receipt/{appointment}', [\App\Http\Controllers\AppointmentReceiptController::class, 'download'])
     ->name('appointment.receipt');
-
+Route::get('/about-us',About::class)->name('about-us');
+Route::get('/contact-us',Contact::class)->name('contact-us');
 
 Route::get('/login', Login::class)->name('admin.dashboard');
 
