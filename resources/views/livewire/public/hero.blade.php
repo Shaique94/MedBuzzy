@@ -17,20 +17,36 @@
                     Connect with verified doctors and healthcare providers in your community
                 </p>
             </div>
+            <form wire:submit.prevent="search" class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                <!-- Location -->
+                <div class="md:col-span-2 rounded border ">
+                    <div class="relative ">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0zM15 11a3 3 0 11-6 0 3 3 0 016 0z">
+                                </path>
+                            </svg>
+                        </div>
+                        <select name="location" wire:model="location" disabled
+                            class="block w-full pl-10 pr-4 py-3 text-base border-gray-300 bg-gray-100 cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 rounded-lg">
+                            <option value="purnea">Purnea</option>
+                        </select>
+                    </div>
+                </div>
 
-            <!-- Search box -->
-            <form wire:submit.prevent="search" class="space-y-4 md:space-y-0 grid grid-cols-1 md:grid-cols-12 gap-4">
                 <!-- Specialty -->
                 <div class="md:col-span-3">
                     <div class="relative border rounded">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+                                    d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z">
+                                </path>
                             </svg>
                         </div>
                         <select name="specialty" wire:model.live="selectedDepartment"
-                            class="block w-full pl-10 pr-10 py-3 text-base border-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 rounded-lg">
+                            class="block w-full pl-10 pr-4 py-3 text-base border-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 rounded-lg">
                             <option value="">Select Specialty</option>
                             @foreach ($departments as $department)
                                 <option value="{{ $department->id }}">{{ $department->name }}</option>
@@ -40,7 +56,7 @@
                 </div>
 
                 <!-- Search input -->
-                <div class="md:col-span-8">
+                <div class="md:col-span-6">
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -57,7 +73,7 @@
                 <!-- Search button -->
                 <div class="md:col-span-1">
                     <button type="submit"
-                        class="w-full h-full flex items-center justify-center bg-brand-teal-600 text-white rounded-lg hover:bg-brand-teal-700 transition-colors">
+                        class="w-full h-full px-3 py-3 flex items-center justify-center bg-brand-teal-600 text-white rounded-lg hover:bg-brand-teal-700 transition-colors">
                         <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -65,6 +81,7 @@
                     </button>
                 </div>
             </form>
+
 
             <!-- CTA and stats -->
             <div class="flex flex-col lg:flex-row items-center justify-between gap-8 mt-12">
@@ -90,11 +107,11 @@
                 </div>
                 <div class="flex divide-x divide-gray-200 bg-white rounded-lg shadow-sm p-2">
                     <div class="px-6 py-3 text-center">
-                        <div class="text-2xl font-bold text-brand-teal-600">500+</div>
+                        <div class="text-2xl font-bold text-brand-teal-600">{{$totalDoctors}}+</div>
                         <div class="text-gray-600 text-sm font-medium">Verified Doctors</div>
                     </div>
                     <div class="px-6 py-3 text-center">
-                        <div class="text-2xl font-bold text-brand-teal-600">10k+</div>
+                        <div class="text-2xl font-bold text-brand-teal-600">{{$totalPatients}}+</div>
                         <div class="text-gray-600 text-sm font-medium">Happy Patients</div>
                     </div>
                     <div class="px-6 py-3 text-center">

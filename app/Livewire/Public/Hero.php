@@ -4,6 +4,7 @@ namespace App\Livewire\Public;
 
 use App\Models\Department;
 use App\Models\Doctor;
+use App\Models\Patient;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -14,10 +15,15 @@ class Hero extends Component
     public $departments;
     public $doctors;
 
+     public $totalDoctors;
+    public $totalPatients;
+
     public function mount()
     {
         $this->departments = Department::all();
         $this->doctors = Doctor::all();
+         $this->totalDoctors = Doctor::count();
+        $this->totalPatients = Patient::count();
     }
 
     public function search()
