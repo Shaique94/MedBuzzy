@@ -148,14 +148,16 @@
                         <!-- Doctor Image/Placeholder -->
                         <div
                             class="relative bg-gradient-to-br from-brand-orange-100 to-brand-orange-200 h-48 flex items-center justify-center">
-                            <div class="w-28 h-28 bg-white rounded-full flex items-center justify-center shadow-lg">
-                                <svg class="w-14 h-14 text-brand-orange-500" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                </svg>
-                            </div>
-
+                            <div
+                                    class="w-28 h-28 bg-white rounded-full flex items-center justify-center shadow-lg overflow-hidden border border-gray-200">
+                                    @if ($doctor->image)
+                                        <img src="{{ asset('storage/' . $doctor->image) }}"
+                                            alt="{{ $doctor->name }}'s Photo" class="w-full h-full object-cover">
+                                    @else
+                                        <!-- Fallback content if no image exists -->
+                                        <div class="text-gray-400 text-center p-2">No Photo</div>
+                                    @endif
+                                </div>
                             <!-- Verified Badge -->
                             <span
                                 class="absolute top-4 right-4 bg-brand-teal-500 text-white text-xs px-2.5 py-1 rounded-full flex items-center font-medium">

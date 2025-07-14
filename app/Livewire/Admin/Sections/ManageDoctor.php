@@ -9,10 +9,13 @@ use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Illuminate\Support\Str;
+use Livewire\WithFileUploads;
 
 
 class ManageDoctor extends Component
 {
+     use WithFileUploads;
+
     public $departments;
     public $doctors;
     public $showModal = false;
@@ -24,6 +27,7 @@ class ManageDoctor extends Component
     public $qualification;
     public $password;
     public $password_confirmation;
+    public $photo; // ➕ Add photo property
 
     public function mount()
     {
@@ -41,6 +45,7 @@ class ManageDoctor extends Component
             'fees' => 'required|numeric',
             'qualification' => 'nullable|string|max:255',
             'password' => 'required|string|min:6|confirmed',
+            'photo' => 'nullable|image|max:2048', // ➕ Validate image
         ]);
 
         $user = User::create([
@@ -51,18 +56,27 @@ class ManageDoctor extends Component
             'role' => 'doctor',
         ]);
 
+        // ➕ Handle image upload
+        $imagePath = null;
+        if ($this->photo) {
+            $imagePath = $this->photo->store('doctors', 'public');
+        }
+
         $doctor = Doctor::create([
             'user_id' => $user->id,
             'department_id' => $this->department_id,
             'fees' => $this->fees,
             'qualification' => $this->qualification,
             'status' => 1,
-            'image' => null,
+            'image' => $imagePath,
             'slug' => Str::slug($this->name),
         ]);
 
-        $this->reset(['name', 'email', 'password', 'password_confirmation', 'phone', 'fees', 'department_id', 'qualification', 'showModal']);
-        $this->doctors = Doctor::all(); // Refresh list
+        $this->reset([
+            'name', 'email', 'password', 'password_confirmation',
+            'phone', 'fees', 'department_id', 'qualification', 'photo', 'showModal'
+        ]);
+        $this->doctors = Doctor::all();
 
         session()->flash('message', 'Doctor saved successfully.');
     }
