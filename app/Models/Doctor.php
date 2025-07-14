@@ -15,6 +15,10 @@ class Doctor extends Model
         'image',
         'qualification',
         'slug',
+        'start_time',
+        'end_time',
+        'slot_duration_minutes',
+        'patients_per_slot',
     ];
 
     protected $casts = [
