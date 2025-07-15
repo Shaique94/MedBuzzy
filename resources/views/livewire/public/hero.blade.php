@@ -29,7 +29,7 @@
                             </svg>
                         </div>
                         <select name="location" wire:model="location" disabled
-                            class="block w-full pl-10 pr-4 py-3 text-base border-gray-300 bg-gray-100 cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 rounded-lg">
+                            class="w-full pl-8 pr-12 py-3 border border-teal-300 bg-white focus:outline-none focus:ring-2 focus:ring-teal-300 rounded-lg disabled:bg-slate-100 text-teal-800 placeholder-teal-600">
                             <option value="purnea">Purnea</option>
                         </select>
                     </div>
@@ -46,7 +46,7 @@
                             </svg>
                         </div>
                         <select name="specialty" wire:model.live="selectedDepartment"
-                            class="block w-full pl-10 pr-4 py-3 text-base border-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 rounded-lg">
+                            class="w-full pl-8 pr-12 py-3 border rounded-lg border-teal-300 bg-white focus:outline-none focus:ring-2 focus:ring-teal-300 disabled:bg-slate-200 text-teal-800 placeholder-teal-600">
                             <option value="">Select Specialty</option>
                             @foreach ($departments as $department)
                                 <option value="{{ $department->id }}">{{ $department->name }}</option>
@@ -66,7 +66,7 @@
                         </div>
                         <input type="text" name="search" wire:model.live="searchQuery"
                             placeholder="Search doctors by name, email, or qualification"
-                            class="block w-full pl-10 pr-4 py-3 border border-teal-300 focus:outline-none focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 rounded-lg">
+                            class="block w-full placeholder:text-teal-600 bg-white pl-10 pr-4 py-3 border border-teal-300 focus:outline-none focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 rounded-lg">
                     </div>
                 </div>
 
