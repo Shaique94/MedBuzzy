@@ -11,9 +11,9 @@
             <form wire:submit.prevent="loadDoctors" class="relative">
                 <div class="relative">
                     <input type="text" wire:model.live="searchQuery" placeholder="Search doctors by name, email, or qualification..."
-                        class="w-full pl-5 pr-12 py-3 border-0 rounded-full focus:outline-none focus:ring-2 focus:ring-teal-300 shadow-md text-teal-800 placeholder-teal-400">
+                        class="w-full pl-5 pr-12 py-3 border-2 border-teal-500 bg-white rounded-full focus:outline-none focus:ring-2 focus:ring-teal-300 shadow-md text-teal-800 placeholder-teal-400">
                     <button type="submit"
-                        class="absolute right-3 top-1/2 transform -translate-y-1/2 bg-teal-500 text-white p-2 rounded-full hover:bg-teal-600 transition">
+                        class="absolute right-3 top-2 transform bg-teal-500 text-white p-2 rounded-full hover:bg-teal-600 transition">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -45,7 +45,7 @@
                         <label class="block text-sm font-medium text-teal-700 mb-2">Specialty</label>
                         <div class="relative">
                             <select wire:model.live="department_id"
-                                class="block w-full pl-3 pr-10 py-2 text-base border-teal-200 focus:outline-none focus:ring-2 focus:ring-teal-300 focus:border-teal-300 rounded-lg shadow-sm">
+                                class="block w-full pl-3 pr-10 py-2 text-base border-teal-200 focus:outline-none focus:ring-2 border focus:ring-teal-300 focus:border-teal-300 rounded-lg shadow-sm">
                                 <option value="">All Specialties</option>
                                 @foreach ($departments as $department)
                                     <option value="{{ $department->id }}">{{ $department->name }}</option>
@@ -57,7 +57,7 @@
                         </div>
                     </div>
 
-                   
+
 
                     <button wire:click="loadDoctors"
                         class="w-full bg-teal-500 text-white py-3 rounded-lg font-semibold shadow-md hover:bg-teal-600 transition flex items-center justify-center gap-2">
@@ -83,7 +83,7 @@
                         </h2>
                         <div>
                             <select wire:model.live="sortBy"
-                                class="border-teal-200 rounded-lg shadow-sm focus:ring-teal-300 focus:border-teal-300 text-teal-700">
+                                class="border-teal-200 rounded-lg shadow-sm focus:ring-teal-300 focus:border-teal-300 text-teal-700 border px-3 py-2">
                                 <option value="name">Sort by: Name</option>
                                 <option value="rating">Sort by: Rating</option>
                                 <option value="experience">Sort by: Experience</option>
