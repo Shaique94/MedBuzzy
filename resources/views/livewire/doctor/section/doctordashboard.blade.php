@@ -13,9 +13,9 @@
 
 
             <div class="relative mb-4">
-    <input type="text" wire:model.live="search" 
-        class="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-beige-600" 
-        placeholder="Search patients...">
+   <input type="text" wire:model.live.debounce.300ms="search"
+       placeholder="Search by doctor, patient or ID..."
+        class="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-beige-600">
     <svg class="w-5 h-5 text-gray-400 absolute left-3 top-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
         <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" 
               stroke-width="2" stroke-linecap="round"/>
@@ -106,11 +106,55 @@
         </div>
 
         <!-- Upcoming Appointments -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-lg font-semibold text-gray-800">Upcoming Appointments</h2>
-                <a href="#" class="text-blue-600 text-sm font-medium">View All</a>
+       <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
+    <div class="p-4 sm:p-6 border-b border-gray-100 mb-6">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">Upcoming Appointments</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 ">
+        <!-- From Date -->
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1 sm:mb-2">From Date</label>
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="far fa-calendar text-gray-400"></i>
+                </div>
+                <input type="date" wire:model="fromDate"
+                    class="w-full pl-10 pr-4 py-2 sm:py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition shadow-sm text-sm sm:text-base">
             </div>
+        </div>
+
+        <!-- To Date -->
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1 sm:mb-2">To Date</label>
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="far fa-calendar text-gray-400"></i>
+                </div>
+                <input type="date" wire:model="toDate"
+                    class="w-full pl-10 pr-4 py-2 sm:py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition shadow-sm text-sm sm:text-base">
+            </div>
+        </div>
+
+        <!-- Apply / Reset Buttons -->
+        <div class="md:col-span-2 flex flex-wrap gap-2 sm:gap-3 items-end">
+            <button wire:click="loadAppointments"
+                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg transition flex items-center gap-2 shadow-md hover:shadow-lg text-sm sm:text-base">
+                <i class="fas fa-filter"></i>
+                <span>Apply Filters</span>
+            </button>
+     
+@if ($filtersApplied)
+    <button wire:click="resetFilters"
+        class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg transition flex items-center gap-2 shadow-sm hover:shadow-md text-sm sm:text-base">
+        <i class="fas fa-sync-alt"></i>
+        <span>Reset</span>
+    </button>
+@endif
+
+        </div>
+    </div>
+</div>
+
+            
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead>
@@ -176,8 +220,10 @@
                                             <button disabled
                                                 class="text-gray-400 cursor-not-allowed text-sm font-medium">Complete</button>
                                         @endif
-                                        <a href=""
-                                            class="text-blue-600 hover:text-blue-800 text-sm font-medium">View</a>
+                                     <button wire:click="showPatientDetails({{ $appointment->patient->id }})"
+    class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+    View
+</button>
                                     </div>
                                 </td>
                             </tr>
@@ -196,5 +242,7 @@
         @endif
 
 
+        @include('livewire.doctor.section.view-detail')
     </div>
+
 </div>

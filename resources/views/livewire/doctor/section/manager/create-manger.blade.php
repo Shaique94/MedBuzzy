@@ -77,6 +77,7 @@
                             <option value="">Select Gender</option>
                             <option value="male">Male</option>
                             <option value="female">Female</option>
+                         p
                             <option value="other">Other</option>
                         </select>
                         @error('gender') <span class="text-red-500 text-sm mt-1 block">{{ $message}}</span>@enderror
