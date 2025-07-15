@@ -3,23 +3,29 @@
 namespace App\Livewire\Public\Appointment;
 
 use App\Models\Appointment;
+use App\Models\Department;
 use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Payment;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 class ManageAppointment extends Component
 {
+    public $step = 1;
     public $doctors;
-    public int $step = 1;
-
-    public $pincode;
-
+    public $departments;
+    public $selectedDepartment = null;
     public $doctor_id;
+    public $selectedDoctor;
     public $appointment_date;
     public $appointment_time;
+    public $availableTimes = [];
+    public $timeSlotCounts = [];
+    public $pincode;
+
     public $newPatient = [
         'name' => '',
         'email' => '',
@@ -31,39 +37,182 @@ class ManageAppointment extends Component
         'district' => '',
         'state' => '',
     ];
+
     public $payment_method;
     public $notes;
-    public $available_payment_methods = [];
-    public $slot_enabled;
+    public $available_payment_methods = ['cash', 'card', 'upi'];
+    public $slot_enabled = true;
 
     public function mount()
     {
-        $this->doctors = Doctor::with('user')->get();
-        $this->available_payment_methods = ['cash', 'card', 'upi'];
+        $this->departments = Department::all();
+        $this->doctors = Doctor::with(['user', 'department'])->get();
 
         if (request()->has('doctor_id')) {
             $this->doctor_id = request()->query('doctor_id');
-            $this->doctors = $this->doctors->filter(fn($doctor) => $doctor->id == $this->doctor_id);
-            if ($this->doctors->count() === 1) {
+            $this->selectedDoctor = Doctor::with(['user', 'department'])
+                ->find($this->doctor_id);
+            if ($this->selectedDoctor) {
                 $this->step = 2;
             }
         }
     }
 
-    public function updatedDoctorId()
+    public function updatedSelectedDepartment($value)
     {
+        if ($value) {
+            $this->doctors = Doctor::with(['user', 'department'])
+                ->where('department_id', $value)
+                ->get();
+        } else {
+            $this->doctors = Doctor::with(['user', 'department'])->get();
+        }
+
+        $this->doctor_id = null;
+        $this->selectedDoctor = null;
         $this->appointment_date = null;
         $this->appointment_time = null;
+        $this->availableTimes = [];
+        $this->timeSlotCounts = [];
     }
 
-    public function updatedAppointmentDate()
+    // slots work
+    public $timeSlots = [];
+    public $availableSlots = [];
+
+    public function generateTimeSlots()
     {
-        $this->appointment_time = null;
-        $this->generateAvailableSlots();
+        if (!$this->selectedDoctor) {
+            return;
+        }
+
+        $startTime = Carbon::parse($this->selectedDoctor->start_time);
+        $endTime = Carbon::parse($this->selectedDoctor->end_time);
+        $duration = $this->selectedDoctor->slot_duration_minutes;
+
+        $this->timeSlots = [];
+        $this->availableSlots = [];
+
+        $currentSlot = $startTime->copy();
+
+        while ($currentSlot->lt($endTime)) {
+            $slotEnd = $currentSlot->copy()->addMinutes($duration);
+
+            // Skip if slot would go past end time
+            if ($slotEnd->gt($endTime)) {
+                break;
+            }
+
+            $timeString = $currentSlot->format('H:i');
+            $this->availableSlots[$timeString] = [
+                'start' => $currentSlot->format('h:i A'),
+                'end' => $slotEnd->format('h:i A'),
+                'disabled' => false // You can add logic to disable booked slots
+            ];
+
+            $currentSlot->addMinutes($duration);
+        }
+
+        // Group into morning/afternoon if needed
+        $this->timeSlots = collect($this->availableSlots)->groupBy(function ($slot) {
+            return Carbon::parse($slot['start'])->hour < 12 ? 'morning' : 'afternoon';
+        })->toArray();
     }
 
-    //  Integrate pincode API when pincode changes
-    public function updatedPincode($value) 
+    public function updatedDoctorId($value)
+    {
+        $this->selectedDoctor = Doctor::with(['user', 'department'])
+            ->find($value);
+        $this->appointment_date = null;
+        $this->appointment_time = null;
+        $this->availableTimes = [];
+        $this->timeSlotCounts = [];
+         $this->generateTimeSlots();
+    }
+
+    public function selectDateTab($tab)
+    {
+        if ($tab === 'tomorrow') {
+            $this->appointment_date = now()->addDay()->toDateString();
+            $this->generateAvailableSlots();
+        }
+    }
+
+    protected function generateAvailableSlots()
+    {
+        $this->availableTimes = [];
+        $this->timeSlotCounts = [];
+
+        if (!$this->selectedDoctor || !$this->appointment_date) {
+            return;
+        }
+
+        $doctor = $this->selectedDoctor;
+        $selectedDate = Carbon::parse($this->appointment_date);
+        $tomorrow = Carbon::now()->addDay();
+
+        // Check if appointment is for tomorrow
+        if (!$selectedDate->isSameDay($tomorrow)) {
+            $this->dispatch('doctor-not-available', [
+                'message' => 'Appointments are only available for tomorrow. Please select tomorrow\'s date.'
+            ]);
+            return;
+        }
+
+        // Check doctor availability for the selected day
+        $dayOfWeek = $selectedDate->format('l');
+        $availableDays = is_array($doctor->available_days) ? $doctor->available_days : [];
+
+        if (!in_array($dayOfWeek, $availableDays)) {
+            $this->dispatch('doctor-not-available', [
+                'message' => "This doctor is not available on {$selectedDate->format('l, d M Y')}. Please choose another doctor or date."
+            ]);
+            return;
+        }
+
+        // Use doctor's working hours or default to 10am-6pm
+        $startTime = $doctor->start_time ? Carbon::parse($doctor->start_time) : Carbon::createFromTime(10, 0);
+        $endTime = $doctor->end_time ? Carbon::parse($doctor->end_time) : Carbon::createFromTime(18, 0);
+        $slotDuration = $doctor->slot_duration_minutes ?? 30;
+        $maxPatientsPerSlot = $doctor->patients_per_slot ?? 1;
+
+        // Generate time slots based on doctor's availability
+        $currentTime = $startTime->copy();
+        $timeSlots = [];
+
+        while ($currentTime->lt($endTime)) {
+            $formattedTime = $currentTime->format('g:i A');
+            $timeSlots[] = $formattedTime;
+            $currentTime->addMinutes($slotDuration);
+        }
+
+        // Count existing appointments for each time slot
+        $appointments = Appointment::where('doctor_id', $doctor->id)
+            ->where('appointment_date', $this->appointment_date)
+            ->get();
+
+        foreach ($appointments as $appointment) {
+            $appointmentTime = Carbon::parse($appointment->appointment_time)->format('g:i A');
+
+            if (!isset($this->timeSlotCounts[$appointmentTime])) {
+                $this->timeSlotCounts[$appointmentTime] = 1;
+            } else {
+                $this->timeSlotCounts[$appointmentTime]++;
+            }
+        }
+
+        // Filter out fully booked slots and format available times
+        $availableSlots = [];
+        foreach ($timeSlots as $time) {
+            $count = $this->timeSlotCounts[$time] ?? 0;
+            if ($count < $maxPatientsPerSlot) {
+                $availableSlots[] = $time;
+            }
+        }
+
+        $this->availableTimes = $availableSlots;
+    }
+    public function updatedPincode($value)
     {
         if (strlen($value) === 6) {
             $this->fetchPincodeDetails($value);
@@ -73,13 +222,14 @@ class ManageAppointment extends Component
         }
     }
 
-    public function fetchPincodeDetails($pincode)
+    protected function fetchPincodeDetails($pincode)
     {
         try {
             $response = Http::get("https://api.postalpincode.in/pincode/{$pincode}");
             $data = $response->json();
+            \Log::info('Pincode API response:', ['pincode' => $pincode, 'data' => $data]);
 
-            if ($data[0]['Status'] === 'Success' && !empty($data[0]['PostOffice'])) {
+            if (isset($data[0]['Status']) && $data[0]['Status'] === 'Success' && !empty($data[0]['PostOffice'])) {
                 $postOffice = $data[0]['PostOffice'][0];
                 $this->newPatient['district'] = $postOffice['District'] ?? '';
                 $this->newPatient['state'] = $postOffice['State'] ?? '';
@@ -88,10 +238,12 @@ class ManageAppointment extends Component
                 $this->newPatient['state'] = '';
             }
         } catch (\Exception $e) {
+            \Log::error('Pincode API error:', ['pincode' => $pincode, 'error' => $e->getMessage()]);
             $this->newPatient['district'] = '';
             $this->newPatient['state'] = '';
         }
     }
+
 
     public function nextStep()
     {
@@ -101,42 +253,37 @@ class ManageAppointment extends Component
 
     public function previousStep()
     {
-        if ($this->step > 1) {
-            $this->step--;
-        }
+        $this->step--;
     }
-
 
     protected function validateStep($step)
     {
         if ($step === 1) {
-            
-            $this->validate(['doctor_id' => 'required|exists:doctors,id']);
-        }
-
-        if ($step === 2) {
             $this->validate([
-                'newPatient.name' => 'required|string',
-                'newPatient.phone' => 'required|string',
-                'newPatient.age' => 'required|integer|min:0',
+                'doctor_id' => 'required|exists:doctors,id',
+                'appointment_time' => 'required'
+            ]);
+        } elseif ($step === 2) {
+            $this->validate([
+                'newPatient.name' => 'required|string|max:255',
+                'newPatient.phone' => 'required|string|max:15',
+                'newPatient.age' => 'required|integer|min:0|max:120',
                 'newPatient.gender' => 'required|string|in:male,female,other',
-                'newPatient.address' => 'required|string',
-                'newPatient.email' => 'nullable|email',
+                'newPatient.address' => 'required|string|max:500',
+                'newPatient.email' => 'nullable|email|max:255',
                 'newPatient.pincode' => 'nullable|digits:6',
             ]);
-        }
-
-        if ($step === 3) {
+        } elseif ($step === 3) {
             $this->validate([
                 'payment_method' => 'required|in:' . implode(',', $this->available_payment_methods),
-                'notes' => 'nullable|string',
+                'notes' => 'nullable|string|max:1000',
             ]);
         }
     }
 
     public function submit()
     {
-        $this->validateStep(4);
+        $this->validateStep(3);
 
         $patient = Patient::create([
             'name' => $this->newPatient['name'],
@@ -160,7 +307,7 @@ class ManageAppointment extends Component
         ]);
 
         $doctor = Doctor::find($this->doctor_id);
-        $amount = $doctor && isset($doctor->fee) ? $doctor->fee : 0;
+        $amount = $doctor ? $doctor->fee : 0;
 
         Payment::create([
             'appointment_id' => $appointment->id,
@@ -171,13 +318,25 @@ class ManageAppointment extends Component
             'transaction_id' => null,
         ]);
 
-        // Redirect to confirmation page with appointment id
         return redirect()->route('appointment.confirmation', ['appointment' => $appointment->id]);
+    }
+
+    public function selectTimeSlot($time)
+    {
+        // Only allow selection if slot is not disabled
+        if (isset($this->availableSlots[$time]) && !$this->availableSlots[$time]['disabled']) {
+            $this->appointment_time = $time;
+        }
     }
 
     #[Layout('layouts.public')]
     public function render()
     {
-        return view('livewire.public.appointment.manage-appointment');
+        return view('livewire.public.appointment.manage-appointment', [
+            'selectedDepartment' => $this->selectedDepartment,
+            'departments' => $this->departments,
+            'selectedDoctor' => $this->selectedDoctor,
+            'timeSlotCounts' => $this->timeSlotCounts,
+        ]);
     }
 }

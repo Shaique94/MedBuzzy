@@ -258,31 +258,28 @@
                 <div class="relative">
                     <!-- Main illustration background -->
                     <div
-                        class="w-full h-96 bg-gradient-to-br from-teal-100 to-orange-100 rounded-3xl p-8 flex items-center justify-center">
-                        <div class="text-center">
+
+                        class="bg-gray-50 rounded-lg shadow-md border border-brand-teal-100 overflow-hidden flex flex-col">
+                        <!-- Doctor Image/Placeholder -->
+                        <div
+                            class="relative bg-gradient-to-br from-brand-orange-100 to-brand-orange-200 h-48 flex items-center justify-center">
                             <div
-                                class="w-32 h-32 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                                <svg class="w-16 h-16 text-teal-600" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
-                                    </path>
-                                </svg>
-                            </div>
-                            <h4 class="text-xl font-bold text-gray-800 mb-2">Easy Appointment Booking</h4>
-                            <p class="text-gray-600">Book appointments with just a few clicks</p>
-                        </div>
-                    </div>
+                                    class="w-28 h-28 bg-white rounded-full flex items-center justify-center shadow-lg overflow-hidden border border-gray-200">
+                                    @if ($doctor->image)
+                                        <img src="{{ asset('storage/' . $doctor->image) }}"
+                                            alt="{{ $doctor->name }}'s Photo" class="w-full h-full object-cover">
+                                    @else
+                                        <!-- Fallback content if no image exists -->
+                                        <div class="text-gray-400 text-center p-2">No Photo</div>
+                                    @endif
+                                </div>
+                            <!-- Verified Badge -->
+                            <span
+                                class="absolute top-4 right-4 bg-brand-teal-500 text-white text-xs px-2.5 py-1 rounded-full flex items-center font-medium">
+                                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
 
-                    <!-- Floating elements -->
-                    <div class="absolute -top-4 -right-4 w-20 h-20 bg-orange-200 rounded-2xl opacity-60"></div>
-                    <div class="absolute -bottom-4 -left-4 w-24 h-24 bg-teal-200 rounded-2xl opacity-60"></div>
+                  
 
-                    <!-- Stats floating cards -->
-                    <div class="absolute top-8 -left-8 bg-white rounded-xl p-4 shadow-lg">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                                <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd"
                                         d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
                                         clip-rule="evenodd"></path>
