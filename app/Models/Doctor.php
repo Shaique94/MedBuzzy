@@ -23,6 +23,7 @@ class Doctor extends Model
 
     protected $casts = [
         'qualification' => 'array',
+        'available_days' => 'array', // Fixed spelling here too
     ];
 
     public function user()

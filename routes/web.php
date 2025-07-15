@@ -8,6 +8,7 @@ use App\Livewire\Admin\Auth\Login;
 use App\Livewire\Admin\Sections\Dashboard;
 use App\Livewire\Admin\Sections\ManageDepartment;
 use App\Livewire\Admin\Sections\ManageDoctor;
+use App\Livewire\Doctor\Section\CreateSlot;
 use App\Livewire\Doctor\Section\Manager\CreateManger;
 use App\Livewire\Doctor\Section\Doctordashboard;
 use App\Livewire\Manager\Sections\Managerdashboard;
@@ -44,6 +45,7 @@ Route::get('/login', Login::class)->name('admin.dashboard');
 Route::prefix('doc')->group(function(){
 Route::get('/dashboard',Doctordashboard::class)->name('doctor.dashboard');
 Route::get('/manager',CreateManger::class)->name('doctor.create-manager');
+Route::get('/crateslot',CreateSlot::class)->name('doctor.create-slot');
 
 });
 
@@ -61,10 +63,10 @@ Route::prefix('admin')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('admin.dashboard');
     Route::get('/manage-doctors', ManageDoctor::class)->name('manage.doctors');
     Route::get('/manage-departments', ManageDepartment::class)->name('admin.departments');
-    Route::get('/appointment',All::class)->name('admin.appointment');
-    Route::get('/appointment/add',Add::class)->name('add.appointment');
-    Route::get('/appointment/update/{id}',Update::class)->name('update.appointment');
-    Route::get('/appointment/view/{id}',ViewDetails::class)->name('view.appointment');
+    Route::get('/appointment', All::class)->name('admin.appointment');
+    Route::get('/appointment/add', Add::class)->name('add.appointment');
+    Route::get('/appointment/update/{id}', Update::class)->name('update.appointment');
+    Route::get('/appointment/view/{id}', ViewDetails::class)->name('view.appointment');
 });
 
 
