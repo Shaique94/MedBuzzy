@@ -20,9 +20,17 @@ class Doctordashboard extends Component
     public $doctor_name;
     public $search = '';
 
+    public $fromDate;
+public $toDate;
+public $filtersApplied = false;
+
+public $showPatientModal = false;
+public $selectedPatient = null;
+
     #[Layout('layouts.doctor')]
     public function mount()
     {
+            $this->filtersApplied = false;
         $this->loadAppointments();
     }
 
@@ -33,6 +41,7 @@ class Doctordashboard extends Component
 
     public function loadAppointments()
     {
+ $filtersUsed = false;
         $user = auth()->user();
         $this->doctor_name = $user->name;
 
@@ -43,12 +52,23 @@ class Doctordashboard extends Component
             ->orderBy('appointment_date', 'asc')
             ->orderBy('appointment_time', 'asc');
 
-        if (!empty($this->search)) {
+     if (!empty($this->search)) {
             $query->whereHas('patient', function ($q) {
                 $q->where('name', 'like', '%' . $this->search . '%');
             });
         }
 
+        if (!empty($this->fromDate)) {
+            $query->whereDate('appointment_date', '>=', $this->fromDate);
+              $filtersUsed = true;
+        }
+
+        if (!empty($this->toDate)) {
+            $query->whereDate('appointment_date', '<=', $this->toDate);
+              $filtersUsed = true;
+        }
+
+    $this->filtersApplied = $filtersUsed;
         $this->appointments = $query->get();
 
         $this->appointments_count = $this->appointments->count();
@@ -75,4 +95,22 @@ class Doctordashboard extends Component
     {
         return view('livewire.doctor.section.doctordashboard');
     }
+
+        public function resetFilters()
+    {
+        $this->search = '';
+        $this->fromDate = null;
+        $this->toDate = null;
+        $this->filtersApplied = false;
+        $this->loadAppointments();
+    }
+
+
+public function showPatientDetails($patientId)
+{
+    logger("Opening modal for patient: $patientId");
+    $this->selectedPatient = \App\Models\Patient::find($patientId);
+    $this->showPatientModal = true;
+}
+
 }

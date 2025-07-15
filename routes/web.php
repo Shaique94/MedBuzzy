@@ -22,7 +22,7 @@ use App\Livewire\Public\Section\About;
 use App\Livewire\Public\Section\Contact;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-
+use App\Livewire\Doctor\Profile;
 
 
 
@@ -44,6 +44,7 @@ Route::get('/login', Login::class)->name('admin.dashboard');
 Route::prefix('doc')->group(function(){
 Route::get('/dashboard',Doctordashboard::class)->name('doctor.dashboard');
 Route::get('/manager',CreateManger::class)->name('doctor.create-manager');
+    Route::get('/profile', Profile::class)->name('doctor.profile'); 
 
 });
 
@@ -72,3 +73,5 @@ Route::post('/logout', function () {
     Auth::logout();
     return redirect('/login');
 })->name('logout');
+
+
