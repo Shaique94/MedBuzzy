@@ -20,6 +20,10 @@ class Manager extends Model
         'status',
     ];
 
+     protected $casts = [
+        'dob' => 'date',
+    ];
+
     /**
      * Get the user details for this manager.
      */
@@ -35,4 +39,5 @@ class Manager extends Model
     {
         return $this->belongsTo(User::class, 'doctor_id');
     }
+    
 }

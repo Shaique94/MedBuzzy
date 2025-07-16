@@ -12,8 +12,10 @@ use Livewire\WithFileUploads;
 
 class CreateManger extends Component
 {
-     use WithFileUploads;
 
+     use WithFileUploads;
+ protected $listeners = ['refreshManagers' => '$refresh'];
+ 
     public $showForm = false;
     public $name, $email, $phone, $address, $gender, $dob, $status = 'active', $photo;
     public $manager_id;
@@ -29,8 +31,9 @@ class CreateManger extends Component
             ->latest()
             ->paginate(10);
 
-        return view('livewire.doctor.section.manager.create-manger', compact('managers'));
+        return view('livewire.doctor.section.manager.manager-list', compact('managers'));
     }
+
 
     public function resetForm()
     {
@@ -47,104 +50,7 @@ class CreateManger extends Component
         $this->showForm = false;
     }
 
-    public function saveManager()
-    {
-        $validated = $this->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'phone' => 'nullable|string|max:20',
-            'address' => 'required|string|max:500',
-            'gender' => 'required|in:male,female,other',
-            'dob' => 'required|date',
-            'status' => 'required|in:active,inactive',
-            'photo' => 'nullable|image|max:1024',
-        ]);
-
-        $user = User::create([
-            'name' => $this->name,
-            'email' => $this->email,
-            'phone' => $this->phone,
-            'password' => Hash::make('password'), // Default password
-            'role' => 'manager',
-        ]);
-
-        $photoPath = $this->photo ? $this->photo->store('manager_photos', 'public') : null;
-
-        $doctor = auth()->user()->doctor; // ✅ Get the actual doctor model
-
-        Manager::create([
-            'user_id' => $user->id,
-            'doctor_id' => $doctor->id, // ✅ Use doctor table ID, not user ID
-            'address' => $this->address,
-            'photo' => $photoPath,
-            'gender' => $this->gender,
-            'dob' => $this->dob,
-            'status' => $this->status,
-        ]);
-
-        session()->flash('success', 'Manager created successfully!');
-        $this->resetForm();
-    }
-
-    public function edit($id)
-    {
-        $manager = Manager::with('user')->findOrFail($id);
-
-        $this->manager_id = $manager->id;
-        $this->name = $manager->user->name;
-        $this->email = $manager->user->email;
-        $this->phone = $manager->user->phone;
-        $this->address = $manager->address;
-        $this->gender = $manager->gender;
-        $this->dob = $manager->dob;
-        $this->status = $manager->status;
-        $this->isEdit = true;
-        $this->showForm = true;
-    }
-
-    public function updateManager()
-    {
-        $validated = $this->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $this->manager_id,
-            'phone' => 'nullable|string|max:20',
-            'address' => 'required|string|max:500',
-            'gender' => 'required|in:male,female,other',
-            'dob' => 'required|date',
-            'status' => 'required|in:active,inactive',
-            'photo' => 'nullable|image|max:1024',
-        ]);
-
-        $manager = Manager::findOrFail($this->manager_id);
-        $user = $manager->user;
-
-        $user->update([
-            'name' => $this->name,
-            'email' => $this->email,
-            'phone' => $this->phone,
-        ]);
-
-        if ($this->photo) {
-            if ($manager->photo && Storage::disk('public')->exists($manager->photo)) {
-                Storage::disk('public')->delete($manager->photo);
-            }
-            $photoPath = $this->photo->store('manager_photos', 'public');
-        } else {
-            $photoPath = $manager->photo;
-        }
-
-        $manager->update([
-            'address' => $this->address,
-            'photo' => $photoPath,
-            'gender' => $this->gender,
-            'dob' => $this->dob,
-            'status' => $this->status,
-        ]);
-
-        session()->flash('success', 'Manager updated successfully!');
-        $this->resetForm();
-    }
-
+    
     public function delete($id)
     {
         $manager = Manager::findOrFail($id);
@@ -155,7 +61,7 @@ class CreateManger extends Component
         $manager->user->delete();
         $manager->delete();
 
-        session()->flash('success', 'Manager deleted successfully!');
+        session()->flash('error', 'Manager deleted successfully!');
         $this->resetForm();
     }
 

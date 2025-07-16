@@ -44,7 +44,8 @@ Route::get('/login', Login::class)->name('admin.dashboard');
 //doctor Routes
 Route::prefix('doc')->group(function(){
 Route::get('/dashboard',Doctordashboard::class)->name('doctor.dashboard');
-Route::get('/manager',CreateManger::class)->name('doctor.create-manager');
+Route::get('/manager',CreateManger::class)->name('doctor.manager-list');
+Route::get('/manager/create',CreateManger::class)->name('doctor.create-manager');
 
     Route::get('/profile', Profile::class)->name('doctor.profile'); 
 
