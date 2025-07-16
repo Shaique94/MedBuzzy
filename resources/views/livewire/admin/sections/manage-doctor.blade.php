@@ -206,6 +206,15 @@
                                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                                 @enderror
                                             </div>
+
+                                              <div>
+                                                <label class="block text-sm font-medium text-gray-700 mb-1">max_booking_days</label>
+                                                <input type="number" min="1" max="30" wire:model="max_booking_days"
+                                                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                                @error('max_booking_days')
+                                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                                @enderror
+                                            </div>
                                         </div>
                                     </div>
 

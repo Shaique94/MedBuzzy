@@ -20,7 +20,8 @@ class Doctor extends Model
         'slot_duration_minutes',
         'patients_per_slot',
         'unavailable_from',
-        'unavailable_to'
+        'unavailable_to',
+        'max_booking_days'
 
     ];
 

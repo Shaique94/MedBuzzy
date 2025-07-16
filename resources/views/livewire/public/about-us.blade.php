@@ -21,7 +21,7 @@
                         <li>Community Empowerment</li>
                     </ul>
                 </div>
-                <a href="/contact" class="inline-block mt-4 px-6 py-2 bg-teal-600 text-white rounded-lg shadow hover:bg-teal-700 transition">Contact Us</a>
+                <a wire:navigate href="{{route('contact-us')}}" class="inline-block mt-4 px-6 py-2 bg-teal-600 text-white rounded-lg shadow hover:bg-teal-700 transition">Contact Us</a>
             </div>
             <div class="flex flex-col items-center">
                 <img src="/images/doctors.jpg" alt="About Us" class="rounded-lg shadow-xl mb-6 w-full max-w-md">

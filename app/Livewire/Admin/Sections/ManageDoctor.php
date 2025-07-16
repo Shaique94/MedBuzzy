@@ -35,6 +35,7 @@ class ManageDoctor extends Component
     public $slot_duration_minutes = 30;
     public $patients_per_slot = 1;
     public $search = '';
+    public $max_booking_days; 
 
     public function mount()
     {
@@ -58,6 +59,7 @@ class ManageDoctor extends Component
             'end_time' => 'required|date_format:H:i|after:start_time',
             'slot_duration_minutes' => 'required|integer|min:5|max:120',
             'patients_per_slot' => 'required|integer|min:1|max:10',
+            'max_booking_days'=>'required|integer|min:1|max:30'
         ]);
 
         $user = User::create([
@@ -86,6 +88,7 @@ class ManageDoctor extends Component
             'end_time' => $this->end_time,
             'slot_duration_minutes' => $this->slot_duration_minutes,
             'patients_per_slot' => $this->patients_per_slot,
+            'max_booking_days' => $this->max_booking_days,
         ]);
 
         $this->reset([
@@ -104,6 +107,7 @@ class ManageDoctor extends Component
             'end_time',
             'slot_duration_minutes',
             'patients_per_slot',
+            'max_booking_days',
             'showModal'
         ]);
 
