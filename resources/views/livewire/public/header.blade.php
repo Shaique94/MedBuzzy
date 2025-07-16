@@ -57,7 +57,6 @@
                             <a href="/find-clinic" class="block px-4 py-3 text-gray-600 hover:bg-brand-orange-50 hover:text-brand-orange-600 last:rounded-b-lg">Find Clinic</a>
                         </div>
                     </div>
-                    <a href="/services" class="text-gray-700 hover:text-brand-teal-600 font-medium transition-colors">Services</a>
                     <a href="{{route('about-us')}}" class="text-gray-700 hover:text-brand-teal-600 font-medium transition-colors">About</a>
                     <a href="{{route('contact-us')}}" class="text-gray-700 hover:text-brand-teal-600 font-medium transition-colors">Contact</a>
                 </nav>
