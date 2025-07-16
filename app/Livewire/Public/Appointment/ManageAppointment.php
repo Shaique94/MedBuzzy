@@ -283,7 +283,7 @@ class ManageAppointment extends Component
         if ($step === 1) {
             $this->validate([
                 'doctor_id' => 'required|exists:doctors,id',
-                'appointment_time' => 'required'
+                // 'appointment_time' => 'required'
             ]);
         } elseif ($step === 2) {
             $this->validate([
