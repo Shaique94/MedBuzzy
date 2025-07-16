@@ -148,12 +148,7 @@
                                     </div>
 
                                     <div class="flex items-center gap-2 text-teal-600 mb-4">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M17.657 16.657L13.414 12.414a4 4 0 00-5.657 5.657l4.243 4.243a8 8 0 0011.314-11.314l-4.243-4.243a1 1 0 00-1.414 1.414l4.243 4.243a6 6 0 01-8.486 8.486l-4.242-4.242a1 1 0 00-1.414 1.414l4.242 4.243a4 4 0 005.657-5.657l-4.243-4.243a1 1 0 00-1.414 1.414l4.243 4.243z">
-                                            </path>
-                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 " viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></svg>
                                         <span>{{ $doctor->location ?? 'Purnea, Bihar' }}</span>
                                     </div>
 
