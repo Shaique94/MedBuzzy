@@ -15,9 +15,9 @@
                 @if ($i === 1)
                 Doctor
                 @elseif ($i === 2)
-                Doctor
+                Calender
                 @elseif ($i === 3)
-                Doctor
+                Slot
                 @elseif($i === 4)
                 Patient
                 @elseif($i === 5)
@@ -206,30 +206,42 @@
             $endOfMonth = $today->copy()->endOfMonth();
             $startDayOfWeek = $startOfMonth->dayOfWeek; // 0 (Sun) - 6 (Sat)
             $daysInMonth = $today->daysInMonth;
+            $maxBookingDays = $selectedDoctor?->max_booking_days ?? 0;
+
+            $bookingStart = $today->copy()->startOfDay();
+            $bookingEnd = $today->copy()->addDays($maxBookingDays)->endOfDay();
             @endphp
 
             <!-- Weekday Headers -->
-            @foreach (['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as $day)
+        @foreach (['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as $day)
             <div class="font-semibold text-gray-700">{{ $day }}</div>
-            @endforeach
+        @endforeach
 
-            <!-- Empty boxes before 1st -->
-            @for ($i = 0; $i < $startDayOfWeek; $i++)
-                <div>
-        </div>
+        <!-- Empty boxes -->
+        @for ($i = 0; $i < $startDayOfWeek; $i++)
+            <div></div>
         @endfor
 
-        <!-- Days -->
+        <!-- Day buttons -->
         @for ($day = 1; $day <= $daysInMonth; $day++)
             @php
-            $date=$today->copy()->startOfMonth()->addDays($day - 1)->format('Y-m-d');
+                $dateObj = $today->copy()->startOfMonth()->addDays($day - 1);
+                $formattedDate = $dateObj->format('Y-m-d');
+                $isWithinBookingRange = $dateObj->between($bookingStart, $bookingEnd);
             @endphp
-            <button wire:click="$set('appointment_date', '{{ $date }}')"
-                class="w-full aspect-square rounded-md border text-gray-800 hover:bg-teal-100
-                {{ $appointment_date === $date ? 'bg-teal-600 text-white font-bold' : 'bg-gray-50' }}">
+
+            <button
+                @if ($isWithinBookingRange)
+                    wire:click="$set('appointment_date', '{{ $formattedDate }}')"
+                @endif
+                class="w-full aspect-square rounded-md border text-gray-800 transition
+                    {{ $appointment_date === $formattedDate ? 'bg-teal-600 text-white font-bold' : 'bg-gray-50' }}
+                    {{ $isWithinBookingRange ? 'hover:bg-teal-100 cursor-pointer' : 'bg-gray-100 text-gray-400 cursor-not-allowed' }}"
+                disabled="{{ $isWithinBookingRange ? 'false' : 'true' }}"
+            >
                 {{ $day }}
             </button>
-            @endfor
+        @endfor
     </div>
 
     @if ($appointment_date)
@@ -240,8 +252,11 @@
 </div>
 
 @endif
+{{--step 3 --}}
+@if ($step === 3)
 
 
+@endif
 
 {{-- Step 4 --}}
 @if ($step === 4)

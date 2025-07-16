@@ -42,11 +42,13 @@ class ManageAppointment extends Component
     public $notes;
     public $available_payment_methods = ['cash', 'card', 'upi'];
     public $slot_enabled = true;
+    public $maxBookingDays = 0;
 
     public function mount()
     {
         $this->departments = Department::all();
         $this->doctors = Doctor::with(['user', 'department'])->get();
+
 
         if (request()->has('doctor_id')) {
             $this->doctor_id = request()->query('doctor_id');
@@ -56,6 +58,7 @@ class ManageAppointment extends Component
                 $this->step = 2;
             }
         }
+
     }
 
     public function updatedSelectedDepartment($value)
