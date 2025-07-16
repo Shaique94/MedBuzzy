@@ -89,6 +89,7 @@ class ManageAppointment extends Component
         $startTime = Carbon::parse($this->selectedDoctor->start_time);
         $endTime = Carbon::parse($this->selectedDoctor->end_time);
         $duration = $this->selectedDoctor->slot_duration_minutes;
+        $maxPatientsPerSlot = $this->selectedDoctor->patients_per_slot ?? 1;
 
         $this->timeSlots = [];
         $this->availableSlots = [];
@@ -104,19 +105,79 @@ class ManageAppointment extends Component
             }
 
             $timeString = $currentSlot->format('H:i');
+            $formattedTime = $currentSlot->format('g:i A');
+            
+            // Get booked count for this slot
+            $bookedCount = $this->getBookedCountForSlot($timeString);
+            $remaining = max(0, $maxPatientsPerSlot - $bookedCount);
+
             $this->availableSlots[$timeString] = [
                 'start' => $currentSlot->format('h:i A'),
                 'end' => $slotEnd->format('h:i A'),
-                'disabled' => false // You can add logic to disable booked slots
+                'disabled' => $remaining <= 0,
+                'remaining_capacity' => $remaining,
+                'max_capacity' => $maxPatientsPerSlot
             ];
-
             $currentSlot->addMinutes($duration);
         }
 
-        // Group into morning/afternoon if needed
-        $this->timeSlots = collect($this->availableSlots)->groupBy(function ($slot) {
-            return Carbon::parse($slot['start'])->hour < 12 ? 'morning' : 'afternoon';
-        })->toArray();
+        // Also generate the grouped time slots for display
+        $this->timeSlots = $this->getTimeSlotsProperty();
+    }
+
+    public function getBookedCountForSlot($time)
+    {
+        if (!$this->selectedDoctor || !$this->appointment_date) {
+            return 0;
+        }
+
+        return Appointment::where('doctor_id', $this->selectedDoctor->id)
+            ->where('appointment_date', $this->appointment_date)
+            ->where('appointment_time', $time)
+            ->count();
+    }
+
+    public function getTimeSlotsProperty()
+    {
+        $morningSlots = [];
+        $afternoonSlots = [];
+        $eveningSlots = [];
+        
+        foreach ($this->availableSlots as $time => $slot) {
+            $hour = date('H', strtotime($slot['start']));
+            
+            if ($hour < 12) {
+                $morningSlots[$time] = $slot;
+            } elseif ($hour < 17) {
+                $afternoonSlots[$time] = $slot;
+            } else {
+                $eveningSlots[$time] = $slot;
+            }
+        }
+        
+        return [
+            'morning' => $morningSlots,
+            'afternoon' => $afternoonSlots,
+            'evening' => $eveningSlots,
+        ];
+    }
+
+    public function getMorningSlotsProperty()
+    {
+        $slots = $this->getTimeSlotsProperty();
+        return $slots['morning'] ?? [];
+    }
+
+    public function getAfternoonSlotsProperty()
+    {
+        $slots = $this->getTimeSlotsProperty();
+        return $slots['afternoon'] ?? [];
+    }
+
+    public function getEveningSlotsProperty()
+    {
+        $slots = $this->getTimeSlotsProperty();
+        return $slots['evening'] ?? [];
     }
 
     public function updatedDoctorId($value)
@@ -127,16 +188,16 @@ class ManageAppointment extends Component
         $this->appointment_time = null;
         $this->availableTimes = [];
         $this->timeSlotCounts = [];
-         $this->generateTimeSlots();
+        $this->generateTimeSlots();
     }
 
-    public function selectDateTab($tab)
-    {
-        if ($tab === 'tomorrow') {
-            $this->appointment_date = now()->addDay()->toDateString();
-            $this->generateAvailableSlots();
-        }
-    }
+    // public function selectDateTab($tab)
+    // {
+    //     if ($tab === 'tomorrow') {
+    //         $this->appointment_date = now()->addDay()->toDateString();
+    //         $this->generateAvailableSlots();
+    //     }
+    // }
 
     protected function generateAvailableSlots()
     {
@@ -151,13 +212,13 @@ class ManageAppointment extends Component
         $selectedDate = Carbon::parse($this->appointment_date);
         $tomorrow = Carbon::now()->addDay();
 
-        // Check if appointment is for tomorrow
-        if (!$selectedDate->isSameDay($tomorrow)) {
-            $this->dispatch('doctor-not-available', [
-                'message' => 'Appointments are only available for tomorrow. Please select tomorrow\'s date.'
-            ]);
-            return;
-        }
+        // // Check if appointment is for tomorrow
+        // if (!$selectedDate->isSameDay($tomorrow)) {
+        //     $this->dispatch('doctor-not-available', [
+        //         'message' => 'Appointments are only available for tomorrow. Please select tomorrow\'s date.'
+        //     ]);
+        //     return;
+        // }
 
         // Check doctor availability for the selected day
         $dayOfWeek = $selectedDate->format('l');
@@ -170,48 +231,10 @@ class ManageAppointment extends Component
             return;
         }
 
-        // Use doctor's working hours or default to 10am-6pm
-        $startTime = $doctor->start_time ? Carbon::parse($doctor->start_time) : Carbon::createFromTime(10, 0);
-        $endTime = $doctor->end_time ? Carbon::parse($doctor->end_time) : Carbon::createFromTime(18, 0);
-        $slotDuration = $doctor->slot_duration_minutes ?? 30;
-        $maxPatientsPerSlot = $doctor->patients_per_slot ?? 1;
-
-        // Generate time slots based on doctor's availability
-        $currentTime = $startTime->copy();
-        $timeSlots = [];
-
-        while ($currentTime->lt($endTime)) {
-            $formattedTime = $currentTime->format('g:i A');
-            $timeSlots[] = $formattedTime;
-            $currentTime->addMinutes($slotDuration);
-        }
-
-        // Count existing appointments for each time slot
-        $appointments = Appointment::where('doctor_id', $doctor->id)
-            ->where('appointment_date', $this->appointment_date)
-            ->get();
-
-        foreach ($appointments as $appointment) {
-            $appointmentTime = Carbon::parse($appointment->appointment_time)->format('g:i A');
-
-            if (!isset($this->timeSlotCounts[$appointmentTime])) {
-                $this->timeSlotCounts[$appointmentTime] = 1;
-            } else {
-                $this->timeSlotCounts[$appointmentTime]++;
-            }
-        }
-
-        // Filter out fully booked slots and format available times
-        $availableSlots = [];
-        foreach ($timeSlots as $time) {
-            $count = $this->timeSlotCounts[$time] ?? 0;
-            if ($count < $maxPatientsPerSlot) {
-                $availableSlots[] = $time;
-            }
-        }
-
-        $this->availableTimes = $availableSlots;
+        // Regenerate time slots with updated availability
+        $this->generateTimeSlots();
     }
+
     public function updatedPincode($value)
     {
         if (strlen($value) === 6) {
@@ -243,7 +266,6 @@ class ManageAppointment extends Component
             $this->newPatient['state'] = '';
         }
     }
-
 
     public function nextStep()
     {

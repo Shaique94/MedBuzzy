@@ -105,7 +105,7 @@
                                 <div class="text-center">
                                     <div
                                         class="w-28 h-28 rounded-full overflow-hidden bg-white border-4 border-white shadow-lg mx-auto">
-                                        <img src="{{ $selectedDoctor->image ? $selectedDoctor->image : asset('images/default.jpg') }}"
+                                        <img src="{{ asset('storage/' . $selectedDoctor->image) }}"
                                             class="w-full h-full object-cover">
                                     </div>
                                     <h3 class="text-lg font-bold text-gray-900 mt-4">Dr.
@@ -208,7 +208,7 @@
 
                                             <div
                                                 class="w-24 h-24 rounded-full overflow-hidden bg-white mx-auto border-4 border-white shadow-md">
-                                                <img src="{{ $doctor->image ? $doctor->image : asset('images/default.jpg') }}"
+                                                <img src="{{ asset('storage/' . $doctor->image) }}"
                                                     alt="Dr. {{ $doctor->user->name }}"
                                                     class="w-full h-full object-cover">
                                             </div>
@@ -237,13 +237,14 @@
                                                             $isAvailable = in_array($fullDay, $doctor->available_days);
                                                         @endphp
                                                         <div class="w-7 h-7 flex items-center justify-center rounded-full text-xs font-medium
-                                                        {{ $isAvailable ? 'bg-teal-400 text-white border border-teal-500' : 'bg-gray-100 text-gray-400' }}"
+                {{ $isAvailable ? 'bg-teal-400 text-white border border-teal-500' : 'bg-gray-100 text-gray-400 opacity-50 cursor-not-allowed' }}"
                                                             title="{{ $fullDay }}">
                                                             {{ substr($day, 0, 1) }}
                                                         </div>
                                                     @endforeach
                                                 @endif
                                             </div>
+
 
                                             <!-- Select doctor button -->
                                             <button
@@ -279,32 +280,170 @@
             </div>
 
             @if ($doctor_id)
-                <!-- Date and Time Selection -->
-                <div class="bg-white p-5 rounded-xl shadow-sm">
-                    <h2 class="text-lg font-medium text-gray-800 mb-4 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-teal-600" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                        Select Date
-                    </h2>
-                    <div class="grid grid-cols-3 gap-4 mt-6">
-                        @foreach ($availableSlots as $time => $slot)
-                            <button wire:click="selectTimeSlot('{{ $time }}')"
-                                @if ($slot['disabled']) disabled @endif
-                                class="px-4 py-2 border rounded-md text-center
-                   @if ($appointment_time === $time) bg-blue-100 border-blue-500 @endif
-                   @if ($slot['disabled']) bg-gray-100 text-gray-400 cursor-not-allowed @else hover:bg-gray-50 @endif">
-                                {{ $slot['start'] }} - {{ $slot['end'] }}
-                            </button>
-                        @endforeach
+                <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100">
+                    <!-- Date Selection -->
+                    <div class="mb-8">
+                        <div class="flex items-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-teal-600" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            <h2 class="text-xl font-semibold text-gray-800">Select Appointment Date</h2>
+                        </div>
+                        <input type="date" wire:model="appointment_date"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                            min="{{ now()->format('Y-m-d') }}">
                     </div>
-                    <!-- Date Selection (Fixed to Tomorrow) -->
 
+                    <!-- Time Slots -->
+                    <div class="space-y-8">
+                        @if (count($this->morningSlots) > 0)
+                            <div>
+                                <h3 class="text-lg font-medium mb-4 text-gray-700 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-amber-400"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                                    </svg>
+                                    Morning Slots
+                                </h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                                    @foreach ($this->morningSlots as $time => $slot)
+                                        <button wire:click="selectTimeSlot('{{ $time }}')"
+                                            @if ($slot['disabled']) disabled @endif
+                                            class="relative p-3 border rounded-lg text-left transition-all duration-200
+                           @if ($appointment_time === $time) border-teal-500 bg-teal-50 ring-1 ring-teal-300
+                           @elseif ($slot['disabled']) 
+                               bg-gray-50 text-gray-400 cursor-not-allowed
+                           @else 
+                               border-gray-200 hover:border-teal-300 hover:bg-teal-50 @endif">
+                                            <div class="font-medium text-gray-800">
+                                                {{ $slot['start'] }} - {{ $slot['end'] }}
+                                            </div>
+                                            @if (!$slot['disabled'])
+                                                <div class="mt-1 text-sm text-gray-600">
+                                                    <span
+                                                        class="font-medium @if ($slot['remaining_capacity'] < 1) text-red-500 @else text-teal-600 @endif">
+                                                        {{ $slot['remaining_capacity'] }} available
+                                                    </span>
+                                                    <span class="text-gray-400">/ {{ $slot['max_capacity'] }}</span>
+                                                </div>
+                                            @endif
+                                            @if ($appointment_time === $time)
+                                                <div class="absolute top-2 right-2 text-teal-600">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
+                                                        viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fill-rule="evenodd"
+                                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                </div>
+                                            @endif
+                                        </button>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+
+                        @if (count($this->afternoonSlots) > 0)
+                            <div>
+                                <h3 class="text-lg font-medium mb-4 text-gray-700 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-orange-400"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M17 16a5 5 0 01-10 0m5-5V9a3 3 0 00-3-3H6a3 3 0 00-3 3v6a3 3 0 003 3h3m4-5h3m3-3h3a3 3 0 013 3v6a3 3 0 01-3 3h-3" />
+                                    </svg>
+                                    Afternoon Slots
+                                </h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                                    @foreach ($this->afternoonSlots as $time => $slot)
+                                        <button wire:click="selectTimeSlot('{{ $time }}')"
+                                            @if ($slot['disabled']) disabled @endif
+                                            class="relative p-3 border rounded-lg text-left transition-all duration-200
+                           @if ($appointment_time === $time) border-teal-500 bg-teal-50 ring-1 ring-teal-300
+                           @elseif ($slot['disabled']) 
+                               bg-gray-50 text-gray-400 cursor-not-allowed
+                           @else 
+                               border-gray-200 hover:border-teal-300 hover:bg-teal-50 @endif">
+                                            <div class="font-medium text-gray-800">
+                                                {{ $slot['start'] }} - {{ $slot['end'] }}
+                                            </div>
+                                            @if (!$slot['disabled'])
+                                                <div class="mt-1 text-sm text-gray-600">
+                                                    <span
+                                                        class="font-medium @if ($slot['remaining_capacity'] < 1) text-red-500 @else text-teal-600 @endif">
+                                                        {{ $slot['remaining_capacity'] }} available
+                                                    </span>
+                                                    <span class="text-gray-400">/ {{ $slot['max_capacity'] }}</span>
+                                                </div>
+                                            @endif
+                                            @if ($appointment_time === $time)
+                                                <div class="absolute top-2 right-2 text-teal-600">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
+                                                        viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fill-rule="evenodd"
+                                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                </div>
+                                            @endif
+                                        </button>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+
+                        @if (count($this->eveningSlots) > 0)
+                            <div>
+                                <h3 class="text-lg font-medium mb-4 text-gray-700 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-indigo-500"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                                    </svg>
+                                    Evening Slots
+                                </h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                                    @foreach ($this->eveningSlots as $time => $slot)
+                                        <button wire:click="selectTimeSlot('{{ $time }}')"
+                                            @if ($slot['disabled']) disabled @endif
+                                            class="relative p-3 border rounded-lg text-left transition-all duration-200
+                           @if ($appointment_time === $time) border-teal-500 bg-teal-50 ring-1 ring-teal-300
+                           @elseif ($slot['disabled']) 
+                               bg-gray-50 text-gray-400 cursor-not-allowed
+                           @else 
+                               border-gray-200 hover:border-teal-300 hover:bg-teal-50 @endif">
+                                            <div class="font-medium text-gray-800">
+                                                {{ $slot['start'] }} - {{ $slot['end'] }}
+                                            </div>
+                                            @if (!$slot['disabled'])
+                                                <div class="mt-1 text-sm text-gray-600">
+                                                    <span
+                                                        class="font-medium @if ($slot['remaining_capacity'] < 1) text-red-500 @else text-teal-600 @endif">
+                                                        {{ $slot['remaining_capacity'] }} available
+                                                    </span>
+                                                    <span class="text-gray-400">/ {{ $slot['max_capacity'] }}</span>
+                                                </div>
+                                            @endif
+                                            @if ($appointment_time === $time)
+                                                <div class="absolute top-2 right-2 text-teal-600">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
+                                                        viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fill-rule="evenodd"
+                                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                </div>
+                                            @endif
+                                        </button>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+                    </div>
                 </div>
             @endif
-
             <!-- Navigation -->
             <div class="flex justify-between text-sm text-balance items-center mt-6">
                 <a wire:navigate href=""
@@ -317,7 +456,7 @@
                     Check your appointment.
                 </a>
 
-               
+
             </div>
         </div>
     @endif
@@ -544,25 +683,25 @@
         @endif
 
         @if ($step < 4)
-             <button wire:click="nextStep" wire:loading.attr="disabled"
-                    @if (!$doctor_id || !$appointment_time) disabled @endif
-                    class="px-6 py-2.5 bg-teal-600 text-white rounded-md shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center">
-                    <span>Continue</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            <button wire:click="nextStep" wire:loading.attr="disabled"
+                @if (!$doctor_id || !$appointment_time) disabled @endif
+                class="px-6 py-2.5 bg-teal-600 text-white rounded-md shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center">
+                <span>Continue</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+                <span wire:loading wire:target="nextStep" class="ml-2">
+                    <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline" xmlns="http://www.w3.org/2000/svg"
+                        fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                            stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                        </path>
                     </svg>
-                    <span wire:loading wire:target="nextStep" class="ml-2">
-                        <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline"
-                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                            </path>
-                        </svg>
-                    </span>
-                </button>
+                </span>
+            </button>
         @else
             <button wire:click="submit"
                 class="px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition flex items-center">
