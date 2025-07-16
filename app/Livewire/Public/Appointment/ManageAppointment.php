@@ -285,7 +285,7 @@ class ManageAppointment extends Component
                 'doctor_id' => 'required|exists:doctors,id',
                 // 'appointment_time' => 'required'
             ]);
-        } elseif ($step === 2) {
+        } elseif ($step === 4) {
             $this->validate([
                 'newPatient.name' => 'required|string|max:255',
                 'newPatient.phone' => 'required|string|max:15',
@@ -295,7 +295,7 @@ class ManageAppointment extends Component
                 'newPatient.email' => 'nullable|email|max:255',
                 'newPatient.pincode' => 'nullable|digits:6',
             ]);
-        } elseif ($step === 3) {
+        } elseif ($step === 5) {
             $this->validate([
                 'payment_method' => 'required|in:' . implode(',', $this->available_payment_methods),
                 'notes' => 'nullable|string|max:1000',
@@ -305,7 +305,7 @@ class ManageAppointment extends Component
 
     public function submit()
     {
-        $this->validateStep(3);
+        $this->validateStep(5);
 
         $patient = Patient::create([
             'name' => $this->newPatient['name'],
