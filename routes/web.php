@@ -9,6 +9,7 @@ use App\Livewire\Admin\Sections\Dashboard;
 use App\Livewire\Admin\Sections\ManageDepartment;
 use App\Livewire\Admin\Sections\ManageDoctor;
 use App\Livewire\Doctor\Section\CreateSlot;
+use App\Livewire\Doctor\Section\Leave;
 use App\Livewire\Doctor\Section\Manager\CreateManger;
 use App\Livewire\Doctor\Section\Doctordashboard;
 use App\Livewire\Manager\Sections\Managerdashboard;
@@ -28,16 +29,16 @@ use App\Livewire\Doctor\Profile;
 
 
 // Public Routes
-Route::get('/',LandingPage::class)->name('hero');
-Route::get('/our-doctors',OurDoctors::class)->name('our-doctors');
+Route::get('/', LandingPage::class)->name('hero');
+Route::get('/our-doctors', OurDoctors::class)->name('our-doctors');
 Route::get('/doctor/{doctor_id}', ViewDoctorDetail::class)->name('doctor-detail');
-Route::get('/contact-us',ContactUs::class)->name('contact-us');
+Route::get('/contact-us', ContactUs::class)->name('contact-us');
 Route::get('/appointment', ManageAppointment::class)->name('appointment');
 Route::get('/appointment/confirmation/{appointment}', AppointmentConfirmation::class)->name('appointment.confirmation');
 Route::get('/appointment/receipt/{appointment}', [\App\Http\Controllers\AppointmentReceiptController::class, 'download'])
     ->name('appointment.receipt');
-Route::get('/about-us',About::class)->name('about-us');
-Route::get('/contact-us',Contact::class)->name('contact-us');
+Route::get('/about-us', About::class)->name('about-us');
+Route::get('/contact-us', Contact::class)->name('contact-us');
 
 Route::get('/login', Login::class)->name('admin.dashboard');
 
@@ -46,18 +47,22 @@ Route::prefix('doc')->group(function(){
 Route::get('/dashboard',Doctordashboard::class)->name('doctor.dashboard');
 Route::get('/manager',CreateManger::class)->name('doctor.manager-list');
 Route::get('/manager/create',CreateManger::class)->name('doctor.create-manager');
+Route::prefix('doc')->group(function () {
+    Route::get('/dashboard', Doctordashboard::class)->name('doctor.dashboard');
+    Route::get('/manager', CreateManger::class)->name('doctor.create-manager');
 
-    Route::get('/profile', Profile::class)->name('doctor.profile'); 
+    Route::get('/profile', Profile::class)->name('doctor.profile');
+    Route::get('/leave', Leave::class)->name('doctor.add-leave');
 
-Route::get('/crateslot',CreateSlot::class)->name('doctor.create-slot');
+    Route::get('/crateslot', CreateSlot::class)->name('doctor.create-slot');
 
 });
 
 
 //manager Routes
 
-Route::prefix('manager')->group(function(){
-    Route::get('/dashboard',Managerdashboard::class)->name('manager.dashboard');
+Route::prefix('manager')->group(function () {
+    Route::get('/dashboard', Managerdashboard::class)->name('manager.dashboard');
 });
 
 

@@ -14,6 +14,8 @@ class CreateSlot extends Component
     public $slot_duration_minutes = 30;
     public $patients_per_slot = 1;
     public $available_days = [];
+        public $max_booking_days; 
+
     
     // Available days options
     public $daysOfWeek = [
@@ -27,11 +29,13 @@ class CreateSlot extends Component
         $doctor = Doctor::where('user_id', auth()->id())->first();
         
         if ($doctor) {
-            $this->start_time = $doctor->start_time;
-            $this->end_time = $doctor->end_time;
+             $this->start_time = \Carbon\Carbon::parse($doctor->start_time)->format('H:i');
+        $this->end_time = \Carbon\Carbon::parse($doctor->end_time)->format('H:i');
             $this->slot_duration_minutes = $doctor->slot_duration_minutes;
             $this->patients_per_slot = $doctor->patients_per_slot;
             $this->available_days = $doctor->available_days ?? [];
+            $this->max_booking_days = $doctor->max_booking_days;
+
         }
     }
 
@@ -43,6 +47,7 @@ class CreateSlot extends Component
             'slot_duration_minutes' => 'required|integer|min:5|max:120',
             'patients_per_slot' => 'required|integer|min:1|max:10',
             'available_days' => 'required|array|min:1',
+            'max_booking_days'=>'required|integer|min:1|max:30'
         ]);
 
         $doctor = Doctor::where('user_id', auth()->id())->first();
@@ -54,6 +59,8 @@ class CreateSlot extends Component
                 'slot_duration_minutes' => $this->slot_duration_minutes,
                 'patients_per_slot' => $this->patients_per_slot,
                 'available_days' => $this->available_days,
+                'max_booking_days' => $this->max_booking_days,
+
             ]);
 
             session()->flash('success', 'Schedule updated successfully!');

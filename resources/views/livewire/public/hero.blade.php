@@ -86,7 +86,7 @@
             <!-- CTA and stats -->
             <div class="flex flex-col lg:flex-row items-center justify-between gap-8 mt-12">
                 <div class="flex flex-col sm:flex-row gap-4">
-                    <a href="/book-appointment"
+                    <a wire:navigate href="{{route('appointment')}}"
                         class="bg-brand-orange-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-brand-orange-700 transition-colors text-center flex items-center justify-center shadow-md hover:shadow-lg">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
