@@ -57,7 +57,7 @@ Route::prefix('doc')->group(function () {
     Route::get('/crateslot', CreateSlot::class)->name('doctor.create-slot');
 
 });
-
+});
 
 //manager Routes
 
