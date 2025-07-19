@@ -21,9 +21,17 @@
 <div class="relative" x-data="{ open: false }">
     <!-- Trigger -->
     <div class="flex items-center cursor-pointer space-x-2 group" @click="open = !open">
-        <img class="h-10 w-10 rounded-full object-cover border-2 border-indigo-100 shadow-md group-hover:border-indigo-200 transition-all duration-200"
-             src="https://i.pravatar.cc/100?img=12"
-             alt="Doctor Avatar">
+        @if(auth()->user()->doctor->image)
+            <img class="h-10 w-10 rounded-full object-cover border-2 border-indigo-100 shadow-md group-hover:border-indigo-200 transition-all duration-200"
+                 src="{{ auth()->user()->doctor->image }}?v={{ time() }}"
+                 alt="Doctor Profile Image"
+                 wire:key="header-profile-image-{{ auth()->id() }}-{{ now()->timestamp }}">
+        @else
+            <!-- Fallback avatar/initials -->
+            <div class="h-10 w-10 rounded-full bg-indigo-100 border-2 border-indigo-100 shadow-md group-hover:border-indigo-200 transition-all duration-200 flex items-center justify-center text-indigo-600 font-medium">
+                {{ substr(auth()->user()->name, 0, 1) }}
+            </div>
+        @endif
         <svg xmlns="http://www.w3.org/2000/svg" 
              class="h-4 w-4 text-gray-500 group-hover:text-indigo-600 transition-colors duration-200"
              fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -72,3 +80,14 @@
     </div>
 </div>
 
+<script>
+    document.addEventListener('livewire:initialized', () => {
+        Livewire.on('profile-picture-updated', (event) => {
+            // Update the image source with cache busting
+            const img = document.querySelector('[wire\\:key^="header-profile-image"]');
+            if (img) {
+                img.src = `${event.imageUrl}?v=${new Date().getTime()}`;
+            }
+        });
+    });
+</script>

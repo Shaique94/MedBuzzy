@@ -12,7 +12,6 @@ use App\Livewire\Doctor\Section\CreateSlot;
 use App\Livewire\Doctor\Section\Leave;
 use App\Livewire\Doctor\Section\Manager\CreateManger;
 use App\Livewire\Doctor\Section\Doctordashboard;
-use App\Livewire\Manager\Sections\Managerdashboard;
 use App\Livewire\Public\Appointment\AppointmentConfirmation;
 use App\Livewire\Public\Appointment\ManageAppointment;
 use App\Livewire\Public\Contact\ContactUs;
@@ -25,7 +24,10 @@ use App\Livewire\Public\Section\Contact;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Doctor\Profile;
-
+use App\Livewire\Manager\Sections\Managerdashboard;
+use App\Livewire\Manager\Sections\AppointmentList;
+// use App\Livewire\Manager\Sections\ViewDetails;
+use App\Livewire\Manager\Sections\Profile as ManagerProfile;
 
 
 // Public Routes
@@ -47,6 +49,8 @@ Route::prefix('doc')->group(function(){
 Route::get('/dashboard',Doctordashboard::class)->name('doctor.dashboard');
 Route::get('/manager',CreateManger::class)->name('doctor.manager-list');
 Route::get('/manager/create',CreateManger::class)->name('doctor.create-manager');
+});
+
 Route::prefix('doc')->group(function () {
     Route::get('/dashboard', Doctordashboard::class)->name('doctor.dashboard');
     Route::get('/manager', CreateManger::class)->name('doctor.create-manager');
@@ -56,18 +60,23 @@ Route::prefix('doc')->group(function () {
 
     Route::get('/crateslot', CreateSlot::class)->name('doctor.create-slot');
 
-});
-});
-
-//manager Routes
-
-Route::prefix('manager')->group(function () {
-    Route::get('/dashboard', Managerdashboard::class)->name('manager.dashboard');
+    // Manager Routes under Doctor
+    Route::prefix('manager')->group(function () {
+    Route::get('/', CreateManger::class)->name('doctor.manager.list');
+    Route::get('/create', CreateManger::class)->name('doctor.manager.create'); 
+    });
 });
 
+
+// Manager Routes
+Route::prefix('manager')->name('manager.')->group(function () {
+Route::get('/dashboard', Managerdashboard::class)->name('dashboard');
+Route::get('/appointments', AppointmentList::class)->name('appointments');
+//Route::get('/appointment/view/{id}', ViewDetails::class)->name('manager.view.appointment');
+   Route::get('/profile', ManagerProfile::class)->name('profile');
+});
 
 // Admin Routes
-
 Route::prefix('admin')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('admin.dashboard');
     Route::get('/manage-doctors', ManageDoctor::class)->name('manage.doctors');

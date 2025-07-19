@@ -13,6 +13,7 @@ class Doctor extends Model
         'fee',
         'status',
         'image',
+         'image_id', 
         'qualification',
         'slug',
         'start_time',
@@ -27,7 +28,7 @@ class Doctor extends Model
 
     protected $casts = [
         'qualification' => 'array',
-        'available_days' => 'array', // Fixed spelling here too
+        'available_days' => 'array', 
         'unavailable_from' => 'date',
         'unavailable_to' => 'date',
     ];

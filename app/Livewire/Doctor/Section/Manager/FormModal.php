@@ -7,22 +7,27 @@ use App\Models\User;
 use App\Models\Manager;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
+use App\Services\ImageKitService;
 
 class FormModal extends Component
 {
     use WithFileUploads;
 
     public $show = false;
-
     public $name = '', $email = '', $phone = '', $address = '', $gender = '', $dob = '', $status = 'active', $photo;
+    public $imageUrl; 
+    public $imageId;
 
-    protected $listeners = ['openCreateModal'];
-
-    public function openCreateModal()
+    public function openModal()
     {
         $this->resetForm();
         $this->show = true;
+    }
+
+    public function closeModal()
+    {
+        $this->resetForm();
+        $this->show = false;
     }
 
     public function saveManager()
@@ -35,7 +40,7 @@ class FormModal extends Component
             'gender' => 'required|in:male,female,other',
             'dob' => 'required|date',
             'status' => 'required|in:active,inactive',
-            'photo' => 'nullable|image|max:1024',
+            'photo' => 'nullable|image|max:10240',
         ]);
 
         $user = User::create([
@@ -46,38 +51,42 @@ class FormModal extends Component
             'role' => 'manager',
         ]);
 
-        $photoPath = $this->photo ? $this->photo->store('manager_photos', 'public') : null;
+        if ($this->photo) {
+            $imageKit = new ImageKitService();
+            $response = $imageKit->upload(
+                fopen($this->photo->getRealPath(), 'r'),
+                'manager_' . time() . '.' . $this->photo->getClientOriginalExtension(),
+                'managers'
+            );
+
+            if (isset($response->result->url) && isset($response->result->fileId)) {
+                $this->imageUrl = $response->result->url;
+                $this->imageId = $response->result->fileId;
+            }
+        }
 
         Manager::create([
             'user_id' => $user->id,
             'doctor_id' => auth()->user()->doctor->id,
             'address' => $this->address,
-            'photo' => $photoPath,
+            'photo' => $this->imageUrl,
+            'photo_id' => $this->imageId,
             'gender' => $this->gender,
             'dob' => $this->dob,
             'status' => $this->status,
         ]);
 
-          return redirect()->route('doctor.manager-list')->with('success', 'Manager created successfully!');
-        $this->closeModal();
-        $this->dispatch('refreshManagers');
+       return redirect()->route('doctor.manager.list')->with('success', 'Manager created successfully!');
     }
 
-    public function closeModal()
+    private function resetForm()
     {
-        $this->resetForm();
-        $this->show = false;
-    }
-
-    public function resetForm()
-    {
-        $this->reset(['show', 'name', 'email', 'phone', 'address', 'gender', 'dob', 'status', 'photo']);
+        $this->reset(['name', 'email', 'phone', 'address', 'gender', 'dob', 'status', 'photo']);
         $this->status = 'active';
     }
 
- public function render()
-{
-    return view('livewire.doctor.section.manager.form-modal');
-}
-
+    public function render()
+    {
+        return view('livewire.doctor.section.manager.form-modal');
+    }
 }

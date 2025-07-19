@@ -122,13 +122,17 @@
                                                 ₹{{ $doctor->fee }} Fee
                                             </div>
 
-                                            <div
-                                                class="w-24 h-24 rounded-full overflow-hidden bg-white mx-auto border-4 border-white shadow-md">
-                                                <img src="{{ asset('storage/' . $doctor->image) }}"
-                                                    alt="Dr. {{ $doctor->user->name }}"
-                                                    class="w-full h-full object-cover">
-                                            </div>
-                                        </div>
+                            <div
+                                class="w-24 h-24 rounded-full overflow-hidden bg-white mx-auto border-4 border-white shadow-md">
+                              @if($doctor->image)
+    <img src="{{ $doctor->image }}" class="w-full h-full object-cover">
+@else
+    <span class="text-blue-600 font-medium">{{ substr($doctor->user->name, 0, 1) }}</span>
+@endif
+                                   
+                                    
+                            </div>
+                        </div>
 
                                         <div class="mt-4">
                                             <h3 class="text-gray-900 font-bold">Dr. {{ $doctor->user->name }}</h3>

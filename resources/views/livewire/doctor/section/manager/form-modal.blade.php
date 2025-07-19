@@ -67,16 +67,39 @@
                             @error('status') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>@enderror
                         </div>
 
-                        <!-- Photo -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Photo</label>
-                            <input type="file" wire:model="photo" class="w-full border border-gray-300 rounded-lg text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-5 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100">
-                            @error('photo') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>@enderror
-                        </div>
-                    </div>
+                <!-- Photo -->
+<div>
+    <label class="block text-sm font-medium text-gray-700 mb-2">Photo</label>
+    
+    <!-- Show image preview if available -->
+    @if($photo)
+        <div class="mb-2">
+            <img src="{{ $photo->temporaryUrl() }}" class="h-20 w-20 object-cover rounded-lg">
+            <div wire:loading wire:target="photo" class="mt-1 text-sm text-gray-500">
+                Processing image...
+            </div>
+        </div>
+    @endif
+    
+    <input 
+        type="file" 
+        wire:model="photo" 
+        accept="image/*"
+        class="w-full border border-gray-300 rounded-lg text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-5 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100"
+    >
+    
+    @error('photo') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>@enderror
+    
+    <!-- Show the final ImageKit URL after upload -->
+    @if($imageUrl)
+        <div class="mt-2 text-xs text-gray-500">
+            Image will be saved to: {{ \Illuminate\Support\Str::limit($imageUrl, 50) }}
+        </div>
+    @endif
+</div>
 
                     <!-- Form buttons -->
-                    <div class="mt-6 flex justify-end space-x-3">
+                  <div class="mt-6 flex justify-end space-x-3">
                         <button type="button" wire:click="closeModal" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">
                             Cancel
                         </button>
@@ -88,4 +111,12 @@
             </div>
         </div>
     @endif
+
+    @script
+    <script>
+        Livewire.on('open-manager-modal', () => {
+            @this.openModal();
+        });
+    </script>
+    @endscript
 </div>

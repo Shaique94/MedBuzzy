@@ -1,10 +1,19 @@
 <div class="h-full bg-white shadow-md flex flex-col">
-    <!-- Profile -->
-    <div class="p-6 border-b flex items-center space-x-4">
-        <img src="https://i.pravatar.cc/100?img=12" alt="Doctor Avatar" class="w-12 h-12 rounded-full object-cover">
+    <!-- Profile Section -->
+   <div class="p-6 border-b flex items-center space-x-4">
+    @if($doctor->image)
+        <img src="{{ $doctor->image }}?v={{ time() }}" 
+             alt="Doctor Profile" 
+             class="w-12 h-12 rounded-full object-cover border-2 border-blue-100"
+             wire:key="sidebar-profile-image-{{ $doctor->id }}-{{ now()->timestamp }}">
+    @else
+        <div class="w-12 h-12 rounded-full bg-blue-100 border-2 border-blue-200 flex items-center justify-center text-blue-600 font-semibold">
+            {{ substr($doctor->user->name, 0, 1) }}
+        </div>
+    @endif
         <div>
             <h2 class="font-semibold text-gray-800 text-lg">{{ $doctor->user->name }}</h2>
-            <p class="text-gray-500 text-sm">{{ $doctor->department->name }}</p>
+            <p class="text-gray-500 text-sm">{{ $doctor->department->name ?? 'No Department' }}</p>
         </div>
     </div>
 
@@ -20,7 +29,7 @@
         </a>
 
         <!-- Create Manager -->
-        <a wire:navigate href="{{ route('doctor.create-manager') }}"
+        <a wire:navigate href="{{ route('doctor.manager.create') }}"
             class="flex items-center px-4 py-2 text-gray-700 hover:bg-green-100 rounded-lg transition">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-green-500" fill="none"
                 viewBox="0 0 24 24" stroke="currentColor">
@@ -50,17 +59,6 @@
 
         <!-- Add more doctor links here -->
 
-        <!-- Add Profile -->
-        <a wire:navigate href="{{ route('doctor.profile') }}"
-            class="flex items-center px-4 py-2 text-gray-700 hover:bg-green-100 rounded-lg transition">
-            <svg class="w-6 h-6 text-blue-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                width="24" height="24" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-            </svg>
-            Profile
-        </a>
-
     </nav>
 
     <!-- Logout -->
@@ -78,3 +76,15 @@
         </form>
     </div>
 </div>
+
+<script>
+    document.addEventListener('livewire:initialized', () => {
+        Livewire.on('profile-picture-updated', (event) => {
+            // Update the image source with cache busting
+            const img = document.querySelector('[wire\\:key^="sidebar-profile-image"]');
+            if (img) {
+                img.src = `${event.imageUrl}?v=${new Date().getTime()}`;
+            }
+        });
+    });
+</script>

@@ -36,16 +36,23 @@
                         <tr class="hover:bg-gray-50 transition duration-150">
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
-                                    <div class="flex-shrink-0 h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center">
-                                        @if($doctor->image)
-                                            <img src="{{ asset('storage/'.$doctor->image) }}" class="h-10 w-10 rounded-full">
-                                        @else
-                                            <span class="text-blue-600 font-medium">{{ substr($doctor->user->name, 0, 1) }}</span>
-                                        @endif
-                                    </div>
+                                   <div class="flex-shrink-0 h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center">
+    @if($doctor->image)
+        <img src="{{ $doctor->image }}" class="h-10 w-10 rounded-full">
+    @else
+        <span class="text-blue-600 font-medium">{{ substr($doctor->user->name, 0, 1) }}</span>
+    @endif
+</div>
                                     <div class="ml-4">
                                         <div class="text-sm font-medium text-gray-900">{{ $doctor->user->name }}</div>
-                                        <div class="text-xs text-gray-500">{{ $doctor->qualification }}</div>
+                                        <div class="text-xs text-gray-500">
+                                                @if(is_array($doctor->qualification))
+            {{ implode(', ', $doctor->qualification) }}
+        @else
+            {{ $doctor->qualification }} 
+        @endif
+                                        
+                                        </div>
                                     </div>
                                 </div>
                             </td>
@@ -62,7 +69,7 @@
         @if(is_array($doctor->available_days))
             {{ implode(', ', $doctor->available_days) }}
         @else
-            {{ $doctor->available_days }} {{-- fallback if it's a string --}}
+            {{ $doctor->available_days }} 
         @endif
     </div>
 </td>
@@ -102,6 +109,19 @@
                         <div class="sm:flex sm:items-start">
                             <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
                                 <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4" id="modal-title">Add New Doctor</h3>
+
+                                <!-- Add this near the top of your form -->
+@if (session()->has('error'))
+    <div class="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700">
+        <p>{{ session('error') }}</p>
+    </div>
+@endif
+
+@if ($errors->has('saveError'))
+    <div class="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700">
+        <p>{{ $errors->first('saveError') }}</p>
+    </div>
+@endif
                                 <form wire:submit.prevent="save" class="space-y-4">
                                     <!-- Personal Information Section -->
                                     <div class="border-b border-gray-200 pb-4">
@@ -134,14 +154,16 @@
                                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                                 @enderror
                                             </div>
-                                            <div>
-                                                <label class="block text-sm font-medium text-gray-700 mb-1">Qualification</label>
-                                                <input type="text" wire:model="qualification"
-                                                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                                                @error('qualification')
-                                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                                @enderror
-                                            </div>
+                                        <div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Qualifications</label>
+    <input type="text" wire:model="qualification"
+           class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+           placeholder="MD, MBBS, PhD (comma separated)">
+    <p class="mt-1 text-xs text-gray-500">Separate multiple qualifications with commas</p>
+    @error('qualification')
+        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+    @enderror
+</div>
                                         </div>
                                     </div>
 
@@ -241,11 +263,11 @@
                                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                         <span class="text-gray-500 sm:text-sm">$</span>
                                                     </div>
-                                                    <input type="number" wire:model="fees"
+                                                    <input type="number" wire:model="fee"
                                                         class="block w-full pl-7 pr-12 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                                         placeholder="0.00">
                                                 </div>
-                                                @error('fees')
+                                                @error('fee')
                                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                                 @enderror
                                             </div>
@@ -268,24 +290,33 @@
 
                                     <!-- Photo and Security Section -->
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Profile Photo</label>
-                                            <div class="mt-1 flex items-center">
-                                                <span class="inline-block h-12 w-12 rounded-full overflow-hidden bg-gray-100">
-                                                    @if ($photo)
-                                                        <img src="{{ $photo->temporaryUrl() }}" class="h-full w-full object-cover">
-                                                    @else
-                                                        <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-                                                            <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                                                        </svg>
-                                                    @endif
-                                                </span>
-                                                <input type="file" wire:model="photo" class="ml-5 block text-sm text-gray-500">
-                                            </div>
-                                            @error('photo')
-                                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                            @enderror
-                                        </div>
+                                       <!-- Photo Section -->
+<div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Profile Photo</label>
+    <div class="mt-1 flex items-center">
+        <span class="inline-block h-12 w-12 rounded-full overflow-hidden bg-gray-100">
+            @if ($photo)
+                <img src="{{ $photo->temporaryUrl() }}" class="h-full w-full object-cover">
+            @elseif($imageUrl)
+                <img src="{{ $imageUrl }}" class="h-full w-full object-cover">
+            @else
+                <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+            @endif
+        </span>
+        <input type="file" wire:model="photo" class="ml-5 block text-sm text-gray-500">
+    </div>
+    @error('photo')
+        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+    @enderror
+    
+    @if($imageUrl)
+        <div class="mt-1 text-xs text-gray-500">
+            Image URL: {{ \Illuminate\Support\Str::limit($imageUrl, 50) }}
+        </div>
+    @endif
+</div>
 
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
