@@ -35,6 +35,7 @@
                             700: '#0f766e',
                             800: '#115e59',
                             900: '#134e4a',
+                            
                         }
                     }
                 }
@@ -59,9 +60,7 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
-    <!-- Alpine.js for interactivity -->
 
-    {{-- <script src="//unpkg.com/alpinejs" defer></script> --}}
 
 </head>
 

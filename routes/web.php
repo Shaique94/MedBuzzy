@@ -22,6 +22,7 @@ use App\Livewire\Public\OurDoctors\OurDoctors;
 use App\Livewire\Public\OurDoctors\ViewDoctorDetail;
 use App\Livewire\Public\Section\About;
 use App\Livewire\Public\Section\Contact;
+use App\Livewire\Public\TermsCondition;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Doctor\Profile;
@@ -31,6 +32,7 @@ use App\Livewire\Doctor\Profile;
 // Public Routes
 Route::get('/', LandingPage::class)->name('hero');
 Route::get('/our-doctors', OurDoctors::class)->name('our-doctors');
+Route::get('/terms-conditions', TermsCondition::class)->name('terms-conditons');
 Route::get('/doctor/{doctor_id}', ViewDoctorDetail::class)->name('doctor-detail');
 Route::get('/contact-us', ContactUs::class)->name('contact-us');
 Route::get('/appointment', ManageAppointment::class)->name('appointment');
