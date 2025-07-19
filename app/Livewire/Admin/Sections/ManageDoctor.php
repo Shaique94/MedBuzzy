@@ -11,6 +11,7 @@ use Livewire\Component;
 use Illuminate\Support\Str;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
+use App\Services\ImageKitService; 
 
 class ManageDoctor extends Component
 {
@@ -24,7 +25,7 @@ class ManageDoctor extends Component
     public $department_id;
     public $available_days = [];
     public $phone;
-    public $fees;
+    public $fee;
     public $status;
     public $qualification;
     public $password;
@@ -36,6 +37,8 @@ class ManageDoctor extends Component
     public $patients_per_slot = 1;
     public $search = '';
     public $max_booking_days; 
+    public $imageUrl; 
+    public $imageId;  
 
     public function mount()
     {
@@ -51,10 +54,10 @@ class ManageDoctor extends Component
             'available_days' => 'required|array|min:1',
             'status' => 'required|in:0,1,2',
             'phone' => 'required|string|max:15',
-            'fees' => 'required|numeric',
+            'fee' => 'required|numeric',
             'qualification' => 'nullable|string|max:255',
             'password' => 'required|string|min:6|confirmed',
-            'photo' => 'nullable|image|max:2048',
+                   'photo' => 'nullable|image|max:10240',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
             'slot_duration_minutes' => 'required|integer|min:5|max:120',
@@ -62,6 +65,7 @@ class ManageDoctor extends Component
             'max_booking_days'=>'required|integer|min:1|max:30'
         ]);
 
+              try {
         $user = User::create([
             'name' => $this->name,
             'email' => $this->email,
@@ -70,19 +74,41 @@ class ManageDoctor extends Component
             'role' => 'doctor',
         ]);
 
-        $imagePath = null;
-        if ($this->photo) {
-            $imagePath = $this->photo->store('doctors', 'public');
-        }
+            // Handle image upload to ImageKit
+            $imageUrl = null;
+            $imageId = null;
+            
+            if ($this->photo) {
+                $imageKit = new ImageKitService();
+                $response = $imageKit->upload(
+                    fopen($this->photo->getRealPath(), 'r'),
+                    'doctor_' . time() . '.' . $this->photo->getClientOriginalExtension(),
+                    'doctors' // Folder in ImageKit
+                );
 
+                if (!isset($response->result->url)) {
+                    throw new \Exception('Image upload failed');
+                }
+
+                $imageUrl = $response->result->url;
+                $imageId = $response->result->fileId;
+                
+          
+            }
+
+  $qualifications = $this->qualification ? 
+    array_filter(array_map('trim', explode(',', $this->qualification))) : 
+    null;
+    
         Doctor::create([
             'user_id' => $user->id,
             'department_id' => $this->department_id,
-            'fees' => $this->fees,
+            'fee' => $this->fee,
             'status' => $this->status,
-            'available_days' => $this->available_days,
-            'qualification' => $this->qualification,
-            'image' => $imagePath,
+             'available_days' => $this->available_days,
+     'qualification' => $qualifications,
+                  'image' => $imageUrl,     
+                'image_id' => $imageId,   
             'slug' => Str::slug($this->name),
             'start_time' => $this->start_time,
             'end_time' => $this->end_time,
@@ -99,7 +125,7 @@ class ManageDoctor extends Component
             'phone',
             'status',
             'available_days',
-            'fees',
+            'fee',
             'department_id',
             'qualification',
             'photo',
@@ -108,11 +134,30 @@ class ManageDoctor extends Component
             'slot_duration_minutes',
             'patients_per_slot',
             'max_booking_days',
-            'showModal'
+            'showModal',
         ]);
 
         session()->flash('message', 'Doctor saved successfully.');
+   } catch (\Exception $e) {
+            // Clean up if something went wrong
+            if (isset($user)) {
+                $user->delete();
+            }
+            
+            // Delete from ImageKit if upload succeeded but something else failed
+            if (isset($imageId)) {
+                try {
+                    $imageKit->delete($imageId);
+                } catch (\Exception $deleteException) {
+                    // Log this error
+                }
+            }
+            
+            session()->flash('error', 'Error saving doctor: ' . $e->getMessage());
+        }
     }
+
+
 
     #[Layout('layouts.admin')]
     public function render()

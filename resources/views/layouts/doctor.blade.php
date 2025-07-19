@@ -55,7 +55,7 @@
             </main>
 
             <!-- Footer -->
-            <livewire:doctor.footer />
+            {{-- <livewire:doctor.footer /> --}}
         </div>
     </div>
 
@@ -70,3 +70,20 @@
     @livewireScripts
 </body>
 </html>
+
+
+
+
+<script>
+    document.addEventListener('livewire:initialized', () => {
+        Livewire.on('profile-picture-updated', (event) => {
+            // Force refresh any Livewire components showing the profile picture
+            Livewire.dispatch('refresh-navigation');
+            
+            // Update all profile images on the page
+            document.querySelectorAll('[wire\\:key^="profile-image-"]').forEach(img => {
+                img.src = `${event.imageUrl}?t=${new Date().getTime()}`;
+            });
+        });
+    });
+</script>
