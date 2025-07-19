@@ -9,6 +9,7 @@ use App\Models\Doctor;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\Hash;
+use App\Services\ImageKitService;
 
 class Profile extends Component
 {
@@ -18,6 +19,8 @@ public $current_password, $new_password, $new_password_confirmation;
 
     public $doctor;
     public $name, $phone, $qualification, $fee, $start_time, $end_time, $slot_duration_minutes, $patients_per_slot,  $image, $newImage;
+    public $available_days = [];
+       public $imageTimestamp; 
 
     #[Layout('layouts.doctor')]
     public function mount()
@@ -27,18 +30,17 @@ public $current_password, $new_password, $new_password_confirmation;
 
         $this->name = $this->doctor->user->name;
         $this->phone = $this->doctor->user->phone ?? '';
-        $this->qualification = $this->doctor->qualification ;
+        $this->qualification = $this->doctor->qualification ?? ''; 
         $this->fee = $this->doctor->fee;
         $this->start_time = $this->doctor->start_time;
         $this->end_time = $this->doctor->end_time;
         $this->slot_duration_minutes = $this->doctor->slot_duration_minutes;
         $this->patients_per_slot = $this->doctor->patients_per_slot;
-        // $this->available_days = $this->doctor->available_days ? explode(',', $this->doctor->available_days) : [];
+       $this->available_days = $this->doctor->available_days ?? [];
     }
 
     public function updateProfile()
     {
-        // dd($this->name, $this->phone, $this->doctor->user);
         $this->validate([
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:15',
@@ -47,16 +49,46 @@ public $current_password, $new_password, $new_password_confirmation;
             'end_time' => 'required',
             'slot_duration_minutes' => 'required|numeric|min:1',
             'patients_per_slot' => 'required|numeric|min:1',
-            'qualification' => 'nullable|string|max:255',
-            // 'available_days' => 'string',
-            'newImage' => 'nullable|image|max:1024',
+            'qualification' => 'required|string|max:255',
+          'available_days' => 'required|array|min:1',
+            'newImage' => 'nullable|image|max:10240',
         ]);
 
-        if ($this->newImage) {
-            $imagePath = $this->newImage->store('doctors', 'public');
-            $this->doctor->image = $imagePath;
-        }
+          try {
+            // Initialize with current image data
+            $imageUrl = $this->doctor->image;
+            $imageId = $this->doctor->image_id;
 
+            // Handle image upload if new image is provided
+            if ($this->newImage) {
+                $imageKit = new ImageKitService();
+                
+                // First delete old image if exists
+                if ($imageId) {
+                    try {
+                        $imageKit->delete($imageId);
+                    } catch (\Exception $e) {
+                        // Log deletion error but continue with upload
+                        \Log::error('Failed to delete old image: ' . $e->getMessage());
+                    }
+                }
+
+                // Upload new image
+                $response = $imageKit->upload(
+                    fopen($this->newImage->getRealPath(), 'r'),
+                    'doctor_' . time() . '.' . $this->newImage->getClientOriginalExtension(),
+                    'doctor-profile'
+                );
+
+                if (!isset($response->result)) {
+                    throw new \Exception('Image upload failed - invalid response');
+                }
+
+                $imageUrl = $response->result->url;
+                $imageId = $response->result->fileId;
+            }
+
+        
         $this->doctor->update([
             'qualification' => $this->qualification,
             'fee' => $this->fee,
@@ -64,8 +96,9 @@ public $current_password, $new_password, $new_password_confirmation;
             'end_time' => $this->end_time,
             'slot_duration_minutes' => $this->slot_duration_minutes,
             'patients_per_slot' => $this->patients_per_slot,
-            // 'available_days' => implode(',', $this->available_days),
-            'image' => $this->doctor->image,
+          'available_days' => $this->available_days,
+           'image' => $imageUrl,
+                'image_id' => $imageId,
         ]);
 
  $this->doctor->user()->update([
@@ -73,9 +106,16 @@ public $current_password, $new_password, $new_password_confirmation;
     'phone' => $this->phone,
 ]);
 
+     $this->reset('newImage');
 
         session()->flash('message', 'Profile updated successfully.');
+
+     } catch (\Exception $e) {
+            session()->flash('error', 'Error updating profile: ' . $e->getMessage());
+            \Log::error('Profile update error: ' . $e->getMessage());
+        }
     }
+
 
    public function render()
     {
@@ -103,7 +143,13 @@ public $current_password, $new_password, $new_password_confirmation;
     ]);
 
     $this->reset(['current_password', 'new_password', 'new_password_confirmation']);
+
+    // Dispatch events to refresh other components
+    $this->dispatch('profile-picture-updated', imageUrl: $imageUrl);
+    $this->dispatch('refresh-navigation');
+
     session()->flash('message', 'Password updated successfully.');
+    
 }
 
 }

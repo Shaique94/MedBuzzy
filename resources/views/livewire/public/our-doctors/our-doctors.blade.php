@@ -105,13 +105,11 @@
                                 <!-- Doctor Image -->
                                 <div
                                     class="w-28 h-28 bg-white rounded-full flex items-center justify-center shadow-lg overflow-hidden border border-gray-200">
-                                    @if ($doctor->image)
-                                        <img src="{{ asset('storage/' . $doctor->image) }}"
-                                            alt="{{ $doctor->name }}'s Photo" class="w-full h-full object-cover">
-                                    @else
-                                        <!-- Fallback content if no image exists -->
-                                        <div class="text-gray-400 text-center p-2">No Photo</div>
-                                    @endif
+                                     @if($doctor->image)
+    <img src="{{ $doctor->image }}" class="w-full h-full object-cover">
+@else
+    <span class="text-blue-600 font-medium">{{ substr($doctor->user->name, 0, 1) }}</span>
+@endif
                                 </div>
 
 

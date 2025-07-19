@@ -39,35 +39,40 @@ class EditModal extends Component
     $this->tempPhoto = $manager->photo_url;
 }
 
-    public function updateManager()
-    {
-        $manager = Manager::with('user')->findOrFail($this->managerId);
+ public function updateManager()
+{
+    $manager = Manager::with('user')->findOrFail($this->managerId);
 
-        $this->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,'.$manager->user->id,
-            'phone' => 'nullable|string|max:20',
-            'address' => 'required|string|max:500',
-            'gender' => 'required|in:male,female,other',
-            'dob' => 'required|date',
-            'status' => 'required|in:active,inactive',
-            'photo' => 'nullable|image|max:1024',
-        ]);
+    $this->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,'.$manager->user->id,
+        'phone' => 'nullable|string|max:20|regex:/^[\d\-\+\(\) ]+$/',
+        'address' => 'required|string|max:500',
+        'gender' => 'required|in:male,female,other',
+        'dob' => 'required|date|before_or_equal:today',
+        'status' => 'required|in:active,inactive',
+        'photo' => 'nullable|image|max:1024|mimes:jpg,jpeg,png',
+    ]);
 
+    try {
+        // Update user data
         $manager->user->update([
             'name' => $this->name,
             'email' => $this->email,
             'phone' => $this->phone,
         ]);
 
+        // Handle photo upload
         $photoPath = $manager->photo;
         if ($this->photo) {
+            // Delete old photo if exists
             if ($manager->photo && Storage::disk('public')->exists($manager->photo)) {
                 Storage::disk('public')->delete($manager->photo);
             }
             $photoPath = $this->photo->store('manager_photos', 'public');
         }
 
+        // Update manager data
         $manager->update([
             'address' => $this->address,
             'photo' => $photoPath,
@@ -76,10 +81,17 @@ class EditModal extends Component
             'status' => $this->status,
         ]);
 
-        return redirect()->route('doctor.manager-list')->with('success', 'Manager updated successfully!');
+        // Close modal and refresh
         $this->closeModal();
-$this->dispatch('refreshManagers');
+        $this->dispatch('refreshManagers');
+        
+        return redirect()->route('doctor.manager-list')
+            ->with('success', 'Manager updated successfully!');
+
+    } catch (\Exception $e) {
+        $this->addError('updateError', 'Failed to update manager: ' . $e->getMessage());
     }
+}
 
     public function closeModal()
     {
@@ -93,6 +105,7 @@ $this->dispatch('refreshManagers');
             'show', 'managerId', 'name', 'email', 'phone',
             'address', 'gender', 'dob', 'status', 'photo', 'tempPhoto'
         ]);
+           $this->resetErrorBag();
     }
 
     public function render()

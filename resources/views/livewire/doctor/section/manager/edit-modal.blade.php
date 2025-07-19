@@ -2,6 +2,14 @@
     @if($show)
         <div class="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
             <div class="bg-white w-full max-w-2xl p-6 rounded-lg relative">
+
+  @error('updateError')
+                    <div class="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700">
+                        <p>{{ $message }}</p>
+                    </div>
+                @enderror
+
+
                 <button wire:click="closeModal" class="absolute top-3 right-3 text-gray-500 hover:text-gray-700">
                     &times;
                 </button>

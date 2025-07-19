@@ -12,31 +12,34 @@
 
     {{-- Profile Update Form --}}
     <form wire:submit.prevent="updateProfile" class="space-y-6">
-        <!-- Profile Photo -->
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Profile Photo</label>
-            <div class="flex items-center">
-                <div class="relative">
-                    @if ($newImage)
-                        <img src="{{ $newImage->temporaryUrl() }}" class="w-20 h-20 rounded-full object-cover border-2 border-white shadow">
-                    @elseif($doctor->image)
-                        <img src="{{ asset('storage/' . $doctor->image) }}" class="w-20 h-20 rounded-full object-cover border-2 border-white shadow">
-                    @else
-                        <div class="w-20 h-20 bg-gray-200 rounded-full border-2 border-white shadow flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                            </svg>
-                        </div>
-                    @endif
+     <!-- Profile Photo -->
+<div>
+    <label class="block text-sm font-medium text-gray-700 mb-2">Profile Photo</label>
+    <div class="flex items-center">
+        <div class="relative">
+            @if ($newImage)
+                <img src="{{ $newImage->temporaryUrl() }}" 
+                     class="w-20 h-20 rounded-full object-cover border-2 border-white shadow">
+            @elseif($doctor->image)
+                <img src="{{ $doctor->image }}" 
+                     class="w-20 h-20 rounded-full object-cover border-2 border-white shadow">
+            @else
+                <div class="w-20 h-20 bg-gray-200 rounded-full border-2 border-white shadow flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
                 </div>
-                <div class="ml-4">
-                    <label class="cursor-pointer bg-white px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                        Change Photo
-                        <input type="file" wire:model="newImage" class="sr-only">
-                    </label>
-                </div>
-            </div>
+            @endif
         </div>
+        <div class="ml-4">
+            <label class="cursor-pointer bg-white px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                Change Photo
+                <input type="file" wire:model="newImage" class="sr-only" accept="image/*">
+            </label>
+        </div>
+    </div>
+    @error('newImage') <span class="mt-1 text-sm text-red-600">{{ $message }}</span> @enderror
+</div>
 
         <!-- Name -->
         <div>
@@ -73,12 +76,11 @@
         <!-- Slot / Qualification -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Qualification -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Qualifications</label>
-                <input type="text" wire:model.defer="qualification" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="MBBS, MD, etc." />
-                @error('qualification') <span class="mt-1 text-sm text-red-600">{{ $message }}</span> @enderror
-            </div>
-
+         <div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Qualifications</label>
+    <input type="text" wire:model.defer="qualification" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="MBBS, MD, etc." />
+    @error('qualification') <span class="mt-1 text-sm text-red-600">{{ $message }}</span> @enderror
+</div>
             <!-- Slot Duration -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Slot Duration (minutes)</label>
@@ -87,18 +89,24 @@
             </div>
 
  <!-- Available Days -->
-        {{-- <div>
-            <label class="block text-sm font-medium text-gray-700">Available Days</label>
-            <div class="flex flex-wrap gap-4 mt-2">
-                @foreach(['Mon','Tue','Wed','Thu','Fri','Sat','Sun'] as $day)
-                    <label class="flex items-center space-x-2">
-                        <input type="checkbox" wire:model="available_days" value="{{ $day }}" class="text-blue-600 rounded" />
-                        <span>{{ $day }}</span>
-                    </label>
-                @endforeach
-            </div>
-        </div> --}}
-
+       <div class="mb-4">
+    <label class="block text-sm font-medium text-gray-700 mb-2">Available Days</label>
+    <div class="flex flex-wrap gap-3">
+        @foreach(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] as $day)
+            <label class="inline-flex items-center">
+                <input type="checkbox" 
+                       wire:model="available_days" 
+                       value="{{ $day }}" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                       @if(in_array($day, $available_days)) checked @endif>
+                <span class="ml-2 text-sm">{{ $day }}</span>
+            </label>
+        @endforeach
+    </div>
+    @error('available_days') 
+        <span class="mt-1 text-sm text-red-600">{{ $message }}</span> 
+    @enderror
+</div>
             <!-- Start Time -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Start Time</label>

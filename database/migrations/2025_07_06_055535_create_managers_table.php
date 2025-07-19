@@ -15,7 +15,10 @@ return new class extends Migration {
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('doctor_id')->constrained('doctors')->onDelete('cascade');
             $table->string('address');
-            $table->string('photo')->nullable();
+        
+            $table->string('photo')->nullable(); 
+            $table->string('photo_id')->nullable(); 
+            
             $table->enum('gender', ['male', 'female', 'other']);
             $table->date('dob');
             $table->enum('status', ['active', 'inactive'])->default('active');

@@ -63,7 +63,9 @@ class User extends Authenticatable
         return $query->whereHas('doctor');
     }
 
-    // In User model
 
-
+public function manager()
+{
+    return $this->hasOne(Manager::class);
+}
 }

@@ -2,15 +2,18 @@
     <!-- Header and Add Button -->
     <div class="flex justify-between items-center mb-8">
         <h2 class="text-3xl font-bold text-gray-900">Managers Management</h2>
-     <button 
-    wire:click="$dispatch('openCreateModal')"
-    class="bg-teal-600 text-white px-4 py-2 rounded"
->
-    Add Manager
-</button>
+        <button 
+            wire:click="$dispatch('open-manager-modal')" 
+            class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg transition-colors duration-200"
+        >
+            Add Manager
+        </button>
     </div>
 
-  @livewire('doctor.section.manager.form-modal')
+    <!-- Form Modal -->
+    <div wire:ignore.self>
+        @livewire('doctor.section.manager.form-modal', key('form-modal'))
+    </div>
   @livewire('doctor.section.manager.edit-modal') 
 
     <!-- Success Message -->
