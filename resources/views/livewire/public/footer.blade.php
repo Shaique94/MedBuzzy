@@ -7,7 +7,7 @@
             </div>
             <div class="flex space-x-4">
                 <a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a>
-                <a href="#" class="text-gray-400 hover:text-white">Terms of Service</a>
+                <a href="{{route('terms-conditons')}}" class="text-gray-400 hover:text-white">Terms and Condition</a>
                 <a href="#" class="text-gray-400 hover:text-white">Contact Us</a>
             </div>
         </div>

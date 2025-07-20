@@ -1,234 +1,464 @@
 <div>
-<div class="hero-gradient py-16 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-7xl mx-auto">
-        <div class="text-center">
-            <h1 class="text-4xl font-extrabold tracking-tight text-brand-teal-800 sm:text-5xl md:text-6xl">
-                <span class="block">About MedBuzzy India</span>
-                <span class="block text-brand-orange-500">Your Healthcare Partner</span>
-            </h1>
-            <p class="mt-3 max-w-md mx-auto text-base text-gray-600 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
-                Connecting patients with India's top doctors across 100+ hospitals
-            </p>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedBuzzy India - About Us</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-orange': {
+                            50: '#fff7ed',
+                            100: '#ffedd5',
+                            200: '#fed7aa',
+                            300: '#fdba74',
+                            400: '#fb923c',
+                            500: '#f97316',
+                            600: '#ea580c',
+                            700: '#c2410c',
+                            800: '#9a3412',
+                            900: '#7c2d12',
+                        },
+                        'brand-teal': {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            200: '#99f6e4',
+                            300: '#5eead4',
+                            400: '#2dd4bf',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, #0d9488 0%, #115e59 100%);
+        }
+        
+        .team-card {
+            transition: all 0.3s ease;
+        }
+        
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .stat-card {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(30deg);
+            transition: all 0.5s ease;
+        }
+        
+        .stat-card:hover::after {
+            transform: rotate(30deg) translate(20px, 20px);
+        }
+        
+        .feature-icon {
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1);
+            background-color: #0d9488;
+            color: white;
+        }
+        
+        .partner-logo {
+            filter: grayscale(100%);
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+        
+        .partner-logo:hover {
+            filter: grayscale(0%);
+            opacity: 1;
+            transform: scale(1.05);
+        }
+        
+        .timeline-dot {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translate(-50%, -50%);
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #14b8a6;
+            z-index: 10;
+        }
+        
+        .timeline-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 2px;
+            background: #14b8a6;
+            transform: translateX(-50%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Hero Section -->
+    <div class="hero-gradient py-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center">
+                <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl">
+                    <span class="block">About MedBuzzy India</span>
+                    <span class="block text-brand-orange-300 mt-2">Your Healthcare Partner</span>
+                </h1>
+                <p class="mt-4 max-w-md mx-auto text-lg text-brand-teal-100 sm:text-xl md:mt-6 md:text-2xl md:max-w-3xl">
+                    Connecting patients with India's top doctors across 100+ hospitals
+                </p>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="py-12 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="lg:text-center">
-            <h2 class="text-base text-brand-teal-600 font-semibold tracking-wide uppercase">Our Vision</h2>
-            <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-                Transforming healthcare access in India
-            </p>
-            <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
-                Bridging the gap between patients and quality healthcare providers across the country
-            </p>
-        </div>
+    <!-- Vision Section -->
+    <div class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:text-center">
+                <h2 class="text-base text-brand-teal-600 font-semibold tracking-wide uppercase">Our Vision</h2>
+                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                    Transforming healthcare access in India
+                </p>
+                <p class="mt-4 max-w-2xl text-xl text-gray-600 lg:mx-auto">
+                    Bridging the gap between patients and quality healthcare providers across the country
+                </p>
+            </div>
 
-        <!-- New Statistics Section -->
-        <div class="mt-16 bg-brand-teal-50 rounded-xl p-8">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-                <div>
-                    <div class="text-3xl font-bold text-brand-teal-600">100+</div>
-                    <div class="text-sm font-medium text-gray-600 mt-1">Partner Hospitals</div>
+            <!-- Statistics Section -->
+            <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="stat-card bg-brand-teal-50 rounded-xl p-8 text-center border border-brand-teal-100">
+                    <div class="text-4xl font-bold text-brand-teal-600">100+</div>
+                    <div class="text-md font-medium text-gray-600 mt-2">Partner Hospitals</div>
+                    <i class="fas fa-hospital text-brand-teal-300 text-3xl mt-4"></i>
                 </div>
-                <div>
-                    <div class="text-3xl font-bold text-brand-orange-500">5,000+</div>
-                    <div class="text-sm font-medium text-gray-600 mt-1">Verified Doctors</div>
+                <div class="stat-card bg-brand-teal-50 rounded-xl p-8 text-center border border-brand-teal-100">
+                    <div class="text-4xl font-bold text-brand-orange-500">5,000+</div>
+                    <div class="text-md font-medium text-gray-600 mt-2">Verified Doctors</div>
+                    <i class="fas fa-user-md text-brand-orange-400 text-3xl mt-4"></i>
                 </div>
-                <div>
-                    <div class="text-3xl font-bold text-brand-teal-600">50+</div>
-                    <div class="text-sm font-medium text-gray-600 mt-1">Cities Covered</div>
+                <div class="stat-card bg-brand-teal-50 rounded-xl p-8 text-center border border-brand-teal-100">
+                    <div class="text-4xl font-bold text-brand-teal-600">50+</div>
+                    <div class="text-md font-medium text-gray-600 mt-2">Cities Covered</div>
+                    <i class="fas fa-city text-brand-teal-300 text-3xl mt-4"></i>
                 </div>
-                <div>
-                    <div class="text-3xl font-bold text-brand-orange-500">10M+</div>
-                    <div class="text-sm font-medium text-gray-600 mt-1">Patients Served</div>
+                <div class="stat-card bg-brand-teal-50 rounded-xl p-8 text-center border border-brand-teal-100">
+                    <div class="text-4xl font-bold text-brand-orange-500">10M+</div>
+                    <div class="text-md font-medium text-gray-600 mt-2">Patients Served</div>
+                    <i class="fas fa-users text-brand-orange-400 text-3xl mt-4"></i>
                 </div>
             </div>
-        </div>
 
-        <!-- Our Story Section -->
-        <div class="mt-16">
-            <div class="grid md:grid-cols-2 gap-12 items-center">
-                <div>
-                    <h2 class="text-2xl font-bold text-brand-teal-800 mb-4">Our Indian Journey</h2>
-                    <div class="prose text-gray-600">
-                        <p>
-                            Founded in 2020, MedBuzzy India began with a mission to solve the challenges Indian patients face in accessing quality healthcare. 
-                            Our platform was designed specifically for India's diverse healthcare landscape.
-                        </p>
-                        <p class="mt-4">
-                            Starting with just 10 hospitals in Delhi NCR, we've grown to partner with leading healthcare providers across the country, 
-                            from multi-specialty hospitals in metros to trusted clinics in tier-2 cities.
-                        </p>
-                        <p class="mt-4">
-                            Today, we're proud to be India's fastest growing doctor appointment platform, serving patients in 12 regional languages 
-                            with features designed for Indian healthcare needs.
-                        </p>
-                    </div>
-                </div>
-                <div class="rounded-xl overflow-hidden shadow-lg">
-                    <img src="https://images.unsplash.com/photo-1581056771107-24ca5f033842?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-                         alt="Indian hospital reception" 
-                         class="w-full h-auto object-cover">
-                </div>
-            </div>
-        </div>
-
-        <!-- Features Section -->
-        <div class="mt-16">
-            <h2 class="text-2xl font-bold text-brand-teal-800 mb-8 text-center">Why Choose MedBuzzy India</h2>
-            <div class="grid gap-8 md:grid-cols-3">
-                <!-- Feature 1 -->
-                <div class="bg-white p-6 rounded-xl shadow-md border border-brand-teal-100 hover:border-brand-teal-300 transition-all">
-                    <div class="flex items-center justify-center h-12 w-12 rounded-md bg-brand-teal-100 text-brand-teal-600 mb-4">
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-semibold text-gray-900">Verified Indian Doctors</h3>
-                    <p class="mt-2 text-gray-600">
-                        All doctors verified with MCI registration and hospital credentials
-                    </p>
-                </div>
-
-                <!-- Feature 2 -->
-                <div class="bg-white p-6 rounded-xl shadow-md border border-brand-teal-100 hover:border-brand-teal-300 transition-all">
-                    <div class="flex items-center justify-center h-12 w-12 rounded-md bg-brand-teal-100 text-brand-teal-600 mb-4">
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-semibold text-gray-900">24/7 Hindi & English Support</h3>
-                    <p class="mt-2 text-gray-600">
-                        Our care coordinators speak both Hindi and English
-                    </p>
-                </div>
-
-                <!-- Feature 3 -->
-                <div class="bg-white p-6 rounded-xl shadow-md border border-brand-teal-100 hover:border-brand-teal-300 transition-all">
-                    <div class="flex items-center justify-center h-12 w-12 rounded-md bg-brand-teal-100 text-brand-teal-600 mb-4">
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-semibold text-gray-900">Transparent Indian Pricing</h3>
-                    <p class="mt-2 text-gray-600">
-                        See consultation fees upfront with no hidden charges
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Team Section -->
-<div class="py-12 bg-brand-teal-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center">
-            <h2 class="text-3xl font-extrabold text-brand-teal-800">Our Indian Leadership</h2>
-            <p class="mt-4 max-w-2xl text-xl text-gray-600 mx-auto">
-                The team dedicated to improving healthcare access in India
-            </p>
-        </div>
-
-        <div class="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            <!-- Team Member 1 -->
-            <div class="pt-6">
-                <div class="flow-root bg-white rounded-lg px-6 pb-8 shadow-md hover:shadow-lg transition-shadow">
-                    <div class="-mt-6 text-center">
-                        <div class="inline-flex items-center justify-center p-1 bg-white rounded-full shadow-lg">
-                            <img class="h-24 w-24 rounded-full object-cover" 
-                                 src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" 
-                                 alt="Dr. Rajesh Sharma">
+            <!-- Our Story Section -->
+            <div class="mt-16">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-brand-teal-800 mb-4">Our Indian Journey</h2>
+                        <div class="prose text-gray-600">
+                            <p class="mb-4">
+                                Founded in 2020, MedBuzzy India began with a mission to solve the challenges Indian patients face in accessing quality healthcare. 
+                                Our platform was designed specifically for India's diverse healthcare landscape.
+                            </p>
+                            <p class="mb-4">
+                                Starting with just 10 hospitals in Delhi NCR, we've grown to partner with leading healthcare providers across the country, 
+                                from multi-specialty hospitals in metros to trusted clinics in tier-2 cities.
+                            </p>
+                            <p>
+                                Today, we're proud to be India's fastest growing doctor appointment platform, serving patients in 12 regional languages 
+                                with features designed for Indian healthcare needs.
+                            </p>
                         </div>
-                        <h3 class="mt-4 text-lg font-medium text-gray-900">Dr. Rajesh Sharma</h3>
-                        <p class="text-brand-teal-600">Medical Director</p>
-                        <p class="mt-2 text-sm text-gray-500">
-                            MBBS, MD (AIIMS), 18+ years experience
-                        </p>
-                        <p class="mt-3 text-base text-gray-600">
-                            Former HOD at Apollo Hospitals, specialist in Cardiology
-                        </p>
+                        
+                        <!-- Milestones Timeline -->
+                        <div class="mt-8 relative pl-8">
+                            <div class="timeline-line"></div>
+                            
+                            <div class="relative mb-8">
+                                <div class="timeline-dot"></div>
+                                <h3 class="font-bold text-brand-teal-700">2020</h3>
+                                <p class="text-gray-600">Founded in Delhi NCR with 10 partner hospitals</p>
+                            </div>
+                            
+                            <div class="relative mb-8">
+                                <div class="timeline-dot"></div>
+                                <h3 class="font-bold text-brand-teal-700">2021</h3>
+                                <p class="text-gray-600">Expanded to 25 cities with 200+ hospitals</p>
+                            </div>
+                            
+                            <div class="relative">
+                                <div class="timeline-dot"></div>
+                                <h3 class="font-bold text-brand-teal-700">2023</h3>
+                                <p class="text-gray-600">Serving 10M+ patients across India</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="rounded-xl overflow-hidden shadow-xl border-4 border-white">
+                        <img src="https://images.unsplash.com/photo-1581056771107-24ca5f033842?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
+                             alt="Indian hospital reception" 
+                             class="w-full h-auto object-cover rounded-lg">
                     </div>
                 </div>
             </div>
 
-            <!-- Team Member 2 -->
-            <div class="pt-6">
-                <div class="flow-root bg-white rounded-lg px-6 pb-8 shadow-md hover:shadow-lg transition-shadow">
-                    <div class="-mt-6 text-center">
-                        <div class="inline-flex items-center justify-center p-1 bg-white rounded-full shadow-lg">
-                            <img class="h-24 w-24 rounded-full object-cover" 
-                                 src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" 
-                                 alt="Priya Patel">
+            <!-- Why Choose MedBuzzy Section -->
+            <div class="mt-16">
+                <h2 class="text-3xl font-bold text-center text-brand-teal-800 mb-12">Why Choose MedBuzzy India</h2>
+                <div class="grid gap-8 md:grid-cols-3">
+                    <!-- Feature 1 -->
+                    <div class="feature-card bg-white p-8 rounded-xl shadow-md border border-brand-teal-100 hover:border-brand-teal-300 transition-all">
+                        <div class="flex items-center justify-center h-16 w-16 rounded-xl bg-brand-teal-100 text-brand-teal-600 mb-6 feature-icon">
+                            <i class="fas fa-user-md text-2xl"></i>
                         </div>
-                        <h3 class="mt-4 text-lg font-medium text-gray-900">Priya Patel</h3>
-                        <p class="text-brand-teal-600">CEO & Co-founder</p>
-                        <p class="mt-2 text-sm text-gray-500">
-                            IIM Bangalore, Healthcare Technology Expert
-                        </p>
-                        <p class="mt-3 text-base text-gray-600">
-                            Passionate about making healthcare accessible to all Indians
+                        <h3 class="text-xl font-semibold text-gray-900">Verified Indian Doctors</h3>
+                        <p class="mt-3 text-gray-600">
+                            All doctors verified with MCI registration and hospital credentials. We ensure only qualified professionals join our platform.
                         </p>
                     </div>
-                </div>
-            </div>
 
-            <!-- Team Member 3 -->
-            <div class="pt-6">
-                <div class="flow-root bg-white rounded-lg px-6 pb-8 shadow-md hover:shadow-lg transition-shadow">
-                    <div class="-mt-6 text-center">
-                        <div class="inline-flex items-center justify-center p-1 bg-white rounded-full shadow-lg">
-                            <img class="h-24 w-24 rounded-full object-cover" 
-                                 src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" 
-                                 alt="Amit Singh">
+                    <!-- Feature 2 -->
+                    <div class="feature-card bg-white p-8 rounded-xl shadow-md border border-brand-teal-100 hover:border-brand-teal-300 transition-all">
+                        <div class="flex items-center justify-center h-16 w-16 rounded-xl bg-brand-teal-100 text-brand-teal-600 mb-6 feature-icon">
+                            <i class="fas fa-headset text-2xl"></i>
                         </div>
-                        <h3 class="mt-4 text-lg font-medium text-gray-900">Amit Singh</h3>
-                        <p class="text-brand-teal-600">CTO</p>
-                        <p class="mt-2 text-sm text-gray-500">
-                            B.Tech IIT Delhi, Former Flipkart Lead
+                        <h3 class="text-xl font-semibold text-gray-900">24/7 Hindi & English Support</h3>
+                        <p class="mt-3 text-gray-600">
+                            Our care coordinators speak both Hindi and English. We also provide support in 12 regional languages.
                         </p>
-                        <p class="mt-3 text-base text-gray-600">
-                            Building technology solutions for India's healthcare challenges
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div class="feature-card bg-white p-8 rounded-xl shadow-md border border-brand-teal-100 hover:border-brand-teal-300 transition-all">
+                        <div class="flex items-center justify-center h-16 w-16 rounded-xl bg-brand-teal-100 text-brand-teal-600 mb-6 feature-icon">
+                            <i class="fas fa-rupee-sign text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900">Transparent Indian Pricing</h3>
+                        <p class="mt-3 text-gray-600">
+                            See consultation fees upfront with no hidden charges. We offer price match guarantee for all services.
                         </p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Partner Hospitals Section -->
-<div class="py-12 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center">
-            <h2 class="text-3xl font-extrabold text-brand-teal-800">Our Partner Hospitals</h2>
-            <p class="mt-4 max-w-2xl text-xl text-gray-600 mx-auto">
-                Trusted by India's leading healthcare providers
-            </p>
-        </div>
+    <!-- Leadership Section -->
+    <div class="py-16 bg-brand-teal-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h2 class="text-3xl font-extrabold text-brand-teal-800">Our Indian Leadership</h2>
+                <p class="mt-4 max-w-2xl text-xl text-gray-600 mx-auto">
+                    The team dedicated to improving healthcare access in India
+                </p>
+            </div>
 
-        <div class="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-6">
-            <div class="flex items-center justify-center p-4 bg-gray-50 rounded-lg">
-                <img src="https://via.placeholder.com/150x60?text=Apollo" alt="Apollo Hospitals" class="h-10">
+            <div class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- CEO Card -->
+                <div class="team-card bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="relative">
+                        <div class="h-48 bg-gradient-to-r from-brand-teal-500 to-brand-teal-700"></div>
+                        <div class="absolute -bottom-16 left-1/2 transform -translate-x-1/2">
+                            <div class="bg-white p-1 rounded-full shadow-xl">
+                                <img class="h-32 w-32 rounded-full object-cover border-4 border-white" 
+                                     src="/leaders/Rajeev.jpg" 
+                                     alt="Sourav Kumar Sah">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pt-20 pb-8 px-6 text-center">
+                        <h3 class="text-xl font-bold text-gray-900">Sourav Kumar Sah</h3>
+                        <p class="text-brand-orange-500 font-medium">Chief Executive Officer (CEO)</p>
+                        <div class="mt-4 flex justify-center space-x-4">
+                            <a href="#" class="text-brand-teal-500 hover:text-brand-teal-700">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a href="#" class="text-brand-teal-500 hover:text-brand-teal-700">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="text-brand-teal-500 hover:text-brand-teal-700">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        </div>
+                        <p class="mt-4 text-gray-600">
+                            Leads MedBuzzy with a visionary mindset and deep passion for revolutionizing healthcare in India.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Medical Director -->
+                <div class="team-card bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="relative">
+                        <div class="h-48 bg-gradient-to-r from-brand-teal-500 to-brand-teal-700"></div>
+                        <div class="absolute -bottom-16 left-1/2 transform -translate-x-1/2">
+                            <div class="bg-white p-1 rounded-full shadow-xl">
+                                <img class="h-32 w-32 rounded-full object-cover border-4 border-white" 
+                                     src="/leaders/Papa.jpg" 
+                                     alt="Dr. Rajesh Sharma">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pt-20 pb-8 px-6 text-center">
+                        <h3 class="text-xl font-bold text-gray-900">Dr. Rajesh Sharma</h3>
+                        <p class="text-brand-orange-500 font-medium">Medical Director</p>
+                        <div class="mt-4 flex justify-center space-x-4">
+                            <a href="#" class="text-brand-teal-500 hover:text-brand-teal-700">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a href="#" class="text-brand-teal-500 hover:text-brand-teal-700">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </div>
+                        <p class="mt-4 text-gray-600">
+                            Former HOD at Apollo Hospitals, specialist in Cardiology with 18+ years experience.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- CTO -->
+                <div class="team-card bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="relative">
+                        <div class="h-48 bg-gradient-to-r from-brand-teal-500 to-brand-teal-700"></div>
+                        <div class="absolute -bottom-16 left-1/2 transform -translate-x-1/2">
+                            <div class="bg-white p-1 rounded-full shadow-xl">
+                                <img class="h-32 w-32 rounded-full object-cover border-4 border-white" 
+                                     src="/leaders/Pankaj.jpg" 
+                                     alt="Amit Singh">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pt-20 pb-8 px-6 text-center">
+                        <h3 class="text-xl font-bold text-gray-900">Amit Singh</h3>
+                        <p class="text-brand-orange-500 font-medium">Chief Technology Officer</p>
+                        <div class="mt-4 flex justify-center space-x-4">
+                            <a href="#" class="text-brand-teal-500 hover:text-brand-teal-700">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a href="#" class="text-brand-teal-500 hover:text-brand-teal-700">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </div>
+                        <p class="mt-4 text-gray-600">
+                            B.Tech IIT Delhi, Former Flipkart Lead. Building tech for India's healthcare challenges.
+                        </p>
+                    </div>
+                </div>
             </div>
-            <div class="flex items-center justify-center p-4 bg-gray-50 rounded-lg">
-                <img src="https://via.placeholder.com/150x60?text=Fortis" alt="Fortis Healthcare" class="h-10">
-            </div>
-            <div class="flex items-center justify-center p-4 bg-gray-50 rounded-lg">
-                <img src="https://via.placeholder.com/150x60?text=Max" alt="Max Healthcare" class="h-10">
-            </div>
-            <div class="flex items-center justify-center p-4 bg-gray-50 rounded-lg">
-                <img src="https://via.placeholder.com/150x60?text=Manipal" alt="Manipal Hospitals" class="h-10">
-            </div>
-            <div class="flex items-center justify-center p-4 bg-gray-50 rounded-lg">
-                <img src="https://via.placeholder.com/150x60?text=AIIMS" alt="AIIMS" class="h-10">
-            </div>
-            <div class="flex items-center justify-center p-4 bg-gray-50 rounded-lg">
-                <img src="https://via.placeholder.com/150x60?text=Artemis" alt="Artemis Hospitals" class="h-10">
+
+            <!-- Additional Leadership -->
+            <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- COO -->
+                <div class="team-card bg-white rounded-xl shadow-lg overflow-hidden flex">
+                    <div class="w-1/3 bg-brand-teal-100 flex items-center justify-center">
+                        <img class="h-40 w-40 rounded-full object-cover" 
+                             src="/leaders/IMG-20250718-WA0005.jpg" 
+                             alt="Priya Patel">
+                    </div>
+                    <div class="w-2/3 p-6">
+                        <h3 class="text-xl font-bold text-gray-900">Priya Patel</h3>
+                        <p class="text-brand-orange-500 font-medium">Chief Operations Officer</p>
+                        <div class="mt-3 flex space-x-3">
+                            <a href="#" class="text-brand-teal-500 hover:text-brand-teal-700">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a href="#" class="text-brand-teal-500 hover:text-brand-teal-700">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </div>
+                        <p class="mt-3 text-gray-600">
+                            IIM Bangalore alum with 12+ years in healthcare operations management.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- CMO -->
+                <div class="team-card bg-white rounded-xl shadow-lg overflow-hidden flex">
+                    <div class="w-1/3 bg-brand-teal-100 flex items-center justify-center">
+                        <img class="h-40 w-40 rounded-full object-cover" 
+                             src="/leaders/IMG-20250718-WA0004 (1).jpg" 
+                             alt="Dr. Ananya Reddy">
+                    </div>
+                    <div class="w-2/3 p-6">
+                        <h3 class="text-xl font-bold text-gray-900">Dr. Ananya Reddy</h3>
+                        <p class="text-brand-orange-500 font-medium">Chief Medical Officer</p>
+                        <div class="mt-3 flex space-x-3">
+                            <a href="#" class="text-brand-teal-500 hover:text-brand-teal-700">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                        <p class="mt-3 text-gray-600">
+                            Renowned pediatrician with 15+ years experience and multiple research publications.
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+    <!-- Partner Hospitals Section -->
+    <div class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h2 class="text-3xl font-extrabold text-brand-teal-800">Our Partner Hospitals</h2>
+                <p class="mt-4 max-w-2xl text-xl text-gray-600 mx-auto">
+                    Trusted by India's leading healthcare providers
+                </p>
+            </div>
+
+            <div class="mt-10 grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-6">
+                <div class="partner-logo flex items-center justify-center p-6 bg-gray-50 rounded-lg">
+                    <span class="text-xl font-bold text-brand-teal-700">Apollo</span>
+                </div>
+                <div class="partner-logo flex items-center justify-center p-6 bg-gray-50 rounded-lg">
+                    <span class="text-xl font-bold text-brand-teal-700">Fortis</span>
+                </div>
+                <div class="partner-logo flex items-center justify-center p-6 bg-gray-50 rounded-lg">
+                    <span class="text-xl font-bold text-brand-teal-700">Max</span>
+                </div>
+                <div class="partner-logo flex items-center justify-center p-6 bg-gray-50 rounded-lg">
+                    <span class="text-xl font-bold text-brand-teal-700">Manipal</span>
+                </div>
+                <div class="partner-logo flex items-center justify-center p-6 bg-gray-50 rounded-lg">
+                    <span class="text-xl font-bold text-brand-teal-700">AIIMS</span>
+                </div>
+                <div class="partner-logo flex items-center justify-center p-6 bg-gray-50 rounded-lg">
+                    <span class="text-xl font-bold text-brand-teal-700">Artemis</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   
+</body>
+</html>
 </div>
