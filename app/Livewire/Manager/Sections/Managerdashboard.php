@@ -1,12 +1,11 @@
 <?php
 
 namespace App\Livewire\Manager\Sections;
-
+use Livewire\Attributes\Layout;
+use Livewire\Component;
 use App\Models\Appointment;
 use App\Models\Doctor;
 use App\Models\Patient;
-use Livewire\Attributes\Layout;
-use Livewire\Component;
 use Carbon\Carbon;
 
 class Managerdashboard extends Component
@@ -16,7 +15,7 @@ class Managerdashboard extends Component
     public $patientsCount;
     public $doctorsCount;
 
-        #[Layout('layouts.manager')]
+#[Layout('layouts.manager')]  
 
          public function mount()
     {

@@ -24,8 +24,8 @@
                     </div>
                 </div>
             </div>
-            <div class="flex flex-col sm:flex-row gap-3">
-                <a href="{{ route('add.appointment') }}"
+            {{-- <div class="flex flex-col sm:flex-row gap-3">
+                <a href=""
                     class="bg-white hover:bg-blue-50 text-blue-600 px-5 py-2.5 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 shadow-md hover:shadow-lg font-medium">
                     <i class="fas fa-plus"></i>
                     <span>New Appointment</span>
@@ -34,7 +34,7 @@
                     <i class="fas fa-download"></i>
                     <span>Export</span>
                 </button>
-            </div>
+            </div> --}}
         </div>
     </div>
 
