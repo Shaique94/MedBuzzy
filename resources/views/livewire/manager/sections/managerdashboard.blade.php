@@ -10,7 +10,7 @@
             </div>
 
             <!-- Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <!-- Card 1 - Doctors -->
                 <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 overflow-hidden">
                     <div class="p-6">
@@ -85,6 +85,31 @@
                         </a>
                     </div>
                 </div>
+
+                  <!-- Card 4 - Payment -->
+                <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 overflow-hidden">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-500 uppercase tracking-wider">Total Payment</p>
+                                <p class="mt-2 text-3xl font-bold text-gray-900">{{$doctorsCount}}</p>
+                            </div>
+                            <div class="p-3 rounded-lg bg-blue-50 text-pink-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-blue-50 px-6 py-3">
+                        <a href="#" class="text-sm font-medium text-pink-600 hover:text-pink-800 flex items-center">
+                            View all fee
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
             </div>
 
         <!-- Upcoming Appointments -->
@@ -109,6 +134,7 @@
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Doctor</th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time</th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fees</th>
                     <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
             </thead>
@@ -154,6 +180,42 @@
                                 </span>
                             @endif
                         </td>
+<td>
+
+<button 
+    wire:click="$dispatch('openModal', { 
+        component: 'fee-collection-modal', 
+        arguments: { 
+            patientId: {{ $appointment->patient->id }},
+            appointmentId: {{ $appointment->id }}
+        }
+    })" 
+    class="relative inline-flex items-center justify-center px-3 py-1 bg-gradient-to-r from-green-500 to-green-600 
+           text-white text-sm font-medium rounded-lg shadow hover:shadow-md 
+           transition-all duration-200 ease-in-out hover:from-green-600 hover:to-green-700
+           focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75
+           active:scale-95 transform"
+>
+    <!-- Animated background (optional) -->
+    <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-200 rounded-lg"></span>
+    
+    <!-- Icon with subtle animation -->
+    <span class="inline-flex items-center group">
+        <svg xmlns="http://www.w3.org/2000/svg" 
+             class="h-4 w-4 mr-1.5 transition-transform duration-200 group-hover:scale-110" 
+             fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+        </svg>
+        <span class="relative">
+            Collect Fee
+            <!-- Underline animation on hover -->
+            <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
+        </span>
+    </span>
+</button>
+
+</td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <div class="flex justify-end space-x-2">
                                 <button class="text-blue-600 hover:text-blue-900 p-1 rounded-md hover:bg-blue-50 transition-colors"
@@ -176,7 +238,7 @@
                                 <a href="{{ route('appointment.receipt', ['appointment' => $appointment->id]) }}"
                                    class="text-gray-600 hover:text-gray-900 p-1 rounded-md hover:bg-gray-50 transition-colors"
                                    title="Print Receipt">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
                                     </svg>
                                 </a>
@@ -194,6 +256,6 @@
         </table>
     </div>
 </div>
-        </div>
-    </div>
+ </div>
+</div>
 </div>
