@@ -32,7 +32,7 @@ use App\Livewire\Manager\Sections\AppointmentList;
 // use App\Livewire\Manager\Sections\ViewDetails;
 use App\Livewire\Manager\Sections\Profile as ManagerProfile;
 use App\Livewire\Manager\Sections\ManageDoctor as DoctorManage;
-
+use Illuminate\Support\Facades\Artisan;
 
 // Public Routes
 Route::get('/', LandingPage::class)->name('hero');
@@ -101,4 +101,7 @@ Route::post('/logout', function () {
     return redirect('/login');
 })->name('logout');
 
-
+Route::get('/storage-link', function () {
+    Artisan::call('storage:link');
+    return 'Storage link created successfully!';
+});
