@@ -79,7 +79,7 @@
                                             ₹{{ $doctor->fee }} Fee
                                         </div>
                                         <div class="w-24 h-24 rounded-full overflow-hidden bg-white mx-auto border-4 border-white shadow-md">
-                                            <img src="{{ asset('storage/' . $doctor->image) }}" alt="Dr. {{ $doctor->user->name }}" class="w-full h-full object-cover" onerror="this.src='{{ asset('images/default.jpg') }}'">
+                                            {{-- <img src="{{ asset('storage/' . $doctor->image) }}" alt="Dr. {{ $doctor->user->name }}" class="w-full h-full object-cover" onerror="this.src='{{ asset('images/default.jpg') }}'"> --}}
                                         </div>
                                     </div>
                                     <h3 class="text-gray-900 font-bold mt-4 text-lg">Dr. {{ $doctor->user->name }}</h3>
@@ -128,7 +128,7 @@
                 <div class="bg-gradient-to-r from-brand-teal-50 to-brand-teal-100 p-6 rounded-2xl shadow-lg border border-brand-teal-200">
                     <div class="flex flex-col sm:flex-row items-center gap-6">
                         <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden bg-white border-4 border-brand-teal-600 shadow-lg">
-                            <img src="{{ asset('storage/' . $selectedDoctor->image) }}" class="w-full h-full object-cover" onerror="this.src='{{ asset('images/default.jpg') }}'">
+                            {{-- <img src="{{ asset('storage/' . $selectedDoctor->image) }}" class="w-full h-full object-cover" > --}}
                         </div>
                         <div class="flex-1 text-center sm:text-left">
                             <h3 class="text-xl font-bold text-gray-800">Dr. {{ $selectedDoctor->user->name }}</h3>
@@ -413,7 +413,7 @@
             <div class="bg-gradient-to-r from-brand-teal-50 to-brand-teal-100 p-6 rounded-2xl shadow-lg border border-brand-teal-200">
                 <div class="flex flex-col sm:flex-row items-center gap-6">
                     <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden bg-white border-4 border-brand-teal-600 shadow-lg">
-                        <img src="{{ asset('storage/' . $selectedDoctor->image) }}" class="w-full h-full object-cover" onerror="this.src='{{ asset('images/default.jpg') }}'">
+                        <img src="" class="w-full h-full object-cover" >
                     </div>
                     <div class="flex-1 text-center sm:text-left">
                         <p class="text-xl font-bold text-gray-800">Dr. {{ $selectedDoctor->user->name }}</p>
@@ -523,7 +523,7 @@
                         <p class="text-sm font-medium text-gray-500">Doctor</p>
                         <div class="flex items-center gap-3">
                             <div class="w-12 h-12 rounded-full overflow-hidden bg-white border-2 border-brand-teal-200">
-                                <img src="{{ asset('storage/' . $selectedDoctor->image) }}" class="w-full h-full object-cover" onerror="this.src='{{ asset('images/default.jpg') }}'">
+                                {{-- <img src="{{ asset('storage/' . $selectedDoctor->image) }}" class="w-full h-full object-cover" onerror="this.src='{{ asset('images/default.jpg') }}'"> --}}
                             </div>
                             <div>
                                 <p class="text-base font-semibold text-gray-800">Dr. {{ $selectedDoctor->user->name }}</p>

@@ -79,10 +79,14 @@ class ManageAppointment extends Component
 
     public function mount()
     {
+        // Set timezone properly
+        date_default_timezone_set('Asia/Kolkata');
+        Carbon::setLocale('en');
+        config(['app.timezone' => 'Asia/Kolkata']);
+
         $this->departments = Department::all();
         $this->doctors = Doctor::with(['user', 'department'])->get();
         $this->currentMonth = now()->startOfMonth()->format('Y-m-d');
-        date_default_timezone_set('Asia/Kolkata');
 
         if (request()->has('doctor_id')) {
             $this->doctor_id = request()->query('doctor_id');
@@ -96,11 +100,9 @@ class ManageAppointment extends Component
 
     public function updated($propertyName)
     {
-        // Skip validation for these properties as they have custom handlers
         if (in_array($propertyName, ['pincode', 'selectedDepartment', 'doctor_id', 'appointment_date'])) {
             return;
         }
-
         $this->validateOnly($propertyName);
     }
 
@@ -113,7 +115,7 @@ class ManageAppointment extends Component
             $this->isProcessing = true;
             try {
                 $response = Http::timeout(5)->get("https://api.postalpincode.in/pincode/{$value}");
-                dd($response);
+                
                 if ($response->successful()) {
                     $data = $response->json();
                     if (isset($data[0]['Status']) && $data[0]['Status'] === 'Success' && !empty($data[0]['PostOffice'])) {
@@ -207,6 +209,10 @@ class ManageAppointment extends Component
         $this->availableSlots = [];
         $currentSlot = $startTime->copy();
 
+        // Get current time with proper timezone
+        $now = Carbon::now('Asia/Kolkata');
+        $isToday = Carbon::parse($this->appointment_date)->isToday();
+
         while ($currentSlot->lt($endTime)) {
             $slotEnd = $currentSlot->copy()->addMinutes($duration);
             if ($slotEnd->gt($endTime)) break;
@@ -218,12 +224,20 @@ class ManageAppointment extends Component
                 ->count();
                 
             $remaining = max(0, $maxPatientsPerSlot - $bookedCount);
+            
+            $slotTime = Carbon::parse($this->appointment_date . ' ' . $timeString, 'Asia/Kolkata');
+            $bufferedNow = $now->copy()->addMinutes(30);
+            $disabled = $remaining <= 0 || ($isToday && $slotTime->lt($bufferedNow));
+            
             $this->availableSlots[$timeString] = [
                 'start' => $currentSlot->format('h:i A'),
                 'end' => $slotEnd->format('h:i A'),
-                'disabled' => $remaining <= 0 || Carbon::parse($this->appointment_date . ' ' . $timeString)->isPast(),
+                'disabled' => $disabled,
                 'remaining_capacity' => $remaining,
-                'max_capacity' => $maxPatientsPerSlot
+                'max_capacity' => $maxPatientsPerSlot,
+                'tooltip' => $disabled ? 
+                    ($remaining <= 0 ? 'Fully booked' : 'Time slot has passed') : 
+                    'Available'
             ];
             $currentSlot->addMinutes($duration);
         }
@@ -312,6 +326,7 @@ class ManageAppointment extends Component
                 'amount' => $this->selectedDoctor->fee,
                 'method' => $this->payment_method,
                 'status' => 'paid',
+                'created_by' => auth()->id(),
             ]);
 
             session()->flash('message', 'Appointment booked successfully!');
@@ -326,8 +341,8 @@ class ManageAppointment extends Component
     #[Layout('layouts.public')]
     public function render()
     {
-        $today = now();
-        $currentMonthDate = Carbon::parse($this->currentMonth);
+        $today = now('Asia/Kolkata');
+        $currentMonthDate = Carbon::parse($this->currentMonth, 'Asia/Kolkata');
         $startOfMonth = $currentMonthDate->copy()->startOfMonth();
         $endOfMonth = $currentMonthDate->copy()->endOfMonth();
         $startDayOfWeek = $startOfMonth->dayOfWeek;
@@ -354,8 +369,8 @@ class ManageAppointment extends Component
             $onLeaveDates = [];
             
             if ($this->selectedDoctor->unavailable_from && $this->selectedDoctor->unavailable_to) {
-                $startDate = Carbon::parse($this->selectedDoctor->unavailable_from);
-                $endDate = Carbon::parse($this->selectedDoctor->unavailable_to);
+                $startDate = Carbon::parse($this->selectedDoctor->unavailable_from, 'Asia/Kolkata');
+                $endDate = Carbon::parse($this->selectedDoctor->unavailable_to, 'Asia/Kolkata');
                 for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
                     $onLeaveDates[] = $date->format('Y-m-d');
                 }
@@ -366,7 +381,7 @@ class ManageAppointment extends Component
                 $isAvailableDay = in_array($currentDate->dayOfWeek, $availableDayNumbers);
                 $isOnLeave = in_array($formattedDate, $onLeaveDates);
                 
-                if ($isAvailableDay && !$isOnLeave && !$currentDate->isPast()) {
+                if ($isAvailableDay && !$isOnLeave && ($currentDate->isToday() || $currentDate->isFuture())) {
                     $validBookingDays[] = $formattedDate;
                     $daysCounted++;
                 }
