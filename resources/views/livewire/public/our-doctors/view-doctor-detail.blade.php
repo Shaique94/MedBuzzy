@@ -74,7 +74,7 @@
                 <div class="flex-grow">
                     <div class="mb-4">
                         <h1 class="text-2xl md:text-3xl font-bold text-teal-800" x-text="doctor.name"></h1>
-                        <p class="text-teal-600">Dr.{{ $doctor->qualification ?? 'N/A' }}</p>
+                        <p class="text-teal-600">{{ $doctor->qualification ? implode(', ', $doctor->qualification) : 'N/A' }}</p>
                     </div>
 
                     <div class="flex flex-wrap items-center gap-4 mb-4">
