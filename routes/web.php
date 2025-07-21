@@ -19,8 +19,10 @@ use App\Livewire\Public\Hero;
 use App\Livewire\Public\LandingPage;
 use App\Livewire\Public\OurDoctors\OurDoctors;
 use App\Livewire\Public\OurDoctors\ViewDoctorDetail;
+use App\Livewire\Public\Review\Review;
 use App\Livewire\Public\Section\About;
 use App\Livewire\Public\Section\Contact;
+use App\Livewire\Public\Signup\Register;
 use App\Livewire\Public\TermsCondition;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -38,6 +40,8 @@ Route::get('/our-doctors', OurDoctors::class)->name('our-doctors');
 Route::get('/terms-conditions', TermsCondition::class)->name('terms-conditons');
 Route::get('/doctor/{doctor_id}', ViewDoctorDetail::class)->name('doctor-detail');
 Route::get('/contact-us', ContactUs::class)->name('contact-us');
+Route::get('/register', Register::class)->name('register');
+Route::get('/review',Review::class)->name('review');
 Route::get('/appointment', ManageAppointment::class)->name('appointment');
 Route::get('/appointment/confirmation/{appointment}', AppointmentConfirmation::class)->name('appointment.confirmation');
 Route::get('/appointment/receipt/{appointment}', [\App\Http\Controllers\AppointmentReceiptController::class, 'download'])
@@ -45,7 +49,7 @@ Route::get('/appointment/receipt/{appointment}', [\App\Http\Controllers\Appointm
 Route::get('/about-us', About::class)->name('about-us');
 Route::get('/contact-us', Contact::class)->name('contact-us');
 
-Route::get('/login', Login::class)->name('admin.dashboard');
+Route::get('/login', Login::class)->name('login');
 
 //doctor Routes
 Route::prefix('doc')->group(function(){

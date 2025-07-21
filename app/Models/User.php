@@ -63,9 +63,13 @@ class User extends Authenticatable
         return $query->whereHas('doctor');
     }
 
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 
-public function manager()
-{
-    return $this->hasOne(Manager::class);
-}
+    public function manager()
+    {
+        return $this->hasOne(Manager::class);
+    }
 }
