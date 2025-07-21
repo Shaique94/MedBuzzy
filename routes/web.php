@@ -31,6 +31,7 @@ use App\Livewire\Manager\Sections\Managerdashboard;
 use App\Livewire\Manager\Sections\AppointmentList;
 // use App\Livewire\Manager\Sections\ViewDetails;
 use App\Livewire\Manager\Sections\Profile as ManagerProfile;
+use App\Livewire\Manager\Sections\ManageDoctor as DoctorManage;
 
 
 // Public Routes
@@ -79,7 +80,8 @@ Route::prefix('manager')->name('manager.')->group(function () {
 Route::get('/dashboard', Managerdashboard::class)->name('dashboard');
 Route::get('/appointments', AppointmentList::class)->name('appointments');
 //Route::get('/appointment/view/{id}', ViewDetails::class)->name('manager.view.appointment');
-   Route::get('/profile', ManagerProfile::class)->name('profile');
+Route::get('/profile', ManagerProfile::class)->name('profile');
+    Route::get('/doctors', DoctorManage::class)->name('manage.doctors');
 });
 
 // Admin Routes
