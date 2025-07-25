@@ -59,6 +59,11 @@ class Doctor extends Model
         return $this->hasMany(Appointment::class);
     }
 
+       public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
     public function getWorkingHours()
     {
         return [
@@ -252,8 +257,5 @@ class Doctor extends Model
     }
 }
 
-     public function reviews()
-    {
-        return $this->hasMany(Review::class);
-    }
-}
+  
+
