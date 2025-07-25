@@ -38,6 +38,11 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 
 
+// Google Auth Routes 
+Route::get('/auth/google', [SocialiteController::class, 'redirectToGoogle'])->name('google.login');
+Route::get('/auth/google-callback', [SocialiteController::class, 'handleGoogleCallback']);
+
+
 // Public Routes
 Route::get('/', LandingPage::class)->name('hero');
 Route::get('/our-doctors', OurDoctors::class)->name('our-doctors');
@@ -103,7 +108,3 @@ Route::get('/storage-link', function () {
     Artisan::call('storage:link');
     return 'Storage link created successfully!';
 });
-
-Route::get('/auth/google', [SocialiteController::class, 'redirectToGoogle'])->name('google.login');
-Route::get('/auth/google-callback', [SocialiteController::class, 'handleGoogleCallback']);
-
