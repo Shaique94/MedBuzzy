@@ -36,6 +36,8 @@ use App\Livewire\Manager\Sections\ManageDoctor as DoctorManage;
 use Illuminate\Support\Facades\Artisan;
 
 // Public Routes
+Route::get('/auth/google', [SocialiteController::class, 'redirectToGoogle'])->name('google.login');
+Route::get('/auth/google-callback', [SocialiteController::class, 'handleGoogleCallback']);
 Route::get('/', LandingPage::class)->name('hero');
 Route::get('/our-doctors', OurDoctors::class)->name('our-doctors');
 Route::get('/terms-conditions', TermsCondition::class)->name('terms-conditons');
@@ -107,5 +109,3 @@ Route::get('/storage-link', function () {
     return 'Storage link created successfully!';
 });
 
-Route::get('/auth/google', [SocialiteController::class, 'redirectToGoogle'])->name('google.login');
-Route::get('/auth/google-callback', [SocialiteController::class, 'handleGoogleCallback']);

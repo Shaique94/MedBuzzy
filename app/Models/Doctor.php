@@ -42,8 +42,5 @@ class Doctor extends Model
     {
         return $this->belongsTo(Department::class);
     }
-     public function reviews()
-    {
-        return $this->hasMany(Review::class);
-    }
+   
 }
