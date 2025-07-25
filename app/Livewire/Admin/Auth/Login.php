@@ -24,19 +24,16 @@ class Login extends Component
 
             session()->flash('success', 'Login successful! Welcome back, ' . $user->name . '.');
 
-            if ($user->role === 'admin') {
-                return redirect()->route('admin.dashboard');
-            } elseif ($user->role === 'doctor') {
-                return redirect()->route('doctor.dashboard');
-            } elseif ($user->role === 'manager') {
-                return redirect()->route('manager.dashboard');
-            } else {
-                Auth::logout();
-                return redirect()->back()->withErrors(['role' => 'Unauthorized role']);
-            }
-        } else {
-            return redirect()->back()->withErrors(['email' => 'Invalid credentials']);
+            // Redirect based on role
+            return match($user->role) {
+                'admin' => redirect()->route('admin.dashboard'),
+                'doctor' => redirect()->route('doctor.dashboard'),
+                'manager' => redirect()->route('manager.dashboard'),
+                default => redirect()->route('hero') // Redirect regular users to home page
+            };
         }
+
+        return redirect()->back()->withErrors(['email' => 'Invalid credentials']);
     }
 
     #[Layout('layouts.public')]

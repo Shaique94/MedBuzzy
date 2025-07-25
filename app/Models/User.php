@@ -23,6 +23,8 @@ class User extends Authenticatable
         'password',
         'phone',
         'role',
+        'google_id',
+        'avatar',
         'email_verified_at',
         'remember_token',
 
@@ -63,9 +65,13 @@ class User extends Authenticatable
         return $query->whereHas('doctor');
     }
 
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 
-public function manager()
-{
-    return $this->hasOne(Manager::class);
-}
+    public function manager()
+    {
+        return $this->hasOne(Manager::class);
+    }
 }

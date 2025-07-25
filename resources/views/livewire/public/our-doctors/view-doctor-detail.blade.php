@@ -74,7 +74,7 @@
                 <div class="flex-grow">
                     <div class="mb-4">
                         <h1 class="text-2xl md:text-3xl font-bold text-teal-800" x-text="doctor.name"></h1>
-                        <p class="text-teal-600">Dr.{{ $doctor->qualification ?? 'N/A' }}</p>
+                        <p class="text-teal-600">{{ $doctor->qualification ? implode(', ', $doctor->qualification) : 'N/A' }}</p>
                     </div>
 
                     <div class="flex flex-wrap items-center gap-4 mb-4">
@@ -144,10 +144,12 @@
                     :class="tab === 'location' ? 'border-teal-500 text-teal-700' :
                         'border-transparent text-teal-500 hover:text-teal-700'"
                     class="px-6 py-4 font-medium border-b-2 whitespace-nowrap">Locations</button>
-                <button @click="tab = 'reviews'"
-                    :class="tab === 'reviews' ? 'border-teal-500 text-teal-700' :
-                        'border-transparent text-teal-500 hover:text-teal-700'"
-                    class="px-6 py-4 font-medium border-b-2 whitespace-nowrap">Reviews</button>
+                <div>
+                    <button @click="tab = 'reviews'"
+                        :class="tab === 'reviews' ? 'border-teal-500 text-teal-700' :
+                            'border-transparent text-teal-500 hover:text-teal-700'"
+                        class="px-6 py-4 font-medium border-b-2 whitespace-nowrap">Reviews</button>
+                </div>
                 <button @click="tab = 'hours'"
                     :class="tab === 'hours' ? 'border-teal-500 text-teal-700' :
                         'border-transparent text-teal-500 hover:text-teal-700'"
@@ -195,11 +197,22 @@
                     </div>
                 </template>
 
-                <div class="pt-4">
-                    <button
-                        class="bg-teal-100 text-teal-700 px-4 py-2 rounded-lg font-medium hover:bg-teal-200 transition">
-                        Leave a Review
-                    </button>
+
+                <div class="pt-4 space-y-5">
+                    @auth
+                        <!-- Show review form for logged in users -->
+                        <button wire:click="$dispatch('reviewModal')"
+                            class="bg-teal-100 text-teal-700 px-4 py-2 rounded-lg font-medium hover:bg-teal-200 transition">
+                            Leave a Review
+                        </button>
+                        <livewire:public.review.review />
+                    @else
+                        <!-- Show login prompt for guests -->
+                        <a href="{{ route('login') }}"
+                            class="inline-block bg-teal-100 text-teal-700 px-4 py-2 rounded-lg font-medium hover:bg-teal-200 transition">
+                            Login to Leave a Review
+                        </a>
+                    @endauth
                 </div>
             </div>
         </div>

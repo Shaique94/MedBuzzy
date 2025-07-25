@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SocialiteController;
 use App\Livewire\Admin\Appointment\Add;
 use App\Livewire\Admin\Appointment\All;
 use App\Livewire\Admin\Appointment\Update;
@@ -19,8 +20,10 @@ use App\Livewire\Public\Contact\ContactUs;
 use App\Livewire\Public\LandingPage;
 use App\Livewire\Public\OurDoctors\OurDoctors;
 use App\Livewire\Public\OurDoctors\ViewDoctorDetail;
+use App\Livewire\Public\Review\Review;
 use App\Livewire\Public\Section\About;
 use App\Livewire\Public\Section\Contact;
+use App\Livewire\Public\Signup\Register;
 use App\Livewire\Public\TermsCondition;
 use App\Livewire\Doctor\Profile;
 use App\Livewire\Manager\Sections\Managerdashboard;
@@ -32,6 +35,8 @@ use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AppointmentReceiptController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
+
 
 // Public Routes
 Route::get('/', LandingPage::class)->name('hero');
@@ -39,6 +44,8 @@ Route::get('/our-doctors', OurDoctors::class)->name('our-doctors');
 Route::get('/terms-conditions', TermsCondition::class)->name('terms-conditons');
 Route::get('/doctor/{doctor_id}', ViewDoctorDetail::class)->name('doctor-detail');
 Route::get('/contact-us', ContactUs::class)->name('contact-us');
+Route::get('/register', Register::class)->name('register');
+Route::get('/review',Review::class)->name('review');
 Route::get('/appointment', ManageAppointment::class)->name('appointment');
 Route::get('/appointment/confirmation/{appointment}', AppointmentConfirmation::class)->name('appointment.confirmation');
 Route::get('/appointment/receipt/{appointment}', [AppointmentReceiptController::class, 'download'])->name('appointment.receipt');
@@ -91,3 +98,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/appointment/update/{id}', Update::class)->name('update.appointment');
     Route::get('/appointment/view/{id}', ViewDetails::class)->name('view.appointment');
 });
+
+Route::get('/storage-link', function () {
+    Artisan::call('storage:link');
+    return 'Storage link created successfully!';
+});
+
+Route::get('/auth/google', [SocialiteController::class, 'redirectToGoogle'])->name('google.login');
+Route::get('/auth/google-callback', [SocialiteController::class, 'handleGoogleCallback']);
+
