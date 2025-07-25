@@ -8,9 +8,12 @@ use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Payment;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
 use Livewire\Component;
+use Razorpay\Api\Api;
 
 class ManageAppointment extends Component
 {
@@ -24,6 +27,9 @@ class ManageAppointment extends Component
     public $appointment_time;
     public $availableSlots = [];
     public $pincode;
+    public $amount = 5000; // Fixed ₹50 (5000 paise)
+    public $orderId;
+    public $appointmentId;
     public $newPatient = [
         'name' => '',
         'email' => '',
@@ -35,12 +41,12 @@ class ManageAppointment extends Component
         'district' => '',
         'state' => '',
     ];
-    public $payment_method;
     public $notes;
-    public $available_payment_methods = ['cash', 'card', 'upi'];
     public $slot_enabled = true;
     public $currentMonth;
     public $isProcessing = false;
+
+
 
     protected $rules = [
         'doctor_id' => 'required|exists:doctors,id',
@@ -53,7 +59,6 @@ class ManageAppointment extends Component
         'newPatient.gender' => 'required|string|in:male,female,other',
         'newPatient.pincode' => 'required|digits:6',
         'newPatient.address' => 'required|string|min:10|max:500',
-        'payment_method' => 'required|in:cash,card,upi',
         'notes' => 'nullable|string|max:1000',
     ];
 
@@ -74,18 +79,16 @@ class ManageAppointment extends Component
         'newPatient.pincode.digits' => 'Pincode must be 6 digits.',
         'newPatient.address.required' => 'Address is required.',
         'newPatient.address.min' => 'Address must be at least 10 characters.',
-        'payment_method.required' => 'Please select a payment method.',
     ];
 
     public function mount()
     {
-        // Set timezone properly
         date_default_timezone_set('Asia/Kolkata');
         Carbon::setLocale('en');
         config(['app.timezone' => 'Asia/Kolkata']);
 
-        $this->departments = Department::all();
-        $this->doctors = Doctor::with(['user', 'department'])->get();
+        $this->departments = cache()->remember('departments', now()->addHours(24), fn() => Department::all());
+        $this->doctors = cache()->remember('doctors', now()->addHours(24), fn() => Doctor::with(['user', 'department'])->get());
         $this->currentMonth = now()->startOfMonth()->format('Y-m-d');
 
         if (request()->has('doctor_id')) {
@@ -103,6 +106,7 @@ class ManageAppointment extends Component
         if (in_array($propertyName, ['pincode', 'selectedDepartment', 'doctor_id', 'appointment_date'])) {
             return;
         }
+
         $this->validateOnly($propertyName);
     }
 
@@ -115,7 +119,7 @@ class ManageAppointment extends Component
             $this->isProcessing = true;
             try {
                 $response = Http::timeout(5)->get("https://api.postalpincode.in/pincode/{$value}");
-                
+
                 if ($response->successful()) {
                     $data = $response->json();
                     if (isset($data[0]['Status']) && $data[0]['Status'] === 'Success' && !empty($data[0]['PostOffice'])) {
@@ -123,12 +127,12 @@ class ManageAppointment extends Component
                         $this->newPatient['district'] = $postOffice['District'] ?? '';
                         $this->newPatient['state'] = $postOffice['State'] ?? '';
                         $this->resetErrorBag('newPatient.pincode');
-                        $this->isProcessing = false;
-                        return;
+                    } else {
+                        $this->addError('newPatient.pincode', 'Invalid pincode or no data found.');
                     }
+                } else {
+                    $this->addError('newPatient.pincode', 'Invalid pincode or no data found.');
                 }
-                
-                $this->addError('newPatient.pincode', 'Invalid pincode or no data found.');
             } catch (\Exception $e) {
                 $this->addError('newPatient.pincode', 'Unable to verify pincode. Please try again later.');
             }
@@ -209,34 +213,34 @@ class ManageAppointment extends Component
         $this->availableSlots = [];
         $currentSlot = $startTime->copy();
 
-        // Get current time with proper timezone
         $now = Carbon::now('Asia/Kolkata');
         $isToday = Carbon::parse($this->appointment_date)->isToday();
 
         while ($currentSlot->lt($endTime)) {
             $slotEnd = $currentSlot->copy()->addMinutes($duration);
-            if ($slotEnd->gt($endTime)) break;
-            
+            if ($slotEnd->gt($endTime))
+                break;
+
             $timeString = $currentSlot->format('H:i');
             $bookedCount = Appointment::where('doctor_id', $this->selectedDoctor->id)
                 ->where('appointment_date', $this->appointment_date)
                 ->where('appointment_time', $timeString)
                 ->count();
-                
+
             $remaining = max(0, $maxPatientsPerSlot - $bookedCount);
-            
+
             $slotTime = Carbon::parse($this->appointment_date . ' ' . $timeString, 'Asia/Kolkata');
             $bufferedNow = $now->copy()->addMinutes(30);
             $disabled = $remaining <= 0 || ($isToday && $slotTime->lt($bufferedNow));
-            
+
             $this->availableSlots[$timeString] = [
                 'start' => $currentSlot->format('h:i A'),
                 'end' => $slotEnd->format('h:i A'),
                 'disabled' => $disabled,
                 'remaining_capacity' => $remaining,
                 'max_capacity' => $maxPatientsPerSlot,
-                'tooltip' => $disabled ? 
-                    ($remaining <= 0 ? 'Fully booked' : 'Time slot has passed') : 
+                'tooltip' => $disabled ?
+                    ($remaining <= 0 ? 'Fully booked' : 'Time slot has passed') :
                     'Available'
             ];
             $currentSlot->addMinutes($duration);
@@ -255,7 +259,7 @@ class ManageAppointment extends Component
     {
         $this->validateStep($this->step);
         $this->step++;
-        
+
         if ($this->step === 2) {
             $this->generateTimeSlots();
         }
@@ -264,7 +268,7 @@ class ManageAppointment extends Component
     public function previousStep()
     {
         $this->step--;
-        
+
         if ($this->step === 2) {
             $this->generateTimeSlots();
         }
@@ -291,52 +295,156 @@ class ManageAppointment extends Component
             ]);
         } elseif ($step === 4) {
             $this->validate([
-                'payment_method' => $this->rules['payment_method'],
                 'notes' => $this->rules['notes'],
             ]);
         }
     }
 
-    public function submit()
+
+    protected $listeners = [
+        'payment-failed' => 'handlePaymentFailed',
+    ];
+
+    public function createOrder()
     {
         $this->validate();
-        $this->isProcessing = true;
-        
-        try {
-            // Create patient
-            $patient = Patient::firstOrCreate(
-                ['phone' => $this->newPatient['phone']],
-                $this->newPatient
-            );
 
-            // Create appointment
-            $appointment = Appointment::create([
+        try {
+            // Check slot availability
+            $bookedCount = Appointment::where([
                 'doctor_id' => $this->doctor_id,
-                'patient_id' => $patient->id,
                 'appointment_date' => $this->appointment_date,
                 'appointment_time' => $this->appointment_time,
-                'notes' => $this->notes,
-                'status' => 'scheduled',
+            ])->count();
+
+            $maxPatientsPerSlot = $this->selectedDoctor->patients_per_slot ?? 1;
+            if ($bookedCount >= $maxPatientsPerSlot) {
+                throw new \Exception('Selected time slot is no longer available.');
+            }
+
+            // Create Razorpay Order
+            $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret'));
+
+            $order = $api->order->create([
+                'receipt' => 'temp_appointment_' . now()->timestamp,
+                'amount' => $this->amount,
+                'currency' => 'INR',
+                'payment_capture' => 1,
             ]);
 
-            // Create payment
-            Payment::create([
-                'appointment_id' => $appointment->id,
-                'patient_id' => $patient->id,
-                'amount' => $this->selectedDoctor->fee,
-                'method' => $this->payment_method,
-                'status' => 'paid',
-                'created_by' => auth()->id(),
-            ]);
+            $this->orderId = $order['id'];
 
-            session()->flash('message', 'Appointment booked successfully!');
-            return redirect()->route('appointment.confirmation', ['appointment' => $appointment->id]);
+            // Dispatch with all data
+            $this->dispatch('razorpay:open', [
+                'key' => config('services.razorpay.key'),
+                'orderId' => $this->orderId,
+                'amount' => $this->amount,
+                'patientData' => $this->newPatient,
+                'appointmentData' => [
+                    'doctor_id' => $this->doctor_id,
+                    'appointment_date' => $this->appointment_date,
+                    'appointment_time' => $this->appointment_time,
+                    'notes' => $this->notes,
+                ]
+            ]);
         } catch (\Exception $e) {
-            $this->addError('appointment_error', 'Failed to book appointment. Please try again.');
+            \Log::error('Order creation failed: ' . $e->getMessage());
+            $this->addError('payment_error', 'Failed to create appointment: ' . $e->getMessage());
             $this->isProcessing = false;
-            throw $e;
         }
     }
+
+
+
+    #[On('payment-success')]
+    // Add this method to handle successful payment
+    public function handlePaymentSuccess($paymentId, $allData)
+    {
+        DB::beginTransaction();
+
+        try {
+            // 1. Extract and prepare data
+            $paymentDetails = [
+                'key' => $allData[0]['key'],
+                'orderId' => $allData[0]['orderId'],
+                'amount' => $allData[0]['amount'] / 100, // Convert from paise to rupees
+            ];
+
+            $patientInfo = $allData[0]['patientData'];
+            $appointmentInfo = $allData[0]['appointmentData'];
+
+           
+            // 2. Verify payment with Razorpay
+            $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret'));
+            $payment = $api->payment->fetch($paymentId);
+
+            if ($payment->status !== 'authorized') {
+                throw new \Exception('Payment not captured');
+            }
+
+            // 3. Create/update patient
+            $patient = Patient::updateOrCreate(
+                ['phone' => $patientInfo['phone']],
+                [
+                    'name' => $patientInfo['name'],
+                    'email' => $patientInfo['email'],
+                    'age' => $patientInfo['age'],
+                    'gender' => $patientInfo['gender'],
+                    'pincode' => $patientInfo['pincode'],
+                    'address' => $patientInfo['address'],
+                    'district' => $patientInfo['district'] ?? null,
+                    'state' => $patientInfo['state'] ?? null,
+                ]
+            );
+            // 4. Create appointment
+            $appointment = Appointment::create([
+                'doctor_id' => $appointmentInfo['doctor_id'],
+                'patient_id' => $patient->id,
+                'appointment_date' => $appointmentInfo['appointment_date'],
+                'appointment_time' => $appointmentInfo['appointment_time'],
+                'notes' => $appointmentInfo['notes'] ?? null,
+                'status' => 'completed',
+            ]);
+
+            // 5. Record payment
+           $payment = Payment::create([
+                'appointment_id' => $appointment->id,
+                'patient_id' => $patient->id,
+                'amount' => $paymentDetails['amount'],
+                'transaction_id' => $paymentId,
+                // 'order_id' => $paymentDetails['orderId'],
+                'status' => 'paid',
+                'method' => 'upi',
+                // 'payment_details' => json_encode($payment->toArray()),
+            ]);
+            DB::commit();
+
+            // 6. Send confirmation (uncomment to implement)
+            // $patient->notify(new AppointmentConfirmed($appointment));
+
+            return redirect()->route('appointment.confirmation', $appointment->id)
+                ->with('success', 'Appointment booked successfully!');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error("Payment failed: {$e->getMessage()}", [
+                'paymentId' => $paymentId,
+                'error' => $e->getTraceAsString()
+            ]);
+
+            return redirect()->back()
+                ->with('error', 'Payment processing failed. Please try again.');
+        }
+    }
+
+
+
+    public function handlePaymentFailed($data)
+    {
+        session()->flash('error', 'Payment failed: ' . $data['error']);
+    }
+
+
 
     #[Layout('layouts.public')]
     public function render()
@@ -347,27 +455,27 @@ class ManageAppointment extends Component
         $endOfMonth = $currentMonthDate->copy()->endOfMonth();
         $startDayOfWeek = $startOfMonth->dayOfWeek;
         $daysInMonth = $currentMonthDate->daysInMonth;
-        
+
         $availableDayNumbers = [];
         $weekdaysFull = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        
+
         if ($this->selectedDoctor && is_array($this->selectedDoctor->available_days)) {
             foreach ($this->selectedDoctor->available_days as $day) {
                 $availableDayNumbers[] = array_search($day, $weekdaysFull);
             }
         }
-        
+
         $hasAvailableDays = !empty($availableDayNumbers);
         $bookingStart = $today->copy()->startOfDay();
         $validBookingDays = [];
         $bookingEnd = $bookingStart->copy();
-        
+
         if ($this->selectedDoctor && $hasAvailableDays) {
             $maxBookingDays = $this->selectedDoctor->max_booking_days ?? 30;
             $currentDate = $bookingStart->copy();
             $daysCounted = 0;
             $onLeaveDates = [];
-            
+
             if ($this->selectedDoctor->unavailable_from && $this->selectedDoctor->unavailable_to) {
                 $startDate = Carbon::parse($this->selectedDoctor->unavailable_from, 'Asia/Kolkata');
                 $endDate = Carbon::parse($this->selectedDoctor->unavailable_to, 'Asia/Kolkata');
@@ -375,12 +483,12 @@ class ManageAppointment extends Component
                     $onLeaveDates[] = $date->format('Y-m-d');
                 }
             }
-            
+
             while ($daysCounted < $maxBookingDays && $currentDate->lte($endOfMonth)) {
                 $formattedDate = $currentDate->format('Y-m-d');
                 $isAvailableDay = in_array($currentDate->dayOfWeek, $availableDayNumbers);
                 $isOnLeave = in_array($formattedDate, $onLeaveDates);
-                
+
                 if ($isAvailableDay && !$isOnLeave && ($currentDate->isToday() || $currentDate->isFuture())) {
                     $validBookingDays[] = $formattedDate;
                     $daysCounted++;

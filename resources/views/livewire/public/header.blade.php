@@ -35,12 +35,12 @@
             <!-- Logo -->
             <div class="flex items-center">
                 <a href="/" class="flex items-center transition-transform hover:scale-105 duration-200">
-                    <img src="/logo/logo.png" alt="MedBuzzy Logo" class="h-16 md:h-">
+                    <img src="/logo/logo.png" alt="MedBuzzy Logo" class="h-16 md:h-20">
                 </a>
             </div>
 
             <!-- Desktop Navigation -->
-            <nav class="hidden lg:flex items-center space-x-8">
+            <nav class="hidden lg:flex items-center space-x-2">
                 <a wire:navigate href="{{ route('our-doctors') }}"
                     class="text-gray-700 hover:text-brand-teal-600 font-medium transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-brand-teal-50">
                     Find Doctor
@@ -56,15 +56,15 @@
             </nav>
 
             <!-- Right Side Actions -->
-            @auth
-                <div class="flex items-center space-x-4">
+            <div class="flex items-center space-x-4">
+                @auth
                     <!-- User Profile -->
-                    <div class="flex items-center space-x-3 group relative">
+                    <div class="hidden lg:flex items-center space-x-3 group relative">
                         <div class="flex items-center space-x-2">
                             <div class="w-9 h-9 rounded-full bg-brand-teal-100 flex items-center justify-center text-brand-teal-800 font-semibold">
                                 {{ substr(auth()->user()->name, 0, 1) }}
                             </div>
-                            <span class="md:inline text-gray-700 font-medium">{{ auth()->user()->name }}</span>
+                            <span class="text-gray-700 font-medium">{{ auth()->user()->name }}</span>
                         </div>
                         
                         <!-- Logout Dropdown -->
@@ -80,72 +80,64 @@
                             </form>
                         </div>
                     </div>
-                    
-                    <!-- Book Now Button -->
-                    <a href="{{ route('appointment') }}"
-                        class="bg-brand-orange-500 text-white px-5 py-2 rounded-lg font-semibold hover:bg-brand-orange-600 transition-colors duration-200 flex items-center shadow-md hover:shadow-lg">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
-                            </path>
-                        </svg>
-                        Book Now
-                    </a>
-                </div>
-            @endauth
+                @endauth
+                
+                <!-- Book Now Button -->
+                <a href="{{ route('appointment') }}"
+                    class="bg-brand-orange-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-brand-orange-600 transition-colors duration-200 flex items-center shadow-md hover:shadow-lg whitespace-nowrap">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                        </path>
+                    </svg>
+                    <span class="hidden sm:inline">Book Now</span>
+                </a>
 
-            @guest
-                <div class="flex items-center space-x-4">
+                @guest
                     <div class="hidden md:flex items-center space-x-3">
                         <a href="/login"
-                            class="text-gray-600 hover:text-brand-teal-600 font-medium transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-brand-teal-50">
+                            class="text-gray-600 hover:text-brand-teal-600 font-medium transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-brand-teal-50 whitespace-nowrap">
                             Login
                         </a>
                         <a href="/register"
-                            class="bg-brand-teal-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-brand-teal-700 transition-colors duration-200 shadow-md hover:shadow-lg">
+                            class="bg-brand-teal-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-brand-teal-700 transition-colors duration-200 shadow-md hover:shadow-lg whitespace-nowrap">
                             Sign Up
                         </a>
                     </div>
-                    <a href="{{ route('appointment') }}"
-                        class="bg-brand-orange-500 text-white px-5 py-2 rounded-lg font-semibold hover:bg-brand-orange-600 transition-colors duration-200 flex items-center shadow-md hover:shadow-lg">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
-                            </path>
-                        </svg>
-                        Book Now
-                    </a>
-                    <button class="lg:hidden text-gray-600 hover:text-brand-teal-600 p-2 focus:outline-none"
-                        id="mobile-menu-button">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 6h16M4 12h16M4 18h16"></path>
-                        </svg>
-                    </button>
-                </div>
-            @endguest
+                @endguest
+
+                <!-- Mobile Menu Button -->
+                <button class="lg:hidden text-gray-600 hover:text-brand-teal-600 p-2 focus:outline-none"
+                    id="mobile-menu-button" aria-label="Toggle menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
         </div>
     </div>
 
     <!-- Mobile Menu -->
-    <div class="lg:hidden bg-white border-t hidden" id="mobile-menu">
-        <nav class="container mx-auto px-4 py-4 space-y-4">
+    <div class="lg:hidden bg-white border-t hidden shadow-lg" id="mobile-menu">
+        <nav class="container mx-auto px-4 py-4 space-y-2">
             <a href="/"
-                class="block text-gray-700 hover:text-brand-teal-600 font-medium py-2 px-3 rounded-lg hover:bg-brand-teal-50 transition-colors duration-200">
+                class="block text-gray-700 hover:text-brand-teal-600 font-medium py-2 px-3 rounded-lg hover:bg-brand-teal-50 transition-colors duration-200 mobile-menu-link">
                 Home
             </a>
             <a wire:navigate href="{{ route('our-doctors') }}"
-                class="block text-gray-700 hover:text-brand-teal-600 font-medium py-2 px-3 rounded-lg hover:bg-brand-teal-50 transition-colors duration-200">
+                class="block text-gray-700 hover:text-brand-teal-600 font-medium py-2 px-3 rounded-lg hover:bg-brand-teal-50 transition-colors duration-200 mobile-menu-link">
                 Find Doctor
             </a>
             <a href="{{ route('about-us') }}"
-                class="block text-gray-700 hover:text-brand-teal-600 font-medium py-2 px-3 rounded-lg hover:bg-brand-teal-50 transition-colors duration-200">
+                class="block text-gray-700 hover:text-brand-teal-600 font-medium py-2 px-3 rounded-lg hover:bg-brand-teal-50 transition-colors duration-200 mobile-menu-link">
                 About
             </a>
             <a href="{{ route('contact-us') }}"
-                class="block text-gray-700 hover:text-brand-teal-600 font-medium py-2 px-3 rounded-lg hover:bg-brand-teal-50 transition-colors duration-200">
+                class="block text-gray-700 hover:text-brand-teal-600 font-medium py-2 px-3 rounded-lg hover:bg-brand-teal-50 transition-colors duration-200 mobile-menu-link">
                 Contact
             </a>
+            
             <div class="pt-4 border-t space-y-3">
                 @auth
                     <div class="flex items-center space-x-3 px-3 py-2">
@@ -156,7 +148,7 @@
                     </div>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="w-full text-left text-red-600 hover:text-red-700 font-medium py-2 px-3 rounded-lg hover:bg-red-50 transition-colors duration-200 flex items-center space-x-2">
+                        <button type="submit" class="w-full text-left text-red-600 hover:text-red-700 font-medium py-2 px-3 rounded-lg hover:bg-red-50 transition-colors duration-200 flex items-center space-x-2 mobile-menu-link">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                             </svg>
@@ -165,16 +157,16 @@
                     </form>
                 @else
                     <a href="/login"
-                        class="block text-center text-gray-600 hover:text-brand-teal-600 font-medium py-2 px-3 rounded-lg hover:bg-brand-teal-50 transition-colors duration-200">
+                        class="block text-center text-gray-600 hover:text-brand-teal-600 font-medium py-2 px-3 rounded-lg hover:bg-brand-teal-50 transition-colors duration-200 mobile-menu-link">
                         Login
                     </a>
                     <a wire:navigate href="{{ route('register') }}"
-                        class="block text-center bg-brand-teal-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-brand-teal-700 transition-colors duration-200 shadow-md hover:shadow-lg">
+                        class="block text-center bg-brand-teal-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-brand-teal-700 transition-colors duration-200 shadow-md hover:shadow-lg mobile-menu-link">
                         Sign Up
                     </a>
                 @endauth
                 <a href="{{ route('appointment') }}"
-                    class="block text-center bg-brand-orange-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-brand-orange-600 transition-colors duration-200 shadow-md hover:shadow-lg">
+                    class="block text-center bg-brand-orange-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-brand-orange-600 transition-colors duration-200 shadow-md hover:shadow-lg mobile-menu-link">
                     Book Appointment
                 </a>
             </div>
@@ -183,8 +175,37 @@
 </header>
 
 <script>
-    document.getElementById('mobile-menu-button').addEventListener('click', function() {
+    document.addEventListener('DOMContentLoaded', function() {
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
-        mobileMenu.classList.toggle('hidden');
+        const mobileMenuLinks = document.querySelectorAll('.mobile-menu-link');
+        
+        // Toggle mobile menu
+        mobileMenuButton.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+            mobileMenu.classList.toggle('block');
+            
+            // Toggle aria-expanded attribute
+            const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
+            mobileMenuButton.setAttribute('aria-expanded', !isExpanded);
+        });
+        
+        // Close mobile menu when clicking on any link
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                mobileMenu.classList.add('hidden');
+                mobileMenu.classList.remove('block');
+                mobileMenuButton.setAttribute('aria-expanded', 'false');
+            });
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!mobileMenu.contains(event.target) && !mobileMenuButton.contains(event.target)) {
+                mobileMenu.classList.add('hidden');
+                mobileMenu.classList.remove('block');
+                mobileMenuButton.setAttribute('aria-expanded', 'false');
+            }
+        });
     });
 </script>
