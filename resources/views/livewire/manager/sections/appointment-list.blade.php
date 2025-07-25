@@ -246,7 +246,7 @@
                                 <i class="fas fa-eye"></i>
                             </button>
                             
-                            <a href="{{ route('update.appointment', $appointment->id) }}"
+                            <a href=""
                                 class="text-yellow-500 hover:text-yellow-700 p-2 rounded-full hover:bg-yellow-50"
                                 title="Edit">
                                 <i class="fas fa-pencil-alt"></i>
@@ -273,10 +273,7 @@
                             <i class="fas fa-calendar-times text-5xl mb-4"></i>
                             <h3 class="text-lg font-medium text-gray-600 mb-2">No appointments found</h3>
                             <p class="text-sm max-w-md px-4 mb-4">Try adjusting your search filters or create a new appointment</p>
-                            <a href="{{ route('add.appointment') }}"
-                                class="text-blue-500 hover:text-blue-600 font-medium flex items-center">
-                                <i class="fas fa-plus mr-2"></i> Create New Appointment
-                            </a>
+                          
                         </div>
                     </td>
                 </tr>

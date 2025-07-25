@@ -26,7 +26,7 @@
                 <i class="fas fa-building text-blue-500 w-6 text-center"></i>
                 <span class="ml-3">Departments</span>
             </a>
-            <a href="{{ route('manage.doctors') }}"
+            <a href="{{ route('admin.manage.doctors') }}"
                 class="sidebar-link flex items-center px-4 py-3 text-gray-700 transition-all">
                 <i class="fas fa-user-md text-blue-500 w-6 text-center"></i>
                 <span class="ml-3">Manage Doctors</span>

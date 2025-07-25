@@ -110,7 +110,7 @@
 
                                     <!-- Modal -->
                                     <livewire:admin.appointment.view-details/>
-   <a href="{{ route('update.appointment', $appointment->id) }}"
+   <a href="{{ route('admin.update.appointment', $appointment->id) }}"
                                     class="text-yellow-500 hover:text-yellow-700 p-1 sm:p-2 rounded-lg hover:bg-yellow-50 transition"
                                     title="Edit">
                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">

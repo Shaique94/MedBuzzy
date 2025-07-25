@@ -40,4 +40,9 @@ class Manager extends Model
         return $this->belongsTo(User::class, 'doctor_id');
     }
     
+    public function managedDoctors()
+{
+    return $this->hasMany(Doctor::class, 'manager_id');
+}
+
 }
