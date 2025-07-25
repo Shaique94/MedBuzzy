@@ -11,7 +11,7 @@
                     <p class="text-blue-100 text-sm sm:text-base">Manage patient appointments efficiently</p>
                 </div>
             </div>
-            <a href="{{ route('add.appointment') }}"
+            <a href="{{ route('admin.add.appointment') }}"
                 class="bg-white hover:bg-blue-50 text-blue-600 px-4 py-2 sm:px-6 sm:py-3 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl font-medium text-sm sm:text-base">
                 <i class="fas fa-plus"></i>
                 <span>New Appointment</span>
@@ -206,7 +206,7 @@
                                     <livewire:admin.appointment.view-details/>
                                 </div>
 
-                                <a href="{{ route('update.appointment', $appointment->id) }}"
+                                <a href="{{ route('admin.update.appointment', $appointment->id) }}"
                                     class="text-yellow-500 hover:text-yellow-700 p-1 sm:p-2 rounded-lg hover:bg-yellow-50 transition"
                                     title="Edit">
                                     <i class="fas fa-pencil-alt text-sm sm:text-base"></i>
@@ -228,7 +228,7 @@
                                 <h3 class="text-base sm:text-lg font-medium text-gray-600 mb-1">No appointments found</h3>
                                 <p class="text-xs sm:text-sm max-w-md px-4">Try adjusting your search filters or create a new
                                     appointment to get started</p>
-                                <a href="{{ route('add.appointment') }}"
+                                <a href="{{ route('admin.add.appointment') }}"
                                     class="mt-3 sm:mt-4 text-blue-500 hover:text-blue-600 font-medium flex items-center text-sm sm:text-base">
                                     <i class="fas fa-plus mr-2"></i> Create New Appointment
                                 </a>
