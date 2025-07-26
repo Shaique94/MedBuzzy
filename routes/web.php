@@ -44,8 +44,6 @@ Route::get('/auth/google-callback', [SocialiteController::class, 'handleGoogleCa
 
 
 // Public Routes
-Route::get('/auth/google', [SocialiteController::class, 'redirectToGoogle'])->name('google.login');
-Route::get('/auth/google-callback', [SocialiteController::class, 'handleGoogleCallback']);
 Route::get('/', LandingPage::class)->name('hero');
 Route::get('/our-doctors', OurDoctors::class)->name('our-doctors');
 Route::get('/terms-conditions', TermsCondition::class)->name('terms-conditons');
@@ -110,4 +108,3 @@ Route::get('/storage-link', function () {
     Artisan::call('storage:link');
     return 'Storage link created successfully!';
 });
-
