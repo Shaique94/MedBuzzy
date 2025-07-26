@@ -403,7 +403,7 @@
                         </div>
 
                         <div class="mt-12">
-                            <a href="/book-appointment"
+                            <a href="{{ route('appointment') }}"
                                 class="inline-flex items-center px-8 py-4 bg-teal-400 text-white font-semibold rounded-xl hover:bg-orange-700 transition-colors">
                                 Start Booking Now
                                 <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

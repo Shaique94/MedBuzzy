@@ -114,34 +114,44 @@ class ManageAppointment extends Component
     {
         $this->newPatient['pincode'] = $value;
         $this->validateOnly('newPatient.pincode');
-
-        if (strlen($value) === 6) {
-            $this->isProcessing = true;
-            try {
-                $response = Http::timeout(5)->get("https://api.postalpincode.in/pincode/{$value}");
-
-                if ($response->successful()) {
-                    $data = $response->json();
-                    if (isset($data[0]['Status']) && $data[0]['Status'] === 'Success' && !empty($data[0]['PostOffice'])) {
-                        $postOffice = $data[0]['PostOffice'][0];
-                        $this->newPatient['district'] = $postOffice['District'] ?? '';
-                        $this->newPatient['state'] = $postOffice['State'] ?? '';
-                        $this->resetErrorBag('newPatient.pincode');
-                    } else {
-                        $this->addError('newPatient.pincode', 'Invalid pincode or no data found.');
-                    }
-                } else {
-                    $this->addError('newPatient.pincode', 'Invalid pincode or no data found.');
-                }
-            } catch (\Exception $e) {
-                $this->addError('newPatient.pincode', 'Unable to verify pincode. Please try again later.');
-            }
-            $this->isProcessing = false;
-        } else {
-            $this->newPatient['district'] = '';
-            $this->newPatient['state'] = '';
-            $this->resetErrorBag('newPatient.pincode');
+if (empty($value) || !preg_match('/^\d{6}$/', $value)) {
+        if (!empty($value)) {
+            $this->addError('newPatient.pincode', 'Please enter a valid 6-digit PIN code');
         }
+        return;
+    }
+
+    $this->isProcessing = true;
+    try {
+        $url = "https://api.postalpincode.in/pincode/{$value}";
+        $context = stream_context_create([
+            'http' => [
+                'timeout' => 5,
+            ]
+        ]);
+        $response = file_get_contents($url, false, $context);
+
+        if ($response === false) {
+            $this->addError('newPatient.pincode', 'Failed to connect to the API');
+            $this->isProcessing = false;
+            return;
+        }
+
+        $data = json_decode($response, true);
+        if (isset($data[0]['Status']) && $data[0]['Status'] === 'Success' && !empty($data[0]['PostOffice'])) {
+            $postOffice = $data[0]['PostOffice'][0];
+            $this->newPatient['district'] = $postOffice['District'] ?? '';
+            $this->newPatient['state'] = $postOffice['State'] ?? '';
+            $this->resetErrorBag('newPatient.pincode');
+        } else {
+            $this->addError('newPatient.pincode', 'Invalid PIN code or no data found');
+        }
+    } catch (\Exception $e) {
+        $this->addError('newPatient.pincode', 'Unable to verify PIN code: ' . $e->getMessage());
+    }
+
+    $this->isProcessing = false;
+
     }
 
     public function setAppointmentDate($date)
@@ -373,7 +383,7 @@ class ManageAppointment extends Component
             $patientInfo = $allData[0]['patientData'];
             $appointmentInfo = $allData[0]['appointmentData'];
 
-           
+
             // 2. Verify payment with Razorpay
             $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret'));
             $payment = $api->payment->fetch($paymentId);
@@ -402,6 +412,7 @@ class ManageAppointment extends Component
                 'patient_id' => $patient->id,
                 'appointment_date' => $appointmentInfo['appointment_date'],
                 'appointment_time' => $appointmentInfo['appointment_time'],
+                'payment_method' => 'razorpay',
                 'notes' => $appointmentInfo['notes'] ?? null,
                'status' => 'scheduled',
                'rescheduled' => false,
@@ -411,7 +422,7 @@ class ManageAppointment extends Component
             ]);
 
             // 5. Record payment
-           $payment = Payment::create([
+            $payment = Payment::create([
                 'appointment_id' => $appointment->id,
                 'patient_id' => $patient->id,
                 'amount' => $paymentDetails['amount'],

@@ -11,7 +11,8 @@
         <div class="max-w-2xl mx-auto mb-10">
             <form wire:submit.prevent="loadDoctors" class="relative">
                 <div class="relative">
-                    <input type="text" wire:model.live="searchQuery" placeholder="Search doctors by name, email, or qualification..."
+                    <input type="text" wire:model.live="searchQuery"
+                        placeholder="Search doctors by name, email, or qualification..."
                         class="w-full pl-5 pr-12 py-3 border-2 border-teal-500 bg-white rounded-full focus:outline-none focus:ring-2 focus:ring-teal-300 shadow-md text-teal-800 placeholder-teal-400">
                     <button type="submit"
                         class="absolute right-3 top-2 transform bg-teal-500 text-white p-2 rounded-full hover:bg-teal-600 transition">
@@ -84,7 +85,7 @@
                                 ({{ implode(', ', $gender) }})
                             @endif
                         </h2>
-                        <div>
+                        {{-- <div>
                             <select wire:model.live="sortBy"
                                 class="border-teal-200 rounded-lg shadow-sm focus:ring-teal-300 focus:border-teal-300 text-teal-700 border px-3 py-2">
                                 <option value="name">Sort by: Name</option>
@@ -92,7 +93,7 @@
                                 <option value="experience">Sort by: Experience</option>
                                 <option value="availability">Sort by: Availability</option>
                             </select>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
 
@@ -105,11 +106,13 @@
                                 <!-- Doctor Image -->
                                 <div
                                     class="w-28 h-28 bg-white rounded-full flex items-center justify-center shadow-lg overflow-hidden border border-gray-200">
-                                     @if($doctor->image)
-    <img src="{{ $doctor->image }}" class="w-full h-full object-cover">
-@else
-    <span class="text-blue-600 font-medium">{{ substr($doctor->user->name, 0, 1) }}</span>
-@endif
+                                    @if ($doctor->image)
+                                        <img src="{{ $doctor->image ? asset('storage/' . $doctor->image) : asset('images/default-doctor.jpg') }}"
+                                            class="w-full h-full object-cover">
+                                    @else
+                                        <span
+                                            class="text-blue-600 font-medium">{{ substr($doctor->user->name, 0, 1) }}</span>
+                                    @endif
                                 </div>
 
 
@@ -146,7 +149,11 @@
                                     </div>
 
                                     <div class="flex items-center gap-2 text-teal-600 mb-4">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 " viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 "
+                                            viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                                            <path
+                                                d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
+                                        </svg>
                                         <span>{{ $doctor->location ?? 'Purnea, Bihar' }}</span>
                                     </div>
 

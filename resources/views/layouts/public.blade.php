@@ -7,6 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Tailwind CSS with full config -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         tailwind.config = {
             theme: {
@@ -35,7 +36,6 @@
                             700: '#0f766e',
                             800: '#115e59',
                             900: '#134e4a',
-                            
                         }
                     }
                 }
@@ -43,7 +43,7 @@
         }
     </script>
 
-    <!-- Custom CSS for gradients -->
+    <!-- Custom CSS for gradients and mobile nav -->
     <style>
         .hero-gradient {
             background: linear-gradient(135deg, #f0fdfa 0%, #ffffff 70%, #fff7ed 100%);
@@ -52,27 +52,47 @@
         .search-gradient {
             background: linear-gradient(90deg, #14b8a6 0%, #2dd4bf 100%);
         }
+        
+        /* Mobile Bottom Navigation Styles */
+        .mobile-bottom-nav {
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-bottom-nav a {
+            transition: all 0.2s ease-out;
+        }
+        
+        .mobile-bottom-nav a:active {
+            transform: scale(0.95);
+        }
+        
+        .mobile-bottom-nav .active-tab {
+            @apply text-teal-600;
+        }
+        
+        .mobile-bottom-nav .active-tab div {
+            @apply bg-teal-600 text-white shadow-md;
+        }
     </style>
 
     <meta property="og:url" content="{{ url()->current() }}">
     <link rel="canonical" href="{{ url()->current() }}">
 
+   
+
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
-
-
 </head>
 
 <body class="flex flex-col min-h-screen bg-gray-50">
     <!-- Main Content Area -->
-    <div class="flex-1 flex flex-col  transition-all duration-300">
-
+    <div class="flex-1 flex flex-col transition-all duration-300">
         <!-- Header -->
         <livewire:public.header />
 
         <!-- Page Content -->
-        <main class="flex-1 overflow-x-hidden md:mt-32 mt-20 overflow-y-auto bg-gray-100">
+        <main class="flex-1 overflow-x-hidden md:mt-32 mt-20 overflow-y-auto bg-gray-100 pb-16 lg:pb-0">
             <div class="container mx-auto px-6 py-8">
                 {{ $slot }}
             </div>
@@ -80,8 +100,11 @@
 
         <!-- Footer -->
         <livewire:public.footer />
+        
+        <!-- Mobile Bottom Navigation -->
+        @include('components.mobile-bottom-nav')
     </div>
+
     @livewireScripts
 </body>
-
 </html>
