@@ -114,45 +114,46 @@ class ManageAppointment extends Component
     {
         $this->newPatient['pincode'] = $value;
         $this->validateOnly('newPatient.pincode');
-if (empty($value) || !preg_match('/^\d{6}$/', $value)) {
-        if (!empty($value)) {
-            $this->addError('newPatient.pincode', 'Please enter a valid 6-digit PIN code');
-        }
-        return;
-    }
-
-    $this->isProcessing = true;
-    try {
-        $url = "https://api.postalpincode.in/pincode/{$value}";
-        $context = stream_context_create([
-            'http' => [
-                'timeout' => 5,
-            ]
-        ]);
-        $response = file_get_contents($url, false, $context);
-
-        if ($response === false) {
-            $this->addError('newPatient.pincode', 'Failed to connect to the API');
-            $this->isProcessing = false;
+        if (empty($value) || !preg_match('/^\d{6}$/', $value)) {
+            if (!empty($value)) {
+                $this->addError('newPatient.pincode', 'Please enter a valid 6-digit PIN code');
+            }
             return;
         }
 
-        $data = json_decode($response, true);
-        if (isset($data[0]['Status']) && $data[0]['Status'] === 'Success' && !empty($data[0]['PostOffice'])) {
-            $postOffice = $data[0]['PostOffice'][0];
-            $this->newPatient['district'] = $postOffice['District'] ?? '';
-            $this->newPatient['state'] = $postOffice['State'] ?? '';
-            $this->resetErrorBag('newPatient.pincode');
-        } else {
-            $this->addError('newPatient.pincode', 'Invalid PIN code or no data found');
+        $this->isProcessing = true;
+        try {
+            $url = "https://api.postalpincode.in/pincode/{$value}";
+            $context = stream_context_create([
+                'http' => [
+                    'timeout' => 5,
+                ]
+            ]);
+            $response = file_get_contents($url, false, $context);
+
+            if ($response === false) {
+                $this->addError('newPatient.pincode', 'Failed to connect to the API');
+                $this->isProcessing = false;
+                return;
+            }
+
+            $data = json_decode($response, true);
+            if (isset($data[0]['Status']) && $data[0]['Status'] === 'Success' && !empty($data[0]['PostOffice'])) {
+                $postOffice = $data[0]['PostOffice'][0];
+                $this->newPatient['district'] = $postOffice['District'] ?? '';
+                $this->newPatient['state'] = $postOffice['State'] ?? '';
+                $this->resetErrorBag('newPatient.pincode');
+            } else {
+                $this->addError('newPatient.pincode', 'Invalid PIN code or no data found');
+            }
+        } catch (\Exception $e) {
+            $this->addError('newPatient.pincode', 'Unable to verify PIN code: ' . $e->getMessage());
         }
-    } catch (\Exception $e) {
-        $this->addError('newPatient.pincode', 'Unable to verify PIN code: ' . $e->getMessage());
-    }
 
-    $this->isProcessing = false;
+        $this->isProcessing = false;
 
     }
+
 
     public function setAppointmentDate($date)
     {
@@ -412,11 +413,14 @@ if (empty($value) || !preg_match('/^\d{6}$/', $value)) {
                 'patient_id' => $patient->id,
                 'appointment_date' => $appointmentInfo['appointment_date'],
                 'appointment_time' => $appointmentInfo['appointment_time'],
-                'payment_method' => 'razorpay',
                 'notes' => $appointmentInfo['notes'] ?? null,
                 'status' => 'scheduled',
+                // 'rescheduled' => false,
+                // 'is_rescheduled' => false,
+                // 'original_date' => null,
+                // 'rescheduled_at' => null,
             ]);
-
+            
             // 5. Record payment
             $payment = Payment::create([
                 'appointment_id' => $appointment->id,

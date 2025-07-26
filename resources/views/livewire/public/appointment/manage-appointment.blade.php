@@ -1,4 +1,4 @@
-<div class="min-h-screen  py-8 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen  py-2 px-2 sm:px-6 lg:px-8">
     <div class="max-w-5xl mx-auto md:shadow-xl ">
         <!-- Header -->
         <div class="text-center bg-teal-600 rounded py-5">
@@ -76,7 +76,7 @@
             </div>
 
             <!-- Step Content -->
-            <div class="p-6 sm:p-8">
+            <div class="p-3 sm:p-8">
                 <!-- Step 1: Select Doctor -->
                 @if ($step === 1)
                     <div class="space-y-6">
@@ -246,7 +246,7 @@
                                 </div>
                             </div>
 
-                            <div class="bg-white p-3 sm:p-4 md:p-6 rounded-xl sm:rounded-2xl border border-gray-100 ">
+                            <div class="bg-white p-2 sm:p-4 md:p-6 rounded-xl sm:rounded-2xl border border-gray-100 ">
                                 <h2
                                     class="text-lg sm:text-xl font-semibold text-gray-800 mb-4 sm:mb-5 md:mb-6 flex items-center">
                                     <svg class="h-5 w-5 sm:h-6 sm:w-6 mr-2 text-brand-teal-600" fill="none"
@@ -260,10 +260,10 @@
 
                                 <!-- Calendar Section -->
                                 @if (!$appointment_date)
-                                    <div class="bg-white p-5 rounded-xl border border-gray-100 ">
+                                    <div class="bg-white p-2 rounded-xl  ">
                                         <div class="flex items-center justify-between mb-5">
                                             <button wire:click="previousMonth"
-                                                class="px-4 py-2 bg-brand-teal-100 text-brand-teal-800 rounded-lg hover:bg-brand-teal-200 transition flex items-center text-sm">
+                                                class="px-3 py-2 bg-brand-teal-100 text-brand-teal-800 rounded-lg hover:bg-brand-teal-200 transition flex items-center text-sm">
                                                 <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20"
                                                     xmlns="http://www.w3.org/2000/svg">
                                                     <path fill-rule="evenodd"
@@ -276,7 +276,7 @@
                                                 {{ \Carbon\Carbon::parse($currentMonth)->format('F Y') }}
                                             </h3>
                                             <button wire:click="nextMonth"
-                                                class="px-4 py-2 bg-brand-teal-100 text-brand-teal-800 rounded-lg hover:bg-brand-teal-200 transition flex items-center text-sm">
+                                                class="px-3 py-2 bg-brand-teal-100 text-brand-teal-800 rounded-lg hover:bg-brand-teal-200 transition flex items-center text-sm">
                                                 Next
                                                 <svg class="h-4 w-4 ml-1" fill="currentColor" viewBox="0 0 20 20"
                                                     xmlns="http://www.w3.org/2000/svg">
@@ -376,8 +376,7 @@
                                 <!-- Time Slots Section -->
                                 @if ($appointment_date)
                                     <div class="bg-white p-5 rounded-xl md:border md:border-gray-100 ">
-                                        <div
-                                            class="flex py-4  justify-between items-start sm:items-center mb-4 gap-4">
+                                        <div class="flex py-4  justify-between items-start sm:items-center mb-4 gap-4">
                                             <h2 class="text-20px font-semibold text-gray-800 flex items-center">
                                                 <svg class="h-5 w-5 mr-2 text-brand-orange-500" fill="currentColor"
                                                     viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
