@@ -403,7 +403,11 @@ class ManageAppointment extends Component
                 'appointment_date' => $appointmentInfo['appointment_date'],
                 'appointment_time' => $appointmentInfo['appointment_time'],
                 'notes' => $appointmentInfo['notes'] ?? null,
-                'status' => 'completed',
+               'status' => 'scheduled',
+               'rescheduled' => false,
+    'is_rescheduled' => false,
+    'original_date' => null,
+    'rescheduled_at' => null,
             ]);
 
             // 5. Record payment

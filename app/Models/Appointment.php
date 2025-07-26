@@ -77,46 +77,118 @@ class Appointment extends Model
     /**
      * Find the next available date for rescheduling
      */
-    protected function findNextAvailableDate(Doctor $doctor, int $maxAttempts): ?Carbon
-    {
-        $currentDate = Carbon::parse($this->appointment_date);
-        $attempts = 0;
+ 
+protected function findNextAvailableDate(Doctor $doctor, int $maxAttempts): ?Carbon
+{
+    $currentDate = Carbon::parse($this->appointment_date);
+    $attempts = 0;
+    
+    while ($attempts < $maxAttempts) {
+        $currentDate->addDay();
+        $attempts++;
         
-        while ($attempts < $maxAttempts) {
-            $currentDate->addDay();
-            $attempts++;
-            
-            if ($this->isDateAvailable($doctor, $currentDate)) {
-                return $currentDate;
-            }
+        // Skip weekends if doctor doesn't work weekends
+        if (!$doctor->isAvailableOn($currentDate->dayOfWeekIso)) {
+            continue;
         }
         
-        return null;
+        // Check if doctor is on leave
+        if ($doctor->isOnLeave($currentDate)) {
+            continue;
+        }
+        
+        // Check if there are available slots
+        $slots = $doctor->generateTimeSlots($currentDate->format('Y-m-d'));
+        if (!empty($slots)) {
+            return $currentDate;
+        }
     }
+    
+    return null;
+}
+
 
     /**
      * Check if date is available for the doctor
      */
-    protected function isDateAvailable(Doctor $doctor, Carbon $date): bool
-    {
-        // Check if doctor is on leave
-        if ($doctor->isOnLeave($date)) {
-            return false;
-        }
 
-      // Check if day of week is available
-        return $doctor->isAvailableOn($date->dayOfWeekIso);
+    protected function isDateAvailable(Doctor $doctor, Carbon $date): bool
+{
+    // Check if doctor is on leave
+    if ($doctor->isOnLeave($date)) {
+        return false;
     }
+
+    // Check if day of week is available
+    if (!$doctor->isAvailableOn($date->dayOfWeekIso)) {
+        return false;
+    }
+
+    // Check if there are available slots
+    $slots = $doctor->generateTimeSlots($date->format('Y-m-d'));
+    return !empty($slots);
+}
 
     /**
      * Check if appointment can be rescheduled
      */
-    public function canBeRescheduled(): bool
-    {
-        return $this->appointment_date->isFuture() 
-            && in_array($this->status, ['scheduled', 'pending', 'confirmed']);
+
+  public function canBeRescheduled(): bool
+{
+    
+  // Explicit list of statuses that cannot be rescheduled
+    $invalidStatuses = ['completed', 'cancelled', 'no-show', 'rescheduled'];
+    
+    // Check if appointment is in invalid status
+    if (in_array($this->status, $invalidStatuses)) {
+        return false;
     }
 
+        // return Carbon::parse($this->appointment_date)
+        //         ->tz(config('app.timezone'))
+        //         ->isFuture();
+         // Check if appointment is already rescheduled
+    if ($this->rescheduled) {
+        return false;
+    }
+
+    // Check if appointment date is in the future
+    if (Carbon::parse($this->appointment_date)
+            ->tz(config('app.timezone'))
+            ->isPast()) {
+        return false;
+    }
+
+    // Check if doctor is available (not on leave)
+    if ($this->doctor->isOnLeave(Carbon::parse($this->appointment_date))) {
+        return false;
+    }
+
+    return true;
+}
+
+
+public function getAvailableRescheduleDates(Doctor $doctor, int $maxDays = 14): array
+{
+    $availableDates = [];
+    $currentDate = Carbon::now()->startOfDay();
+    $endDate = $currentDate->copy()->addDays($maxDays);
+    
+    while ($currentDate->lte($endDate)) {
+        if ($this->isDateAvailable($doctor, $currentDate)) {
+            $availableDates[] = $currentDate->format('Y-m-d');
+        }
+        $currentDate->addDay();
+    }
+    
+    return $availableDates;
+}
+
+public function isDoctorAvailable(): bool
+{
+    return !$this->doctor->isOnLeave($this->appointment_date) && 
+           $this->doctor->isAvailableOn($this->appointment_date->dayOfWeekIso);
+}
     /**
      * Send notification about rescheduling
      */
