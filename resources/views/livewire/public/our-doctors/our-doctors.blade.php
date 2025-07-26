@@ -107,8 +107,9 @@
                                 <div
                                     class="w-28 h-28 bg-white rounded-full flex items-center justify-center shadow-lg overflow-hidden border border-gray-200">
                                     @if ($doctor->image)
-                                        <img src="{{ $doctor->image ? asset('storage/' . $doctor->image) : asset('images/default-doctor.jpg') }}"
-                                            class="w-full h-full object-cover">
+                                         <img src="{{ $doctor->image ?? 'https://ui-avatars.com/api/?name=' . urlencode($doctor->user->name) . '&background=random&rounded=true' }}"
+                                                            alt="Dr. {{ $doctor->user->name }}"
+                                                            class="w-full h-full object-cover">
                                     @else
                                         <span
                                             class="text-blue-600 font-medium">{{ substr($doctor->user->name, 0, 1) }}</span>
