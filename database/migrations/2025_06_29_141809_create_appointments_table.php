@@ -20,6 +20,8 @@ return new class extends Migration
             $table->date('appointment_date');
             $table->time('appointment_time')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+              $table->date('original_date')->nullable(); 
+    $table->boolean('rescheduled')->default(false); 
             $table->timestamps();
         });
     }

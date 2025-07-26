@@ -7,7 +7,7 @@
             </svg>
         </div>
         <div>
-            <h2 class="text-2xl font-bold text-gray-800">Collect Consultation Fee</h2>
+            <h2 class="text-2xl font-bold text-gray-800">Record Payment</h2>
             <p class="text-sm text-gray-500">Patient ID: {{ $patientId }}</p>
         </div>
     </div>
@@ -46,6 +46,26 @@
         </div>
     </div>
 
+    <!-- Payment Method Selection -->
+    <div class="mb-6">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Payment Method</label>
+        <div class="grid grid-cols-3 gap-3">
+            @foreach(['cash' => 'Cash', 'card' => 'Card', 'upi' => 'UPI'] as $value => $label)
+                <label class="flex items-center justify-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition
+                    {{ $paymentMethod === $value ? 'border-blue-500 bg-blue-50' : 'border-gray-300' }}">
+                    <input 
+                        type="radio" 
+                        wire:model="paymentMethod"
+                        value="{{ $value }}"
+                        class="sr-only"
+                    >
+                    <span>{{ $label }}</span>
+                </label>
+            @endforeach
+        </div>
+        @error('paymentMethod') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
+    </div>
+
     <!-- Action Buttons -->
     <div class="flex justify-end space-x-3 pt-4 border-t border-gray-200">
         <button 
@@ -63,7 +83,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
             </svg>
-            Update Fee
+            Record Payment
         </button>
     </div>
 </div>

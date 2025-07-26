@@ -10,7 +10,7 @@ use Livewire\WithPagination;
 
 class ManageDoctor extends Component
 {
-  use WithPagination;
+    use WithPagination;
 
     public $search = '';
     public $departmentFilter = '';
@@ -25,10 +25,8 @@ class ManageDoctor extends Component
 
     public function updated($property)
     {
-        // Show reset button when either search or department filter is active
         $this->showReset = !empty($this->search) || !empty($this->departmentFilter);
         
-        // Reset pagination when filters change
         if (in_array($property, ['search', 'departmentFilter'])) {
             $this->resetPage();
         }
@@ -44,18 +42,22 @@ class ManageDoctor extends Component
 
     public function render()
     {
+        // Get current manager's user ID
+        $managerUserId = auth()->id();
+        
         $query = Doctor::with(['user', 'department'])
-                      ->latest();
+            ->whereHas('managers', function ($q) use ($managerUserId) {
+                $q->where('user_id', $managerUserId);
+            })
+            ->latest();
 
-        // Search filter
         if (!empty($this->search)) {
             $query->whereHas('user', function ($q) {
                 $q->where('name', 'like', '%' . $this->search . '%')
-                  ->orWhere('email', 'like', '%' . $this->search . '%');
+                    ->orWhere('email', 'like', '%' . $this->search . '%');
             });
         }
 
-        // Department filter
         if (!empty($this->departmentFilter)) {
             $query->where('department_id', $this->departmentFilter);
         }

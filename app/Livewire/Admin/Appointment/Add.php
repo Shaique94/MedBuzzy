@@ -89,10 +89,12 @@ class Add extends Component
         ]);
 
         $patient = Patient::firstOrCreate(
-            ['phone' => $this->phone],
+      [
+            'phone' => $this->phone,
+            'name' => $this->name,
+            'email' => $this->email
+        ],
             [
-                'name' => $this->name,
-                'email' => $this->email,
                 'gender' => $this->gender,
                 'address' => $this->address,
                 'pincode' => $this->pincode,
