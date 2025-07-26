@@ -186,7 +186,7 @@
     <div class="box">
         <div class="header">
             <div class="appointment-status">✓ Confirmed</div>
-            <img src="{{ asset('healingTouchLogo.jpeg') }}" class="logo" alt="Logo">
+            <img src="/logo/logo.png" class="w-5 h-5" alt="">
             <div class="hospital-title">
                 <h3>MedBuzzy</h3>
                 <div class="tagline">Your Trusted Healthcare Partner</div>

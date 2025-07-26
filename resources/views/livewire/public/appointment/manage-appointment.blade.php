@@ -1,13 +1,13 @@
-<div class="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-5xl mx-auto md:shadow-xl">
+<div class="min-h-screen  py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-5xl mx-auto md:shadow-xl ">
         <!-- Header -->
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-brand-teal-700">Book an Appointment</h1>
-            <p class="mt-2 text-gray-600">Schedule your visit with our expert doctors</p>
+        <div class="text-center bg-teal-600 rounded py-5">
+            <h1 class="text-3xl font-bold text-gray-50">Book an Appointment</h1>
+            <p class="mt-2 text-gray-200">Schedule your visit with our expert doctors</p>
         </div>
 
         <!-- Main Card -->
-        <div class="bg-white rounded-2xl overflow-hidden">
+        <div class="bg-white  overflow-hidden">
             <!-- Progress Steps -->
             <div class="bg-brand-teal-50 px-6 py-4">
                 <div class="flex items-center justify-between">
@@ -377,8 +377,8 @@
                                 @if ($appointment_date)
                                     <div class="bg-white p-5 rounded-xl md:border md:border-gray-100 ">
                                         <div
-                                            class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
-                                            <h2 class="text-lg font-semibold text-gray-800 flex items-center">
+                                            class="flex py-4  justify-between items-start sm:items-center mb-4 gap-4">
+                                            <h2 class="text-20px font-semibold text-gray-800 flex items-center">
                                                 <svg class="h-5 w-5 mr-2 text-brand-orange-500" fill="currentColor"
                                                     viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                     <path fill-rule="evenodd"
@@ -544,344 +544,370 @@
                                                     </div>
                                                 @endif
                                             </div>
-                                        </div>
-                                    </div>
-                                @endif
-                            @else
-                                <div class="text-center py-12 bg-blue-50 rounded-xl border border-blue-200">
-                                    <svg class="h-12 w-12 mx-auto text-blue-500 mb-4" fill="currentColor"
-                                        viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd"
-                                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
-                                    <h3 class="text-xl font-medium text-blue-700">Select a Doctor First</h3>
-                                    <p class="text-sm text-blue-600 mt-2">Please choose a doctor to view available
-                                        dates
-                                    </p>
-                                    <button wire:click="$set('step', 1)"
-                                        class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-                                        Back to Doctors
-                                    </button>
-                                </div>
-                        @endif
-                    </div>
-                @endif
-
-                <!-- Step 3: Patient Information -->
-                @if ($step === 3)
-                    <div class="space-y-6">
-                        <!-- Doctor Summary -->
-                        <div
-                            class="bg-gradient-to-r from-brand-teal-50 to-brand-teal-100 p-5 rounded-xl border border-brand-teal-200">
-                            <div class="flex flex-col sm:flex-row items-center gap-5">
-                                <div
-                                    class="w-20 h-20 rounded-full overflow-hidden bg-white border-4 border-brand-teal-600 shadow-lg">
-                                    <img src="{{ $selectedDoctor->image ? asset('storage/' . $selectedDoctor->image) : asset('images/default-doctor.jpg') }}"
-                                        class="w-full h-full object-cover">
-                                </div>
-                                <div class="text-center sm:text-left">
-                                    <h3 class="text-xl font-bold text-gray-800">Dr. {{ $selectedDoctor->user->name }}
-                                    </h3>
-                                    <p class="text-sm font-medium text-brand-teal-700">
-                                        {{ $selectedDoctor->department->name }}</p>
-                                    <div
-                                        class="mt-2 flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center sm:justify-start">
-                                        <p class="text-sm text-gray-600">
-                                            {{ \Carbon\Carbon::parse($appointment_date)->format('l, F j, Y') }}
-                                        </p>
-                                        <p class="text-sm text-gray-600">{{ $appointment_time }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Patient Form -->
-                        <div class="bg-white p-5 rounded-xl border border-gray-100 md:shadow-sm">
-                            <h2 class="text-xl font-semibold text-gray-800 mb-5 flex items-center">
-                                <svg class="h-5 w-5 mr-2 text-brand-teal-600" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"></path>
-                                </svg>
-                                Patient Information
-                            </h2>
-
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                <!-- Name -->
-                                <div>
-                                    <label class="block mb-2 text-sm font-medium text-gray-600">Full Name <span
-                                            class="text-red-500">*</span></label>
-                                    <input type="text" wire:model.live.debounce.500ms="newPatient.name"
-                                        class="w-full px-4 py-3 border {{ $errors->has('newPatient.name') ? 'border-red-500' : 'border-gray-300' }} rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
-                                        placeholder="John Doe">
-                                    @error('newPatient.name')
-                                        <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
-                                    @enderror
-                                </div>
-
-                                <!-- Email -->
-                                <div>
-                                    <label class="block mb-2 text-sm font-medium text-gray-600">Email</label>
-                                    <input type="email" wire:model.live.debounce.500ms="newPatient.email"
-                                        class="w-full px-4 py-3 border {{ $errors->has('newPatient.email') ? 'border-red-500' : 'border-gray-300' }} rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
-                                        placeholder="john@example.com">
-                                    @error('newPatient.email')
-                                        <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
-                                    @enderror
-                                </div>
-
-                                <!-- Phone -->
-                                <div>
-                                    <label class="block mb-2 text-sm font-medium text-gray-600">Phone <span
-                                            class="text-red-500">*</span></label>
-                                    <input type="tel" wire:model.live.debounce.500ms="newPatient.phone"
-                                        class="w-full px-4 py-3 border {{ $errors->has('newPatient.phone') ? 'border-red-500' : 'border-gray-300' }} rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
-                                        placeholder="+91 9876543210">
-                                    @error('newPatient.phone')
-                                        <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
-                                    @enderror
-                                </div>
-
-                                <!-- Age -->
-                                <div>
-                                    <label class="block mb-2 text-sm font-medium text-gray-600">Age <span
-                                            class="text-red-500">*</span></label>
-                                    <input type="number" wire:model.live.debounce.500ms="newPatient.age"
-                                        class="w-full px-4 py-3 border {{ $errors->has('newPatient.age') ? 'border-red-500' : 'border-gray-300' }} rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
-                                        placeholder="30" min="0" max="120">
-                                    @error('newPatient.age')
-                                        <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
-                                    @enderror
-                                </div>
-
-                                <!-- Gender -->
-                                <div>
-                                    <label class="block mb-2 text-sm font-medium text-gray-600">Gender <span
-                                            class="text-red-500">*</span></label>
-                                    <select wire:model.live="newPatient.gender"
-                                        class="w-full px-4 py-3 border {{ $errors->has('newPatient.gender') ? 'border-red-500' : 'border-gray-300' }} rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition">
-                                        <option value="">Select Gender</option>
-                                        <option value="male">Male</option>
-                                        <option value="female">Female</option>
-                                        <option value="other">Other</option>
-                                    </select>
-                                    @error('newPatient.gender')
-                                        <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
-                                    @enderror
-                                </div>
-
-                                <!-- Pincode -->
-                                <div>
-                                    <label class="block mb-2 text-sm font-medium text-gray-600">Pincode <span
-                                            class="text-red-500">*</span></label>
-                                    <div class="relative">
-                                        <input type="text" wire:model.live.debounce.500ms="pincode" maxlength="6"
-                                            class="w-full px-4 py-3 border {{ $errors->has('newPatient.pincode') ? 'border-red-500' : 'border-gray-300' }} rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
-                                            placeholder="123456">
-                                        @if (strlen($pincode) == 6)
-                                            <div wire:loading wire:target="pincode"
-                                                class="absolute right-3 top-1/2 transform -translate-y-1/2">
-                                                <svg class="animate-spin h-5 w-5 text-brand-teal-500"
-                                                    viewBox="0 0 24 24">
-                                                    <circle class="opacity-25" cx="12" cy="12" r="10"
-                                                        stroke="currentColor" stroke-width="4"></circle>
-                                                    <path class="opacity-75" fill="currentColor"
-                                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                                    </path>
-                                                </svg>
+                                            <!-- Slot Legend -->
+                                            <div class="mt-6 flex flex-wrap justify-end gap-4 border-t pt-3">
+                                                <div class="flex items-center">
+                                                    <div
+                                                        class="w-4 h-4 bg-brand-teal-100 border border-brand-teal-200 rounded-full mr-1.5">
+                                                    </div>
+                                                    <span class="text-xs text-gray-600">Available
+                                                        ({{ $fillingUpThreshold + 1 }}-{{ $maxSlots }}
+                                                        slots)</span>
+                                                </div>
+                                                <div class="flex items-center">
+                                                    <div
+                                                        class="w-4 h-4 bg-brand-orange-100 border border-brand-orange-200 rounded-full mr-1.5">
+                                                    </div>
+                                                    <span class="text-xs text-gray-600">Filling Up
+                                                        (2-{{ $fillingUpThreshold }} slots)</span>
+                                                </div>
+                                                <div class="flex items-center">
+                                                    <div
+                                                        class="w-4 h-4 bg-red-100 border border-red-200 rounded-full mr-1.5">
+                                                    </div>
+                                                    <span class="text-xs text-gray-600">Almost Full (1 slot)</span>
+                                                </div>
+                                                <div class="flex items-center">
+                                                    <div
+                                                        class="w-4 h-4 bg-gray-100 border border-gray-200 rounded-full mr-1.5">
+                                                    </div>
+                                                    <span class="text-xs text-gray-600">Full (0 slots)</span>
+                                                </div>
                                             </div>
-                                        @endif
-                                    </div>
-                                    @error('newPatient.pincode')
-                                        <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
-                                    @enderror
-                                </div>
-
-                                <!-- State -->
-                                <div>
-                                    <label class="block mb-2 text-sm font-medium text-gray-600">State <span
-                                            class="text-red-500">*</span></label>
-                                    <input type="text" wire:model.live="newPatient.state"
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
-                                        placeholder="State">
-                                </div>
-
-                                <!-- District -->
-                                <div>
-                                    <label class="block mb-2 text-sm font-medium text-gray-600">District <span
-                                            class="text-red-500">*</span></label>
-                                    <input type="text" wire:model.live="newPatient.district"
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
-                                        placeholder="District">
-                                </div>
-
-                                <!-- Address -->
-                                <div class="md:col-span-2">
-                                    <label class="block mb-2 text-sm font-medium text-gray-600">Address <span
-                                            class="text-red-500">*</span></label>
-                                    <textarea wire:model.live.debounce.500ms="newPatient.address" rows="4"
-                                        class="w-full px-4 py-3 border {{ $errors->has('newPatient.address') ? 'border-red-500' : 'border-gray-300' }} rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
-                                        placeholder="123 Main St, Apt 4B, City"></textarea>
-                                    @error('newPatient.address')
-                                        <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endif
-
-                <!-- Step 4: Confirmation -->
-                @if ($step === 4)
-                    <div
-                        class="space-y-3 sm:space-y-4 md:space-y-6 max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl mx-auto">
-                        <div
-                            class="bg-brand-teal-50 p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl shadow-sm border border-brand-teal-100">
-                            <h3 class="text-sm sm:text-base md:text-xl font-semibold text-gray-800 mb-2 sm:mb-3">
-                                Appointment Summary</h3>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
-                                <div class="space-y-2">
-                                    <p class="text-xs sm:text-sm font-medium text-gray-500">Doctor</p>
-                                    <div class="flex items-center gap-1 sm:gap-2">
-                                        <div
-                                            class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full overflow-hidden bg-white border-2 border-brand-teal-200">
-                                            <img src="{{ $selectedDoctor->image ? asset('storage/' . $selectedDoctor->image) : asset('images/default.jpg') }}"
-                                                class="w-full h-full object-cover" alt="Doctor Profile">
-                                        </div>
-                                        <div>
-                                            <p class="text-xs sm:text-sm md:text-base font-semibold text-gray-800">Dr.
-                                                {{ $selectedDoctor->user->name }}</p>
-                                            <p class="text-[10px] sm:text-xs text-brand-teal-600">
-                                                {{ $selectedDoctor->department->name }}</p>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="space-y-2">
-                                    <p class="text-xs sm:text-sm font-medium text-gray-500">Appointment</p>
-                                    <p class="text-xs sm:text-sm md:text-base font-semibold text-gray-800">
-                                        {{ \Carbon\Carbon::parse($appointment_date)->format('l, F j, Y') }}</p>
-                                    <p class="text-[10px] sm:text-xs text-gray-600">{{ $appointment_time }}</p>
-                                </div>
-                                <div class="space-y-2">
-                                    <p class="text-xs sm:text-sm font-medium text-gray-500">Patient</p>
-                                    <p class="text-xs sm:text-sm md:text-base font-semibold text-gray-800">
-                                        {{ $newPatient['name'] }}</p>
-                                    <p class="text-[10px] sm:text-xs text-gray-600">{{ $newPatient['age'] }} yrs,
-                                        {{ ucfirst($newPatient['gender']) }}</p>
-                                </div>
-                                <div class="space-y-2">
-                                    <p class="text-xs sm:text-sm font-medium text-gray-500">Contact</p>
-                                    <p class="text-xs sm:text-sm text-gray-800">
-                                        {{ $newPatient['email'] ?: 'Not provided' }}</p>
-                                    <p class="text-xs sm:text-sm text-gray-800">{{ $newPatient['phone'] }}</p>
-                                </div>
                             </div>
+                        @endif
+                    @else
+                        <div class="text-center py-12 bg-blue-50 rounded-xl border border-blue-200">
+                            <svg class="h-12 w-12 mx-auto text-blue-500 mb-4" fill="currentColor" viewBox="0 0 20 20"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                            <h3 class="text-xl font-medium text-blue-700">Select a Doctor First</h3>
+                            <p class="text-sm text-blue-600 mt-2">Please choose a doctor to view available
+                                dates
+                            </p>
+                            <button wire:click="$set('step', 1)"
+                                class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                                Back to Doctors
+                            </button>
                         </div>
-                        <div
-                            class="bg-white p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl border border-gray-100 shadow-sm">
-                            <h3 class="text-sm sm:text-base md:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">
-                                Payment Details</h3>
-                            <div class="space-y-1 sm:space-y-2">
-                                <div class="flex justify-between">
-                                    <span class="text-[10px] sm:text-sm font-medium text-gray-600">Consultation
-                                        Fee</span>
-                                    <span class="text-xs sm:text-sm font-medium">₹{{ $selectedDoctor->fee }}</span>
-                                </div>
-                                <div class="flex justify-between border-t border-gray-200 pt-1 sm:pt-2">
-                                    <span class="text-[10px] sm:text-sm font-medium text-gray-600">Taxes & Fees</span>
-                                    <span class="text-xs sm:text-sm font-medium">₹0</span>
-                                </div>
-                                <div class="flex justify-between border-t border-gray-200 pt-1 sm:pt-2">
-                                    <span class="text-sm sm:text-lg font-semibold">Total Amount</span>
-                                    <span
-                                        class="text-sm sm:text-lg font-bold text-brand-teal-600">₹{{ $selectedDoctor->fee }}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div
-                            class="bg-white p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl border border-gray-100 shadow-sm">
-                            <div class="space-y-1 sm:space-y-2">
-                                <div class="flex justify-between">
-                                    <span class="text-[10px] sm:text-sm font-medium text-gray-600">Processing
-                                        Fee</span>
-                                    <span class="text-xs sm:text-sm font-medium">₹50.00</span>
-                                </div>
-                                <div class="flex justify-between border-t border-gray-200 pt-1 sm:pt-2">
-                                    <span class="text-sm sm:text-lg font-semibold">Total Amount</span>
-                                    <span class="text-sm sm:text-lg font-bold text-brand-teal-600">₹50.00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div
-                            class="bg-white p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl border border-gray-100 shadow-sm">
-                            <label class="block mb-1 text-xs sm:text-sm font-medium text-gray-600">Notes
-                                (Optional)</label>
-                            <textarea wire:model.debounce.500ms="notes" rows="3"
-                                class="w-full px-2 py-1.5 sm:px-3 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
-                                placeholder="Any symptoms, concerns, or special requests..."></textarea>
-                        </div>
-                        <button wire:click="createOrder" wire:loading.attr="disabled"
-                            wire:loading.target="createOrder"
-                            class="w-full bg-brand-teal-600 text-white px-2 py-1.5 sm:px-4 sm:py-2 md:px-6 md:py-3 rounded-lg hover:bg-brand-teal-700 disabled:opacity-50 flex items-center justify-center shadow-md text-xs sm:text-sm">
-                            <span wire:loading.remove wire:target="createOrder">Pay ₹50.00 & Confirm Appointment</span>
-                            <span wire:loading wire:target="createOrder">
-                                <svg class="animate-spin h-3 w-3 sm:h-4 sm:w-4 text-white"
-                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10"
-                                        stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor"
-                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                    </path>
-                                </svg>
-                            </span>
-                        </button>
-                    </div>
                 @endif
             </div>
+            @endif
 
-            <!-- Navigation Buttons -->
-            <div class="px-6 py-4 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
-                <div class="flex flex-col sm:flex-row justify-between gap-4">
-                    @if ($step > 1)
-                        <button wire:click="previousStep"
-                            class="px-6 py-3 bg-white border border-brand-orange-300 text-brand-orange-600 rounded-lg hover:bg-brand-orange-50 transition flex items-center justify-center shadow-sm">
-                            <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd"
-                                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                                    clip-rule="evenodd"></path>
-                            </svg>
-                            Back
-                        </button>
-                    @else
-                        <div></div>
-                    @endif
+            <!-- Step 3: Patient Information -->
+            @if ($step === 3)
+                <div class="space-y-6">
+                    <!-- Doctor Summary -->
+                    <div
+                        class="bg-gradient-to-r from-brand-teal-50 to-brand-teal-100 p-5 rounded-xl border border-brand-teal-200">
+                        <div class="flex flex-col sm:flex-row items-center gap-5">
+                            <div
+                                class="w-20 h-20 rounded-full overflow-hidden bg-white border-4 border-brand-teal-600 shadow-lg">
+                                <img src="{{ $selectedDoctor->image ? asset('storage/' . $selectedDoctor->image) : asset('images/default-doctor.jpg') }}"
+                                    class="w-full h-full object-cover">
+                            </div>
+                            <div class="text-center sm:text-left">
+                                <h3 class="text-xl font-bold text-gray-800">Dr. {{ $selectedDoctor->user->name }}
+                                </h3>
+                                <p class="text-sm font-medium text-brand-teal-700">
+                                    {{ $selectedDoctor->department->name }}</p>
+                                <div
+                                    class="mt-2 flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center sm:justify-start">
+                                    <p class="text-sm text-gray-600">
+                                        {{ \Carbon\Carbon::parse($appointment_date)->format('l, F j, Y') }}
+                                    </p>
+                                    <p class="text-sm text-gray-600">{{ $appointment_time }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                    @if ($step < 4)
-                        <button wire:click="nextStep" wire:loading.attr="disabled"
-                            class="px-6 py-3 bg-brand-teal-600 text-white rounded-lg hover:bg-brand-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-teal-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shadow-md transition-all duration-300">
-                            <span>Continue</span>
-                            <svg class="h-5 w-5 ml-2" fill="currentColor" viewBox="0 0 20 20"
+                    <!-- Patient Form -->
+                    <div class="bg-white p-5 rounded-xl border border-gray-100 md:shadow-sm">
+                        <h2 class="text-xl font-semibold text-gray-800 mb-5 flex items-center">
+                            <svg class="h-5 w-5 mr-2 text-brand-teal-600" fill="currentColor" viewBox="0 0 20 20"
                                 xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd"
-                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                    clip-rule="evenodd"></path>
+                                <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"></path>
                             </svg>
-                            <span wire:loading wire:target="nextStep" class="ml-2">
-                                <svg class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10"
-                                        stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor"
-                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                    </path>
-                                </svg>
-                            </span>
-                        </button>
-                    @endif
+                            Patient Information
+                        </h2>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <!-- Name -->
+                            <div>
+                                <label class="block mb-2 text-sm font-medium text-gray-600">Full Name <span
+                                        class="text-red-500">*</span></label>
+                                <input type="text" wire:model.live.debounce.500ms="newPatient.name"
+                                    class="w-full px-4 py-3 border {{ $errors->has('newPatient.name') ? 'border-red-500' : 'border-gray-300' }} rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
+                                    placeholder="John Doe">
+                                @error('newPatient.name')
+                                    <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Email -->
+                            <div>
+                                <label class="block mb-2 text-sm font-medium text-gray-600">Email</label>
+                                <input type="email" wire:model.live.debounce.500ms="newPatient.email"
+                                    class="w-full px-4 py-3 border {{ $errors->has('newPatient.email') ? 'border-red-500' : 'border-gray-300' }} rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
+                                    placeholder="john@example.com">
+                                @error('newPatient.email')
+                                    <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Phone -->
+                            <div>
+                                <label class="block mb-2 text-sm font-medium text-gray-600">Phone <span
+                                        class="text-red-500">*</span></label>
+                                <input type="tel" wire:model.live.debounce.500ms="newPatient.phone"
+                                    class="w-full px-4 py-3 border {{ $errors->has('newPatient.phone') ? 'border-red-500' : 'border-gray-300' }} rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
+                                    placeholder="+91 9876543210">
+                                @error('newPatient.phone')
+                                    <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Age -->
+                            <div>
+                                <label class="block mb-2 text-sm font-medium text-gray-600">Age <span
+                                        class="text-red-500">*</span></label>
+                                <input type="number" wire:model.live.debounce.500ms="newPatient.age"
+                                    class="w-full px-4 py-3 border {{ $errors->has('newPatient.age') ? 'border-red-500' : 'border-gray-300' }} rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
+                                    placeholder="30" min="0" max="120">
+                                @error('newPatient.age')
+                                    <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Gender -->
+                            <div>
+                                <label class="block mb-2 text-sm font-medium text-gray-600">Gender <span
+                                        class="text-red-500">*</span></label>
+                                <select wire:model.live="newPatient.gender"
+                                    class="w-full px-4 py-3 border {{ $errors->has('newPatient.gender') ? 'border-red-500' : 'border-gray-300' }} rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition">
+                                    <option value="">Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                                @error('newPatient.gender')
+                                    <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Pincode -->
+                            <div>
+                                <label class="block mb-2 text-sm font-medium text-gray-600">Pincode <span
+                                        class="text-red-500">*</span></label>
+                                <div class="relative">
+                                    <input type="text" wire:model.live.debounce.500ms="pincode" maxlength="6"
+                                        class="w-full px-4 py-3 border {{ $errors->has('newPatient.pincode') ? 'border-red-500' : 'border-gray-300' }} rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
+                                        placeholder="123456">
+                                    @if (strlen($pincode) == 6)
+                                        <div wire:loading wire:target="pincode"
+                                            class="absolute right-3 top-1/2 transform -translate-y-1/2">
+                                            <svg class="animate-spin h-5 w-5 text-brand-teal-500" viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10"
+                                                    stroke="currentColor" stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor"
+                                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                                </path>
+                                            </svg>
+                                        </div>
+                                    @endif
+                                </div>
+                                @error('newPatient.pincode')
+                                    <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- State -->
+                            <div>
+                                <label class="block mb-2 text-sm font-medium text-gray-600">State <span
+                                        class="text-red-500">*</span></label>
+                                <input type="text" wire:model.live="newPatient.state"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
+                                    placeholder="State">
+                            </div>
+
+                            <!-- District -->
+                            <div>
+                                <label class="block mb-2 text-sm font-medium text-gray-600">District <span
+                                        class="text-red-500">*</span></label>
+                                <input type="text" wire:model.live="newPatient.district"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
+                                    placeholder="District">
+                            </div>
+
+                            <!-- Address -->
+                            <div class="md:col-span-2">
+                                <label class="block mb-2 text-sm font-medium text-gray-600">Address <span
+                                        class="text-red-500">*</span></label>
+                                <textarea wire:model.live.debounce.500ms="newPatient.address" rows="4"
+                                    class="w-full px-4 py-3 border {{ $errors->has('newPatient.address') ? 'border-red-500' : 'border-gray-300' }} rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
+                                    placeholder="123 Main St, Apt 4B, City"></textarea>
+                                @error('newPatient.address')
+                                    <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            @endif
+
+            <!-- Step 4: Confirmation -->
+            @if ($step === 4)
+                <div
+                    class="space-y-3 sm:space-y-4 md:space-y-6 max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl mx-auto">
+                    <div
+                        class="bg-brand-teal-50 p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl shadow-sm border border-brand-teal-100">
+                        <h3 class="text-sm sm:text-base md:text-xl font-semibold text-gray-800 mb-2 sm:mb-3">
+                            Appointment Summary</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
+                            <div class="space-y-2">
+                                <p class="text-xs sm:text-sm font-medium text-gray-500">Doctor</p>
+                                <div class="flex items-center gap-1 sm:gap-2">
+                                    <div
+                                        class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full overflow-hidden bg-white border-2 border-brand-teal-200">
+                                        <img src="{{ $selectedDoctor->image ? asset('storage/' . $selectedDoctor->image) : asset('images/default.jpg') }}"
+                                            class="w-full h-full object-cover" alt="Doctor Profile">
+                                    </div>
+                                    <div>
+                                        <p class="text-xs sm:text-sm md:text-base font-semibold text-gray-800">Dr.
+                                            {{ $selectedDoctor->user->name }}</p>
+                                        <p class="text-[10px] sm:text-xs text-brand-teal-600">
+                                            {{ $selectedDoctor->department->name }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <p class="text-xs sm:text-sm font-medium text-gray-500">Appointment</p>
+                                <p class="text-xs sm:text-sm md:text-base font-semibold text-gray-800">
+                                    {{ \Carbon\Carbon::parse($appointment_date)->format('l, F j, Y') }}</p>
+                                <p class="text-[10px] sm:text-xs text-gray-600">{{ $appointment_time }}</p>
+                            </div>
+                            <div class="space-y-2">
+                                <p class="text-xs sm:text-sm font-medium text-gray-500">Patient</p>
+                                <p class="text-xs sm:text-sm md:text-base font-semibold text-gray-800">
+                                    {{ $newPatient['name'] }}</p>
+                                <p class="text-[10px] sm:text-xs text-gray-600">{{ $newPatient['age'] }} yrs,
+                                    {{ ucfirst($newPatient['gender']) }}</p>
+                            </div>
+                            <div class="space-y-2">
+                                <p class="text-xs sm:text-sm font-medium text-gray-500">Contact</p>
+                                <p class="text-xs sm:text-sm text-gray-800">
+                                    {{ $newPatient['email'] ?: 'Not provided' }}</p>
+                                <p class="text-xs sm:text-sm text-gray-800">{{ $newPatient['phone'] }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl border border-gray-100 shadow-sm">
+                        <h3 class="text-sm sm:text-base md:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">
+                            Payment Details</h3>
+                        <div class="space-y-1 sm:space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-[10px] sm:text-sm font-medium text-gray-600">Consultation
+                                    Fee</span>
+                                <span class="text-xs sm:text-sm font-medium">₹{{ $selectedDoctor->fee }}</span>
+                            </div>
+                            <div class="flex justify-between border-t border-gray-200 pt-1 sm:pt-2">
+                                <span class="text-[10px] sm:text-sm font-medium text-gray-600">Taxes & Fees</span>
+                                <span class="text-xs sm:text-sm font-medium">₹0</span>
+                            </div>
+                            <div class="flex justify-between border-t border-gray-200 pt-1 sm:pt-2">
+                                <span class="text-sm sm:text-lg font-semibold">Total Amount</span>
+                                <span
+                                    class="text-sm sm:text-lg font-bold text-brand-teal-600">₹{{ $selectedDoctor->fee }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl border border-gray-100 shadow-sm">
+                        <div class="space-y-1 sm:space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-[10px] sm:text-sm font-medium text-gray-600">Processing
+                                    Fee</span>
+                                <span class="text-xs sm:text-sm font-medium">₹50.00</span>
+                            </div>
+                            <div class="flex justify-between border-t border-gray-200 pt-1 sm:pt-2">
+                                <span class="text-sm sm:text-lg font-semibold">Total Amount</span>
+                                <span class="text-sm sm:text-lg font-bold text-brand-teal-600">₹50.00</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl border border-gray-100 shadow-sm">
+                        <label class="block mb-1 text-xs sm:text-sm font-medium text-gray-600">Notes
+                            (Optional)</label>
+                        <textarea wire:model.debounce.500ms="notes" rows="3"
+                            class="w-full px-2 py-1.5 sm:px-3 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
+                            placeholder="Any symptoms, concerns, or special requests..."></textarea>
+                    </div>
+                    <button wire:click="createOrder" wire:loading.attr="disabled" wire:loading.target="createOrder"
+                        class="w-full bg-brand-teal-600 text-white px-2 py-1.5 sm:px-4 sm:py-2 md:px-6 md:py-3 rounded-lg hover:bg-brand-teal-700 disabled:opacity-50 flex items-center justify-center shadow-md text-xs sm:text-sm">
+                        <span wire:loading.remove wire:target="createOrder">Pay ₹50.00 & Confirm Appointment</span>
+                        <span wire:loading wire:target="createOrder">
+                            <svg class="animate-spin h-3 w-3 sm:h-4 sm:w-4 text-white"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10"
+                                    stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
+                            </svg>
+                        </span>
+                    </button>
+                </div>
+            @endif
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="px-6 py-4 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
+            <div class="flex flex-col sm:flex-row justify-between gap-4">
+                @if ($step > 1)
+                    <button wire:click="previousStep"
+                        class="px-6 py-3 bg-white border border-brand-orange-300 text-brand-orange-600 rounded-lg hover:bg-brand-orange-50 transition flex items-center justify-center shadow-sm">
+                        <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                        Back
+                    </button>
+                @else
+                    <div></div>
+                @endif
+
+                @if ($step < 4)
+                    <button wire:click="nextStep" wire:loading.attr="disabled"
+                        class="px-6 py-3 bg-brand-teal-600 text-white rounded-lg hover:bg-brand-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-teal-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shadow-md transition-all duration-300">
+                        <span>Continue</span>
+                        <svg class="h-5 w-5 ml-2" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                        <span wire:loading wire:target="nextStep" class="ml-2">
+                            <svg class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10"
+                                    stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
+                            </svg>
+                        </span>
+                    </button>
+                @endif
             </div>
         </div>
     </div>
+</div>
 </div>
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
