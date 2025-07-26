@@ -150,7 +150,7 @@
                                                     </div>
                                                     <div
                                                         class="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden bg-white mx-auto border-4 border-white shadow-md">
-                                                        <img src="{{ $doctor->image ? asset('storage/' . $doctor->image) : asset('images/default-doctor.jpg') }}"
+                                                        <img src="{{ $doctor->image ?? 'https://ui-avatars.com/api/?name=' . urlencode($doctor->user->name) . '&background=random&rounded=true' }}"
                                                             alt="Dr. {{ $doctor->user->name }}"
                                                             class="w-full h-full object-cover">
                                                     </div>
@@ -228,8 +228,9 @@
                                 <div class="flex flex-col sm:flex-row items-center gap-4 sm:gap-5 md:gap-6">
                                     <div
                                         class="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full overflow-hidden bg-white border-2 sm:border-4 border-brand-teal-600 ">
-                                        <img src="{{ asset('storage/' . $selectedDoctor->image) }}"
-                                            class="w-full h-full object-cover">
+                                       <img src="{{ $selectedDoctor->image ?? 'https://ui-avatars.com/api/?name=' . urlencode($selectedDoctor->user->name) . '&background=random&rounded=true' }}"
+                                                            alt="Dr. {{ $selectedDoctor->user->name }}"
+                                                            class="w-full h-full object-cover">
                                     </div>
                                     <div class="flex-1 text-center sm:text-left">
                                         <h3 class="text-lg sm:text-xl font-bold text-gray-800">Dr.
@@ -607,8 +608,9 @@
                         <div class="flex flex-col sm:flex-row items-center gap-5">
                             <div
                                 class="w-20 h-20 rounded-full overflow-hidden bg-white border-4 border-brand-teal-600 shadow-lg">
-                                <img src="{{ $selectedDoctor->image ? asset('storage/' . $selectedDoctor->image) : asset('images/default-doctor.jpg') }}"
-                                    class="w-full h-full object-cover">
+                                <img src="{{ $selectedDoctor->image ?? 'https://ui-avatars.com/api/?name=' . urlencode($selectedDoctor->user->name) . '&background=random&rounded=true' }}"
+                                                            alt="Dr. {{ $selectedDoctor->user->name }}"
+                                                            class="w-full h-full object-cover">
                             </div>
                             <div class="text-center sm:text-left">
                                 <h3 class="text-xl font-bold text-gray-800">Dr. {{ $selectedDoctor->user->name }}
@@ -774,8 +776,9 @@
                                 <div class="flex items-center gap-1 sm:gap-2">
                                     <div
                                         class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full overflow-hidden bg-white border-2 border-brand-teal-200">
-                                        <img src="{{ $selectedDoctor->image ? asset('storage/' . $selectedDoctor->image) : asset('images/default.jpg') }}"
-                                            class="w-full h-full object-cover" alt="Doctor Profile">
+                                        <img src="{{ $selectedDoctor->image ?? 'https://ui-avatars.com/api/?name=' . urlencode($selectedDoctor->user->name) . '&background=random&rounded=true' }}"
+                                                            alt="Dr. {{ $selectedDoctor->user->name }}"
+                                                            class="w-full h-full object-cover">
                                     </div>
                                     <div>
                                         <p class="text-xs sm:text-sm md:text-base font-semibold text-gray-800">Dr.
@@ -846,20 +849,17 @@
                             class="w-full px-2 py-1.5 sm:px-3 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
                             placeholder="Any symptoms, concerns, or special requests..."></textarea>
                     </div>
-                    <button wire:click="createOrder" wire:loading.attr="disabled" wire:loading.target="createOrder"
-                        class="w-full bg-brand-teal-600 text-white px-2 py-1.5 sm:px-4 sm:py-2 md:px-6 md:py-3 rounded-lg hover:bg-brand-teal-700 disabled:opacity-50 flex items-center justify-center shadow-md text-xs sm:text-sm">
-                        <span wire:loading.remove wire:target="createOrder">Pay ₹50.00 & Confirm Appointment</span>
-                        <span wire:loading wire:target="createOrder">
-                            <svg class="animate-spin h-3 w-3 sm:h-4 sm:w-4 text-white"
-                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10"
-                                    stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor"
-                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                </path>
-                            </svg>
-                        </span>
-                    </button>
+                   <button wire:click="createOrder" wire:loading.attr="disabled" wire:loading.target="createOrder"
+        class="w-full bg-brand-teal-600 text-white px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-3.5 rounded-xl hover:bg-brand-teal-700 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center shadow-lg transition-all duration-300 text-sm sm:text-base font-semibold">
+    <span wire:loading.remove wire:target="createOrder">Pay ₹50.00 & Confirm Appointment</span>
+    <span wire:loading wire:target="createOrder" class="flex items-center">
+        <svg class="animate-spin h-4 w-4 sm:h-5 sm:w-5 text-white mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        Processing...
+    </span>
+</button>
                 </div>
             @endif
         </div>

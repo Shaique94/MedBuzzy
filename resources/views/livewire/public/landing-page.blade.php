@@ -153,41 +153,31 @@
                 </div>
 
                 <!-- Search Bar -->
-                <div class="max-w-lg mx-auto mb-12">
-                    <form action="/doctors" method="GET" class="relative">
-                        <input type="text" name="search" placeholder="Search doctors by name or specialty..."
-                            class="w-full pl-5 pr-12 py-3.5 bg-white border border-brand-teal-200 rounded-full focus:outline-none focus:ring-2 focus:ring-brand-teal-400 focus:border-brand-teal-500 shadow-sm transition-all duration-300 text-gray-700 placeholder-gray-400">
-                        <button type="submit"
-                            class="absolute right-3 top-1/2 mt-3 transform -translate-y-1/2 text-brand-teal-600 hover:text-brand-teal-800 transition-colors">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                            </svg>
-                        </button>
-                    </form>
-                </div>
+               
 
                 <!-- Doctors Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 md:gap-10">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4 sm:p-6">
                     @forelse ($doctors as $doctor)
                         <div
-                            class="bg-gray-50 rounded-lg shadow-md border border-brand-teal-100 overflow-hidden flex flex-col">
+                            class="bg-white rounded-xl shadow overflow-hidden   flex flex-col border border-brand-teal-50">
                             <!-- Doctor Image/Placeholder -->
                             <div
-                                class="relative bg-gradient-to-br from-brand-orange-100 to-brand-orange-200 h-48 flex items-center justify-center">
+                                class="relative h-60 bg-gradient-to-br from-brand-teal-100 to-brand-orange-100 flex items-center justify-center">
                                 <div
-                                    class="w-28 h-28 bg-white rounded-full flex items-center justify-center shadow-lg overflow-hidden border border-gray-200">
-                                        @if($doctor->image)
-    <img src="{{ $doctor->image }}" class="w-full h-full object-cover">
-@else
-    <span class="text-blue-600 font-medium">{{ substr($doctor->user->name, 0, 1) }}</span>
-@endif
+                                    class="w-36 h-36 bg-white rounded-full flex items-center justify-center shadow-xl border-4 border-white overflow-hidden">
+                                    @if ($doctor->image)
+                                        <img src="{{ $doctor->image }}" class="w-full h-full object-cover"
+                                            alt="{{ $doctor->user->name }}">
+                                    @else
+                                        <span
+                                            class="text-4xl font-bold text-brand-teal-600">{{ substr($doctor->user->name, 0, 1) }}</span>
+                                    @endif
                                 </div>
 
                                 <!-- Verified Badge -->
                                 <span
-                                    class="absolute top-4 right-4 bg-brand-teal-500 text-white text-xs px-2.5 py-1 rounded-full flex items-center font-medium">
-                                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    class="absolute top-4 right-4 bg-brand-teal-500 text-white text-xs px-3 py-1.5 rounded-full flex items-center font-semibold shadow-sm">
+                                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd"
                                             d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
                                             clip-rule="evenodd"></path>
@@ -200,61 +190,61 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <!-- Name and Department -->
                                 <div class="mb-4">
-                                    <h3 class="font-bold text-lg text-gray-900 mb-1 truncate">{{ $doctor->user->name }}
-                                    </h3>
-                                    <p class="text-brand-teal-600 font-medium text-sm">{{ $doctor->department->name }}
-                                    </p>
+                                    <h3 class="font-bold text-xl text-gray-800 truncate">{{ $doctor->user->name }}</h3>
+                                    <p class="text-brand-teal-600 font-medium text-sm mt-1">
+                                        {{ $doctor->department->name }}</p>
                                 </div>
 
                                 <!-- Rating -->
                                 <div class="mb-4 flex items-center">
                                     <div class="flex text-brand-orange-400 mr-2">
                                         @for ($i = 0; $i < 5; $i++)
-                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                                 <path
                                                     d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
                                                 </path>
                                             </svg>
                                         @endfor
                                     </div>
-                                    <span class="text-gray-500 text-xs">(247 reviews)</span>
+                                    <span class="text-gray-500 text-sm">({{ rand(50, 500) }} reviews)</span>
                                 </div>
 
                                 <!-- Experience and Fees -->
                                 <div class="grid grid-cols-2 gap-4 mb-6">
                                     <div>
-                                        <p class="text-gray-500 text-xs">Experience</p>
-                                        <p class="font-semibold text-gray-900 text-sm">12 years</p>
+                                        <p class="text-gray-500 text-xs uppercase tracking-wide">Experience</p>
+                                        <p class="font-semibold text-gray-800 text-sm">
+                                            {{ $doctor->experience ?? '12' }} years</p>
                                     </div>
                                     <div>
-                                        <p class="text-gray-500 text-xs">Fees</p>
-                                        <p class="font-semibold text-gray-900 text-sm">{{ $doctor->fee }}</p>
+                                        <p class="text-gray-500 text-xs uppercase tracking-wide">Fees</p>
+                                        <p class="font-semibold text-gray-800 text-sm">₹ {{ $doctor->fee }}</p>
                                     </div>
                                 </div>
 
                                 <!-- Buttons -->
                                 <div class="mt-auto grid grid-cols-2 gap-3">
                                     <a href="{{ route('doctor-detail', ['doctor_id' => $doctor->id]) }}"
-                                        class="text-center border border-teal-500 hover:bg-brand-teal-500 hover:text-white text-brand-teal-500 py-2 px-3 rounded-lg text-xs font-semibold transition-colors duration-200">
-                                        Profile
+                                        class="text-center border-2 border-brand-teal-500 text-brand-teal-500 hover:bg-brand-teal-500 hover:text-white py-2 rounded-lg text-sm font-semibold transition-all duration-200">
+                                        View Profile
                                     </a>
                                     <a href="{{ route('appointment', ['doctor_id' => $doctor->id]) }}"
-                                        class="text-center bg-brand-teal-500 hover:bg-brand-teal-600 text-white py-2 px-3 rounded-lg text-xs font-semibold transition-colors duration-200">
-                                        Book Now
+                                        class="text-center bg-brand-teal-500 hover:bg-brand-teal-600 text-white py-2 rounded-lg text-sm font-semibold transition-all duration-200">
+                                        Book Appointment
                                     </a>
                                 </div>
                             </div>
                         </div>
                     @empty
-                        <div class="col-span-full text-center text-gray-500 py-12">
-                            <svg class="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
+                        <div class="col-span-full text-center py-12">
+                            <svg class="w-16 h-16 mx-auto mb-4 text-brand-teal-400" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                     d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
                                 </path>
                             </svg>
-                            <p class="text-lg">No doctors found</p>
-                            <p class="text-sm">Try adjusting your search criteria</p>
+                            <p class="text-xl text-gray-600 font-medium">No doctors found</p>
+                            <p class="text-sm text-gray-500 mt-2">Try adjusting your search criteria</p>
                         </div>
                     @endforelse
                 </div>
