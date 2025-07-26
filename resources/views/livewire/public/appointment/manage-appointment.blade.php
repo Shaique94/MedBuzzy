@@ -101,6 +101,18 @@
                                         <div
                                             class="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full overflow-hidden bg-white mx-auto border-2 sm:border-4 border-white shadow-md">
                                             {{-- <img src="{{ asset('storage/' . $doctor->image) }}" alt="Dr. {{ $doctor->user->name }}" class="w-full h-full object-cover" onerror="this.src='{{ asset('images/default.jpg') }}'"> --}}
+                                               @if($doctor->image)
+        <img src="{{ $doctor->image }}" 
+             alt="Dr. {{ $doctor->user->name }}" 
+             class="w-full h-full object-cover"
+             onerror="this.src='{{ asset('images/default-doctor.jpg') }}'">
+    @else
+        <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+            <svg class="h-10 w-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+        </div>
+    @endif
                                         </div>
                                     </div>
                                     <h3
