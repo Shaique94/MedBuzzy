@@ -414,11 +414,7 @@ if (empty($value) || !preg_match('/^\d{6}$/', $value)) {
                 'appointment_time' => $appointmentInfo['appointment_time'],
                 'payment_method' => 'razorpay',
                 'notes' => $appointmentInfo['notes'] ?? null,
-               'status' => 'scheduled',
-               'rescheduled' => false,
-    'is_rescheduled' => false,
-    'original_date' => null,
-    'rescheduled_at' => null,
+                'status' => 'scheduled',
             ]);
 
             // 5. Record payment
