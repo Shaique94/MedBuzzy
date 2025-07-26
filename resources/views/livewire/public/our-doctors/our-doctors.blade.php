@@ -118,50 +118,62 @@
 
                                 <!-- Doctor Info -->
                                 <div class="flex-grow">
-                                    <div class="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
-                                        <h3 class="text-xl font-bold text-teal-800">{{ $doctor->user->name ?? 'N/A' }}
-                                        </h3>
-                                        <span
-                                            class="bg-teal-100 text-teal-700 text-sm px-3 py-1 rounded-full font-medium">{{ $doctor->department->name ?? 'N/A' }}</span>
-                                    </div>
+                                    <div class="flex flex-col">
+                                        <!-- Header with name and department -->
+                                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 mb-3">
+                                            <h3 class="text-2xl font-semibold text-teal-900">
+                                                {{ $doctor->user->name ?? 'N/A' }}</h3>
+                                            <div
+                                                class="bg-teal-50 text-teal-800 text-sm px-3 py-1 rounded-full font-medium max-w-fit">
+                                                {{ $doctor->department->name ?? 'N/A' }}
+                                            </div>
+                                        </div>
 
-                                    <p class="text-teal-600 mb-3">
-                                        @if (is_array($doctor->qualification))
-                                            {{ implode(', ', $doctor->qualification) }}
-                                        @else
-                                            {{ $doctor->qualification ?? 'N/A' }}
-                                        @endif
-                                    </p>
+                                        <!-- Qualifications -->
+                                        <div class="mb-4">
+                                            <p class="text-teal-700 text-base">
+                                                @if (is_array($doctor->qualification))
+                                                    {{ implode(', ', array_filter($doctor->qualification)) }}
+                                                @else
+                                                    <span>{{ $doctor->qualification ?? 'N/A' }}</span>
+                                                @endif
+                                            </p>
+                                        </div>
 
-                                    <div class="flex items-center gap-2 mb-3">
-                                        <div class="flex text-orange-400">
-                                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                                </path>
-                                            </svg>
-                                            <span
-                                                class="ml-1 text-teal-700 font-medium">{{ $doctor->rating ?? '4.9' }}</span>
-                                            <span class="text-teal-400 ml-1">({{ $doctor->review_count ?? '24' }}
+                                        <!-- Rating and Reviews -->
+                                        <div class="flex items-center gap-2 mb-4">
+                                            <div class="flex items-center text-amber-500">
+                                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                                </svg>
+                                                <span
+                                                    class="ml-1 text-teal-800 font-medium">{{ $doctor->rating ?? '4.9' }}</span>
+                                            </div>
+                                            <span class="text-teal-600 text-sm">({{ $doctor->review_count ?? '24' }}
                                                 reviews)</span>
                                         </div>
-                                    </div>
 
-                                    <div class="flex items-center gap-2 text-teal-600 mb-4">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 "
-                                            viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
-                                            <path
-                                                d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
-                                        </svg>
-                                        <span>{{ $doctor->location ?? 'Purnea, Bihar' }}</span>
-                                    </div>
+                                        <!-- Location -->
+                                        <div class="flex items-start gap-2 text-teal-700 mb-5">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mt-0.5 flex-shrink-0"
+                                                viewBox="0 0 384 512">
+                                                <path
+                                                    d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
+                                            </svg>
+                                            <span class="text-sm">{{ $doctor->location ?? 'Purnea, Bihar' }}</span>
+                                        </div>
 
-                                    <div class="flex gap-2">
-                                        <span class="bg-cyan-100 text-cyan-800 text-xs px-2 py-1 rounded">General
-                                            Checkup</span>
-                                        <span
-                                            class="bg-amber-100 text-amber-800 text-xs px-2 py-1 rounded">Pediatric</span>
+                                        <!-- Specializations -->
+                                        <div class="flex flex-wrap gap-2">
+                                            <span
+                                                class="bg-cyan-50 text-cyan-800 text-xs px-3 py-1.5 rounded-full border border-cyan-100">General
+                                                Checkup</span>
+                                            <span
+                                                class="bg-amber-50 text-amber-800 text-xs px-3 py-1.5 rounded-full border border-amber-100">Pediatric</span>
+                                            <!-- Add more specializations as needed -->
+                                        </div>
                                     </div>
                                 </div>
 

@@ -8,6 +8,7 @@
     <!-- Tailwind CSS with full config -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <script>
         tailwind.config = {
             theme: {
@@ -92,8 +93,8 @@
         <livewire:public.header />
 
         <!-- Page Content -->
-        <main class="flex-1 overflow-x-hidden md:mt-32 mt-20 overflow-y-auto bg-gray-100 pb-5 lg:pb-0">
-            <div class="container mx-auto px-4 py-8">
+        <main class="flex-1 overflow-x-hidden md:mt-28 mt-14  overflow-y-auto bg-gray-100 pb-5 lg:pb-0">
+            <div class="container mx-auto px-0 py-4">
                 {{ $slot }}
             </div>
         </main>

@@ -1,6 +1,6 @@
 <header class="bg-white fixed w-full top-0 z-50 shadow-sm">
     <!-- Top Bar -->
-    <div class="bg-brand-teal-600 text-white py-2 hidden md:block">
+    <div class="bg-brand-teal-600 p-2 text-white  hidden md:block">
         <div class="container mx-auto px-4 flex justify-between items-center text-sm">
             <div class="flex items-center space-x-6">
                 <span class="flex items-center space-x-2 hover:text-brand-teal-100 transition-colors">
@@ -30,7 +30,7 @@
     </div>
 
     <!-- Main Header -->
-    <div class="container mx-auto px-4 py-3">
+    <div class="container mx-auto px-4 py-1 md:py-3">
         <div class="flex justify-between items-center">
             <!-- Logo -->
             <div class="flex items-center">
@@ -90,7 +90,7 @@
                             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
                         </path>
                     </svg>
-                    <span class="hidden sm:inline">Book Now</span>
+                    <span class=" text-xs md:text-sm sm:inline">Book Now</span>
                 </a>
 
                 @guest
@@ -112,7 +112,7 @@
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
+                    </svg> 
                 </button>
             </div>
         </div>
