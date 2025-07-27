@@ -91,6 +91,16 @@ class Doctor extends Model
         return $dayName && in_array($dayName, $this->available_days ?? []);
     }
 
+      public function getRatingAttribute()
+    {
+        return $this->reviews()->where('approved', true)->avg('rating') ?? 0;
+    }
+
+    public function getReviewCountAttribute()
+    {
+        return $this->reviews()->where('approved', true)->count();
+    }
+
     public function availableTimeSlots($date)
     {
         try {

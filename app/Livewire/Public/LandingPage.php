@@ -12,13 +12,28 @@ class LandingPage extends Component
     public $doctors;
     public $departments;
 
+    public function mount()
+    {
+        $this->loadDoctors();
+        $this->departments = Department::where('status', true)->get();
+    }
 
+    protected function loadDoctors()
+    {
+        $this->doctors = Doctor::withCount(['reviews' => function($query) {
+                $query->where('approved', true);
+            }])
+            ->withAvg(['reviews' => function($query) {
+                $query->where('approved', true);
+            }], 'rating')
+            ->inRandomOrder()
+            ->limit(4)
+            ->get();
+    }
 
     #[Layout('layouts.public')]
     public function render()
     {
-        $this->doctors = Doctor::inRandomOrder()->limit(4)->get();
-        $this->departments = Department::where('status', true)->get();
         return view('livewire.public.landing-page');
     }
 }

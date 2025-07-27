@@ -66,7 +66,7 @@
                         <div class="relative">
                             @if ($doctor->image)
                                 <img src="{{ $doctor->image ?? 'https://ui-avatars.com/api/?name=' . urlencode($doctor->user->name) . '&background=random&rounded=true' }}"
-                                                            alt="Dr. {{ $doctor->user->name }}"
+                                    alt="Dr. {{ $doctor->user->name }}"
                                     class="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-white object-cover shadow-lg">
                             @else
                                 <div
@@ -93,7 +93,7 @@
                                 <div class="text-xs text-teal-600">Rating</div>
                             </div>
                             <div class="text-center bg-teal-50 rounded-lg p-2 min-w-[70px]">
-                                <div class="text-lg font-bold text-teal-700">{{ $countFeadback }}</div>
+                                <div class="text-lg font-bold text-teal-700"></div>
                                 <div class="text-xs text-teal-600">Feedback</div>
                             </div>
                             <div class="text-center bg-teal-50 rounded-lg p-2 min-w-[70px]">
@@ -118,13 +118,54 @@
                                 x-text="doctor.department"></span>
 
                             <div class="flex items-center gap-1">
-                                <div class="flex text-amber-400">
-                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                    </svg>
-                                    <span class="ml-1 text-teal-800 font-medium">4.9</span>
-                                    <span class="text-teal-500 ml-1 text-sm">(35 reviews)</span>
+                                <div class="flex items-center">
+                                    <!-- Star Rating Display -->
+                                    <div class="flex text-amber-400">
+                                        @php
+                                            $averageRating = $averageRating ?? 0;
+                                            $fullStars = floor($averageRating);
+                                            $hasHalfStar = $averageRating - $fullStars >= 0.5;
+                                            $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
+                                        @endphp
+
+                                        <!-- Full Stars -->
+                                        @for ($i = 0; $i < $fullStars; $i++)
+                                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                            </svg>
+                                        @endfor
+
+                                        <!-- Half Star (if needed) -->
+                                        @if ($hasHalfStar)
+                                            <div class="relative w-5 h-5">
+                                                <svg class="w-5 h-5 text-gray-300" fill="currentColor"
+                                                    viewBox="0 0 20 20">
+                                                    <path
+                                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                                </svg>
+                                                <svg class="absolute top-0 left-0 w-5 h-5 text-amber-400"
+                                                    fill="currentColor" viewBox="0 0 20 20"
+                                                    style="clip-path: inset(0 50% 0 0)">
+                                                    <path
+                                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                                </svg>
+                                            </div>
+                                        @endif
+
+                                        <!-- Empty Stars -->
+                                        @for ($i = 0; $i < $emptyStars; $i++)
+                                            <svg class="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                            </svg>
+                                        @endfor
+                                    </div>
+
+                                    <!-- Rating Text -->
+                                    <span
+                                        class="ml-1 text-teal-800 font-medium">{{ number_format($averageRating, 1) }}</span>
+                                    <span class="text-teal-500 ml-1 text-sm">({{ $countFeedback ?? 0 }} reviews)</span>
                                 </div>
                             </div>
 
@@ -177,7 +218,7 @@
                                 <div class="text-teal-600 text-xs">Positive Feedback</div>
                             </div>
                             <div class="text-center">
-                                <div class="text-2xl font-bold text-teal-700">{{ $countFeadback }}</div>
+                                <div class="text-2xl font-bold text-teal-700">{{ $countFeedback }}</div>
                                 <div class="text-teal-600 text-xs">Patient Feedback</div>
                             </div>
                             <div class="text-center">
@@ -243,7 +284,7 @@
                         </svg>
                         Reviews
                         <span class="bg-teal-100 text-teal-800 text-xs px-2 py-0.5 rounded-full"
-                            x-text="doctor.reviews.length"></span>
+                            >{{$countFeedback}}</span>
                     </button>
                     <button @click="tab = 'hours'"
                         :class="tab === 'hours' ? 'border-teal-500 text-teal-700 bg-teal-50' :
@@ -564,34 +605,52 @@
                     <!-- Rating Summary -->
                     <div class="flex items-center gap-4 bg-teal-50 p-3 rounded-lg border border-teal-100">
                         <div class="text-center">
-                            <div class="text-3xl font-bold text-teal-700">4.9</div>
+                            <div class="text-3xl font-bold text-teal-700">{{ number_format($averageRating, 1) }}</div>
                             <div class="text-teal-600 text-sm">Average Rating</div>
                         </div>
                         <div class="text-center">
-                            <div class="text-3xl font-bold text-teal-700" x-text="doctor.reviews.length"></div>
+                            <div class="text-3xl font-bold text-teal-700">{{ $countFeedback }}</div>
                             <div class="text-teal-600 text-sm">Total Reviews</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="space-y-6">
-                    <template x-for="review in doctor.reviews" :key="review.date">
+                    @forelse($approvedReviews as $review)
                         <div class="border border-teal-100 rounded-lg p-5 hover:border-teal-200 transition">
                             <div class="flex justify-between items-start mb-3">
                                 <div>
-                                    <h3 class="font-medium text-teal-800" x-text="review.author"></h3>
-                                    <div class="text-amber-400 text-lg" x-text="getStars(review.rating)"></div>
+                                    <h3 class="font-medium text-teal-800">{{ $review->user->name }}</h3>
+                                    <div class="text-amber-400 text-lg">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            @if ($i <= $review->rating)
+                                                ★
+                                            @else
+                                                ☆
+                                            @endif
+                                        @endfor
+                                    </div>
                                 </div>
-                                <span class="text-teal-500 text-sm" x-text="formatDate(review.date)"></span>
+                                <span class="text-teal-500 text-sm">{{ $review->created_at->format('M d, Y') }}</span>
                             </div>
-                            <p class="text-teal-700" x-text="review.comment"></p>
+                            <p class="text-teal-700">{{ $review->comment }}</p>
                         </div>
-                    </template>
+                    @empty
+                        <div class="text-center py-8 text-teal-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-4 text-teal-400"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                            </svg>
+                            <p class="text-lg">No reviews yet</p>
+                            <p class="text-sm mt-1">Be the first to review this doctor</p>
+                        </div>
+                    @endforelse
 
                     <div class="pt-4">
                         @auth
                             <!-- Show review form for logged in users -->
-                            <button wire:click="$dispatch('reviewModal')"
+                            <button wire:click="$dispatch('reviewModal', { doctor_id: {{ $doctor->id }} })"
                                 class="inline-flex items-center gap-2 bg-teal-500 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-teal-600 transition shadow-sm">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
@@ -600,7 +659,7 @@
                                 </svg>
                                 Leave a Review
                             </button>
-                            <livewire:public.review.review />
+                            <livewire:public.review.review :doctor_id="$doctor->id" />
                         @else
                             <!-- Show login prompt for guests -->
                             <a href="{{ route('admin.login') }}"

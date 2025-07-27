@@ -19,8 +19,6 @@ class OurDoctors extends Component
     #[Url(as: 'search')]
     public $searchQuery = '';
 
-   
-
     #[Url(as: 'sort')]
     public $sortBy = 'name'; // Default sort by name
 
@@ -32,7 +30,6 @@ class OurDoctors extends Component
 
     public function updated($property)
     {
-        // Update doctors when any filter or search query changes
         if (in_array($property, ['department_id', 'searchQuery', 'sortBy'])) {
             $this->loadDoctors();
         }
@@ -42,8 +39,16 @@ class OurDoctors extends Component
     {
         $query = Doctor::query()
             ->join('users', 'doctors.user_id', '=', 'users.id')
-            ->with('user', 'department')
-            ->select('doctors.*', 'users.email', 'users.name'); // Explicitly select needed columns
+            ->with(['user', 'department', 'reviews' => function($query) {
+                $query->where('approved', true);
+            }])
+            ->select('doctors.*', 'users.email', 'users.name')
+            ->withAvg(['reviews' => function($query) {
+                $query->where('approved', true);
+            }], 'rating')
+            ->withCount(['reviews' => function($query) {
+                $query->where('approved', true);
+            }]);
 
         if (!empty($this->department_id)) {
             $query->where('doctors.department_id', $this->department_id);
@@ -53,19 +58,19 @@ class OurDoctors extends Component
             $query->where(function ($q) {
                 $q->where('users.name', 'like', '%' . $this->searchQuery . '%')
                   ->orWhere('users.email', 'like', '%' . $this->searchQuery . '%')
-                  ->orWhereJsonContains('doctors.qualification', $this->searchQuery); // Handle JSON array search
+                  ->orWhereJsonContains('doctors.qualification', $this->searchQuery);
             });
         }
 
-       
-
-        // Apply sorting
         switch ($this->sortBy) {
+            case 'rating':
+                $query->orderBy('reviews_avg_rating', 'desc');
+                break;
             case 'availability':
-                $query->orderBy('doctors.available_days', 'asc'); // Assumes available_days can be sorted
+                $query->orderBy('doctors.available_days', 'asc');
                 break;
             default:
-                $query->orderBy('users.name', 'asc'); // Default sort by user's name
+                $query->orderBy('users.name', 'asc');
                 break;
         }
 

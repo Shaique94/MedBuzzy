@@ -36,6 +36,11 @@
                 <i class="fas fa-users text-blue-500 w-6 text-center"></i>
                 <span class="ml-3">Patients</span>
             </a>
+
+             <a href="{{route('admin.reviewapprovel')}}" class="sidebar-link flex items-center px-4 py-3 text-gray-700 transition-all">
+                <i class="fas fa-users text-blue-500 w-6 text-center"></i>
+                <span class="ml-3">Review</span>
+            </a>
             <a href="/admin/settings" class="sidebar-link flex items-center px-4 py-3 text-gray-700 transition-all">
                 <i class="fas fa-cog text-blue-500 w-6 text-center"></i>
                 <span class="ml-3">Settings</span>

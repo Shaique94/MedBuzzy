@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\SocialiteController;
+use App\Livewire\Admin\AdminReviewApproval;
 use App\Livewire\Admin\Appointment\Add;
 use App\Livewire\Admin\Appointment\All;
 use App\Livewire\Admin\Appointment\Update;
 use App\Livewire\Admin\Appointment\ViewDetails;
 use App\Livewire\Admin\Auth\Login;
+use App\Livewire\Admin\Review\AdminReviewManagement;
 use App\Livewire\Admin\Sections\Dashboard;
 use App\Livewire\Admin\Sections\ManageDepartment;
 use App\Livewire\Admin\Sections\ManageDoctor;
@@ -102,6 +104,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/appointment/add', Add::class)->name('add.appointment');
     Route::get('/appointment/update/{id}', Update::class)->name('update.appointment');
     Route::get('/appointment/view/{id}', ViewDetails::class)->name('view.appointment');
+    Route::get('/review',AdminReviewManagement::class)->name('reviewapprovel');
 });
 
 Route::get('/storage-link', function () {
