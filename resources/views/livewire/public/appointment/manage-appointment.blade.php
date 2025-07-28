@@ -612,15 +612,13 @@
                                     alt="Dr. {{ $selectedDoctor->user->name }}" class="w-full h-full object-cover">
                             </div>
                             <div class="text-center sm:text-left">
-                                <h3 class="text-xl font-bold text-gray-800">Dr. {{ $selectedDoctor->user->name }}
-                                </h3>
+                                <h3 class="text-xl font-bold text-gray-800">Dr. {{ $selectedDoctor->user->name }}</h3>
                                 <p class="text-sm font-medium text-brand-teal-700">
                                     {{ $selectedDoctor->department->name }}</p>
                                 <div
                                     class="mt-2 flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center sm:justify-start">
                                     <p class="text-sm text-gray-600">
-                                        {{ \Carbon\Carbon::parse($appointment_date)->format('l, F j, Y') }}
-                                    </p>
+                                        {{ \Carbon\Carbon::parse($appointment_date)->format('l, F j, Y') }}</p>
                                     <p class="text-sm text-gray-600">{{ $appointment_time }}</p>
                                 </div>
                             </div>
@@ -634,17 +632,17 @@
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"></path>
                             </svg>
-                            Patient Information
+                            Patient Information (रोगी जानकारी)
                         </h2>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <!-- Name -->
                             <div>
-                                <label class="block mb-2 text-sm font-medium text-gray-600">Full Name <span
+                                <label class="block mb-2 text-sm font-medium text-gray-600">Full Name (पूरा नाम) <span
                                         class="text-red-500">*</span></label>
                                 <input type="text" wire:model.live.debounce.500ms="newPatient.name"
                                     class="w-full px-4 py-3 border {{ $errors->has('newPatient.name') ? 'border-red-500' : 'border-gray-300' }} rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
-                                    placeholder="John Doe">
+                                    placeholder="John Doe (जॉन डो)">
                                 @error('newPatient.name')
                                     <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                                 @enderror
@@ -652,10 +650,10 @@
 
                             <!-- Email -->
                             <div>
-                                <label class="block mb-2 text-sm font-medium text-gray-600">Email</label>
+                                <label class="block mb-2 text-sm font-medium text-gray-600">Email (ईमेल)</label>
                                 <input type="email" wire:model.live.debounce.500ms="newPatient.email"
                                     class="w-full px-4 py-3 border {{ $errors->has('newPatient.email') ? 'border-red-500' : 'border-gray-300' }} rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
-                                    placeholder="john@example.com">
+                                    placeholder="john@example.com (john@example.com)">
                                 @error('newPatient.email')
                                     <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                                 @enderror
@@ -663,11 +661,11 @@
 
                             <!-- Phone -->
                             <div>
-                                <label class="block mb-2 text-sm font-medium text-gray-600">Phone <span
+                                <label class="block mb-2 text-sm font-medium text-gray-600">Phone (फोन) <span
                                         class="text-red-500">*</span></label>
                                 <input type="tel" wire:model.live.debounce.500ms="newPatient.phone"
                                     class="w-full px-4 py-3 border {{ $errors->has('newPatient.phone') ? 'border-red-500' : 'border-gray-300' }} rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
-                                    placeholder="+91 9876543210">
+                                    placeholder="+91 9876543210 (+91 9876543210)">
                                 @error('newPatient.phone')
                                     <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                                 @enderror
@@ -675,11 +673,11 @@
 
                             <!-- Age -->
                             <div>
-                                <label class="block mb-2 text-sm font-medium text-gray-600">Age <span
+                                <label class="block mb-2 text-sm font-medium text-gray-600">Age (आयु) <span
                                         class="text-red-500">*</span></label>
                                 <input type="number" wire:model.live.debounce.500ms="newPatient.age"
                                     class="w-full px-4 py-3 border {{ $errors->has('newPatient.age') ? 'border-red-500' : 'border-gray-300' }} rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
-                                    placeholder="30" min="0" max="120">
+                                    placeholder="30 (30)" min="0" max="120">
                                 @error('newPatient.age')
                                     <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                                 @enderror
@@ -687,14 +685,14 @@
 
                             <!-- Gender -->
                             <div>
-                                <label class="block mb-2 text-sm font-medium text-gray-600">Gender <span
+                                <label class="block mb-2 text-sm font-medium text-gray-600">Gender (लिंग) <span
                                         class="text-red-500">*</span></label>
                                 <select wire:model.live="newPatient.gender"
                                     class="w-full px-4 py-3 border {{ $errors->has('newPatient.gender') ? 'border-red-500' : 'border-gray-300' }} rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition">
-                                    <option value="">Select Gender</option>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
-                                    <option value="other">Other</option>
+                                    <option value="">Select Gender (लिंग चुनें)</option>
+                                    <option value="male">Male (पुरुष)</option>
+                                    <option value="female">Female (महिला)</option>
+                                    <option value="other">Other (अन्य)</option>
                                 </select>
                                 @error('newPatient.gender')
                                     <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
@@ -703,12 +701,12 @@
 
                             <!-- Pincode -->
                             <div>
-                                <label class="block mb-2 text-sm font-medium text-gray-600">Pincode <span
+                                <label class="block mb-2 text-sm font-medium text-gray-600">Pincode (पिनकोड) <span
                                         class="text-red-500">*</span></label>
                                 <div class="relative">
                                     <input type="text" wire:model.live.debounce.500ms="pincode" maxlength="6"
                                         class="w-full px-4 py-3 border {{ $errors->has('newPatient.pincode') ? 'border-red-500' : 'border-gray-300' }} rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
-                                        placeholder="123456">
+                                        placeholder="123456 (123456)">
                                     @if (strlen($pincode) == 6)
                                         <div wire:loading wire:target="pincode"
                                             class="absolute right-3 top-1/2 transform -translate-y-1/2">
@@ -729,29 +727,29 @@
 
                             <!-- State -->
                             <div>
-                                <label class="block mb-2 text-sm font-medium text-gray-600">State <span
+                                <label class="block mb-2 text-sm font-medium text-gray-600">State (राज्य) <span
                                         class="text-red-500">*</span></label>
                                 <input type="text" wire:model.live="newPatient.state"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
-                                    placeholder="State">
+                                    placeholder="State (राज्य)">
                             </div>
 
                             <!-- District -->
                             <div>
-                                <label class="block mb-2 text-sm font-medium text-gray-600">District <span
+                                <label class="block mb-2 text-sm font-medium text-gray-600">District (जिला) <span
                                         class="text-red-500">*</span></label>
                                 <input type="text" wire:model.live="newPatient.district"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
-                                    placeholder="District">
+                                    placeholder="District (जिला)">
                             </div>
 
                             <!-- Address -->
                             <div class="md:col-span-2">
-                                <label class="block mb-2 text-sm font-medium text-gray-600">Address <span
+                                <label class="block mb-2 text-sm font-medium text-gray-600">Address (पता) <span
                                         class="text-red-500">*</span></label>
                                 <textarea wire:model.live.debounce.500ms="newPatient.address" rows="4"
                                     class="w-full px-4 py-3 border {{ $errors->has('newPatient.address') ? 'border-red-500' : 'border-gray-300' }} rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
-                                    placeholder="123 Main St, Apt 4B, City"></textarea>
+                                    placeholder="123 Main St, Apt 4B, City (123 मेन स्ट्रीट, अपार्टमेंट 4बी, शहर)"></textarea>
                                 @error('newPatient.address')
                                     <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                                 @enderror
@@ -763,9 +761,14 @@
 
             <!-- Step 4: Confirmation -->
             @if ($step === 4)
-                <div
-                    class="space-y-3 sm:space-y-4 md:space-y-6 max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl mx-auto">
-                    <div
+                <div class="space-y-4 md:space-y-6 max-w-md md:max-w-3xl mx-auto px-2 sm:px-0">
+                    <!-- Header -->
+                    <div class="text-center">
+                        <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Confirm Your Appointment</h2>
+                        <p class="text-sm sm:text-base text-gray-600 mt-1">Review details before final confirmation</p>
+                    </div>
+
+                                       <div
                         class="bg-brand-teal-50 p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl shadow-sm border border-brand-teal-100">
                         <h3 class="text-sm sm:text-base md:text-xl font-semibold text-gray-800 mb-2 sm:mb-3">
                             Appointment Summary</h3>
@@ -808,61 +811,79 @@
                             </div>
                         </div>
                     </div>
-                    <div class="bg-white p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl border border-gray-100 shadow-sm">
-                        <h3 class="text-sm sm:text-base md:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">
-                            Payment Details</h3>
-                        <div class="space-y-1 sm:space-y-2">
-                            <div class="flex justify-between">
-                                <span class="text-[10px] sm:text-sm font-medium text-gray-600">Consultation
-                                    Fee</span>
-                                <span class="text-xs sm:text-sm font-medium">₹{{ $selectedDoctor->fee }}</span>
+
+                    <!-- Payment Details Card -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="bg-brand-teal-100 px-4 py-3">
+                            <h3 class="text-base sm:text-lg font-semibold text-gray-800">Payment Summary</h3>
+                        </div>
+                        <div class="p-4 sm:p-5">
+                            <!-- Doctor's Fee -->
+                            <div class="flex justify-between items-center py-3 border-b border-gray-200">
+                                <div>
+                                    <h4 class="text-sm font-medium text-gray-800">Doctor's Consultation Fee</h4>
+                                    <p class="text-xs text-gray-500 mt-1">Payable directly to doctor during visit</p>
+                                </div>
+                                <span class="text-sm font-semibold">₹{{ $selectedDoctor->fee }}</span>
                             </div>
-                            <div class="flex justify-between border-t border-gray-200 pt-1 sm:pt-2">
-                                <span class="text-[10px] sm:text-sm font-medium text-gray-600">Taxes & Fees</span>
-                                <span class="text-xs sm:text-sm font-medium">₹0</span>
+
+                            <!-- Processing Fee -->
+                            <div class="flex justify-between items-center py-3 border-b border-gray-200">
+                                <div>
+                                    <h4 class="text-sm font-medium text-gray-800">Booking Fee</h4>
+                                    <p class="text-xs text-gray-500 mt-1">Secures your appointment (non-refundable)</p>
+                                </div>
+                                <span class="text-sm font-semibold">₹50.00</span>
                             </div>
-                            <div class="flex justify-between border-t border-gray-200 pt-1 sm:pt-2">
-                                <span class="text-sm sm:text-lg font-semibold">Total Amount</span>
-                                <span
-                                    class="text-sm sm:text-lg font-bold text-brand-teal-600">₹{{ $selectedDoctor->fee }}</span>
+
+                            <!-- Total -->
+                            <div class="flex justify-between items-center pt-4">
+                                <span class="text-base font-bold text-gray-800">Total Amount Due Now</span>
+                                <span class="text-lg font-bold text-brand-teal-600">₹50.00</span>
                             </div>
                         </div>
                     </div>
-                    <div class="bg-white p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl border border-gray-100 shadow-sm">
-                        <div class="space-y-1 sm:space-y-2">
-                            <div class="flex justify-between">
-                                <span class="text-[10px] sm:text-sm font-medium text-gray-600">Processing
-                                    Fee</span>
-                                <span class="text-xs sm:text-sm font-medium">₹50.00</span>
-                            </div>
-                            <div class="flex justify-between border-t border-gray-200 pt-1 sm:pt-2">
-                                <span class="text-sm sm:text-lg font-semibold">Total Amount</span>
-                                <span class="text-sm sm:text-lg font-bold text-brand-teal-600">₹50.00</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-white p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl border border-gray-100 shadow-sm">
-                        <label class="block mb-1 text-xs sm:text-sm font-medium text-gray-600">Notes
-                            (Optional)</label>
+
+                    <!-- Notes Section -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-5">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Additional Notes (Optional)</label>
                         <textarea wire:model.debounce.500ms="notes" rows="3"
-                            class="w-full px-2 py-1.5 sm:px-3 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition text-sm"
                             placeholder="Any symptoms, concerns, or special requests..."></textarea>
                     </div>
+
+                    <!-- Payment Button -->
                     <button wire:click="createOrder" wire:loading.attr="disabled" wire:loading.target="createOrder"
-                        class="w-full bg-brand-teal-600 text-white px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-3.5 rounded-xl hover:bg-brand-teal-700 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center shadow-lg transition-all duration-300 text-sm sm:text-base font-semibold">
-                        <span wire:loading.remove wire:target="createOrder">Pay ₹50.00 & Confirm Appointment</span>
+                        class="w-full bg-brand-teal-600 hover:bg-brand-teal-700 text-white font-semibold py-3 px-4 rounded-lg shadow-md transition-all duration-300 flex items-center justify-center">
+                        <span wire:loading.remove wire:target="createOrder">
+                            Confirm & Pay ₹50 Booking Fee
+                        </span>
                         <span wire:loading wire:target="createOrder" class="flex items-center">
-                            <svg class="animate-spin h-4 w-4 sm:h-5 sm:w-5 text-white mr-2"
-                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <svg class="animate-spin h-5 w-5 text-white mr-2" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10"
                                     stroke="currentColor" stroke-width="4"></circle>
                                 <path class="opacity-75" fill="currentColor"
                                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
                                 </path>
                             </svg>
-                            Processing...
+                            Processing Payment...
                         </span>
                     </button>
+
+                    <!-- Payment Disclaimer -->
+                    <div class="text-center px-2">
+                        <p class="text-xs text-gray-500">
+                            <svg class="w-4 h-4 inline-block mr-1 -mt-1" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            The doctor's fee of ₹{{ $selectedDoctor->fee }} will be collected directly by the doctor
+                            during your appointment.
+                            Today's payment is only for the booking fee to secure your slot.
+                        </p>
+                    </div>
                 </div>
             @endif
         </div>
