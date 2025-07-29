@@ -1,4 +1,4 @@
-<div class="min-h-screen  py-2 px-2 sm:px-6 lg:px-8">
+<div class="min-h-screen p-1  sm:px-6 lg:px-8">
     <div class="max-w-5xl mx-auto md:shadow-xl ">
         <!-- Header -->
         <div class="text-center bg-teal-600 rounded py-5">
@@ -76,7 +76,7 @@
             </div>
 
             <!-- Step Content -->
-            <div class="p-3 sm:p-8">
+            <div class=" p-2 sm:p-8">
                 <!-- Step 1: Select Doctor -->
                 @if ($step === 1)
                     <div class="space-y-6">
@@ -768,7 +768,7 @@
                         <p class="text-sm sm:text-base text-gray-600 mt-1">Review details before final confirmation</p>
                     </div>
 
-                                       <div
+                    <div
                         class="bg-brand-teal-50 p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl shadow-sm border border-brand-teal-100">
                         <h3 class="text-sm sm:text-base md:text-xl font-semibold text-gray-800 mb-2 sm:mb-3">
                             Appointment Summary</h3>
