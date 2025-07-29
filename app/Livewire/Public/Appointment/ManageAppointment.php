@@ -7,8 +7,11 @@ use App\Models\Department;
 use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Payment;
+use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
@@ -369,88 +372,103 @@ class ManageAppointment extends Component
 
     #[On('payment-success')]
     // Add this method to handle successful payment
-    public function handlePaymentSuccess($paymentId, $allData)
-    {
-        DB::beginTransaction();
+   public function handlePaymentSuccess($paymentId, $allData)
+{
+    DB::beginTransaction();
 
-        try {
-            // 1. Extract and prepare data
-            $paymentDetails = [
-                'key' => $allData[0]['key'],
-                'orderId' => $allData[0]['orderId'],
-                'amount' => $allData[0]['amount'] / 100, // Convert from paise to rupees
-            ];
+    try {
+        // 1. Extract and prepare data
+        $paymentDetails = [
+            'key' => $allData[0]['key'],
+            'orderId' => $allData[0]['orderId'],
+            'amount' => $allData[0]['amount'] / 100, // Convert from paise to rupees
+        ];
 
-            $patientInfo = $allData[0]['patientData'];
-            $appointmentInfo = $allData[0]['appointmentData'];
+        $patientInfo = $allData[0]['patientData'];
+        $appointmentInfo = $allData[0]['appointmentData'];
 
+        // 2. Verify payment with Razorpay
+        $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret'));
+        $payment = $api->payment->fetch($paymentId);
 
-            // 2. Verify payment with Razorpay
-            $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret'));
-            $payment = $api->payment->fetch($paymentId);
-
-            if ($payment->status !== 'authorized') {
-                throw new \Exception('Payment not captured');
-            }
-
-            // 3. Create/update patient
-            $patient = Patient::updateOrCreate(
-                ['phone' => $patientInfo['phone']],
-                [
-                    'name' => $patientInfo['name'],
-                    'email' => $patientInfo['email'],
-                    'age' => $patientInfo['age'],
-                    'gender' => $patientInfo['gender'],
-                    'pincode' => $patientInfo['pincode'],
-                    'address' => $patientInfo['address'],
-                    'district' => $patientInfo['district'] ?? null,
-                    'state' => $patientInfo['state'] ?? null,
-                ]
-            );
-            // 4. Create appointment
-            $appointment = Appointment::create([
-                'doctor_id' => $appointmentInfo['doctor_id'],
-                'patient_id' => $patient->id,
-                'appointment_date' => $appointmentInfo['appointment_date'],
-                'appointment_time' => $appointmentInfo['appointment_time'],
-                'notes' => $appointmentInfo['notes'] ?? null,
-                'status' => 'scheduled',
-                'rescheduled' => false,
-                'is_rescheduled' => false,
-                'original_appointment_id' => null,
-                'rescheduled_at' => null,
-            ]);
-            
-            // 5. Record payment
-            $payment = Payment::create([
-                'appointment_id' => $appointment->id,
-                'patient_id' => $patient->id,
-                'amount' => $paymentDetails['amount'],
-                'transaction_id' => $paymentId,
-                // 'order_id' => $paymentDetails['orderId'],
-                'status' => 'paid',
-                'method' => 'upi',
-                // 'payment_details' => json_encode($payment->toArray()),
-            ]);
-            DB::commit();
-
-            // 6. Send confirmation (uncomment to implement)
-            // $patient->notify(new AppointmentConfirmed($appointment));
-
-            return redirect()->route('appointment.confirmation', $appointment->id)
-                ->with('success', 'Appointment booked successfully!');
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            \Log::error("Payment failed: {$e->getMessage()}", [
-                'paymentId' => $paymentId,
-                'error' => $e->getTraceAsString()
-            ]);
-
-            return redirect()->back()
-                ->with('error', 'Payment processing failed. Please try again.');
+        if ($payment->status !== 'authorized') {
+            throw new \Exception('Payment not captured');
         }
+
+        // 3. Create/update patient
+        $patient = Patient::updateOrCreate(
+            ['phone' => $patientInfo['phone']],
+            [
+                'name' => $patientInfo['name'],
+                'email' => $patientInfo['email'],
+                'age' => $patientInfo['age'],
+                'gender' => $patientInfo['gender'],
+                'pincode' => $patientInfo['pincode'],
+                'address' => $patientInfo['address'],
+                'district' => $patientInfo['district'] ?? null,
+                'state' => $patientInfo['state'] ?? null,
+            ]
+        );
+
+        // 4. Create user account with default password
+        $defaultPassword = 'patient@123'; // More secure default password
+        $user = User::firstOrCreate(
+            ['email' => $patientInfo['email']],
+            [
+                'name' => $patientInfo['name'],
+                'phone' => $patientInfo['phone'],
+                'email' => $patientInfo['email'],
+                'password' => Hash::make($defaultPassword),
+            ]
+        );
+
+        // 5. Create appointment
+        $appointment = Appointment::create([
+            'doctor_id' => $appointmentInfo['doctor_id'],
+            'patient_id' => $patient->id,
+            'appointment_date' => $appointmentInfo['appointment_date'],
+            'appointment_time' => $appointmentInfo['appointment_time'],
+            'notes' => $appointmentInfo['notes'] ?? null,
+            'status' => 'scheduled',
+            'rescheduled' => false,
+            'is_rescheduled' => false,
+            'original_appointment_id' => null,
+            'rescheduled_at' => null,
+        ]);
+        
+        // 6. Record payment
+        $payment = Payment::create([
+            'appointment_id' => $appointment->id,
+            'patient_id' => $patient->id,
+            'amount' => $paymentDetails['amount'],
+            'transaction_id' => $paymentId,
+            'status' => 'paid',
+            'method' => 'upi',
+        ]);
+
+        DB::commit();
+
+        // 7. Log in the user automatically
+        Auth::login($user);
+ 
+        // 8. Send confirmation (uncomment to implement)
+        // $patient->notify(new AppointmentConfirmed($appointment));
+        // $user->notify(new AccountCreated($user, $defaultPassword));
+
+        return redirect()->route('appointment.confirmation', $appointment->id)
+            ->with('success', 'Appointment booked successfully! You have been automatically logged in.');
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+        \Log::error("Payment failed: {$e->getMessage()}", [
+            'paymentId' => $paymentId,
+            'error' => $e->getTraceAsString()
+        ]);
+
+        return redirect()->back()
+            ->with('error', 'Payment processing failed. Please try again.');
     }
+}
 
 
 
