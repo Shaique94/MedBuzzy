@@ -300,31 +300,50 @@
                                                 style="scroll-behavior: smooth; min-width: 100vw;"
                                             >
                                                 @php
+                                                    // Use doctor's max_booking_days if available, otherwise fallback to 30
+                                                    $maxBookingDays = $selectedDoctor->max_booking_days ?? 30;
+                                                    $availableDays = is_array($selectedDoctor->available_days)
+                                                        ? $selectedDoctor->available_days
+                                                        : (is_string($selectedDoctor->available_days) ? json_decode($selectedDoctor->available_days, true) : []);
+                                                    $availableDayNumbers = [];
+                                                    // Map day names to Carbon dayOfWeek numbers (0=Sunday, 1=Monday, ...)
+                                                    $dayNameToNumber = [
+                                                        'Sunday' => 0,
+                                                        'Monday' => 1,
+                                                        'Tuesday' => 2,
+                                                        'Wednesday' => 3,
+                                                        'Thursday' => 4,
+                                                        'Friday' => 5,
+                                                        'Saturday' => 6,
+                                                    ];
+                                                    foreach ($availableDays as $dayName) {
+                                                        if (isset($dayNameToNumber[$dayName])) {
+                                                            $availableDayNumbers[] = $dayNameToNumber[$dayName];
+                                                        }
+                                                    }
                                                     $today = \Carbon\Carbon::today();
-                                                    $endDate = \Carbon\Carbon::today()->addDays(30);
+                                                    $endDate = $today->copy()->addDays($maxBookingDays - 1);
                                                     $dateTabs = [];
                                                     $currentDate = $today->copy();
                                                     while ($currentDate <= $endDate) {
                                                         $formattedDate = $currentDate->format('Y-m-d');
-                                                        $isWithinBookingRange = !empty($validBookingDays) && is_array($validBookingDays) && in_array($formattedDate, $validBookingDays);
-                                                        $isAvailableDay = !empty($availableDayNumbers) && is_array($availableDayNumbers) && in_array($currentDate->dayOfWeek, $availableDayNumbers);
+                                                        // Only allow selection if this day is in doctor's available_days
+                                                        $isAvailableDay = in_array($currentDate->dayOfWeek, $availableDayNumbers);
                                                         $isOnLeave = !empty($onLeaveDates) && is_array($onLeaveDates) && in_array($formattedDate, $onLeaveDates);
-                                                        $isBookable = $isWithinBookingRange && $isAvailableDay && !$isOnLeave;
+                                                        $isBookable = $isAvailableDay && !$isOnLeave;
                                                         $isPast = $currentDate->isPast() && !$currentDate->isToday();
                                                         $isToday = $currentDate->isToday();
 
-                                                        if ($isWithinBookingRange) {
-                                                            $dateTabs[] = [
-                                                                'date' => $formattedDate,
-                                                                'isBookable' => $isBookable,
-                                                                'isPast' => $isPast,
-                                                                'isToday' => $isToday,
-                                                                'isOnLeave' => $isOnLeave,
-                                                                'isAvailableDay' => $isAvailableDay,
-                                                                'day' => $currentDate->format('D'),
-                                                                'dateDisplay' => $currentDate->format('M j'),
-                                                            ];
-                                                        }
+                                                        $dateTabs[] = [
+                                                            'date' => $formattedDate,
+                                                            'isBookable' => $isBookable,
+                                                            'isPast' => $isPast,
+                                                            'isToday' => $isToday,
+                                                            'isOnLeave' => $isOnLeave,
+                                                            'isAvailableDay' => $isAvailableDay,
+                                                            'day' => $currentDate->format('D'),
+                                                            'dateDisplay' => $currentDate->format('M j'),
+                                                        ];
                                                         $currentDate->addDay();
                                                     }
                                                 @endphp
