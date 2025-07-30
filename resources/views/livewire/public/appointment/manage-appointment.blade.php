@@ -174,13 +174,14 @@
                                                                 'Saturday',
                                                             ];
                                                             $fullDay = $weekdays[$index];
-                                                            $isAvailable = in_array(
-                                                                $fullDay,
-                                                                $doctor->available_days ?? [],
-                                                            );
+                                                            // Convert the available_days string to an array
+                                                            $availableDays = is_array($doctor->available_days ?? null)
+                                                                ? $doctor->available_days
+                                                                : json_decode($doctor->available_days ?? '[]', true);
+                                                            $isAvailable = in_array($fullDay, $availableDays ?? []);
                                                         @endphp
                                                         <div class="w-6 h-6 flex items-center justify-center rounded-full text-xs font-medium
-                                                            {{ $isAvailable ? 'bg-brand-teal-400 text-white border border-brand-teal-500' : 'bg-gray-100 text-gray-400 opacity-50 cursor-not-allowed' }}"
+                                                           {{ $isAvailable ? 'bg-brand-teal-400 text-white border border-brand-teal-500' : 'bg-gray-100 text-gray-400 opacity-50 cursor-not-allowed' }}"
                                                             title="{{ $fullDay }}">{{ substr($day, 0, 1) }}</div>
                                                     @endforeach
                                                 </div>

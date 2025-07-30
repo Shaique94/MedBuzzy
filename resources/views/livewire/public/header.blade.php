@@ -30,11 +30,11 @@
     </div>
 
     <!-- Main Header -->
-    <div class="container mx-auto px-4 py-1 md:py-3">
+    <div class="container mx-auto px-4 py-1 ">
         <div class="flex justify-between items-center">
             <!-- Logo -->
             <div class="flex items-center">
-                <a href="/" class="flex items-center transition-transform hover:scale-105 duration-200">
+                <a href="/" class="flex items-center">
                     <img src="/logo/logo.png" alt="MedBuzzy Logo" class="h-16 md:h-20">
                 </a>
             </div>
@@ -99,10 +99,10 @@
                             class="text-gray-600 hover:text-brand-teal-600 font-medium transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-brand-teal-50 whitespace-nowrap">
                             Login
                         </a>
-                        <a href="/register"
+                        {{-- <a href="/register"
                             class="bg-brand-teal-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-brand-teal-700 transition-colors duration-200 shadow-md hover:shadow-lg whitespace-nowrap">
                             Sign Up
-                        </a>
+                        </a> --}}
                     </div>
                 @endguest
 
@@ -160,10 +160,10 @@
                         class="block text-center text-gray-600 hover:text-brand-teal-600 font-medium py-2 px-3 rounded-lg hover:bg-brand-teal-50 transition-colors duration-200 mobile-menu-link">
                         Login
                     </a>
-                    <a wire:navigate href="{{ route('register') }}"
+                    {{-- <a wire:navigate href="{{ route('register') }}"
                         class="block text-center bg-brand-teal-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-brand-teal-700 transition-colors duration-200 shadow-md hover:shadow-lg mobile-menu-link">
                         Sign Up
-                    </a>
+                    </a> --}}
                 @endauth
                 <a href="{{ route('appointment') }}"
                     class="block text-center bg-brand-orange-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-brand-orange-600 transition-colors duration-200 shadow-md hover:shadow-lg mobile-menu-link">

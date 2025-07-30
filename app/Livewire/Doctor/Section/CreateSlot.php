@@ -42,8 +42,8 @@ class CreateSlot extends Component
     public function save()
     {
         $this->validate([
-            'start_time' => 'required|date_format:H:i',
-            'end_time' => 'required|date_format:H:i|after:start_time',
+            'start_time' => 'required',
+            'end_time' => 'required|after:start_time',
             'slot_duration_minutes' => 'required|integer|min:5|max:120',
             'patients_per_slot' => 'required|integer|min:1|max:10',
             'available_days' => 'required|array|min:1',

@@ -9,6 +9,7 @@ use App\Livewire\Admin\Appointment\ViewDetails;
 use App\Livewire\Admin\Auth\Login;
 use App\Livewire\Admin\Review\AdminReviewManagement;
 use App\Livewire\Admin\Sections\Dashboard;
+use App\Livewire\Admin\Sections\EditDoctor;
 use App\Livewire\Admin\Sections\ManageDepartment;
 use App\Livewire\Admin\Sections\ManageDoctor;
 use App\Livewire\Doctor\Section\CreateSlot;
@@ -105,7 +106,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/appointment/update/{id}', Update::class)->name('update.appointment');
     Route::get('/appointment/view/{id}', ViewDetails::class)->name('view.appointment');
     Route::get('/review',AdminReviewManagement::class)->name('reviewapprovel');
-});
+  Route::get('/doctors/edit/{id}', EditDoctor::class)->name('editDoctor');});
 
 Route::get('/storage-link', function () {
     Artisan::call('storage:link');
