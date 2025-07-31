@@ -15,6 +15,7 @@ class ViewDoctorDetail extends Component
     public $slug;
     public $averageRating = 0;
     public $countFeedback = 0;
+    public $approvedReviews = []; // Add property for approved reviews
 
     public function mount($slug)
     {
@@ -30,6 +31,12 @@ class ViewDoctorDetail extends Component
             ->firstOrFail();
 
         $this->doctorId = $this->doctor->id;
+
+        // Get approved reviews
+        $this->approvedReviews = $this->doctor->reviews()->where('approved', true)
+            ->with('user')
+            ->latest()
+            ->get();
 
         // Calculate review metrics
         $this->calculateReviewMetrics();
@@ -63,6 +70,12 @@ class ViewDoctorDetail extends Component
                   ->latest();
         }]);
         
+        // Update the approvedReviews collection
+        $this->approvedReviews = $this->doctor->reviews()->where('approved', true)
+            ->with('user')
+            ->latest()
+            ->get();
+            
         $this->calculateReviewMetrics();
     }
 
@@ -72,6 +85,7 @@ class ViewDoctorDetail extends Component
     {
         return view('livewire.public.our-doctors.view-doctor-detail', [
             'doctor' => $this->doctor,
+            'approvedReviews' => $this->approvedReviews,
         ]);
     }
 }
