@@ -187,7 +187,7 @@
 
                                     <div class="flex flex-col gap-2 w-full sm:w-auto">
                                         <a wire:navigate
-                                            href="{{ route('appointment', ['doctor_id' => $doctor->id]) }}"
+                                            href="{{ route('appointment', ['doctor_slug' => $doctor->slug]) }}"
                                             class="bg-teal-500 text-white px-6 py-2 rounded-lg font-medium shadow hover:bg-teal-600 transition text-center">
                                             Book Appointment
                                         </a>

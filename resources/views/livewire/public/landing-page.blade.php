@@ -229,7 +229,7 @@
                                         class="text-center border-2 border-brand-teal-500 text-brand-teal-500 hover:bg-brand-teal-500 hover:text-white py-2 rounded-lg text-sm font-semibold transition-all duration-200">
                                         View Profile
                                     </a>
-                                    <a href="{{ route('appointment', ['doctor_id' => $doctor->id]) }}"
+                                    <a href="{{ route('appointment', ['doctor_slug' => $doctor->slug]) }}"
                                         class="text-center bg-brand-teal-500 hover:bg-brand-teal-600 text-white py-2 rounded-lg text-sm font-semibold transition">
                                         Book Appointment
                                     </a>

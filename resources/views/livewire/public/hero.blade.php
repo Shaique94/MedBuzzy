@@ -189,7 +189,7 @@
                                                 <div class="font-medium text-teal-800">Today, 2:30 PM</div>
                                                 <div class="text-sm text-teal-600" x-text="'₹' + (doctor.fee ?? 500) + ' consultation'"></div>
                                             </div>
-                                            <a :href="'/appointment?doctor_id=' + doctor.id" class="w-full block bg-teal-600 text-white py-3 rounded-lg font-medium hover:bg-teal-700 transition-colors text-center">
+                                            <a :href="'{{ route('appointment', ['doctor_slug' => '__SLUG__']) }}'.replace('__SLUG__', doctor.slug)" class="w-full block bg-teal-600 text-white py-3 rounded-lg font-medium hover:bg-teal-700 transition-colors text-center">
                                                 Book Now
                                             </a>
                                         </div>

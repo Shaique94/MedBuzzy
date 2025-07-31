@@ -229,7 +229,7 @@
                                 <div class="text-2xl font-bold text-teal-700" x-text="doctor.experience"></div>
                                 <div class="text-teal-600 text-xs">Years Experience</div>
                             </div>
-                            <a wire:navigate href="{{ route('appointment', ['doctor_id' => $doctor->id]) }}"
+                            <a wire:navigate href="{{ route('appointment', ['doctor_slug' => $doctor->slug]) }}"
                                 class="bg-gradient-to-r bg-teal-500  text-white px-6 py-3 rounded-lg font-medium  hover:bg-teal-700 transition shadow-sm">
                                 BOOK APPOINTMENT
                             </a>
@@ -239,7 +239,7 @@
 
                 <!-- Mobile CTA -->
                 <div class="md:hidden p-4 bg-teal-50 border-t border-teal-100">
-                    <a wire:navigate href="{{ route('appointment', ['doctor_id' => $doctor->id]) }}"
+                    <a wire:navigate href="{{ route('appointment', ['doctor_slug' => $doctor->slug]) }}"
                         class="block w-full text-center bg-gradient-to-r from-teal-500 bg-cyan-500 text-white px-6 py-3 rounded-lg font-medium hover:from-teal-600 hover:to-cyan-600 transition shadow-sm">
                         BOOK APPOINTMENT
                     </a>

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class Doctor extends Model
 {
@@ -33,6 +34,45 @@ class Doctor extends Model
         'unavailable_from' => 'date',
         'unavailable_to' => 'date',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($doctor) {
+            if (empty($doctor->slug)) {
+                $doctor->slug = $doctor->generateSlug();
+            }
+        });
+
+        static::updating(function ($doctor) {
+            if ($doctor->isDirty('user_id') && empty($doctor->slug)) {
+                $doctor->slug = $doctor->generateSlug();
+            }
+        });
+    }
+
+    public function generateSlug()
+    {
+        if (!$this->user) {
+            $this->load('user');
+        }
+        
+        if (!$this->user) {
+            return null;
+        }
+
+        $baseSlug = Str::slug($this->user->name);
+        $slug = $baseSlug;
+        $counter = 1;
+
+        while (static::where('slug', $slug)->where('id', '!=', $this->id)->exists()) {
+            $slug = $baseSlug . '-' . $counter;
+            $counter++;
+        }
+
+        return $slug;
+    }
 
     public function user()
     {

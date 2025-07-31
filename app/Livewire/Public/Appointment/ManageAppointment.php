@@ -86,7 +86,7 @@ class ManageAppointment extends Component
         'newPatient.address.min' => 'Address must be at least 10 characters.',
     ];
 
-    public function mount()
+    public function mount($doctor_slug = null)
     {
         date_default_timezone_set('Asia/Kolkata');
         Carbon::setLocale('en');
@@ -96,7 +96,17 @@ class ManageAppointment extends Component
         $this->doctors = cache()->remember('doctors', now()->addHours(24), fn() => Doctor::with(['user', 'department'])->get());
         $this->currentMonth = now()->startOfMonth()->format('Y-m-d');
 
-        if (request()->has('doctor_id')) {
+        // Handle slug parameter from route
+        if ($doctor_slug) {
+            $this->selectedDoctor = Doctor::with(['user', 'department'])->where('slug', $doctor_slug)->first();
+            if ($this->selectedDoctor) {
+                $this->doctor_id = $this->selectedDoctor->id;
+                $this->selectedDepartment = $this->selectedDoctor->department_id;
+                $this->step = 2;
+            }
+        }
+        // Handle legacy doctor_id query parameter for backward compatibility
+        elseif (request()->has('doctor_id')) {
             $this->doctor_id = request()->query('doctor_id');
             $this->selectedDoctor = Doctor::with(['user', 'department'])->find($this->doctor_id);
             if ($this->selectedDoctor) {
