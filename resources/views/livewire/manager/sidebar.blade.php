@@ -1,12 +1,18 @@
 <div id="sidebar" class="fixed inset-y-0 left-0 w-64 bg-white shadow-xl transform -translate-x-full md:translate-x-0 transition-transform duration-300 z-50 flex flex-col">
-    <!-- Sidebar header with logo -->
-    <div class="flex items-center justify-center h-20 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-white">
+    <!-- Sidebar header with logo and close icon -->
+    <div class="flex items-center justify-between h-20 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-white px-4">
         <div class="flex items-center space-x-2">
             <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
             </svg>
             <h1 class="text-xl font-bold text-blue-600">MedBuzzy<span class="font-light">Manager</span></h1>
         </div>
+        <!-- Close icon for mobile -->
+        <button id="closeSidebar" class="md:hidden text-gray-600 hover:text-gray-800 focus:outline-none">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
     </div>
 
     <!-- Navigation links -->
@@ -27,7 +33,6 @@
                 </svg>
             </span>
             <span class="ml-3 font-medium">Doctors</span>
-            <span class="ml-auto bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-0.5 rounded-full">12</span>
         </a>
 
         <a href="{{route('manager.appointments')}}" class="flex items-center px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-all duration-200 group">
@@ -37,44 +42,11 @@
                 </svg>
             </span>
             <span class="ml-3 font-medium">Appointments</span>
-            <span class="ml-auto bg-red-100 text-red-800 text-xs font-semibold px-2 py-0.5 rounded-full">5</span>
         </a>
-
-    <a href="{{ route('manager.profile') }}" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-all duration-200 group">
-    <span class="relative">
-        <!-- User avatar - replace with dynamic user image if available -->
-        <span class="bg-blue-100 p-2 rounded-full group-hover:bg-blue-200 transition-colors duration-200 flex items-center justify-center">
-            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-            </svg>
-            <!-- <img class="w-8 h-8 rounded-full object-cover" src="{{ auth()->user()->profile_photo_url }}" alt="{{ auth()->user()->name }}"> -->
-        </span>
-    </span>
-    <span class="ml-3">
-        <span class="block font-medium">My Profile</span>
-    </span>
-</a>
     </nav>
 
     <!-- User profile and logout -->
     <div class="p-4 border-t border-gray-100 bg-gray-50">
-      <div class="flex items-center mb-4">
-    @if(auth()->user()->image_url)
-        <img class="w-10 h-10 rounded-full object-cover" 
-             src="{{ auth()->user()->image_url }}" 
-             alt="{{ auth()->user()->name }} profile picture">
-    @else
-        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-            <span class="text-blue-600 font-medium text-sm uppercase">
-                {{ substr(auth()->user()->name, 0, 1) }}
-            </span>
-        </div>
-    @endif
-    <div class="ml-3">
-        <p class="text-sm font-medium text-gray-900">{{ auth()->user()->name }}</p>
-        <p class="text-xs text-gray-500 capitalize">{{ auth()->user()->role }}</p>
-    </div>
-</div>
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors duration-200">
@@ -86,3 +58,10 @@
         </form>
     </div>
 </div>
+
+<!-- JavaScript for toggling sidebar on mobile -->
+<script>
+    document.getElementById('closeSidebar')?.addEventListener('click', () => {
+        document.getElementById('sidebar').classList.add('-translate-x-full');
+    });
+</script>

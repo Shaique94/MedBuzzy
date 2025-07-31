@@ -1,10 +1,10 @@
-<div class="min-h-screen bg-gray-50">
+<div class="min-h-screen w-[388px] md:w-full bg-gray-50">
     <!-- Main Content Section -->
-    <div class="p-6">
+    <div class="p-2">
         <div class="max-w-7xl mx-auto space-y-6">
             <!-- Dashboard Header -->
             <div class="mb-8">
-                <h1 class="text-3xl font-bold text-gray-900">Dashboard Overview</h1>
+                {{-- <h1 class="text-3xl font-bold text-gray-900">Dashboard Overview</h1> --}}
                 <p class="text-gray-600 mt-2">Welcome back! Here's what's happening today.</p>
                 <div class="mt-4 border-b border-gray-200"></div>
             </div>
