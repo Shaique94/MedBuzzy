@@ -30,6 +30,8 @@ class Add extends Component
     public $notes;
     public $doctors;
 
+    
+
     public function mount()
     {
         $this->doctors = Doctor::all();
@@ -119,7 +121,7 @@ class Add extends Component
         session()->flash('success', 'Appointment booked successfully.');
         return redirect()->route('admin.appointment');
     }
-
+ 
     public function resetForm()
     {
         $this->reset([

@@ -25,7 +25,7 @@
                 </div>
             </form>
 
-            
+
         </div>
 
         <div class="flex flex-col lg:flex-row gap-8">
@@ -191,8 +191,7 @@
                                             class="bg-teal-500 text-white px-6 py-2 rounded-lg font-medium shadow hover:bg-teal-600 transition text-center">
                                             Book Appointment
                                         </a>
-                                        <a wire:navigate
-                                            href="{{ route('doctor-detail', ['doctor_id' => $doctor->id]) }}"
+                                        <a wire:navigate href="{{ route('doctor-detail', ['slug' => $doctor->slug]) }}"
                                             class="border border-teal-500 text-teal-600 px-6 py-2 text-center rounded-lg font-medium hover:bg-teal-50 transition">
                                             View Profile
                                         </a>

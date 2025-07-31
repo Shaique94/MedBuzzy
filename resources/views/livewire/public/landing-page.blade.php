@@ -249,7 +249,7 @@
 
                                 <!-- Buttons -->
                                 <div class="mt-auto grid grid-cols-2 gap-3">
-                                    <a href="{{ route('doctor-detail', ['doctor_id' => $doctor->id]) }}"
+                                    <a href="{{ route('doctor-detail', ['slug' => $doctor->slug]) }}"
                                         class="text-center border-2 border-brand-teal-500 text-brand-teal-500 hover:bg-brand-teal-500 hover:text-white py-2 rounded-lg text-sm font-semibold transition-all duration-200">
                                         View Profile
                                     </a>

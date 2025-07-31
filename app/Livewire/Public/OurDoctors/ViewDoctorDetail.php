@@ -9,35 +9,28 @@ use Livewire\Component;
 
 class ViewDoctorDetail extends Component
 {
-    public $doctor_id;
     public $doctor;
     public $approvedReviews;
     public $countFeedback;
     public $averageRating;
 
     #[Layout('layouts.public')]
-    public function mount($doctor_id)
+    public function mount($slug)
     {
-        $this->doctor_id = $doctor_id;
+        $this->doctor = Doctor::with(['user', 'department'])->where('slug', $slug)->firstOrFail();
         $this->loadDoctorAndReviews();
     }
 
     public function loadDoctorAndReviews()
     {
-        // Load doctor with relationships
-        $this->doctor = Doctor::with(['user', 'department'])->findOrFail($this->doctor_id);
-        
         // Load approved reviews for this specific doctor
-        $this->approvedReviews = Review::where('doctor_id', $this->doctor_id)
+        $this->approvedReviews = $this->doctor->reviews()
             ->where('approved', true)
             ->with(['user'])
             ->latest()
             ->get();
-            
-        // Count feedback for this doctor only
+
         $this->countFeedback = $this->approvedReviews->count();
-        
-        // Calculate average rating
         $this->averageRating = $this->approvedReviews->avg('rating') ?? 0;
     }
 
