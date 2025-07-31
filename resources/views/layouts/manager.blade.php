@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Manager Panel</title>
+    <title>{{ $title ? $title . ' | Manager Panel - MedBuzzy' : 'Manager Panel - MedBuzzy' }}</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Open Graph & canonical tags (optional) -->
