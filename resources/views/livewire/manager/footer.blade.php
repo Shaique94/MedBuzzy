@@ -1,4 +1,4 @@
-<div class="bg-white border-t border-gray-200 px-3 sm:px-4 lg:px-6 py-3 sm:py-4">
+<div class="bg-white border-t border-gray-200 px-3 sm:px-4 lg:px-6 py-3 sm:py-4 mt-auto">
     <div class="max-w-7xl mx-auto">
         <!-- Mobile Layout (Stack) -->
         <div class="md:hidden text-center space-y-2">

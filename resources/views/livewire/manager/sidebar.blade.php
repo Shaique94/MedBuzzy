@@ -49,29 +49,7 @@
             <span class="ml-2 sm:ml-3 font-medium text-sm sm:text-base">Appointments</span>
         </a>
 
-        <!-- Additional Quick Actions Section -->
-        <div class="pt-4 sm:pt-6">
-            <h3 class="px-3 sm:px-4 text-xs sm:text-sm font-semibold text-gray-400 uppercase tracking-wider">Quick Actions</h3>
-            <div class="mt-2 space-y-1">
-                <button class="w-full flex items-center px-3 sm:px-4 py-2 sm:py-2.5 text-gray-600 hover:bg-gray-50 hover:text-gray-800 rounded-lg transition-all duration-200 group text-left">
-                    <span class="bg-purple-100 p-1.5 sm:p-2 rounded-lg group-hover:bg-purple-200 transition-colors duration-200 flex-shrink-0">
-                        <svg class="w-4 h-4 sm:w-5 sm:h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                        </svg>
-                    </span>
-                    <span class="ml-2 sm:ml-3 font-medium text-sm sm:text-base">Quick Add</span>
-                </button>
-                
-                <button class="w-full flex items-center px-3 sm:px-4 py-2 sm:py-2.5 text-gray-600 hover:bg-gray-50 hover:text-gray-800 rounded-lg transition-all duration-200 group text-left">
-                    <span class="bg-orange-100 p-1.5 sm:p-2 rounded-lg group-hover:bg-orange-200 transition-colors duration-200 flex-shrink-0">
-                        <svg class="w-4 h-4 sm:w-5 sm:h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                        </svg>
-                    </span>
-                    <span class="ml-2 sm:ml-3 font-medium text-sm sm:text-base">Reports</span>
-                </button>
-            </div>
-        </div>
+        
     </nav>
 
     <!-- User profile and logout -->
