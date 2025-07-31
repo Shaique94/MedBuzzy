@@ -7,8 +7,10 @@ use Livewire\WithPagination;
 use App\Models\Payment;
 use Carbon\Carbon;
  use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 
 #[Layout('layouts.doctor')]
+#[Title('Payment Management')]
 class PaymentList extends Component
 {
    use WithPagination;

@@ -4,8 +4,10 @@ namespace App\Livewire\Doctor\Section;
 
 use App\Models\Doctor;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Title('Schedule Management')]
 class CreateSlot extends Component
 {
     public $showForm = false;

@@ -6,8 +6,10 @@ use App\Models\Appointment;
 use App\Models\Doctor;
 use App\Models\User;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Title('Doctor Dashboard')]
 class Doctordashboard extends Component
 { 
    public $appointments;

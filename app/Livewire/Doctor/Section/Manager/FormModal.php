@@ -5,10 +5,12 @@ namespace App\Livewire\Doctor\Section\Manager;
 use Livewire\Component;
 use App\Models\User;
 use App\Models\Manager;
+use Livewire\Attributes\Title;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Hash;
 use App\Services\ImageKitService;
 
+#[Title('Add Manager')]
 class FormModal extends Component
 {
     use WithFileUploads;

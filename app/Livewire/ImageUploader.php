@@ -4,8 +4,10 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Livewire\Attributes\Title;
 use App\Services\ImageKitService;
 
+#[Title('Image Upload')]
 class ImageUploader extends Component
 {
     use WithFileUploads;

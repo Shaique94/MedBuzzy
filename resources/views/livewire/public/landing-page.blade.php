@@ -142,7 +142,7 @@
         </section>
 
         <!-- Top Doctors Section -->
-        <section class="py-16  bg-white">
+        <section class="py-16 bg-white">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
                 <!-- Header -->
                 <div class="text-center mb-12">
@@ -152,35 +152,23 @@
                         professionals ready to provide exceptional care.</p>
                 </div>
 
-                <!-- Search Bar -->
-               
-
                 <!-- Doctors Grid -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4 sm:p-6">
                     @forelse ($doctors as $doctor)
-                        <div
-                            class="bg-white rounded-xl shadow overflow-hidden   flex flex-col border border-brand-teal-50">
+                        <div class="bg-white rounded-xl border border-brand-teal-100 flex flex-col">
                             <!-- Doctor Image/Placeholder -->
-                            <div
-                                class="relative h-60 bg-gradient-to-br from-brand-teal-100 to-brand-orange-100 flex items-center justify-center">
-                                <div
-                                    class="w-36 h-36 bg-white rounded-full flex items-center justify-center shadow-xl border-4 border-white overflow-hidden">
+                            <div class="relative h-56 bg-gradient-to-br from-brand-teal-50 to-brand-orange-50 flex items-center justify-center">
+                                <div class="w-32 h-32 bg-white rounded-full flex items-center justify-center border-4 border-white overflow-hidden">
                                     @if ($doctor->image)
-                                        <img src="{{ $doctor->image }}" class="w-full h-full object-cover"
-                                            alt="{{ $doctor->user->name }}">
+                                        <img src="{{ $doctor->image }}" class="w-full h-full object-cover" alt="{{ $doctor->user->name }}">
                                     @else
-                                        <span
-                                            class="text-4xl font-bold text-brand-teal-600">{{ substr($doctor->user->name, 0, 1) }}</span>
+                                        <span class="text-3xl font-bold text-brand-teal-600">{{ substr($doctor->user->name, 0, 1) }}</span>
                                     @endif
                                 </div>
-
                                 <!-- Verified Badge -->
-                                <span
-                                    class="absolute top-4 right-4 bg-brand-teal-500 text-white text-xs px-3 py-1.5 rounded-full flex items-center font-semibold shadow-sm">
+                                <span class="absolute top-4 right-4 bg-brand-teal-500 text-white text-xs px-3 py-1.5 rounded-full flex items-center font-semibold border border-white">
                                     <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd"
-                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                            clip-rule="evenodd"></path>
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                     </svg>
                                     Verified
                                 </span>
@@ -188,65 +176,53 @@
 
                             <!-- Doctor Details -->
                             <div class="p-6 flex-grow flex flex-col">
-                                <!-- Name and Department -->
-                                <div class="mb-4">
-                                    <h3 class="font-bold text-xl text-gray-800 truncate">{{ $doctor->user->name }}</h3>
-                                    <p class="text-brand-teal-600 font-medium text-sm mt-1">
-                                        {{ $doctor->department->name }}</p>
+                                <div class="mb-3">
+                                    <h3 class="font-bold text-lg text-gray-800 truncate">{{ $doctor->user->name }}</h3>
+                                    <p class="text-brand-teal-600 font-medium text-sm mt-1">{{ $doctor->department->name }}</p>
                                 </div>
-
                                 <!-- Rating -->
-                                <div class="mb-4 flex items-center">
-    <div class="flex text-brand-orange-400 mr-2">
-        @php
-            // Calculate average rating (replace with your actual logic)
-            $avgRating = $doctor->reviews()->where('approved', true)->avg('rating') ?? 0;
-            $fullStars = floor($avgRating);
-            $hasHalfStar = ($avgRating - $fullStars) >= 0.5;
-            $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
-        @endphp
-        
-        <!-- Full Stars -->
-        @for ($i = 0; $i < $fullStars; $i++)
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-            </svg>
-        @endfor
-        
-        <!-- Half Star -->
-        @if($hasHalfStar)
-            <div class="relative w-5 h-5">
-                <svg class="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                </svg>
-                <svg class="absolute top-0 left-0 w-5 h-5 text-brand-orange-400" fill="currentColor" viewBox="0 0 20 20" style="clip-path: inset(0 50% 0 0)">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                </svg>
-            </div>
-        @endif
-        
-        <!-- Empty Stars -->
-        @for ($i = 0; $i < $emptyStars; $i++)
-            <svg class="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-            </svg>
-        @endfor
-    </div>
-    <span class="text-gray-500 text-sm">({{ $doctor->reviews()->where('approved', true)->count() }} reviews)</span>
-</div>
+                                <div class="mb-3 flex items-center">
+                                    <div class="flex text-brand-orange-400 mr-2">
+                                        @php
+                                            $avgRating = $doctor->reviews()->where('approved', true)->avg('rating') ?? 0;
+                                            $fullStars = floor($avgRating);
+                                            $hasHalfStar = ($avgRating - $fullStars) >= 0.5;
+                                            $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
+                                        @endphp
+                                        @for ($i = 0; $i < $fullStars; $i++)
+                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                            </svg>
+                                        @endfor
+                                        @if($hasHalfStar)
+                                            <div class="relative w-4 h-4">
+                                                <svg class="w-4 h-4 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                </svg>
+                                                <svg class="absolute top-0 left-0 w-4 h-4 text-brand-orange-400" fill="currentColor" viewBox="0 0 20 20" style="clip-path: inset(0 50% 0 0)">
+                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                </svg>
+                                            </div>
+                                        @endif
+                                        @for ($i = 0; $i < $emptyStars; $i++)
+                                            <svg class="w-4 h-4 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                            </svg>
+                                        @endfor
+                                    </div>
+                                    <span class="text-gray-500 text-xs">({{ $doctor->reviews()->where('approved', true)->count() }} reviews)</span>
+                                </div>
                                 <!-- Experience and Fees -->
-                                <div class="grid grid-cols-2 gap-4 mb-6">
+                                <div class="grid grid-cols-2 gap-2 mb-4">
                                     <div>
-                                        <p class="text-gray-500 text-xs uppercase tracking-wide">Experience</p>
-                                        <p class="font-semibold text-gray-800 text-sm">
-                                            {{ $doctor->experience ?? '12' }} years</p>
+                                        <p class="text-gray-400 text-xs uppercase">Experience</p>
+                                        <p class="font-semibold text-gray-800 text-sm">{{ $doctor->experience ?? '12' }} yrs</p>
                                     </div>
                                     <div>
-                                        <p class="text-gray-500 text-xs uppercase tracking-wide">Fees</p>
+                                        <p class="text-gray-400 text-xs uppercase">Fees</p>
                                         <p class="font-semibold text-gray-800 text-sm">₹ {{ $doctor->fee }}</p>
                                     </div>
                                 </div>
-
                                 <!-- Buttons -->
                                 <div class="mt-auto grid grid-cols-2 gap-3">
                                     <a href="{{ route('doctor-detail', ['slug' => $doctor->slug]) }}"
@@ -254,7 +230,7 @@
                                         View Profile
                                     </a>
                                     <a href="{{ route('appointment', ['doctor_id' => $doctor->id]) }}"
-                                        class="text-center bg-brand-teal-500 hover:bg-brand-teal-600 text-white py-2 rounded-lg text-sm font-semibold transition-all duration-200">
+                                        class="text-center bg-brand-teal-500 hover:bg-brand-teal-600 text-white py-2 rounded-lg text-sm font-semibold transition">
                                         Book Appointment
                                     </a>
                                 </div>
@@ -262,11 +238,8 @@
                         </div>
                     @empty
                         <div class="col-span-full text-center py-12">
-                            <svg class="w-16 h-16 mx-auto mb-4 text-brand-teal-400" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                    d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
-                                </path>
+                            <svg class="w-16 h-16 mx-auto mb-4 text-brand-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                             <p class="text-xl text-gray-600 font-medium">No doctors found</p>
                             <p class="text-sm text-gray-500 mt-2">Try adjusting your search criteria</p>
@@ -276,11 +249,10 @@
                 <!-- View All Doctors Button -->
                 <div class="text-center mt-12">
                     <a wire:navigate href="{{ route('our-doctors') }}"
-                        class="inline-flex items-center px-6 py-3 bg-brand-teal-500 text-white rounded-lg font-medium hover:bg-brand-teal-600 transition-colors duration-200 shadow-md">
+                        class="inline-flex items-center px-6 py-3 bg-brand-teal-500 text-white rounded-lg font-medium hover:bg-brand-teal-600 transition-colors duration-200">
                         View All Doctors
                         <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
-                            </path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                         </svg>
                     </a>
                 </div>
@@ -446,154 +418,117 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <!-- Article Card 1 -->
-                    <article
-                        class="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-2xl hover:border-orange-200 transition-all duration-300 group">
+                    <article class="bg-white rounded-2xl border border-orange-100 overflow-hidden hover:bg-orange-50 transition-all duration-300 group">
                         <div class="relative">
-                            <div
-                                class="w-full h-64 bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center">
-                                <svg class="w-24 h-24 text-orange-600" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                                    </path>
+                            <div class="w-full h-64 bg-gradient-to-br from-orange-50 to-orange-100 flex items-center justify-center">
+                                <svg class="w-24 h-24 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                 </svg>
                             </div>
                             <div class="absolute top-4 left-4">
-                                <span
-                                    class="bg-teal-400 text-white text-xs px-3 py-1 rounded-full font-medium">Featured</span>
+                                <span class="bg-orange-200 text-orange-800 text-xs px-3 py-1 rounded-full font-medium">Featured</span>
                             </div>
                         </div>
                         <div class="p-6">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center space-x-2">
                                     <div class="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
-                                        <svg class="w-4 h-4 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd"
-                                                d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                                                clip-rule="evenodd"></path>
+                                        <svg class="w-4 h-4 text-orange-400" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
                                         </svg>
                                     </div>
                                     <span class="text-sm text-gray-600">Dr. Ruby Martin</span>
                                 </div>
                                 <span class="text-sm text-gray-500">Dec 4, 2024</span>
                             </div>
-                            <h3
-                                class="font-bold text-xl text-gray-800 mb-3 group-hover:text-orange-600 transition-colors leading-tight">
-                                Digital Healthcare Revolution: Making Clinics Paperless</h3>
-                            <p class="text-gray-600 mb-4 leading-relaxed">Discover how digital transformation is
-                                revolutionizing healthcare delivery and improving patient care through technology.</p>
-                            <a href="/blog/digital-healthcare"
-                                class="inline-flex items-center text-teal-600 font-medium hover:text-teal-700 transition-colors">
+                            <h3 class="font-bold text-xl text-gray-800 mb-3 group-hover:text-orange-600 transition-colors leading-tight">
+                                Digital Healthcare Revolution: Making Clinics Paperless
+                            </h3>
+                            <p class="text-gray-600 mb-4 leading-relaxed">Discover how digital transformation is revolutionizing healthcare delivery and improving patient care through technology.</p>
+                            <a href="/blog/digital-healthcare" class="inline-flex items-center text-teal-600 font-medium hover:text-teal-700 transition-colors">
                                 Read More
                                 <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                                 </svg>
                             </a>
                         </div>
                     </article>
-
                     <!-- Article Card 2 -->
-                    <article
-                        class="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-2xl hover:border-orange-200 transition-all duration-300 group">
+                    <article class="bg-white rounded-2xl border border-teal-100 overflow-hidden hover:bg-teal-50 transition-all duration-300 group">
                         <div class="relative">
-                            <div
-                                class="w-full h-64 bg-gradient-to-br from-teal-100 to-teal-200 flex items-center justify-center">
-                                <svg class="w-24 h-24 text-teal-600" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
-                                    </path>
+                            <div class="w-full h-64 bg-gradient-to-br from-teal-50 to-teal-100 flex items-center justify-center">
+                                <svg class="w-24 h-24 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                 </svg>
                             </div>
                             <div class="absolute top-4 left-4">
-                                <span
-                                    class="bg-teal-600 text-white text-xs px-3 py-1 rounded-full font-medium">Popular</span>
+                                <span class="bg-teal-100 text-teal-800 text-xs px-3 py-1 rounded-full font-medium">Popular</span>
                             </div>
                         </div>
                         <div class="p-6">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center space-x-2">
                                     <div class="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center">
-                                        <svg class="w-4 h-4 text-teal-600" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd"
-                                                d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                                                clip-rule="evenodd"></path>
+                                        <svg class="w-4 h-4 text-teal-400" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
                                         </svg>
                                     </div>
                                     <span class="text-sm text-gray-600">Dr. Danish Omar</span>
                                 </div>
                                 <span class="text-sm text-gray-500">Dec 1, 2024</span>
                             </div>
-                            <h3
-                                class="font-bold text-xl text-gray-800 mb-3 group-hover:text-orange-600 transition-colors leading-tight">
-                                Benefits of Online Doctor Consultations</h3>
-                            <p class="text-gray-600 mb-4 leading-relaxed">Explore the advantages of virtual healthcare
-                                consultations and how they're making medical care more accessible.</p>
-                            <a href="/blog/online-consultations"
-                                class="inline-flex items-center text-teal-600 font-medium hover:text-teal-700 transition-colors">
+                            <h3 class="font-bold text-xl text-gray-800 mb-3 group-hover:text-teal-600 transition-colors leading-tight">
+                                Benefits of Online Doctor Consultations
+                            </h3>
+                            <p class="text-gray-600 mb-4 leading-relaxed">Explore the advantages of virtual healthcare consultations and how they're making medical care more accessible.</p>
+                            <a href="/blog/online-consultations" class="inline-flex items-center text-teal-600 font-medium hover:text-teal-700 transition-colors">
                                 Read More
                                 <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                                 </svg>
                             </a>
                         </div>
                     </article>
-
                     <!-- Article Card 3 -->
-                    <article
-                        class="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-2xl hover:border-orange-200 transition-all duration-300 group">
+                    <article class="bg-white rounded-2xl border border-blue-100 overflow-hidden hover:bg-blue-50 transition-all duration-300 group">
                         <div class="relative">
-                            <div
-                                class="w-full h-64 bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
-                                <svg class="w-24 h-24 text-blue-600" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
-                                    </path>
+                            <div class="w-full h-64 bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center">
+                                <svg class="w-24 h-24 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                                 </svg>
                             </div>
                             <div class="absolute top-4 left-4">
-                                <span
-                                    class="bg-blue-600 text-white text-xs px-3 py-1 rounded-full font-medium">Trending</span>
+                                <span class="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full font-medium">Trending</span>
                             </div>
                         </div>
                         <div class="p-6">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center space-x-2">
                                     <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                                        <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd"
-                                                d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                                                clip-rule="evenodd"></path>
+                                        <svg class="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
                                         </svg>
                                     </div>
                                     <span class="text-sm text-gray-600">Dr. Sophia Williams</span>
                                 </div>
                                 <span class="text-sm text-gray-500">Nov 28, 2024</span>
                             </div>
-                            <h3
-                                class="font-bold text-xl text-gray-800 mb-3 group-hover:text-orange-600 transition-colors leading-tight">
-                                5 Reasons to Choose Telemedicine</h3>
-                            <p class="text-gray-600 mb-4 leading-relaxed">Learn why telemedicine is becoming the
-                                preferred
-                                choice for modern healthcare and patient convenience.</p>
-                            <a href="/blog/telemedicine-benefits"
-                                class="inline-flex items-center text-teal-600 font-medium hover:text-teal-700 transition-colors">
+                            <h3 class="font-bold text-xl text-gray-800 mb-3 group-hover:text-blue-600 transition-colors leading-tight">
+                                5 Reasons to Choose Telemedicine
+                            </h3>
+                            <p class="text-gray-600 mb-4 leading-relaxed">Learn why telemedicine is becoming the preferred choice for modern healthcare and patient convenience.</p>
+                            <a href="/blog/telemedicine-benefits" class="inline-flex items-center text-teal-600 font-medium hover:text-teal-700 transition-colors">
                                 Read More
                                 <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                                 </svg>
                             </a>
                         </div>
                     </article>
                 </div>
-
                 <div class="text-center mt-16">
                     <a href="/blog"
-                        class="inline-flex items-center px-8 py-4 bg-teal-600 text-white font-semibold rounded-xl hover:from-orange-700 hover:to-teal-700 transition-all duration-300">
+                        class="inline-flex items-center px-8 py-4 bg-brand-teal-600 text-white font-semibold rounded-xl hover:bg-brand-teal-700 transition-all duration-300">
                         View All Articles
                         <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -603,22 +538,15 @@
                 </div>
             </div>
         </section>
-
     </div>
-
     <style>
         /* Hide scrollbar for carousel */
         .scrollbar-hide {
             -ms-overflow-style: none;
-            /* IE and Edge */
             scrollbar-width: none;
-            /* Firefox */
         }
-
         .scrollbar-hide::-webkit-scrollbar {
             display: none;
-            /* Chrome, Safari, Opera */
         }
     </style>
-
 </div>

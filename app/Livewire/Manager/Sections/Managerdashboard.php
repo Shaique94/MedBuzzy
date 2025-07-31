@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Manager\Sections;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use App\Models\Appointment;
 use App\Models\Doctor;
@@ -10,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth; 
 use App\Models\Payment;
 
+#[Title('Manager Dashboard')]
 class Managerdashboard extends Component
 {
     public  $appointments;

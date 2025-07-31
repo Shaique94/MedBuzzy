@@ -124,57 +124,88 @@
                         x-data="{
                             doctors: @js($doctors),
                             current: 0,
-                            next() { this.current = (this.current + 1) % this.doctors.length },
-                            prev() { this.current = (this.current - 1 + this.doctors.length) % this.doctors.length }
+                            transitioning: false,
+                            goTo(idx) {
+                                if (this.transitioning || idx === this.current) return;
+                                this.transitioning = true;
+                                this.current = idx;
+                                setTimeout(() => { this.transitioning = false }, 350);
+                            },
+                            next() {
+                                if (this.transitioning) return;
+                                this.transitioning = true;
+                                this.current = (this.current + 1) % this.doctors.length;
+                                setTimeout(() => { this.transitioning = false }, 350);
+                            },
+                            prev() {
+                                if (this.transitioning) return;
+                                this.transitioning = true;
+                                this.current = (this.current - 1 + this.doctors.length) % this.doctors.length;
+                                setTimeout(() => { this.transitioning = false }, 350);
+                            }
                         }"
                         class="relative"
                     >
                         <div class="bg-gradient-to-br from-teal-100 to-blue-100 rounded-3xl p-8 lg:p-12">
-                            <template x-for="(doctor, idx) in doctors" :key="doctor.id">
-                                <div x-show="current === idx" x-transition class="bg-white rounded-2xl p-6 space-y-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center overflow-hidden">
-                                            <template x-if="doctor.image">
-                                                <img :src="doctor.image" alt="" class="w-full h-full object-cover">
-                                            </template>
-                                            <template x-if="!doctor.image">
-                                                <span class="text-2xl font-bold text-teal-600" x-text="doctor.user?.name ? doctor.user.name.charAt(0) : '?'"></span>
-                                            </template>
-                                        </div>
-                                        <div>
-                                            <div class="font-semibold text-gray-900" x-text="doctor.user?.name"></div>
-                                            <div class="text-sm text-gray-600" x-text="doctor.department?.name"></div>
-                                        </div>
-                                        <div class="ml-auto">
-                                            <div class="flex text-yellow-400">
-                                                <template x-for="i in 5">
-                                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                                                    </svg>
+                            <div class="relative h-[340px]">
+                                <template x-for="(doctor, idx) in doctors" :key="doctor.id">
+                                    <div
+                                        x-show="current === idx"
+                                        x-transition:enter="transition-opacity duration-300"
+                                        x-transition:enter-start="opacity-0 scale-95"
+                                        x-transition:enter-end="opacity-100 scale-100"
+                                        x-transition:leave="transition-opacity duration-200"
+                                        x-transition:leave-start="opacity-100 scale-100"
+                                        x-transition:leave-end="opacity-0 scale-95"
+                                        class="absolute inset-0 bg-white rounded-2xl p-6 space-y-4"
+                                        style="will-change: opacity, transform;"
+                                    >
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center overflow-hidden">
+                                                <template x-if="doctor.image">
+                                                    <img :src="doctor.image" alt="" class="w-full h-full object-cover">
+                                                </template>
+                                                <template x-if="!doctor.image">
+                                                    <span class="text-2xl font-bold text-teal-600" x-text="doctor.user?.name ? doctor.user.name.charAt(0) : '?'"></span>
                                                 </template>
                                             </div>
+                                            <div>
+                                                <div class="font-semibold text-gray-900" x-text="doctor.user?.name"></div>
+                                                <div class="text-sm text-gray-600" x-text="doctor.department?.name"></div>
+                                            </div>
+                                            <div class="ml-auto">
+                                                <div class="flex text-yellow-400">
+                                                    <template x-for="i in 5">
+                                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                                        </svg>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="space-y-3">
+                                            <div class="text-sm text-gray-700">Next Available:</div>
+                                            <div class="bg-teal-50 rounded-lg p-3 border border-teal-100">
+                                                <div class="font-medium text-teal-800">Today, 2:30 PM</div>
+                                                <div class="text-sm text-teal-600" x-text="'₹' + (doctor.fee ?? 500) + ' consultation'"></div>
+                                            </div>
+                                            <a :href="'/appointment?doctor_id=' + doctor.id" class="w-full block bg-teal-600 text-white py-3 rounded-lg font-medium hover:bg-teal-700 transition-colors text-center">
+                                                Book Now
+                                            </a>
                                         </div>
                                     </div>
-                                    <div class="space-y-3">
-                                        <div class="text-sm text-gray-700">Next Available:</div>
-                                        <div class="bg-teal-50 rounded-lg p-3 border border-teal-100">
-                                            <div class="font-medium text-teal-800">Today, 2:30 PM</div>
-                                            <div class="text-sm text-teal-600" x-text="'₹' + (doctor.fee ?? 500) + ' consultation'"></div>
-                                        </div>
-                                        <a :href="'/appointment?doctor_id=' + doctor.id" class="w-full block bg-teal-600 text-white py-3 rounded-lg font-medium hover:bg-teal-700 transition-colors text-center">
-                                            Book Now
-                                        </a>
-                                    </div>
-                                </div>
-                            </template>
+                                </template>
+                            </div>
                         </div>
                         <!-- Carousel Controls -->
-                        <button @click="prev" class="absolute left-0 top-1/2 -translate-y-1/2 bg-white border border-teal-200 rounded-full p-2 shadow hover:bg-teal-50 transition -translate-x-1/2">
+                        <button @click="prev" :disabled="transitioning"
+                            class="absolute left-0 top-1/2 -translate-y-1/2 bg-white border border-teal-200 rounded-full p-2 shadow hover:bg-teal-50 transition -translate-x-1/2 disabled:opacity-50 disabled:cursor-not-allowed">
                             <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                             </svg>
                         </button>
-                        <button @click="next" class="absolute right-0 top-1/2 -translate-y-1/2 bg-white border border-teal-200 rounded-full p-2 shadow hover:bg-teal-50 transition translate-x-1/2">
+                        <button @click="next" :disabled="transitioning"
+                            class="absolute right-0 top-1/2 -translate-y-1/2 bg-white border border-teal-200 rounded-full p-2 shadow hover:bg-teal-50 transition translate-x-1/2 disabled:opacity-50 disabled:cursor-not-allowed">
                             <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                             </svg>
@@ -182,7 +213,9 @@
                         <!-- Dots -->
                         <div class="flex justify-center gap-2 mt-4">
                             <template x-for="(doctor, idx) in doctors" :key="doctor.id">
-                                <button @click="current = idx" :class="current === idx ? 'bg-teal-600' : 'bg-teal-200'" class="w-3 h-3 rounded-full"></button>
+                                <button @click="goTo(idx)" :class="current === idx ? 'bg-teal-600' : 'bg-teal-200'"
+                                    :disabled="transitioning"
+                                    class="w-3 h-3 rounded-full transition-all duration-200"></button>
                             </template>
                         </div>
                     </div>

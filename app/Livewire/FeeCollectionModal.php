@@ -5,8 +5,10 @@ use LivewireUI\Modal\ModalComponent;
 use App\Models\Patient;
 use App\Models\Appointment;
 use App\Models\Payment;
+use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\Auth;
 
+#[Title('Fee Collection')]
 class FeeCollectionModal extends ModalComponent
 {
     public $patientId;

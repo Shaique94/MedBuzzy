@@ -3,8 +3,10 @@
 namespace App\Livewire\Public;
 
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Title('About MedBuzzy')]
 class AboutUs extends Component
 {
 

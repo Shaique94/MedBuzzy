@@ -6,8 +6,10 @@ use App\Models\Appointment;
 use App\Models\Doctor;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Title('Update Appointment')]
 class Update extends Component
 {
     public $name;

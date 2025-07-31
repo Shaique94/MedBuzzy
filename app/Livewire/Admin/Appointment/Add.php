@@ -9,8 +9,10 @@ use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Title('Book New Appointment')]
 class Add extends Component
 {
     public $name;

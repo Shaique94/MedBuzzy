@@ -5,8 +5,10 @@ namespace App\Livewire\Doctor\Section;
 use App\Models\Doctor;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Title('Leave Management')]
 class Leave extends Component
 {
     public $from_date;

@@ -1,4 +1,4 @@
-<div class="min-h-screen w-[388px] md:w-full bg-gray-50">
+<div class="min-h-screen w-[388px] md:w-full mt-4 ">
     <!-- Main Content Section -->
     <div class="p-2">
         <div class="max-w-7xl mx-auto space-y-6">

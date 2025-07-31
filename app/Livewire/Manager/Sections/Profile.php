@@ -7,9 +7,11 @@ use Livewire\WithFileUploads;
 use App\Models\Manager;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\Hash;
 use App\Services\ImageKitService;
 
+#[Title('Manager Profile')]
 class Profile extends Component
 {
     use WithFileUploads;
