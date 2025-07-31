@@ -32,7 +32,7 @@
 
             <!-- Page content -->
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
-                <div class="container mx-auto  ">
+                <div class="container mx-auto pb-4">
                     {{ $slot }}
                       @livewire('livewire-ui-modal')
                 </div>
