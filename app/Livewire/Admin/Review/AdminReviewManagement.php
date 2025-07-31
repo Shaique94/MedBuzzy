@@ -4,8 +4,10 @@ namespace App\Livewire\Admin\Review;
 
 use App\Models\Review;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Title('Review Management')]
 class AdminReviewManagement extends Component
 {
      public $pendingReviews;

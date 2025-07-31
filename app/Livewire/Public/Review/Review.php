@@ -8,8 +8,11 @@ namespace App\Livewire\Public\Review;
 use App\Models\Doctor;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
+
+#[Title('Write Review')]
 class Review extends Component
 { public $doctor;
 

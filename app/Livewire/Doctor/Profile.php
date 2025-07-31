@@ -8,9 +8,11 @@ use Livewire\WithFileUploads;
 use App\Models\Doctor;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\Hash;
 use App\Services\ImageKitService;
 
+#[Title('Doctor Profile')]
 class Profile extends Component
 {
 public $current_password, $new_password, $new_password_confirmation;

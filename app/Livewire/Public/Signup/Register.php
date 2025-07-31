@@ -7,7 +7,9 @@ use Livewire\Component;
 use Livewire\Attributes\Rule;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 
+#[Title('Create Account')]
 class Register extends Component
 {
     #[Rule('required|min:3|max:255')]

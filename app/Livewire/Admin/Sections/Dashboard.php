@@ -7,8 +7,10 @@ use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Payment;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Title('Admin Dashboard')]
 class Dashboard extends Component
 {
   public  $appointments;

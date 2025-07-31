@@ -6,11 +6,13 @@ use App\Models\Doctor;
 use App\Models\User;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Services\ImageKitService;
 use Illuminate\Support\Str;
 
+#[Title('Edit Doctor')]
 class EditDoctor extends Component
 {
     use WithFileUploads;

@@ -5,8 +5,10 @@ namespace App\Livewire\Manager\Sections;
 use Livewire\Component;
 use App\Models\Patient;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 
 #[Layout('layouts.manager')]
+#[Title('Patient Details')]
 class PatientView extends Component
 {
      public $patient;
