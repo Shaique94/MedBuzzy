@@ -63,7 +63,7 @@ Route::get('/about-us', About::class)->name('about-us');
 Route::get('/contact-us', Contact::class)->name('contact-us');
 
 // Authentication Routes
-Route::get('/login', Login::class)->name('admin.login');
+Route::get('/login', Login::class)->name('login');
 Route::post('/logout', function () {
     Auth::logout();
     return redirect('/login');
