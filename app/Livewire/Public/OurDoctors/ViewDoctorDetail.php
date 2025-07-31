@@ -5,8 +5,10 @@ namespace App\Livewire\Public\OurDoctors;
 use App\Models\Doctor;
 use App\Models\Review;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Title('Doctor Profile')]
 class ViewDoctorDetail extends Component
 {
     public $doctor_id;

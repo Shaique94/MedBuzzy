@@ -4,8 +4,10 @@ namespace App\Livewire\Public\Appointment;
 
 use App\Models\Appointment;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Title('Appointment Confirmation')]
 class AppointmentConfirmation extends Component
 {
     public $appointment;

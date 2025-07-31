@@ -4,7 +4,10 @@ namespace App\Livewire\Public\Section;
 
 use Livewire\Component;
 use Livewire\Attributes\Layout;
- #[Layout('layouts.public')]
+use Livewire\Attributes\Title;
+
+#[Layout('layouts.public')]
+#[Title('Contact Us')]
 class Contact extends Component
 {
     public function render()

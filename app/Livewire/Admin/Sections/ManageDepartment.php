@@ -5,9 +5,11 @@ namespace App\Livewire\Admin\Sections;
 use App\Models\Department;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
 
+#[Title('Manage Departments')]
 class ManageDepartment extends Component
 {
     use WithPagination;

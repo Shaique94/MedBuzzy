@@ -4,9 +4,11 @@ namespace App\Livewire\Doctor\Section\Manager;
 
 use Livewire\Component;
 use App\Models\Manager;
+use Livewire\Attributes\Title;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
 
+#[Title('Edit Manager')]
 class EditModal extends Component
 {
     use WithFileUploads;

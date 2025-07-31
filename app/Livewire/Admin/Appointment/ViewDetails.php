@@ -4,8 +4,10 @@ namespace App\Livewire\Admin\Appointment;
 
 use App\Models\Appointment;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Title('Appointment Details')]
 class ViewDetails extends Component
 {
    public $showModal = false;

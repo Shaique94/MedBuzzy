@@ -4,8 +4,10 @@ namespace App\Livewire\Admin\Auth;
 
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Title('Admin Login')]
 class Login extends Component
 { 
     public $email;

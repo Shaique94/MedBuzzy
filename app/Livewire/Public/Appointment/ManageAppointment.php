@@ -15,9 +15,11 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Razorpay\Api\Api;
 
+#[Title('Book Appointment')]
 class ManageAppointment extends Component
 {
     public $step = 1;

@@ -5,8 +5,10 @@ namespace App\Livewire\Public;
 use App\Models\Department;
 use App\Models\Doctor;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Title('MedBuzzy - Healthcare Management')]
 class LandingPage extends Component
 {
     public $doctors;

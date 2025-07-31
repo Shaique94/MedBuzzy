@@ -5,9 +5,11 @@ namespace App\Livewire\Public\OurDoctors;
 use App\Models\Department;
 use App\Models\Doctor;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 
+#[Title('Our Doctors')]
 class OurDoctors extends Component
 {
     public $departments;

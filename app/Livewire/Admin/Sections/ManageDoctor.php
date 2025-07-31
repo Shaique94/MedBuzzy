@@ -7,12 +7,14 @@ use App\Models\Doctor;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Illuminate\Support\Str;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 use App\Services\ImageKitService; 
 
+#[Title('Manage Doctors')]
 class ManageDoctor extends Component
 {
     use WithFileUploads;

@@ -9,9 +9,11 @@ use App\Models\Department;
 use App\Models\Doctor;
 use Carbon\Carbon;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\Auth;
 
 #[Layout('layouts.manager')]
+#[Title('Appointment Management')]
 class AppointmentList extends Component
 {
     use WithPagination;
