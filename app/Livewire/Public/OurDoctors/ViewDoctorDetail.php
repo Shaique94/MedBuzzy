@@ -3,50 +3,75 @@
 namespace App\Livewire\Public\OurDoctors;
 
 use App\Models\Doctor;
-use App\Models\Review;
+use App\Models\DoctorReview;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
 class ViewDoctorDetail extends Component
 {
     public $doctor;
-    public $approvedReviews;
-    public $countFeedback;
-    public $averageRating;
+    public $doctorId;
+    public $slug;
+    public $averageRating = 0;
+    public $countFeedback = 0;
 
-    #[Layout('layouts.public')]
     public function mount($slug)
     {
-        $this->doctor = Doctor::with(['user', 'department'])->where('slug', $slug)->firstOrFail();
-        $this->loadDoctorAndReviews();
+        $this->slug = $slug;
+
+        // Load doctor with detailed review data
+        $this->doctor = Doctor::where('slug', $this->slug)
+            ->with(['user', 'department', 'reviews' => function($query) {
+                $query->where('approved', true)
+                      ->with('user')
+                      ->latest();
+            }])
+            ->firstOrFail();
+
+        $this->doctorId = $this->doctor->id;
+
+        // Calculate review metrics
+        $this->calculateReviewMetrics();
     }
 
-    public function loadDoctorAndReviews()
+    public function calculateReviewMetrics()
     {
-        $this->approvedReviews = $this->doctor->reviews()
-            ->where('approved', true)
-            ->with(['user'])
-            ->latest()
-            ->get();
-
-        $this->countFeedback = $this->approvedReviews->count();
-        $this->averageRating = $this->approvedReviews->avg('rating') ?? 0;
+        $reviews = $this->doctor->reviews->where('approved', true);
+        
+        $this->countFeedback = $reviews->count();
+        
+        // Calculate average rating
+        if ($this->countFeedback > 0) {
+            $this->averageRating = $reviews->avg('rating');
+        }
     }
-
-    public function getDynamicTitleProperty()
+    
+    public function getListeners()
     {
-        return $this->doctor && $this->doctor->user 
-            ? 'Dr. ' . $this->doctor->user->name . ' | ' . ($this->doctor->qualification ? implode(', ', $this->doctor->qualification) : '') 
-            : 'Doctor';
+        return [
+            'reviewAdded' => 'refreshReviews',
+        ];
+    }
+    
+    public function refreshReviews()
+    {
+        // Reload doctor reviews when a new review is added
+        $this->doctor->load(['reviews' => function($query) {
+            $query->where('approved', true)
+                  ->with('user')
+                  ->latest();
+        }]);
+        
+        $this->calculateReviewMetrics();
     }
 
+    #[Layout('layouts.public')]
+    #[Title('Doctor Details')]
     public function render()
     {
         return view('livewire.public.our-doctors.view-doctor-detail', [
             'doctor' => $this->doctor,
-            'approvedReviews' => $this->approvedReviews,
-            'countFeedback' => $this->countFeedback,
-            'averageRating' => round($this->averageRating, 1),
-        ])->layoutData(['title' => $this->dynamicTitle]);
+        ]);
     }
 }
