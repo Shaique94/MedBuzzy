@@ -7,9 +7,9 @@
         </div>
 
         <!-- Main Card -->
-        <div class="bg-white w-full rounded-none border-t border-b border-gray-200">
+        <div class="bg-white w-full rounded-none border-t border-b border-teal-200">
             <!-- Progress Steps -->
-            <div class="bg-brand-teal-50 px-0 py-4 w-full border-b border-gray-100">
+            <div class="bg-brand-teal-50 px-0 py-4 w-full border-b border-teal-100">
                 <div class="flex items-center justify-between max-w-5xl mx-auto
                     flex-nowrap overflow-x-auto scrollbar-hide gap-0 sm:gap-0 px-2 sm:px-0"
                     style="min-width:0;">
@@ -82,7 +82,7 @@
             </div>
 
             <!-- Step Content -->
-            <div class="p-0 sm:p-0 w-full max-w-5xl mx-auto">
+            <div class="p-0 sm:p-0 w-full max-w-5xl mx-auto mt-5">
                 <!-- Step 1: Select Doctor -->
                 @if ($step === 1)
                     <div class="space-y-6">
@@ -100,7 +100,7 @@
                             </h2>
                             <div class="flex flex-wrap gap-2">
                                 <button type="button" wire:click="$set('selectedDepartment', null)"
-                                    class="px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 
+                                    class="px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200
                                     {{ !$selectedDepartment ? 'bg-brand-teal-600 text-white shadow-md' : 'bg-white hover:bg-brand-orange-50 text-gray-800 border border-gray-200' }}">
                                     All Specialties
                                 </button>
@@ -251,7 +251,7 @@
                                 </div>
                             </div>
 
-                            <div class="bg-white p-2 sm:p-4 md:p-6 rounded-xl sm:rounded-2xl border border-gray-100 ">
+                            <div class="bg-white p-2 sm:p-4 md:p-6 rounded-xl sm:rounded-2xl border border-teal-400 ">
                                 <h2
                                     class="text-lg sm:text-xl font-semibold text-gray-800 mb-4 sm:mb-5 md:mb-6 flex items-center">
                                     <svg class="h-5 w-5 sm:h-6 sm:w-6 mr-2 text-brand-teal-600" fill="none"
@@ -261,7 +261,7 @@
                                 </h2>
 
                                 @if (!$appointment_date)
-                                    <div 
+                                    <div
                                         x-data="{
                                             scroll: 0,
                                             scrollMax: 0,
@@ -284,7 +284,7 @@
                                         class="relative w-full"
                                     >
                                         <!-- Left Arrow -->
-                                        <button type="button" @click="prev" 
+                                        <button type="button" @click="prev"
                                             class="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-white border border-gray-200 rounded-full p-3 shadow-lg hover:bg-brand-teal-50 transition"
                                             :class="scroll <= 0 ? 'opacity-50 cursor-not-allowed' : ''"
                                             :disabled="scroll <= 0">
@@ -293,7 +293,7 @@
                                             </svg>
                                         </button>
                                         <!-- Date Tabs Scrollbar -->
-                                        <div 
+                                        <div
                                             x-ref="dates"
                                             @scroll="updateScroll"
                                             class="flex overflow-x-auto gap-4 px-16 py-4 scrollbar-hide snap-x snap-mandatory w-full"
@@ -376,7 +376,7 @@
                                             @endforeach
                                         </div>
                                         <!-- Right Arrow -->
-                                        <button type="button" @click="next" 
+                                        <button type="button" @click="next"
                                             class="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-white border border-gray-200 rounded-full p-3 shadow-lg hover:bg-brand-teal-50 transition"
                                             :class="scroll >= scrollMax ? 'opacity-50 cursor-not-allowed' : ''"
                                             :disabled="scroll >= scrollMax">
@@ -465,7 +465,7 @@
                                                     @if ($isMorning)
                                                         <button wire:click="selectTimeSlot('{{ $time }}')"
                                                             @if ($slot['disabled']) disabled @endif
-                                                            class="p-3 border rounded-lg text-center transition-all duration-200 
+                                                            class="p-3 border rounded-lg text-center transition-all duration-200
                                                         {{ $appointment_time === $time ? 'bg-brand-teal-600 text-white border-brand-teal-700 ' : '' }}
                                                         {{ $slot['disabled'] ? 'bg-gray-100 text-gray-400 cursor-not-allowed border-gray-200' : '' }}
                                                         {{ !$slot['disabled'] && $slot['remaining_capacity'] == 1 ? 'bg-red-200 border-red-300 text-red-800' : '' }}
