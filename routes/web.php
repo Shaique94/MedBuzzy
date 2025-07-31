@@ -50,7 +50,7 @@ Route::get('/auth/google-callback', [SocialiteController::class, 'handleGoogleCa
 Route::get('/', LandingPage::class)->name('hero');
 Route::get('/our-doctors', OurDoctors::class)->name('our-doctors');
 Route::get('/terms-conditions', TermsCondition::class)->name('terms-conditons');
-Route::get('/doctor/{doctor_id}', ViewDoctorDetail::class)->name('doctor-detail');
+Route::get('/doctor/{slug}', ViewDoctorDetail::class)->name('doctor-detail');
 Route::get('/contact-us', ContactUs::class)->name('contact-us');
 Route::get('/register', Register::class)->name('register');
 Route::get('/review',Review::class)->name('review');
