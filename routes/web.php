@@ -28,6 +28,7 @@ use App\Livewire\Public\Section\About;
 use App\Livewire\Public\Section\Contact;
 use App\Livewire\Public\Signup\Register;
 use App\Livewire\Public\TermsCondition;
+use App\Livewire\Public\PrivacyPolicy;
 use App\Livewire\Doctor\Profile;
 use App\Livewire\Manager\Sections\Managerdashboard;
 use App\Livewire\Manager\Sections\AppointmentList;
@@ -50,6 +51,7 @@ Route::get('/auth/google-callback', [SocialiteController::class, 'handleGoogleCa
 Route::get('/', LandingPage::class)->name('hero');
 Route::get('/our-doctors', OurDoctors::class)->name('our-doctors');
 Route::get('/terms-conditions', TermsCondition::class)->name('terms-conditons');
+Route::get('/privacy-policy', PrivacyPolicy::class)->name('privacy-policy');
 Route::get('/doctor/{slug}', ViewDoctorDetail::class)->name('doctor-detail');
 Route::get('/contact-us', ContactUs::class)->name('contact-us');
 Route::get('/register', Register::class)->name('register');
