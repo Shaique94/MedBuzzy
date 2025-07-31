@@ -18,7 +18,6 @@
             <a href="{{route('admin.appointment')}}" class="sidebar-link flex items-center px-4 py-3 text-gray-700 transition-all">
                 <i class="fas fa-calendar-check text-blue-500 w-6 text-center"></i>
                 <span class="ml-3">Appointments</span>
-                <span class="ml-auto bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded-full">12</span>
             </a>
 
             <a href="{{ route('admin.departments') }}"
@@ -32,19 +31,19 @@
                 <span class="ml-3">Manage Doctors</span>
             </a>
 
-            <a href="#" class="sidebar-link flex items-center px-4 py-3 text-gray-700 transition-all">
+            {{-- <a href="#" class="sidebar-link flex items-center px-4 py-3 text-gray-700 transition-all">
                 <i class="fas fa-users text-blue-500 w-6 text-center"></i>
                 <span class="ml-3">Patients</span>
-            </a>
+            </a> --}}
 
              <a href="{{route('admin.reviewapprovel')}}" class="sidebar-link flex items-center px-4 py-3 text-gray-700 transition-all">
                 <i class="fas fa-users text-blue-500 w-6 text-center"></i>
                 <span class="ml-3">Review</span>
             </a>
-            <a href="/admin/settings" class="sidebar-link flex items-center px-4 py-3 text-gray-700 transition-all">
+            {{-- <a href="/admin/settings" class="sidebar-link flex items-center px-4 py-3 text-gray-700 transition-all">
                 <i class="fas fa-cog text-blue-500 w-6 text-center"></i>
                 <span class="ml-3">Settings</span>
-            </a>
+            </a> --}}
 
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
