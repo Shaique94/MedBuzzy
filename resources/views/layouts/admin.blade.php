@@ -72,6 +72,15 @@
             {{ $slot }}
 
             <!-- Footer -->
+              <footer class="mt-12 bg-gray-50 shadow-inner">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0">
+            <div class="text-sm text-gray-500 text-center md:text-left">
+                &copy; {{ date('Y') }} <span class="font-semibold text-blue-600">MedBuzzy</span>. All rights reserved.
+            </div>
+           
+        </div>
+    </footer>
+
         </div>
     </div>
 

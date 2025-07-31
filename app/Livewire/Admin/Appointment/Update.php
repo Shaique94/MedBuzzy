@@ -19,14 +19,12 @@ class Update extends Component
     public $state = "Bihar";
     public $country = "India";
     public $doctor_id;
-    public $appointment_date;
-    public $appointment_time;
-    public $payment_method = "cash";
-    public $notes;
+public $showModel;
     public $doctors;
-    public $appointment_id;
     public $age;
-    public $status; // Added status field
+    public $status;
+
+        #[On('OpenModel')]
 
     public function mount($id)
     {
@@ -43,12 +41,7 @@ class Update extends Component
         $this->pincode = $appointment->patient->pincode;
         $this->state = $appointment->patient->state ?? 'Bihar';
         $this->country = $appointment->patient->country ?? 'India';
-        $this->doctor_id = $appointment->doctor_id;
-        $this->appointment_date = $appointment->appointment_date;
-        $this->appointment_time = $appointment->appointment_time;
-        $this->payment_method = $appointment->payment_method;
-        $this->notes = $appointment->notes;
-        $this->status = $appointment->status; // Set initial status
+        $this->showModel=true;
     }
 
     public function update()
@@ -63,12 +56,6 @@ class Update extends Component
             'pincode' => 'nullable|string|max:10',
             'state' => 'nullable|string|max:100',
             'country' => 'nullable|string|max:100',
-            'doctor_id' => 'required|exists:doctors,id',
-            'appointment_date' => 'required|date',
-            'appointment_time' => 'required',
-            'notes' => 'nullable|string',
-            'payment_method' => 'required|in:cash,card,upi',
-            'status' => 'required|in:pending,scheduled,completed,cancelled,checked_in', // Added status validation
         ]);
 
         try {
@@ -88,22 +75,22 @@ class Update extends Component
                 'country' => $this->country,
             ]);
 
-            // Update appointment info
-            $appointment->update([
-                'doctor_id' => $this->doctor_id,
-                'appointment_date' => $this->appointment_date,
-                'appointment_time' => $this->appointment_time,
-                'payment_method' => $this->payment_method,
-                'notes' => $this->notes,
-                'status' => $this->status, // Update status
-            ]);
+           
 
             session()->flash('success', 'Appointment updated successfully!');
+            $this->dispatch('closeModal');
             return $this->redirect(route('admin.appointment'), navigate: true);
 
         } catch (\Exception $e) {
+            \Log::error('Appointment update failed: ' . $e->getMessage());
             session()->flash('error', 'Error updating appointment: ' . $e->getMessage());
         }
+    }
+
+    public function closeModal()
+    {
+        $this->showModel=false;
+        return redirect()->route('admin.dashboard');
     }
 
     #[Layout('layouts.admin')]
