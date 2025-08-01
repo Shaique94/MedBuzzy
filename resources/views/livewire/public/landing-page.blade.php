@@ -260,7 +260,7 @@
         </section>
 
         <!-- About Us Section -->
-        <livewire:public.about-us />
+        {{-- <livewire:public.about-us /> --}}
 
         <!-- Booking Process Section -->
         <!-- 4-Step Process Section -->
