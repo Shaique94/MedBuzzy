@@ -3,28 +3,30 @@
     <div class="bg-brand-teal-600 p-2 text-white  hidden md:block">
         <div class="container mx-auto px-4 flex justify-between items-center text-sm">
             <div class="flex items-center space-x-6">
-                <span class="flex items-center space-x-2 hover:text-brand-teal-100 transition-colors">
+                <a href="mailto:{{ $contactDetails['email'] }}" class="flex items-center space-x-2 hover:text-brand-teal-100 transition-colors">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
                         <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
                     </svg>
-                    info@medbuzzy.com
-                </span>
+                    {{ $contactDetails['email'] }}
+                </a>
                 <span class="flex items-center space-x-2 hover:text-brand-teal-100 transition-colors">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd"
                             d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
                             clip-rule="evenodd"></path>
                     </svg>
-                    Purnea, Bihar, India
+                    {{ $contactDetails['address'] }}
                 </span>
             </div>
             <div class="flex items-center space-x-4">
+                @if($contactDetails['emergency_phone'])
                 <span class="flex items-center space-x-2">
                     <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
                     <span class="hover:text-brand-teal-100 transition-colors">24/7 Emergency Available</span>
                 </span>
-                <span class="font-semibold hover:text-brand-teal-100 transition-colors">+91 943-080-8079</span>
+                @endif
+                <a href="tel:{{ $contactDetails['phone'] }}" class="font-semibold hover:text-brand-teal-100 transition-colors">{{ $contactDetails['phone'] }}</a>
             </div>
         </div>
     </div>

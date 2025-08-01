@@ -38,8 +38,8 @@
                             </div>
                             <div class="ml-4">
                                 <h3 class="text-lg font-medium text-gray-900">Phone Support</h3>
-                                <p class="mt-1 text-gray-600">+91 94308 08079</p>
-                                <p class="mt-2 text-sm text-gray-500">Mon-Fri: 8am - 6pm | Sat: 9am - 2pm</p>
+                                <p class="mt-1 text-gray-600"><a href="tel:{{ $contactDetails['phone'] }}" class="hover:text-brand-teal-600 transition-colors">{{ $contactDetails['phone'] }}</a></p>
+                                <p class="mt-2 text-sm text-gray-500">{{ $contactDetails['working_hours'] }}</p>
                             </div>
                         </div>
 
@@ -51,7 +51,7 @@
                             </div>
                             <div class="ml-4">
                                 <h3 class="text-lg font-medium text-gray-900">Email Us</h3>
-                                <p class="mt-1 text-gray-600">infomedbuzzy@gmail.com</p>
+                                <p class="mt-1 text-gray-600"><a href="mailto:{{ $contactDetails['email'] }}" class="hover:text-brand-teal-600 transition-colors">{{ $contactDetails['email'] }}</a></p>
                                 <p class="mt-2 text-sm text-gray-500">Response time: Typically within 24 hours</p>
                             </div>
                         </div>
@@ -65,8 +65,7 @@
                             </div>
                             <div class="ml-4">
                                 <h3 class="text-lg font-medium text-gray-900">Visit Us</h3>
-                                <p class="mt-1 text-gray-600">123 Healthcare Avenue</p>
-                                <p class="text-gray-600">Mumbai, Maharashtra 400001</p>
+                                <p class="mt-1 text-gray-600">{{ $contactDetails['address'] }}</p>
                                 <p class="mt-2 text-sm text-brand-teal-600 flex items-start">
                                     <svg class="flex-shrink-0 h-4 w-4 mt-0.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -233,7 +232,7 @@
                 <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
                     <h3 class="text-lg font-medium text-brand-teal-800">What are your working hours?</h3>
                     <p class="mt-2 text-gray-600">
-                        Our support team is available Monday to Friday from 8am to 6pm, and Saturdays from 9am to 2pm. Doctors have varying schedules you can view when booking.
+                        Our support team is available {{ $contactDetails['working_hours'] }}. Doctors have varying schedules you can view when booking.
                     </p>
                 </div>
 
