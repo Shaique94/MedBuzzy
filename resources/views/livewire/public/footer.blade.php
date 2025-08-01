@@ -30,7 +30,7 @@
             <div>
                 <h3 class="text-lg font-semibold mb-4 text-teal-400">Legal</h3>
                 <ul class="space-y-2">
-                    {{-- <li><a href="#" class="text-gray-400 hover:text-white transition">Privacy Policy</a></li> --}}
+                    <li><a href="{{route('privacy-policy')}}" class="text-gray-400 hover:text-white transition">Privacy Policy</a></li>
                     <li><a href="{{route('terms-conditons')}}" class="text-gray-400 hover:text-white transition">Terms & Conditions</a></li>
                 </ul>
             </div>
