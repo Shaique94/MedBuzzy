@@ -747,7 +747,7 @@
                             <livewire:public.review.review :doctor_id="$doctor->id" />
                         @else
                             <!-- Show login prompt for guests -->
-                            <a href="{{ route('admin.login') }}"
+                            <a href="{{ route('login') }}"
                                 class="inline-flex items-center gap-2 bg-teal-100 text-teal-700 px-5 py-2.5 rounded-lg font-medium hover:bg-teal-200 transition">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
