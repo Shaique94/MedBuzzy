@@ -262,238 +262,254 @@
         <!-- About Us Section -->
         {{-- <livewire:public.about-us /> --}}
 
-        <!-- Booking Process Section -->
-        <!-- 4-Step Process Section -->
-        <section class="py-20 bg-gradient-to-br from-teal-50 to-orange-50">
-            <div class="container mx-auto px-6 lg:px-16">
-                <div class="flex flex-col-reverse lg:flex-row items-center gap-16">
-                    <!-- Left: Steps -->
+
+        <!-- How Booking Works Section -->
+        <section class="py-16 md:py-24 bg-brand-teal-50 relative overflow-hidden">
+            <!-- Background Pattern -->
+            <div class="absolute inset-0 opacity-5">
+                <div class="absolute top-10 left-10 w-32 h-32 bg-brand-teal-400 rounded-full blur-3xl"></div>
+                <div class="absolute bottom-20 right-20 w-40 h-40 bg-brand-orange-400 rounded-full blur-3xl"></div>
+                <div class="absolute top-1/2 left-1/3 w-24 h-24 bg-brand-teal-300 rounded-full blur-2xl"></div>
+            </div>
+            
+            <div class="container mx-auto px-4 md:px-6 lg:px-16 relative z-10">
+                <div class="flex flex-col-reverse lg:flex-row items-center gap-12 lg:gap-20">
+                    <!-- Left: Process Steps -->
                     <div class="w-full lg:w-1/2">
-                        <h2 class="text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4">How Booking Works</h2>
-                        <p class="text-lg text-gray-600 mb-10">Get started in minutes with our seamless, patient-friendly process.</p>
-                        <ol class="space-y-8 relative border-l-4 border-teal-200 pl-6">
-                            <li class="flex items-start group">
-                                <span class="absolute -left-8 flex items-center justify-center w-12 h-12 rounded-full bg-teal-500 text-white font-bold text-xl shadow-lg group-hover:bg-orange-500 transition">1</span>
-                                <div>
-                                    <h3 class="text-xl font-semibold text-gray-800 mb-1">Sign Up / Login</h3>
-                                    <p class="text-gray-600">Create your account or log in securely to access all features.</p>
+                        <div class="text-center lg:text-left mb-8 lg:mb-12">
+                            <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4 leading-tight">
+                                How <span class="text-brand-teal-600">Booking</span> Works
+                            </h2>
+                            <p class="text-lg md:text-xl text-gray-600 max-w-lg mx-auto lg:mx-0">
+                                Get started in minutes with our seamless, patient-friendly process designed for modern healthcare.
+                            </p>
+                        </div>
+
+                        <!-- Mobile: Cards Layout -->
+                        <div class="lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+                            <div class="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/50 hover:bg-white/90 transition-all duration-300 group">
+                                <div class="w-16 h-16 bg-brand-teal-500 text-white rounded-2xl flex items-center justify-center font-bold text-xl mb-4 group-hover:scale-110 transition-transform">
+                                    1
                                 </div>
-                            </li>
-                            <li class="flex items-start group">
-                                <span class="absolute -left-8 flex items-center justify-center w-12 h-12 rounded-full bg-orange-400 text-white font-bold text-xl shadow-lg group-hover:bg-teal-500 transition" style="top:5.5rem;">2</span>
-                                <div>
-                                    <h3 class="text-xl font-semibold text-gray-800 mb-1">Pick a Specialty</h3>
-                                    <p class="text-gray-600">Browse specialties and select the department that fits your needs.</p>
+                                <h3 class="text-lg font-bold text-gray-800 mb-2">Sign Up / Login</h3>
+                                <p class="text-gray-600 text-sm">Create your account or log in securely to access all features.</p>
+                            </div>
+                            
+                            <div class="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/50 hover:bg-white/90 transition-all duration-300 group">
+                                <div class="w-16 h-16 bg-brand-orange-500 text-white rounded-2xl flex items-center justify-center font-bold text-xl mb-4 group-hover:scale-110 transition-transform">
+                                    2
                                 </div>
-                            </li>
-                            <li class="flex items-start group">
-                                <span class="absolute -left-8 flex items-center justify-center w-12 h-12 rounded-full bg-teal-400 text-white font-bold text-xl shadow-lg group-hover:bg-orange-500 transition" style="top:11rem;">3</span>
-                                <div>
-                                    <h3 class="text-xl font-semibold text-gray-800 mb-1">Choose a Doctor</h3>
-                                    <p class="text-gray-600">View doctor profiles, ratings, and availability to make your choice.</p>
+                                <h3 class="text-lg font-bold text-gray-800 mb-2">Pick Specialty</h3>
+                                <p class="text-gray-600 text-sm">Browse specialties and select the department that fits your needs.</p>
+                            </div>
+                            
+                            <div class="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/50 hover:bg-white/90 transition-all duration-300 group">
+                                <div class="w-16 h-16 bg-brand-teal-500 text-white rounded-2xl flex items-center justify-center font-bold text-xl mb-4 group-hover:scale-110 transition-transform">
+                                    3
                                 </div>
-                            </li>
-                            <li class="flex items-start group">
-                                <span class="absolute -left-8 flex items-center justify-center w-12 h-12 rounded-full bg-orange-500 text-white font-bold text-xl shadow-lg group-hover:bg-teal-500 transition" style="top:16.5rem;">4</span>
-                                <div>
-                                    <h3 class="text-xl font-semibold text-gray-800 mb-1">Book Instantly</h3>
-                                    <p class="text-gray-600">Select a time slot and confirm your appointment in one click.</p>
+                                <h3 class="text-lg font-bold text-gray-800 mb-2">Choose Doctor</h3>
+                                <p class="text-gray-600 text-sm">View doctor profiles, ratings, and availability to make your choice.</p>
+                            </div>
+                            
+                            <div class="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/50 hover:bg-white/90 transition-all duration-300 group">
+                                <div class="w-16 h-16 bg-brand-orange-500 text-white rounded-2xl flex items-center justify-center font-bold text-xl mb-4 group-hover:scale-110 transition-transform">
+                                    4
                                 </div>
-                            </li>
-                        </ol>
-                        <div class="mt-12">
+                                <h3 class="text-lg font-bold text-gray-800 mb-2">Book Instantly</h3>
+                                <p class="text-gray-600 text-sm">Select a time slot and confirm your appointment in one click.</p>
+                            </div>
+                        </div>
+
+                        <!-- Desktop: Timeline Layout -->
+                        <div class="hidden lg:block">
+                            <div class="relative">
+                                <!-- Timeline Line -->
+                                <div class="absolute left-6 top-6 bottom-6 w-1 bg-brand-teal-200 rounded-full"></div>
+                                
+                                <!-- Timeline Items -->
+                                <div class="space-y-12">
+                                    <div class="flex items-start group">
+                                        <div class="relative z-10 w-12 h-12 bg-brand-teal-500 text-white rounded-full flex items-center justify-center font-bold text-xl shadow-lg group-hover:scale-110 group-hover:shadow-xl transition-all duration-300">
+                                            1
+                                        </div>
+                                        <div class="ml-8 bg-white/60 backdrop-blur-sm rounded-2xl p-6 flex-1 border border-white/50 group-hover:bg-white/80 group-hover:border-brand-teal-200 transition-all duration-300">
+                                            <h3 class="text-xl font-bold text-gray-800 mb-2 flex items-center">
+                                                <svg class="w-6 h-6 text-brand-teal-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                                </svg>
+                                                Sign Up / Login
+                                            </h3>
+                                            <p class="text-gray-600">Create your account or log in securely to access all features and manage your health records.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-start group">
+                                        <div class="relative z-10 w-12 h-12 bg-brand-orange-500 text-white rounded-full flex items-center justify-center font-bold text-xl shadow-lg group-hover:scale-110 group-hover:shadow-xl transition-all duration-300">
+                                            2
+                                        </div>
+                                        <div class="ml-8 bg-white/60 backdrop-blur-sm rounded-2xl p-6 flex-1 border border-white/50 group-hover:bg-white/80 group-hover:border-brand-orange-200 transition-all duration-300">
+                                            <h3 class="text-xl font-bold text-gray-800 mb-2 flex items-center">
+                                                <svg class="w-6 h-6 text-brand-orange-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                                </svg>
+                                                Pick a Specialty
+                                            </h3>
+                                            <p class="text-gray-600">Browse through various medical specialties and select the department that best fits your health needs.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-start group">
+                                        <div class="relative z-10 w-12 h-12 bg-brand-teal-500 text-white rounded-full flex items-center justify-center font-bold text-xl shadow-lg group-hover:scale-110 group-hover:shadow-xl transition-all duration-300">
+                                            3
+                                        </div>
+                                        <div class="ml-8 bg-white/60 backdrop-blur-sm rounded-2xl p-6 flex-1 border border-white/50 group-hover:bg-white/80 group-hover:border-brand-teal-200 transition-all duration-300">
+                                            <h3 class="text-xl font-bold text-gray-800 mb-2 flex items-center">
+                                                <svg class="w-6 h-6 text-brand-teal-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                                                </svg>
+                                                Choose a Doctor
+                                            </h3>
+                                            <p class="text-gray-600">View detailed doctor profiles, patient ratings, and real-time availability to make your choice.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-start group">
+                                        <div class="relative z-10 w-12 h-12 bg-brand-orange-500 text-white rounded-full flex items-center justify-center font-bold text-xl shadow-lg group-hover:scale-110 group-hover:shadow-xl transition-all duration-300">
+                                            4
+                                        </div>
+                                        <div class="ml-8 bg-white/60 backdrop-blur-sm rounded-2xl p-6 flex-1 border border-white/50 group-hover:bg-white/80 group-hover:border-brand-orange-200 transition-all duration-300">
+                                            <h3 class="text-xl font-bold text-gray-800 mb-2 flex items-center">
+                                                <svg class="w-6 h-6 text-brand-orange-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                                </svg>
+                                                Book Instantly
+                                            </h3>
+                                            <p class="text-gray-600">Select your preferred time slot and confirm your appointment instantly with secure payment options.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CTA Button -->
+                        <div class="text-center lg:text-left mt-12">
                             <a href="{{ route('appointment') }}"
-                                class="inline-flex items-center px-8 py-4 bg-teal-500 text-white font-semibold rounded-xl hover:bg-orange-600 transition-colors shadow-lg">
+                                class="inline-flex items-center px-8 py-4 bg-teal-500 text-white font-bold rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 group">
+                                <svg class="w-6 h-6 mr-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                </svg>
                                 Start Booking Now
-                                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                <svg class="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                                 </svg>
                             </a>
                         </div>
                     </div>
-                    <!-- Right: Illustration -->
+
+                    <!-- Right: Interactive Illustration -->
                     <div class="w-full lg:w-1/2 flex justify-center">
-                        <div class="relative w-full max-w-md">
-                            <div class="rounded-3xl bg-white shadow-xl p-8 flex flex-col items-center">
-                                <div class="w-24 h-24 bg-gradient-to-br from-teal-100 to-orange-100 rounded-full flex items-center justify-center mb-6">
-                                    <svg class="w-12 h-12 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
-                                        </path>
+                        <div class="relative w-full max-w-lg">
+                            <!-- Main Card -->
+                            <div class="relative bg-white/80 backdrop-blur-md rounded-3xl shadow-2xl p-8 border border-white/50 hover:bg-white/90 transition-all duration-500 group">
+                                <!-- Header Icon -->
+                                <div class="w-24 h-24 bg-brand-teal-500 rounded-2xl flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                                    <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                     </svg>
                                 </div>
-                                <h4 class="text-lg font-bold text-gray-800 mb-2">Book in Seconds</h4>
-                                <p class="text-gray-500 text-center">Our platform makes healthcare access fast and effortless.</p>
-                            </div>
-                            <!-- Floating stats -->
-                            <div class="absolute -top-8 -left-8 bg-white rounded-xl p-4 shadow-lg flex items-center space-x-3">
-                                <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd"
-                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
+                                
+                                <!-- Content -->
+                                <div class="text-center">
+                                    <h4 class="text-2xl font-bold text-gray-800 mb-3">Book in Seconds</h4>
+                                    <p class="text-gray-600 leading-relaxed">Our platform makes healthcare access fast, secure, and effortless for patients worldwide.</p>
                                 </div>
-                                <div>
-                                    <p class="font-bold text-gray-800">10k+</p>
-                                    <p class="text-xs text-gray-600">Happy Patients</p>
+
+                                <!-- Feature Pills -->
+                                <div class="flex flex-wrap justify-center gap-2 mt-6">
+                                    <span class="bg-brand-teal-100 text-brand-teal-700 px-3 py-1 rounded-full text-sm font-medium">Instant Booking</span>
+                                    <span class="bg-brand-orange-100 text-brand-orange-700 px-3 py-1 rounded-full text-sm font-medium">Secure Payment</span>
+                                    <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">24/7 Access</span>
                                 </div>
                             </div>
-                            <div class="absolute bottom-0 -right-8 bg-white rounded-xl p-4 shadow-lg flex items-center space-x-3">
-                                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <p class="font-bold text-gray-800">500+</p>
-                                    <p class="text-xs text-gray-600">Expert Doctors</p>
+
+                            <!-- Floating Stats -->
+                            <div class="absolute -top-6 -left-6 bg-white/90 backdrop-blur-md rounded-2xl p-4 shadow-xl border border-white/50 animate-float-1">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                                        <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-gray-800 text-xl">10k+</p>
+                                        <p class="text-sm text-gray-600">Happy Patients</p>
+                                    </div>
                                 </div>
                             </div>
-                            <!-- Decorative shapes -->
-                            <div class="absolute -top-6 right-0 w-16 h-16 bg-orange-200 rounded-2xl opacity-40"></div>
-                            <div class="absolute bottom-0 -left-6 w-20 h-20 bg-teal-200 rounded-2xl opacity-40"></div>
+
+                            <div class="absolute -bottom-6 -right-6 bg-white/90 backdrop-blur-md rounded-2xl p-4 shadow-xl border border-white/50 animate-float-2">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                                        <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-gray-800 text-xl">500+</p>
+                                        <p class="text-sm text-gray-600">Expert Doctors</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="absolute top-1/2 -right-4 bg-white/90 backdrop-blur-md rounded-2xl p-3 shadow-xl border border-white/50 animate-float-3">
+                                <div class="text-center">
+                                    <p class="font-bold text-gray-800 text-lg">99%</p>
+                                    <p class="text-xs text-gray-600">Success Rate</p>
+                                </div>
+                            </div>
+
+                            <!-- Decorative Elements -->
+                            <div class="absolute -top-8 right-4 w-16 h-16 bg-brand-orange-400 rounded-2xl opacity-60 blur-sm"></div>
+                            <div class="absolute -bottom-8 -left-4 w-20 h-20 bg-brand-teal-400 rounded-2xl opacity-60 blur-sm"></div>
+                            <div class="absolute top-1/4 -left-8 w-12 h-12 bg-blue-400 rounded-full opacity-50 blur-sm"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Health Initiatives Section -->
-        {{-- <section class="py-20 bg-white">
-            <div class="container mx-auto px-8 lg:px-16">
-                <div class="text-center mb-16">
-                    <h2 class="text-4xl lg:text-5xl font-bold text-gray-800 mb-6">Health Insights & Updates</h2>
-                    <p class="text-xl text-gray-600 max-w-3xl mx-auto">Stay informed with the latest healthcare news,
-                        tips,
-                        and insights from our medical experts</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Article Card 1 -->
-                    <article class="bg-white rounded-2xl border border-orange-100 overflow-hidden hover:bg-orange-50 transition-all duration-300 group">
-                        <div class="relative">
-                            <div class="w-full h-64 bg-gradient-to-br from-orange-50 to-orange-100 flex items-center justify-center">
-                                <svg class="w-24 h-24 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                </svg>
-                            </div>
-                            <div class="absolute top-4 left-4">
-                                <span class="bg-orange-200 text-orange-800 text-xs px-3 py-1 rounded-full font-medium">Featured</span>
-                            </div>
-                        </div>
-                        <div class="p-6">
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="flex items-center space-x-2">
-                                    <div class="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
-                                        <svg class="w-4 h-4 text-orange-400" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
-                                        </svg>
-                                    </div>
-                                    <span class="text-sm text-gray-600">Dr. Ruby Martin</span>
-                                </div>
-                                <span class="text-sm text-gray-500">Dec 4, 2024</span>
-                            </div>
-                            <h3 class="font-bold text-xl text-gray-800 mb-3 group-hover:text-orange-600 transition-colors leading-tight">
-                                Digital Healthcare Revolution: Making Clinics Paperless
-                            </h3>
-                            <p class="text-gray-600 mb-4 leading-relaxed">Discover how digital transformation is revolutionizing healthcare delivery and improving patient care through technology.</p>
-                            <a href="/blog/digital-healthcare" class="inline-flex items-center text-teal-600 font-medium hover:text-teal-700 transition-colors">
-                                Read More
-                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                                </svg>
-                            </a>
-                        </div>
-                    </article>
-                    <!-- Article Card 2 -->
-                    <article class="bg-white rounded-2xl border border-teal-100 overflow-hidden hover:bg-teal-50 transition-all duration-300 group">
-                        <div class="relative">
-                            <div class="w-full h-64 bg-gradient-to-br from-teal-50 to-teal-100 flex items-center justify-center">
-                                <svg class="w-24 h-24 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                </svg>
-                            </div>
-                            <div class="absolute top-4 left-4">
-                                <span class="bg-teal-100 text-teal-800 text-xs px-3 py-1 rounded-full font-medium">Popular</span>
-                            </div>
-                        </div>
-                        <div class="p-6">
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="flex items-center space-x-2">
-                                    <div class="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center">
-                                        <svg class="w-4 h-4 text-teal-400" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
-                                        </svg>
-                                    </div>
-                                    <span class="text-sm text-gray-600">Dr. Danish Omar</span>
-                                </div>
-                                <span class="text-sm text-gray-500">Dec 1, 2024</span>
-                            </div>
-                            <h3 class="font-bold text-xl text-gray-800 mb-3 group-hover:text-teal-600 transition-colors leading-tight">
-                                Benefits of Online Doctor Consultations
-                            </h3>
-                            <p class="text-gray-600 mb-4 leading-relaxed">Explore the advantages of virtual healthcare consultations and how they're making medical care more accessible.</p>
-                            <a href="/blog/online-consultations" class="inline-flex items-center text-teal-600 font-medium hover:text-teal-700 transition-colors">
-                                Read More
-                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                                </svg>
-                            </a>
-                        </div>
-                    </article>
-                    <!-- Article Card 3 -->
-                    <article class="bg-white rounded-2xl border border-blue-100 overflow-hidden hover:bg-blue-50 transition-all duration-300 group">
-                        <div class="relative">
-                            <div class="w-full h-64 bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center">
-                                <svg class="w-24 h-24 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                                </svg>
-                            </div>
-                            <div class="absolute top-4 left-4">
-                                <span class="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full font-medium">Trending</span>
-                            </div>
-                        </div>
-                        <div class="p-6">
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="flex items-center space-x-2">
-                                    <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                                        <svg class="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
-                                        </svg>
-                                    </div>
-                                    <span class="text-sm text-gray-600">Dr. Sophia Williams</span>
-                                </div>
-                                <span class="text-sm text-gray-500">Nov 28, 2024</span>
-                            </div>
-                            <h3 class="font-bold text-xl text-gray-800 mb-3 group-hover:text-blue-600 transition-colors leading-tight">
-                                5 Reasons to Choose Telemedicine
-                            </h3>
-                            <p class="text-gray-600 mb-4 leading-relaxed">Learn why telemedicine is becoming the preferred choice for modern healthcare and patient convenience.</p>
-                            <a href="/blog/telemedicine-benefits" class="inline-flex items-center text-teal-600 font-medium hover:text-teal-700 transition-colors">
-                                Read More
-                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                                </svg>
-                            </a>
-                        </div>
-                    </article>
-                </div>
-                <div class="text-center mt-16">
-                    <a href="/blog"
-                        class="inline-flex items-center px-8 py-4 bg-brand-teal-600 text-white font-semibold rounded-xl hover:bg-brand-teal-700 transition-all duration-300">
-                        View All Articles
-                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                        </svg>
-                    </a>
-                </div>
-            </div>
-        </section> --}}
     </div>
     <style>
+        /* Custom animations for floating elements */
+        @keyframes float-1 {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-8px) rotate(1deg); }
+            66% { transform: translateY(4px) rotate(-1deg); }
+        }
+        
+        @keyframes float-2 {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(6px) rotate(-1deg); }
+            66% { transform: translateY(-4px) rotate(1deg); }
+        }
+        
+        @keyframes float-3 {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-6px) rotate(0.5deg); }
+        }
+        
+        .animate-float-1 {
+            animation: float-1 6s ease-in-out infinite;
+        }
+        
+        .animate-float-2 {
+            animation: float-2 8s ease-in-out infinite;
+        }
+        
+        .animate-float-3 {
+            animation: float-3 4s ease-in-out infinite;
+        }
+
         /* Hide scrollbar for carousel */
         .scrollbar-hide {
             -ms-overflow-style: none;
