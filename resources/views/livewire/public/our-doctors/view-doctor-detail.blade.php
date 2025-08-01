@@ -1,6 +1,8 @@
 <div>
     <div x-data="{
         tab: 'about',
+        isMobile: window.innerWidth < 768,
+        showMobileStats: false,
         doctor: {
             name: '{{ $doctor->user->name }}',
             department: '{{ $doctor->department->name ?? 'N/A' }}',
@@ -54,52 +56,124 @@
             return new Date(dateString).toLocaleDateString(undefined, options);
         },
         activeLocation: 0,
-        showAllServices: false
-    }" class="min-h-screen bg-gradient-to-br from-teal-50 to-cyan-50 px-4 py-8">
-        <div class="container mx-auto max-w-6xl">
+        showAllServices: false,
+        init() {
+            this.isMobile = window.innerWidth < 768;
+            window.addEventListener('resize', () => {
+                this.isMobile = window.innerWidth < 768;
+            });
+        }
+    }" 
+    x-init="init()"
+    class="min-h-screen bg-gradient-to-br from-teal-50 via-cyan-50 to-blue-50 relative overflow-hidden">
+        
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 opacity-5">
+            <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-teal-200/20 to-transparent"></div>
+            <div class="absolute -top-10 -right-10 w-72 h-72 bg-teal-200 rounded-full opacity-10 blur-3xl"></div>
+            <div class="absolute top-1/2 -left-10 w-64 h-64 bg-cyan-200 rounded-full opacity-10 blur-3xl"></div>
+            <div class="absolute bottom-0 right-1/4 w-48 h-48 bg-blue-200 rounded-full opacity-10 blur-3xl"></div>
+        </div>
+        
+        <div class="relative z-10 px-4 py-4 sm:py-6 lg:py-8">
+        <div class="relative z-10 px-4 py-4 sm:py-6 lg:py-8">
+            <div class="container mx-auto max-w-7xl">
+
+            <!-- Mobile Header with Back Button -->
+            <div class="md:hidden mb-4">
+                <div class="flex items-center gap-3 mb-2">
+                    <button onclick="history.back()" 
+                        class="p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg border border-white/20 hover:bg-white transition-all duration-200">
+                        <svg class="w-5 h-5 text-teal-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+                    <div class="flex-1">
+                        <h1 class="text-lg font-bold text-teal-900 truncate">Dr. {{ $doctor->user->name }}</h1>
+                        <p class="text-sm text-teal-600 truncate">{{ $doctor->department->name ?? 'N/A' }}</p>
+                    </div>
+                    <button @click="showMobileStats = !showMobileStats"
+                        class="p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg border border-white/20">
+                        <svg class="w-5 h-5 text-teal-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </button>
+                </div>
+                
+                <!-- Mobile Quick Stats Dropdown -->
+                <div x-show="showMobileStats" 
+                     x-transition:enter="transition ease-out duration-200"
+                     x-transition:enter-start="opacity-0 -translate-y-1"
+                     x-transition:enter-end="opacity-100 translate-y-0"
+                     x-transition:leave="transition ease-in duration-150"
+                     x-transition:leave-start="opacity-100 translate-y-0"
+                     x-transition:leave-end="opacity-0 -translate-y-1"
+                     class="grid grid-cols-2 gap-3 mb-4">
+                    <div class="bg-white/90 backdrop-blur-sm rounded-xl p-3 border border-white/30 shadow-lg">
+                        <div class="text-xl font-bold text-teal-700">{{ number_format($averageRating, 1) }}</div>
+                        <div class="text-xs text-teal-600">Rating</div>
+                    </div>
+                    <div class="bg-white/90 backdrop-blur-sm rounded-xl p-3 border border-white/30 shadow-lg">
+                        <div class="text-xl font-bold text-teal-700">{{ $countFeedback }}</div>
+                        <div class="text-xs text-teal-600">Reviews</div>
+                    </div>
+                    <div class="bg-white/90 backdrop-blur-sm rounded-xl p-3 border border-white/30 shadow-lg">
+                        <div class="text-xl font-bold text-teal-700">₹{{ $doctor->fee }}</div>
+                        <div class="text-xs text-teal-600">Fee</div>
+                    </div>
+                    <div class="bg-white/90 backdrop-blur-sm rounded-xl p-3 border border-white/30 shadow-lg">
+                        <div class="text-xl font-bold text-teal-700">{{ $doctor->experience }}</div>
+                        <div class="text-xs text-teal-600">Years Exp.</div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Doctor Profile Header -->
-            <div class="bg-white rounded-2xl border border-teal-100 overflow-hidden mb-8">
-                <div class="flex flex-col md:flex-row gap-6 p-6 md:p-8">
+            <div class="bg-white/80 backdrop-blur-sm rounded-2xl sm:rounded-3xl border border-white/30 shadow-xl overflow-hidden mb-6 lg:mb-8">
+                <div class="flex flex-col lg:flex-row gap-6 p-4 sm:p-6 lg:p-8">
                     <!-- Doctor Image -->
-                    <div class="flex-shrink-0 relative self-center md:self-start">
-                        <div class="relative">
+                    <div class="flex-shrink-0 relative self-center lg:self-start">
+                        <div class="relative group">
                             @if ($doctor->image)
                                 <img src="{{ $doctor->image ?? 'https://ui-avatars.com/api/?name=' . urlencode($doctor->user->name) . '&background=random&rounded=true' }}"
                                     alt="Dr. {{ $doctor->user->name }}"
-                                    class="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-white object-cover shadow-lg">
+                                    class="w-28 h-28 sm:w-36 sm:h-36 lg:w-44 lg:h-44 rounded-full border-4 border-white object-cover shadow-2xl group-hover:scale-105 transition-transform duration-300">
                             @else
                                 <div
-                                    class="w-32 h-32 md:w-40 md:h-40 rounded-full bg-teal-100 border-4 border-white flex items-center justify-center shadow-lg">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-teal-400"
+                                    class="w-28 h-28 sm:w-36 sm:h-36 lg:w-44 lg:h-44 rounded-full bg-gradient-to-br from-teal-100 to-cyan-100 border-4 border-white flex items-center justify-center shadow-2xl group-hover:scale-105 transition-transform duration-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 sm:h-16 sm:w-16 lg:h-20 lg:w-20 text-teal-500"
                                         fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                             d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                     </svg>
                                 </div>
                             @endif
-                            <div class="absolute -bottom-2 right-2 bg-teal-500 text-white rounded-full p-2 shadow-md">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="absolute -bottom-1 -right-1 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-full p-2 shadow-lg">
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M5 13l4 4L19 7"></path>
                                 </svg>
                             </div>
                         </div>
 
-                        <!-- Quick Stats -->
-                        <div class="mt-4 flex flex-wrap justify-center gap-2 md:hidden">
-                            <div class="text-center bg-teal-50 rounded-lg p-2 min-w-[70px]">
-                                <div class="text-lg font-bold text-teal-700">99%</div>
-                                <div class="text-xs text-teal-600">Rating</div>
-                            </div>
-                            <div class="text-center bg-teal-50 rounded-lg p-2 min-w-[70px]">
-                                <div class="text-lg font-bold text-teal-700"></div>
-                                <div class="text-xs text-teal-600">Feedback</div>
-                            </div>
-                            <div class="text-center bg-teal-50 rounded-lg p-2 min-w-[70px]">
-                                <div class="text-lg font-bold text-teal-700" x-text="'₹' + doctor.fee"></div>
-                                <div class="text-xs text-teal-600">Fee</div>
-                            </div>
+                        <!-- Mobile Quick Access Buttons -->
+                        <div class="mt-4 flex justify-center gap-2 lg:hidden">
+                            <button class="bg-teal-500 text-white p-2 rounded-full shadow-lg hover:bg-teal-600 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                </svg>
+                            </button>
+                            <button class="bg-cyan-500 text-white p-2 rounded-full shadow-lg hover:bg-cyan-600 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                </svg>
+                            </button>
+                            <button class="bg-blue-500 text-white p-2 rounded-full shadow-lg hover:bg-blue-600 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                            </button>
                         </div>
                     </div>
 
@@ -179,15 +253,17 @@
                             </div>
                         </div>
 
-                        <div class="flex items-center gap-2 text-teal-700 mb-4">
-                            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                            <span>Purnea, Bihar</span>
-                            <a href="#" class="text-teal-500 hover:underline ml-2 text-sm">Get Directions</a>
+                        <div class="flex items-center gap-2 text-teal-700 mb-4 sm:mb-6">
+                            <div class="bg-white/60 backdrop-blur-sm px-3 py-1.5 rounded-full border border-teal-200 shadow-sm flex items-center gap-2">
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                                <span class="text-xs sm:text-sm font-medium">Purnea, Bihar</span>
+                                <a href="#" class="text-teal-500 hover:text-teal-600 ml-1 text-xs sm:text-sm transition-colors">Directions</a>
+                            </div>
                         </div>
 
                         <!-- Services Tags -->
@@ -212,25 +288,28 @@
 
                         <!-- Stats and CTA (Desktop) -->
                         <div
-                            class="hidden md:flex flex-wrap items-center justify-between gap-4 mt-6 pt-4 border-t border-teal-100">
-                            <div class="text-center">
-                                <div class="text-2xl font-bold text-teal-700">99%</div>
+                            class="hidden lg:flex flex-wrap items-center justify-between gap-4 mt-6 pt-6 border-t border-white/50">
+                            <div class="text-center group">
+                                <div class="text-2xl font-bold text-teal-700 group-hover:text-teal-800 transition-colors">99%</div>
                                 <div class="text-teal-600 text-xs">Positive Feedback</div>
                             </div>
-                            <div class="text-center">
-                                <div class="text-2xl font-bold text-teal-700">{{ $countFeedback }}</div>
+                            <div class="text-center group">
+                                <div class="text-2xl font-bold text-teal-700 group-hover:text-teal-800 transition-colors">{{ $countFeedback }}</div>
                                 <div class="text-teal-600 text-xs">Patient Feedback</div>
                             </div>
-                            <div class="text-center">
-                                <div class="text-2xl font-bold text-teal-700" x-text="'₹' + doctor.fee"></div>
+                            <div class="text-center group">
+                                <div class="text-2xl font-bold text-teal-700 group-hover:text-teal-800 transition-colors" x-text="'₹' + doctor.fee"></div>
                                 <div class="text-teal-600 text-xs">Consultation Fee</div>
                             </div>
-                            <div class="text-center">
-                                <div class="text-2xl font-bold text-teal-700" x-text="doctor.experience"></div>
+                            <div class="text-center group">
+                                <div class="text-2xl font-bold text-teal-700 group-hover:text-teal-800 transition-colors" x-text="doctor.experience"></div>
                                 <div class="text-teal-600 text-xs">Years Experience</div>
                             </div>
                             <a wire:navigate href="{{ route('appointment', ['doctor_slug' => $doctor->slug]) }}"
-                                class="bg-gradient-to-r bg-teal-500  text-white px-6 py-3 rounded-lg font-medium  hover:bg-teal-700 transition shadow-sm">
+                                class="bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 text-white px-8 py-3 rounded-xl font-semibold text-sm tracking-wide shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
                                 BOOK APPOINTMENT
                             </a>
                         </div>
@@ -238,64 +317,67 @@
                 </div>
 
                 <!-- Mobile CTA -->
-                <div class="md:hidden p-4 bg-teal-50 border-t border-teal-100">
+                <div class="lg:hidden p-4 bg-gradient-to-r from-teal-50 to-cyan-50 border-t border-white/50">
                     <a wire:navigate href="{{ route('appointment', ['doctor_slug' => $doctor->slug]) }}"
-                        class="block w-full text-center bg-gradient-to-r from-teal-500 bg-cyan-500 text-white px-6 py-3 rounded-lg font-medium hover:from-teal-600 hover:to-cyan-600 transition shadow-sm">
+                        class="block w-full text-center bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 text-white px-6 py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
                         BOOK APPOINTMENT
                     </a>
                 </div>
             </div>
 
             <!-- Navigation Tabs -->
-            <div class="bg-white rounded-xl border border-teal-100 mb-8 overflow-hidden sticky top-0 z-10 shadow-sm">
-                <nav class="flex overflow-x-auto no-scrollbar">
+            <div class="bg-white/80 backdrop-blur-sm rounded-xl border border-white/30 mb-6 lg:mb-8 overflow-hidden sticky top-4 z-20 shadow-lg">
+                <nav class="flex overflow-x-auto scrollbar-hide">
                     <button @click="tab = 'about'"
-                        :class="tab === 'about' ? 'border-teal-500 text-teal-700 bg-teal-50' :
-                            'border-transparent text-teal-600 hover:text-teal-700 hover:bg-teal-50'"
-                        class="px-6 py-4 font-medium border-b-2 whitespace-nowrap transition flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        :class="tab === 'about' ? 'border-teal-500 text-teal-700 bg-gradient-to-br from-teal-50 to-cyan-50' :
+                            'border-transparent text-teal-600 hover:text-teal-700 hover:bg-teal-50/50'"
+                        class="px-4 sm:px-6 py-3 sm:py-4 font-medium border-b-2 whitespace-nowrap transition-all duration-200 flex items-center gap-2 min-w-max">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        Overview
+                        <span class="text-sm sm:text-base">Overview</span>
                     </button>
                     <button @click="tab = 'location'"
-                        :class="tab === 'location' ? 'border-teal-500 text-teal-700 bg-teal-50' :
-                            'border-transparent text-teal-600 hover:text-teal-700 hover:bg-teal-50'"
-                        class="px-6 py-4 font-medium border-b-2 whitespace-nowrap transition flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        :class="tab === 'location' ? 'border-teal-500 text-teal-700 bg-gradient-to-br from-teal-50 to-cyan-50' :
+                            'border-transparent text-teal-600 hover:text-teal-700 hover:bg-teal-50/50'"
+                        class="px-4 sm:px-6 py-3 sm:py-4 font-medium border-b-2 whitespace-nowrap transition-all duration-200 flex items-center gap-2 min-w-max">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
-                        Locations
+                        <span class="text-sm sm:text-base">Locations</span>
                     </button>
                     <button @click="tab = 'reviews'"
-                        :class="tab === 'reviews' ? 'border-teal-500 text-teal-700 bg-teal-50' :
-                            'border-transparent text-teal-600 hover:text-teal-700 hover:bg-teal-50'"
-                        class="px-6 py-4 font-medium border-b-2 whitespace-nowrap transition flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        :class="tab === 'reviews' ? 'border-teal-500 text-teal-700 bg-gradient-to-br from-teal-50 to-cyan-50' :
+                            'border-transparent text-teal-600 hover:text-teal-700 hover:bg-teal-50/50'"
+                        class="px-4 sm:px-6 py-3 sm:py-4 font-medium border-b-2 whitespace-nowrap transition-all duration-200 flex items-center gap-2 min-w-max">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                         </svg>
-                        Reviews
-                        <span class="bg-teal-100 text-teal-800 text-xs px-2 py-0.5 rounded-full"
+                        <span class="text-sm sm:text-base">Reviews</span>
+                        <span class="bg-teal-100 text-teal-800 text-xs px-2 py-0.5 rounded-full ml-1"
                             >{{$countFeedback}}</span>
                     </button>
                     <button @click="tab = 'hours'"
-                        :class="tab === 'hours' ? 'border-teal-500 text-teal-700 bg-teal-50' :
-                            'border-transparent text-teal-600 hover:text-teal-700 hover:bg-teal-50'"
-                        class="px-6 py-4 font-medium border-b-2 whitespace-nowrap transition flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        :class="tab === 'hours' ? 'border-teal-500 text-teal-700 bg-gradient-to-br from-teal-50 to-cyan-50' :
+                            'border-transparent text-teal-600 hover:text-teal-700 hover:bg-teal-50/50'"
+                        class="px-4 sm:px-6 py-3 sm:py-4 font-medium border-b-2 whitespace-nowrap transition-all duration-200 flex items-center gap-2 min-w-max">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        Availability
+                        <span class="text-sm sm:text-base">Availability</span>
                     </button>
                 </nav>
             </div>
@@ -771,14 +853,85 @@
         </div>
     </div>
 
+    <!-- Floating Action Button for Mobile -->
+    <div class="fixed bottom-6 right-6 z-50 md:hidden">
+        <a wire:navigate href="{{ route('appointment', ['doctor_slug' => $doctor->slug]) }}"
+            class="floating-btn bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 text-white p-4 rounded-full shadow-2xl custom-shadow flex items-center justify-center group">
+            <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+        </a>
+    </div>
+
     <style>
-        .no-scrollbar::-webkit-scrollbar {
+        .scrollbar-hide::-webkit-scrollbar {
             display: none;
         }
 
-        .no-scrollbar {
+        .scrollbar-hide {
             -ms-overflow-style: none;
             scrollbar-width: none;
+        }
+
+        /* Enhanced mobile tap targets */
+        @media (max-width: 768px) {
+            button, a {
+                min-height: 44px;
+            }
+        }
+
+        /* Smooth scroll behavior for better UX */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom backdrop blur for older browsers */
+        .backdrop-blur-fallback {
+            background-color: rgba(255, 255, 255, 0.85);
+        }
+
+        /* Enhanced focus states for accessibility */
+        button:focus, a:focus {
+            outline: 2px solid #14b8a6;
+            outline-offset: 2px;
+        }
+
+        /* Smooth transitions for all interactive elements */
+        button, a, .transition-all {
+            transition: all 0.2s ease-in-out;
+        }
+
+        /* Loading animation for images */
+        .doctor-image {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Floating action button animation */
+        .floating-btn {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Custom shadow for depth */
+        .custom-shadow {
+            box-shadow: 0 10px 25px -5px rgba(0, 128, 128, 0.1), 0 10px 10px -5px rgba(0, 128, 128, 0.04);
+        }
+
+        /* Gradient text effect */
+        .gradient-text {
+            background: linear-gradient(135deg, #14b8a6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
     </style>
 </div>
