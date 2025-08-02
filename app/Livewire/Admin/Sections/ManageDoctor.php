@@ -13,6 +13,7 @@ use Illuminate\Support\Str;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 use App\Services\ImageKitService; 
+use App\Services\PincodeService; 
 
 #[Title('Manage Doctors')]
 class ManageDoctor extends Component
@@ -41,7 +42,10 @@ class ManageDoctor extends Component
     public $search = '';
     public $max_booking_days; 
     public $imageUrl; 
-    public $imageId;  
+    public $imageId;
+    public $pincode;
+    public $city;
+    public $state;  
 
     public function mount()
     {
@@ -70,6 +74,9 @@ class ManageDoctor extends Component
             'max_booking_days',
             'imageUrl',
             'imageId',
+            'pincode',
+            'city',
+            'state',
         ]);
 
         if ($id) {
@@ -90,9 +97,65 @@ class ManageDoctor extends Component
             $this->max_booking_days = $doctor->max_booking_days;
             $this->imageUrl = $doctor->image;
             $this->imageId = $doctor->image_id;
+            $this->pincode = $doctor->pincode;
+            $this->city = $doctor->city;
+            $this->state = $doctor->state;
         }
 
         $this->showModal = true;
+    }
+
+    public function updatedPincode($value)
+    {
+        if (strlen($value) === 6) {
+            $this->fetchPincodeDetails($value);
+        } else {
+            // Only clear if pincode is not 6 digits - allows manual entry
+            if (strlen($value) < 6) {
+                $this->resetErrorBag('pincode');
+            }
+        }
+    }
+
+    public function updatedCity($value)
+    {
+        // Clear pincode error when user manually enters city
+        $this->resetErrorBag('pincode');
+    }
+
+    public function updatedState($value)
+    {
+        // Clear pincode error when user manually enters state
+        $this->resetErrorBag('pincode');
+    }
+
+    public function fetchPincodeDetails($pincode)
+    {
+        \Log::info('ManageDoctor: Fetching pincode details', ['pincode' => $pincode]);
+        
+        $result = PincodeService::getLocationByPincode($pincode);
+        
+        \Log::info('ManageDoctor: PincodeService result', $result);
+        
+        if ($result['success']) {
+            $this->city = $result['data']['city'];
+            $this->state = $result['data']['state'];
+            $this->resetErrorBag('pincode');
+            
+            \Log::info('ManageDoctor: Successfully updated location', [
+                'city' => $this->city,
+                'state' => $this->state
+            ]);
+        } else {
+            \Log::error('ManageDoctor: Failed to fetch pincode details', [
+                'pincode' => $pincode,
+                'error' => $result['error']
+            ]);
+            
+            $this->addError('pincode', $result['error']);
+            $this->city = '';
+            $this->state = '';
+        }
     }
 
     public function save()
@@ -112,7 +175,10 @@ class ManageDoctor extends Component
             'end_time' => 'required|date_format:H:i|after:start_time',
             'slot_duration_minutes' => 'required|integer|min:5|max:120',
             'patients_per_slot' => 'required|integer|min:1|max:10',
-            'max_booking_days' => 'required|integer|min:1|max:30'
+            'max_booking_days' => 'required|integer|min:1|max:30',
+            'pincode' => 'nullable|digits:6',
+            'city' => 'nullable|string|max:100',
+            'state' => 'nullable|string|max:100',
         ]);
 
         try {
@@ -170,6 +236,9 @@ class ManageDoctor extends Component
                     'slot_duration_minutes' => $this->slot_duration_minutes,
                     'patients_per_slot' => $this->patients_per_slot,
                     'max_booking_days' => $this->max_booking_days,
+                    'pincode' => $this->pincode,
+                    'city' => $this->city,
+                    'state' => $this->state,
                 ]);
             } else {
                 // Create new doctor
@@ -197,6 +266,9 @@ class ManageDoctor extends Component
                     'slot_duration_minutes' => $this->slot_duration_minutes,
                     'patients_per_slot' => $this->patients_per_slot,
                     'max_booking_days' => $this->max_booking_days,
+                    'pincode' => $this->pincode,
+                    'city' => $this->city,
+                    'state' => $this->state,
                 ]);
             }
 
@@ -221,6 +293,9 @@ class ManageDoctor extends Component
                 'showModal',
                 'imageUrl',
                 'imageId',
+                'pincode',
+                'city',
+                'state',
             ]);
 
             session()->flash('message', 'Doctor ' . ($this->doctorId ? 'updated' : 'saved') . ' successfully.');

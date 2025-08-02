@@ -32,6 +32,7 @@
                             <th class="px-4 py-3 sm:px-6 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Department</th>
                             <th class="px-4 py-3 sm:px-6 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Availability</th>
                             <th class="px-4 py-3 sm:px-6 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Contact</th>
+                            <th class="px-4 py-3 sm:px-6 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Location</th>
                             <th class="px-4 py-3 sm:px-6 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
@@ -80,6 +81,18 @@
                                 <div class="text-sm text-gray-600">{{ $doctor->user->email }}</div>
                                 <div class="text-sm text-gray-600">{{ $doctor->user->phone }}</div>
                             </td>
+                            <td class="px-4 py-3 sm:px-6 sm:py-4">
+                                <div class="text-sm text-gray-600">
+                                    @if($doctor->city || $doctor->state || $doctor->pincode)
+                                        <div>{{ $doctor->city ?? 'N/A' }}, {{ $doctor->state ?? 'N/A' }}</div>
+                                        @if($doctor->pincode)
+                                            <div class="text-xs text-gray-500">PIN: {{ $doctor->pincode }}</div>
+                                        @endif
+                                    @else
+                                        <span class="text-gray-400">Not specified</span>
+                                    @endif
+                                </div>
+                            </td>
                             <td class="px-4 py-3 sm:px-6 sm:py-4 text-sm font-medium flex space-x-3">
                                 <button wire:click="openModal({{ $doctor->id }})" class="flex items-center text-indigo-600 hover:text-indigo-800 transition-colors duration-200">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -97,7 +110,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="5" class="px-4 py-6 sm:px-6 text-center text-gray-500">
+                            <td colspan="6" class="px-4 py-6 sm:px-6 text-center text-gray-500">
                                 <div class="flex flex-col items-center justify-center py-8">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-300 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -141,6 +154,12 @@
                                 <div>
                                     <p class="text-xs text-gray-600">{{ $doctor->user->email }}</p>
                                     <p class="text-xs text-gray-600">{{ $doctor->user->phone }}</p>
+                                    @if($doctor->city || $doctor->state || $doctor->pincode)
+                                        <p class="text-xs text-gray-500">
+                                            {{ $doctor->city ?? 'N/A' }}, {{ $doctor->state ?? 'N/A' }}
+                                            @if($doctor->pincode) - {{ $doctor->pincode }} @endif
+                                        </p>
+                                    @endif
                                 </div>
                                 <div class="flex space-x-3">
                                     <button wire:click="openModal({{ $doctor->id }})" class="text-indigo-600 hover:text-indigo-800 text-xs">
@@ -277,6 +296,37 @@
                                     <input type="text" wire:model="qualification" class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200" placeholder="MD, MBBS, PhD (comma separated)">
                                     <p class="mt-1 text-xs text-gray-500">Separate multiple qualifications with commas</p>
                                     @error('qualification') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Location Information Section -->
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-800 mb-4">Location Information</h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Pincode</label>
+                                    <div class="flex gap-2">
+                                        <input type="text" wire:model.live="pincode" maxlength="6" class="flex-1 p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200" placeholder="123456">
+                                        @if($pincode && strlen($pincode) === 6)
+                                            <button type="button" wire:click="fetchPincodeDetails('{{ $pincode }}')" class="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                                </svg>
+                                            </button>
+                                        @endif
+                                    </div>
+                                    @error('pincode') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">City</label>
+                                    <input type="text" wire:model="city" class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200" placeholder="Auto-filled from pincode or enter manually">
+                                    @error('city') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">State</label>
+                                    <input type="text" wire:model="state" class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200" placeholder="Auto-filled from pincode or enter manually">
+                                    @error('state') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                                 </div>
                             </div>
                         </div>

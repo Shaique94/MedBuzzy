@@ -39,10 +39,10 @@
         
         <!-- Background Pattern -->
         <div class="absolute inset-0 opacity-5">
-            <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-teal-100/30 to-transparent"></div>
-            <div class="absolute -top-32 -right-32 w-96 h-96 bg-teal-200 rounded-full opacity-20 blur-3xl"></div>
-            <div class="absolute top-1/2 -left-32 w-80 h-80 bg-teal-300 rounded-full opacity-20 blur-3xl"></div>
-            <div class="absolute bottom-0 right-1/4 w-64 h-64 bg-teal-400 rounded-full opacity-20 blur-3xl"></div>
+            <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-brand-teal-100/30 to-transparent"></div>
+            <div class="absolute -top-32 -right-32 w-96 h-96 bg-brand-teal-200 rounded-full opacity-20 blur-3xl"></div>
+            <div class="absolute top-1/2 -left-32 w-80 h-80 bg-brand-teal-200 rounded-full opacity-20 blur-3xl"></div>
+            <div class="absolute bottom-0 right-1/4 w-64 h-64 bg-teal-200 rounded-full opacity-20 blur-3xl"></div>
         </div>
         
         <div class="relative z-10">
@@ -58,7 +58,7 @@
                         </button>
                         <div class="flex-1 min-w-0">
                             <h1 class="text-lg font-bold text-gray-900 truncate">Dr. {{ $doctor->user->name }}</h1>
-                            <p class="text-sm text-teal-600 truncate">{{ $doctor->department->name ?? 'General Medicine' }}</p>
+                            <p class="text-sm text-brand-teal-600 truncate">{{ $doctor->department->name ?? 'General Medicine' }}</p>
                         </div>
                         <button @click="showMobileStats = !showMobileStats"
                             class="p-2 hover:bg-gray-100 rounded-full transition-colors">
@@ -77,21 +77,21 @@
                          x-transition:leave-start="opacity-100 translate-y-0"
                          x-transition:leave-end="opacity-0 -translate-y-1"
                          class="grid grid-cols-2 gap-3 mt-4">
-                        <div class="bg-gradient-to-r from-teal-50 to-teal-100 rounded-xl p-3 border border-teal-200">
-                            <div class="text-xl font-bold text-teal-700">{{ number_format($averageRating, 1) }}</div>
-                            <div class="text-xs text-teal-600">Rating</div>
+                        <div class="bg-gradient-to-r from-brand-teal-50 to-brand-teal-100 rounded-xl p-3 border border-brand-teal-200">
+                            <div class="text-xl font-bold text-brand-teal-700">{{ number_format($averageRating, 1) }}</div>
+                            <div class="text-xs text-brand-teal-600">Rating</div>
                         </div>
-                        <div class="bg-gradient-to-r from-teal-100 to-teal-200 rounded-xl p-3 border border-teal-300">
-                            <div class="text-xl font-bold text-teal-800">{{ $countFeedback }}</div>
-                            <div class="text-xs text-teal-700">Reviews</div>
+                        <div class="bg-gradient-to-r from-brand-orange-50 to-brand-orange-100 rounded-xl p-3 border border-brand-orange-200">
+                            <div class="text-xl font-bold text-brand-orange-700">{{ $countFeedback }}</div>
+                            <div class="text-xs text-brand-orange-600">Reviews</div>
                         </div>
-                        <div class="bg-gradient-to-r from-teal-200 to-teal-300 rounded-xl p-3 border border-teal-400">
-                            <div class="text-xl font-bold text-teal-900">₹{{ $doctor->fee }}</div>
-                            <div class="text-xs text-teal-800">Consultation</div>
+                        <div class="bg-gradient-to-r from-green-50 to-green-100 rounded-xl p-3 border border-green-200">
+                            <div class="text-xl font-bold text-green-700">₹{{ $doctor->fee }}</div>
+                            <div class="text-xs text-green-600">Consultation</div>
                         </div>
-                        <div class="bg-gradient-to-r from-teal-300 to-teal-400 rounded-xl p-3 border border-teal-500">
-                            <div class="text-xl font-bold text-white">{{ $doctor->experience ?? '5+' }} yrs</div>
-                            <div class="text-xs text-teal-100">Experience</div>
+                        <div class="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-3 border border-blue-200">
+                            <div class="text-xl font-bold text-blue-700">{{ $doctor->experience ?? '5+' }} yrs</div>
+                            <div class="text-xs text-blue-600">Experience</div>
                         </div>
                     </div>
                 </div>
@@ -101,7 +101,7 @@
                 <!-- Doctor Profile Header -->
                 <div class="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden mb-8">
                     <!-- Header Background -->
-                    <div class="bg-gradient-to-r from-teal-400 to-teal-600 h-32 md:h-40 relative">
+                    <div class="bg-gradient-to-r from-brand-teal-500 to-brand-orange-500 h-32 md:h-40 relative">
                         <div class="absolute inset-0 bg-black/10"></div>
                         <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/20 to-transparent"></div>
                     </div>
@@ -117,8 +117,8 @@
                                             alt="Dr. {{ $doctor->user->name }}"
                                             class="w-32 h-32 md:w-40 md:h-40 rounded-2xl border-4 border-white object-cover shadow-2xl group-hover:scale-105 transition-transform duration-300">
                                     @else
-                                        <div class="w-32 h-32 md:w-40 md:h-40 rounded-2xl bg-gradient-to-br from-teal-100 to-teal-300 border-4 border-white flex items-center justify-center shadow-2xl group-hover:scale-105 transition-transform duration-300">
-                                            <span class="text-4xl md:text-5xl font-bold text-teal-700">
+                                        <div class="w-32 h-32 md:w-40 md:h-40 rounded-2xl bg-gradient-to-br from-brand-teal-100 to-brand-orange-100 border-4 border-white flex items-center justify-center shadow-2xl group-hover:scale-105 transition-transform duration-300">
+                                            <span class="text-4xl md:text-5xl font-bold text-brand-teal-600">
                                                 {{ substr($doctor->user->name, 0, 1) }}
                                             </span>
                                         </div>
@@ -136,7 +136,7 @@
                             <div class="flex-grow text-center md:text-left">
                                 <div class="mb-4">
                                     <h1 class="text-2xl md:text-4xl font-bold text-gray-900 mb-2">Dr. {{ $doctor->user->name }}</h1>
-                                    <p class="text-lg text-teal-600 font-medium mb-2">{{ $doctor->department->name ?? 'General Medicine' }}</p>
+                                    <p class="text-lg text-brand-teal-600 font-medium mb-2">{{ $doctor->department->name ?? 'General Medicine' }}</p>
                                     @if($doctor->qualification)
                                         <p class="text-gray-600">
                                             {{ is_array($doctor->qualification) ? implode(', ', $doctor->qualification) : $doctor->qualification }}
@@ -188,14 +188,14 @@
                                 <!-- Contact Buttons -->
                                 <div class="hidden md:flex gap-4 mb-4">
                                     <button @click="showContactModal = true" 
-                                            class="bg-teal-500 hover:bg-teal-600 text-white py-2 px-6 rounded-lg inline-flex items-center gap-2 transition-colors">
+                                            class="bg-brand-teal-600 hover:bg-brand-teal-700 text-white py-2 px-6 rounded-lg inline-flex items-center gap-2 transition-colors">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                                         </svg>
                                         Contact
                                     </button>
                                     <a wire:navigate href="{{ route('appointment', ['doctor_slug' => $doctor->slug]) }}"
-                                       class="bg-teal-600 hover:bg-teal-700 text-white py-2 px-6 rounded-lg inline-flex items-center gap-2 transition-colors">
+                                       class="bg-brand-orange-600 hover:bg-brand-orange-700 text-white py-2 px-6 rounded-lg inline-flex items-center gap-2 transition-colors">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                         </svg>
@@ -211,22 +211,22 @@
                 <div class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden mb-8">
                     <div class="flex overflow-x-auto scrollbar-hide">
                         <button @click="tab = 'about'" 
-                                :class="tab === 'about' ? 'bg-teal-500 text-white' : 'text-gray-600 hover:bg-gray-50'"
+                                :class="tab === 'about' ? 'bg-brand-teal-500 text-white' : 'text-gray-600 hover:bg-gray-50'"
                                 class="flex-shrink-0 px-6 py-4 font-medium transition-colors min-w-fit">
                             About
                         </button>
                         <button @click="tab = 'availability'" 
-                                :class="tab === 'availability' ? 'bg-teal-500 text-white' : 'text-gray-600 hover:bg-gray-50'"
+                                :class="tab === 'availability' ? 'bg-brand-teal-500 text-white' : 'text-gray-600 hover:bg-gray-50'"
                                 class="flex-shrink-0 px-6 py-4 font-medium transition-colors min-w-fit">
                             Availability
                         </button>
                         <button @click="tab = 'location'" 
-                                :class="tab === 'location' ? 'bg-teal-500 text-white' : 'text-gray-600 hover:bg-gray-50'"
+                                :class="tab === 'location' ? 'bg-brand-teal-500 text-white' : 'text-gray-600 hover:bg-gray-50'"
                                 class="flex-shrink-0 px-6 py-4 font-medium transition-colors min-w-fit">
                             Location
                         </button>
                         <button @click="tab = 'reviews'" 
-                                :class="tab === 'reviews' ? 'bg-teal-500 text-white' : 'text-gray-600 hover:bg-gray-50'"
+                                :class="tab === 'reviews' ? 'bg-brand-teal-500 text-white' : 'text-gray-600 hover:bg-gray-50'"
                                 class="flex-shrink-0 px-6 py-4 font-medium transition-colors min-w-fit">
                             Reviews
                         </button>
@@ -238,7 +238,7 @@
                     <!-- About Section -->
                     <div x-show="tab === 'about'" x-transition class="bg-white rounded-xl shadow-md border border-gray-200 p-6 md:p-8">
                         <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                            <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-6 h-6 text-brand-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
                             About Dr. {{ $doctor->user->name }}
@@ -259,9 +259,9 @@
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4" x-data="{ showAll: false }">
                                         <template x-for="(service, index) in doctor.services" :key="index">
                                             <div x-show="showAll || index < 4" 
-                                                 class="bg-gradient-to-r from-teal-50 to-teal-100 rounded-lg p-4 border border-teal-200">
-                                                <h4 x-text="service.name" class="font-medium text-teal-800 mb-2"></h4>
-                                                <p x-text="service.description" class="text-sm text-teal-700"></p>
+                                                 class="bg-gradient-to-r from-brand-teal-50 to-brand-teal-100 rounded-lg p-4 border border-brand-teal-200">
+                                                <h4 x-text="service.name" class="font-medium text-brand-teal-800 mb-2"></h4>
+                                                <p x-text="service.description" class="text-sm text-brand-teal-700"></p>
                                             </div>
                                         </template>
                                         <button x-show="!showAll && doctor.services.length > 4" 
@@ -275,24 +275,24 @@
 
                             <!-- Quick Stats -->
                             <div class="space-y-6">
-                                <div class="bg-gradient-to-br from-teal-50 to-teal-100 rounded-xl p-6 border border-teal-200">
-                                    <h3 class="font-semibold text-teal-800 mb-4">Quick Stats</h3>
+                                <div class="bg-gradient-to-br from-brand-teal-50 to-brand-teal-100 rounded-xl p-6 border border-brand-teal-200">
+                                    <h3 class="font-semibold text-brand-teal-800 mb-4">Quick Stats</h3>
                                     <div class="space-y-4">
                                         <div class="flex items-center justify-between">
-                                            <span class="text-teal-700">Experience</span>
-                                            <span class="font-semibold text-teal-800">{{ $doctor->experience ?? '5+' }} years</span>
+                                            <span class="text-brand-teal-700">Experience</span>
+                                            <span class="font-semibold text-brand-teal-800">{{ $doctor->experience ?? '5+' }} years</span>
                                         </div>
                                         <div class="flex items-center justify-between">
-                                            <span class="text-teal-700">Consultation Fee</span>
-                                            <span class="font-semibold text-teal-800">₹{{ $doctor->fee }}</span>
+                                            <span class="text-brand-teal-700">Consultation Fee</span>
+                                            <span class="font-semibold text-brand-teal-800">₹{{ $doctor->fee }}</span>
                                         </div>
                                         <div class="flex items-center justify-between">
-                                            <span class="text-teal-700">Average Rating</span>
-                                            <span class="font-semibold text-teal-800">{{ number_format($averageRating, 1) }}/5</span>
+                                            <span class="text-brand-teal-700">Average Rating</span>
+                                            <span class="font-semibold text-brand-teal-800">{{ number_format($averageRating, 1) }}/5</span>
                                         </div>
                                         <div class="flex items-center justify-between">
-                                            <span class="text-teal-700">Total Reviews</span>
-                                            <span class="font-semibold text-teal-800">{{ $countFeedback }}</span>
+                                            <span class="text-brand-teal-700">Total Reviews</span>
+                                            <span class="font-semibold text-brand-teal-800">{{ $countFeedback }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -321,7 +321,7 @@
                                             <div class="flex items-center gap-2">
                                                 <span class="text-sm text-gray-600 w-10">{{ $i }} stars</span>
                                                 <div class="flex-1 bg-gray-200 rounded-full h-2.5">
-                                                    <div class="bg-teal-600 h-2.5 rounded-full" style="width: {{ $percentages[$i] }}%"></div>
+                                                    <div class="bg-brand-teal-600 h-2.5 rounded-full" style="width: {{ $percentages[$i] }}%"></div>
                                                 </div>
                                                 <span class="text-sm text-gray-600 w-8">{{ number_format($percentages[$i]) }}%</span>
                                             </div>
@@ -335,7 +335,7 @@
                     <!-- Availability Section -->
                     <div x-show="tab === 'availability'" x-transition class="bg-white rounded-xl shadow-md border border-gray-200 p-6 md:p-8">
                         <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                            <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-6 h-6 text-brand-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                             Availability & Schedule 
@@ -343,8 +343,8 @@
 
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                             <!-- Weekly Schedule -->
-                            <div class="bg-gradient-to-br from-teal-50 to-teal-100 rounded-xl p-6 border border-teal-200">
-                                <h3 class="font-semibold text-teal-800 mb-4">Weekly Schedule</h3>
+                            <div class="bg-gradient-to-br from-brand-teal-50 to-brand-teal-100 rounded-xl p-6 border border-brand-teal-200">
+                                <h3 class="font-semibold text-brand-teal-800 mb-4">Weekly Schedule</h3>
                                 <div class="space-y-3">
                                     @php
                                         $availableDays = is_array($doctor->available_days) 
@@ -361,26 +361,26 @@
                                             $isAvailable = in_array($day, $availableDays);
                                             $isToday = $day === $today;
                                         @endphp
-                                        <div class="flex items-center justify-between p-3 rounded-lg {{ $isToday ? 'bg-white shadow-md border-2 border-teal-300' : ($isAvailable ? 'bg-white border border-teal-100' : 'bg-gray-50 border border-gray-100') }}">
+                                        <div class="flex items-center justify-between p-3 rounded-lg {{ $isToday ? 'bg-white shadow-md border-2 border-brand-teal-300' : ($isAvailable ? 'bg-white border border-brand-teal-100' : 'bg-gray-50 border border-gray-100') }}">
                                             <div class="flex items-center gap-3">
-                                                <div class="w-10 h-10 rounded-full flex items-center justify-center {{ $isAvailable ? 'bg-teal-100 text-teal-600' : 'bg-gray-200 text-gray-500' }}">
+                                                <div class="w-10 h-10 rounded-full flex items-center justify-center {{ $isAvailable ? 'bg-brand-teal-100 text-brand-teal-600' : 'bg-gray-200 text-gray-500' }}">
                                                     <span class="font-medium text-sm">{{ substr($day, 0, 3) }}</span>
                                                 </div>
                                                 <div>
-                                                    <div class="font-medium {{ $isAvailable ? 'text-teal-800' : 'text-gray-500' }}">
+                                                    <div class="font-medium {{ $isAvailable ? 'text-brand-teal-800' : 'text-gray-500' }}">
                                                         {{ $day }}
                                                         @if ($isToday)
-                                                            <span class="ml-2 bg-teal-500 text-white text-xs px-2 py-0.5 rounded-full">Today</span>
+                                                            <span class="ml-2 bg-brand-teal-500 text-white text-xs px-2 py-0.5 rounded-full">Today</span>
                                                         @endif
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="text-right">
-                                                <div class="{{ $isAvailable ? 'text-teal-600 font-medium' : 'text-gray-400' }}">
+                                                <div class="{{ $isAvailable ? 'text-brand-teal-600 font-medium' : 'text-gray-400' }}">
                                                     {{ $isAvailable ? '9:00 AM - 6:00 PM' : 'Closed' }}
                                                 </div>
                                                 @if ($isAvailable)
-                                                    <span class="text-xs bg-teal-100 text-teal-800 px-2 py-0.5 rounded-full">Available</span>
+                                                    <span class="text-xs bg-brand-teal-100 text-brand-teal-800 px-2 py-0.5 rounded-full">Available</span>
                                                 @endif
                                             </div>
                                         </div>
@@ -439,7 +439,7 @@
                     <!-- Location Section -->
                     <div x-show="tab === 'location'" x-transition class="bg-white rounded-xl shadow-md border border-gray-200 p-6 md:p-8">
                         <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                            <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-6 h-6 text-brand-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
@@ -447,20 +447,20 @@
                         </h2>
 
                         <div class="space-y-6">
-                            <div class="bg-gradient-to-r from-teal-50 to-teal-100 rounded-xl p-6 border border-teal-200">
+                            <div class="bg-gradient-to-r from-brand-teal-50 to-brand-teal-100 rounded-xl p-6 border border-brand-teal-200">
                                 <div class="flex items-start gap-4">
-                                    <div class="w-12 h-12 bg-teal-500 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <div class="w-12 h-12 bg-brand-teal-500 rounded-full flex items-center justify-center flex-shrink-0">
                                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                                         </svg>
                                     </div>
                                     <div class="flex-grow">
-                                        <h3 class="text-lg font-semibold text-teal-800 mb-2">Main Clinic</h3>
-                                        <p class="text-teal-700 mb-3">
+                                        <h3 class="text-lg font-semibold text-brand-teal-800 mb-2">Main Clinic</h3>
+                                        <p class="text-brand-teal-700 mb-3">
                                             @if($doctor->city && $doctor->state)
                                                 {{ $doctor->city }}, {{ $doctor->state }}, India
                                                 @if($doctor->pincode)
-                                                    <br><span class="text-sm text-teal-600">PIN: {{ $doctor->pincode }}</span>
+                                                    <br><span class="text-sm text-brand-teal-600">PIN: {{ $doctor->pincode }}</span>
                                                 @endif
                                             @else
                                                 Purnea, Bihar, India
@@ -492,7 +492,7 @@
                     <!-- Reviews Section -->
                     <div x-show="tab === 'reviews'" x-transition class="bg-white rounded-xl shadow-md border border-gray-200 p-6 md:p-8">
                         <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                            <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-6 h-6 text-brand-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                             </svg>
                             Patient Reviews
@@ -501,7 +501,7 @@
                         <!-- Reviews List -->
                         <div class="space-y-6">
                             @forelse($approvedReviews as $review)
-                                <div class="bg-gray-50 p-5 rounded-lg border border-gray-200 hover:border-teal-300 transition-colors duration-200">
+                                <div class="bg-gray-50 p-5 rounded-lg border border-gray-200 hover:border-brand-teal-300 transition-colors duration-200">
                                     <div class="flex justify-between items-start mb-3">
                                         <div>
                                             <h3 class="font-medium text-gray-800">{{ $review->user->name }}</h3>
@@ -532,7 +532,7 @@
                         <div class="mt-6 text-center">
                             @auth
                                 <button wire:click="$dispatch('openReviewModal', {doctorId: {{ $doctor->id }}})" 
-                                        class="bg-teal-600 hover:bg-teal-700 text-white py-2 px-6 rounded-lg inline-flex items-center gap-2 transition-colors">
+                                        class="bg-brand-teal-600 hover:bg-brand-teal-700 text-white py-2 px-6 rounded-lg inline-flex items-center gap-2 transition-colors">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                                     </svg>
@@ -605,7 +605,7 @@
         <!-- Floating Action Button (Mobile) -->
         <div class="fixed bottom-6 right-6 z-50 md:hidden">
             <a wire:navigate href="{{ route('appointment', ['doctor_slug' => $doctor->slug]) }}"
-                class="bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white p-4 rounded-full shadow-2xl flex items-center justify-center group transition-all duration-200 transform hover:scale-110">
+                class="bg-gradient-to-r from-brand-teal-500 to-brand-teal-600 hover:from-brand-teal-600 hover:to-brand-teal-700 text-white p-4 rounded-full shadow-2xl flex items-center justify-center group transition-all duration-200 transform hover:scale-110">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
@@ -678,7 +678,7 @@
 
         /* Gradient text effect */
         .gradient-text {
-            background: linear-gradient(135deg, #0f766e, #14b8a6);
+            background: linear-gradient(135deg, #14b8a6, #06b6d4);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;

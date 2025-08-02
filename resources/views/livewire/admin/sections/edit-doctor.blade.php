@@ -13,7 +13,7 @@
                 </div>
 
                 <!-- Modal Body -->
-                <form wire:submit.prevent="saveDoctor" class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <form wire:submit.prevent="saveDoctor" class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
                     <!-- Personal Information Column -->
                     <div class="space-y-6">
                         <h4 class="text-lg font-medium text-gray-800 border-b pb-2">Personal Information</h4>
@@ -79,6 +79,50 @@
                         </div>
                     </div>
 
+                    <!-- Location Information Column -->
+                    <div class="space-y-6">
+                        <h4 class="text-lg font-medium text-gray-800 border-b pb-2">Location Information</h4>
+
+                        <div>
+                            <label for="pincode" class="block text-sm font-medium text-gray-700 mb-1">Pincode</label>
+                            <div class="flex gap-2">
+                                <input wire:model.live="pincode" type="text" id="pincode" maxlength="6" class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" placeholder="123456">
+                                @if($pincode && strlen($pincode) === 6)
+                                    <button type="button" wire:click="fetchPincodeDetails('{{ $pincode }}')" class="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                        </svg>
+                                    </button>
+                                @endif
+                            </div>
+                            @error('pincode')
+                                <span class="mt-1 text-sm text-red-600">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label for="city" class="block text-sm font-medium text-gray-700 mb-1">
+                                City
+                                <span class="text-xs text-gray-500">(Auto-filled from pincode or enter manually)</span>
+                            </label>
+                            <input wire:model="city" type="text" id="city" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" placeholder="Enter city name">
+                            @error('city')
+                                <span class="mt-1 text-sm text-red-600">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label for="state" class="block text-sm font-medium text-gray-700 mb-1">
+                                State
+                                <span class="text-xs text-gray-500">(Auto-filled from pincode or enter manually)</span>
+                            </label>
+                            <input wire:model="state" type="text" id="state" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" placeholder="Enter state name">
+                            @error('state')
+                                <span class="mt-1 text-sm text-red-600">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+
                     <!-- Professional Information Column -->
                     <div class="space-y-6">
                         <h4 class="text-lg font-medium text-gray-800 border-b pb-2">Professional Information</h4>
@@ -131,7 +175,7 @@
                     </div>
 
                     <!-- Availability Section (Full width) -->
-                    <div class="md:col-span-2 space-y-6">
+                    <div class="md:col-span-3 space-y-6">
                         <h4 class="text-lg font-medium text-gray-800 border-b pb-2">Availability</h4>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -191,7 +235,7 @@
                     </div>
 
                     <!-- Modal Footer -->
-                    <div class="md:col-span-2 flex justify-end space-x-4 pt-6 border-t">
+                    <div class="md:col-span-3 flex justify-end space-x-4 pt-6 border-t">
                         <button type="button" wire:click="closeModal" class="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors">
                             Cancel
                         </button>

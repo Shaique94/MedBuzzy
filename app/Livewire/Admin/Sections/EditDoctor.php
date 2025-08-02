@@ -10,6 +10,7 @@ use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Services\ImageKitService;
+use App\Services\PincodeService;
 use Illuminate\Support\Str;
 
 #[Title('Edit Doctor')]
@@ -39,6 +40,9 @@ class EditDoctor extends Component
     public $image;
     public $image_id;
     public $imageTimestamp;
+    public $pincode;
+    public $city;
+    public $state;
 
     #[On('openModal')]
     public function editDoc($id)
@@ -69,6 +73,9 @@ class EditDoctor extends Component
         $this->image = $this->doctor->image ?? null;
         $this->image_id = $this->doctor->image_id ?? null;
         $this->imageTimestamp = time();
+        $this->pincode = $this->doctor->pincode ?? null;
+        $this->city = $this->doctor->city ?? null;
+        $this->state = $this->doctor->state ?? null;
 
         $this->showModal = true;
     }
@@ -94,10 +101,66 @@ class EditDoctor extends Component
             'image',
             'image_id',
             'imageTimestamp',
+            'pincode',
+            'city',
+            'state',
         ]);
         $this->qualification = [];
         $this->qualificationInput = '';
         $this->available_days = [];
+    }
+
+    public function updatedPincode($value)
+    {
+        if (strlen($value) === 6) {
+            $this->fetchPincodeDetails($value);
+        } else {
+            // Only clear if pincode is not 6 digits - allows manual entry
+            if (strlen($value) < 6) {
+                $this->resetErrorBag('pincode');
+            }
+        }
+    }
+
+    public function updatedCity($value)
+    {
+        // Clear pincode error when user manually enters city
+        $this->resetErrorBag('pincode');
+    }
+
+    public function updatedState($value)
+    {
+        // Clear pincode error when user manually enters state
+        $this->resetErrorBag('pincode');
+    }
+
+    public function fetchPincodeDetails($pincode)
+    {
+        \Log::info('EditDoctor: Fetching pincode details', ['pincode' => $pincode]);
+        
+        $result = PincodeService::getLocationByPincode($pincode);
+        
+        \Log::info('EditDoctor: PincodeService result', $result);
+        
+        if ($result['success']) {
+            $this->city = $result['data']['city'];
+            $this->state = $result['data']['state'];
+            $this->resetErrorBag('pincode');
+            
+            \Log::info('EditDoctor: Successfully updated location', [
+                'city' => $this->city,
+                'state' => $this->state
+            ]);
+        } else {
+            \Log::error('EditDoctor: Failed to fetch pincode details', [
+                'pincode' => $pincode,
+                'error' => $result['error']
+            ]);
+            
+            $this->addError('pincode', $result['error']);
+            $this->city = '';
+            $this->state = '';
+        }
     }
 
     public function saveDoctor()
@@ -121,7 +184,10 @@ class EditDoctor extends Component
             'department_id' => 'nullable|exists:departments,id',
             'status' => 'required|boolean',
             'slug' => 'nullable|string|max:255|unique:doctors,slug,' . $this->doctor->id,
-            'newImage' => 'nullable|image|max:10240', // 10MB to match Profile
+            'newImage' => 'nullable|image|max:10240',
+            'pincode' => 'nullable|digits:6',
+            'city' => 'nullable|string|max:100',
+            'state' => 'nullable|string|max:100',
         ]);
 
         try {
@@ -180,6 +246,9 @@ class EditDoctor extends Component
                     'slug' => $this->slug ?? Str::slug($this->name),
                     'image' => $imageUrl,
                     'image_id' => $imageId,
+                    'pincode' => $this->pincode,
+                    'city' => $this->city,
+                    'state' => $this->state,
                 ]);
             });
 
