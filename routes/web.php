@@ -12,7 +12,7 @@ use App\Livewire\Admin\Sections\Dashboard;
 use App\Livewire\Admin\Sections\EditDoctor;
 use App\Livewire\Admin\Sections\ManageDepartment;
 use App\Livewire\Admin\Sections\ManageDoctor;
-use App\Livewire\Admin\Sections\ListDoctor;
+use App\Livewire\Admin\Doctor\ListDoctor;
 use App\Livewire\Doctor\Section\CreateSlot;
 use App\Livewire\Doctor\Section\Leave;
 use App\Livewire\Doctor\Section\Manager\CreateManger;
