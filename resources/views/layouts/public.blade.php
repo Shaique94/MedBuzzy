@@ -11,6 +11,8 @@
     <!-- Tailwind CSS with full config -->
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- Alpine.js - Loading this before Tailwind -->
+    
     <script>
         tailwind.config = {
             theme: {
@@ -76,12 +78,15 @@
         .mobile-bottom-nav .active-tab div {
             @apply bg-teal-600 text-white shadow-md;
         }
+
+        /* Add x-cloak directive support */
+        [x-cloak] {
+            display: none !important;
+        }
     </style>
 
     <meta property="og:url" content="{{ url()->current() }}">
     <link rel="canonical" href="{{ url()->current() }}">
-
-   
 
     <!-- Scripts -->
     {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}

@@ -1,4 +1,4 @@
-<div class="max-w-2xl mx-auto mt-10 bg-white p-8 rounded-xl shadow-lg border border-teal-100">
+<div class="max-w-2xl mx-auto mt-4 mx-2 bg-white p-8 rounded-xl  border border-teal-100">
     <!-- Header with icon -->
     <div class="text-center mb-8">
         <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-teal-50">
@@ -39,7 +39,8 @@
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-500">Date & Time</p>
                     <p class="text-lg font-semibold text-gray-900">
-                        {{ $appointment->appointment_date }} • {{ $appointment->appointment_time }}
+                                                                    {{ \Carbon\Carbon::parse( $appointment->appointment_date)->format('l, F j, Y') }}</p>
+                                                                    Time : {{ \Carbon\Carbon::parse($appointment->appointment_time)->format('g:i A') }}
                     </p>
                 </div>
             </div>
