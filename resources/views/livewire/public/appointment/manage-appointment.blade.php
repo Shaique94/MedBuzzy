@@ -337,22 +337,21 @@
 
                                             @foreach ($dateTabs as $dateTab)
                                                 <button wire:click="setAppointmentDate('{{ $dateTab['date'] }}')"
-                                                    class="flex-shrink-0 px-6 py-3 border-b-2 font-medium text-sm whitespace-nowrap 
-                                                {{ $appointment_date === $dateTab['date']
-                                                    ? 'border-brand-teal-500 text-brand-teal-600'
-                                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
+                                                    class="flex-shrink-0 px-6 py-3 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-200
+                                                        {{ $appointment_date === $dateTab['date']
+                                                            ? 'border-brand-teal-500 text-brand-teal-600 bg-brand-teal-50 shadow-md rounded-t-lg border-t border-l border-r border-brand-teal-200'
+                                                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
                                                     aria-current="{{ $appointment_date === $dateTab['date'] ? 'page' : 'false' }}">
-                                                    <div class="text-center ">
+                                                    <div class="text-center">
                                                         @if ($dateTab['isToday'])
-                                                            <span
-                                                                class="block text-xs mb-1 font-semibold text-brand-teal-600">Today</span>
+                                                            <span class="block text-xs mb-1 font-semibold text-brand-teal-600">Today</span>
+                                                        @elseif (\Carbon\Carbon::parse($dateTab['date'])->isTomorrow())
+                                                            <span class="block text-xs mb-1 font-semibold text-brand-teal-600">Tomorrow</span>
                                                         @else
-                                                            <span
-                                                                class="block text-xs mb-1">{{ $dateTab['dayName'] }}</span>
+                                                            <span class="block text-xs mb-1 {{ $appointment_date === $dateTab['date'] ? 'font-semibold' : '' }}">{{ $dateTab['dayName'] }}</span>
                                                         @endif
-                                                        <span
-                                                            class="block text-base font-medium">{{ $dateTab['dayNumber'] }}</span>
-                                                        <span class="block text-xs">{{ $dateTab['monthName'] }}</span>
+                                                        <span class="block text-base {{ $appointment_date === $dateTab['date'] ? 'font-bold' : 'font-medium' }}">{{ $dateTab['dayNumber'] }}</span>
+                                                        <span class="block text-xs {{ $appointment_date === $dateTab['date'] ? 'font-medium' : '' }}">{{ $dateTab['monthName'] }}</span>
                                                     </div>
                                                 </button>
                                             @endforeach
@@ -459,11 +458,9 @@
                                                             <button wire:click="selectTimeSlot('{{ $time }}')"
                                                                 @if ($slot['disabled']) disabled @endif
                                                                 class="p-3 border rounded-lg text-center transition-all duration-200
-                                                                {{ $appointment_time === $time ? 'bg-brand-teal-600 text-white border-brand-teal-700' : '' }}
+                                                                {{ $appointment_time === $time ? 'bg-brand-teal-600 text-brand-teal-600 border-brand-teal-700' : '' }}
                                                                 {{ $slot['disabled'] ? 'bg-gray-100 text-gray-400 cursor-not-allowed border-gray-200' : '' }}
-                                                                {{ !$slot['disabled'] && $slot['remaining_capacity'] == 1 ? 'bg-red-100 border-red-200 text-red-800' : '' }}
-                                                                {{ !$slot['disabled'] && $slot['remaining_capacity'] > 1 && $slot['remaining_capacity'] <= $fillingUpThreshold ? 'bg-brand-orange-50 border-brand-orange-200 text-brand-orange-700' : '' }}
-                                                                {{ !$slot['disabled'] && $slot['remaining_capacity'] > $fillingUpThreshold ? 'bg-brand-teal-50 border-brand-teal-200 hover:bg-brand-teal-100 text-brand-teal-800' : '' }}">
+                                                                {{ !$slot['disabled'] ? 'bg-brand-teal-50 border-brand-teal-200 hover:bg-brand-teal-100 text-brand-teal-800' : '' }}">
                                                                 <div class="text-sm font-medium">
                                                                     {{ date('h:i A', strtotime($slot['start'])) }}
                                                                 </div>
@@ -488,11 +485,9 @@
                                                             <button wire:click="selectTimeSlot('{{ $time }}')"
                                                                 @if ($slot['disabled']) disabled @endif
                                                                 class="p-3 border rounded-lg text-center transition-all duration-200
-                                                                {{ $appointment_time === $time ? 'bg-brand-teal-600 text-white border-brand-teal-700' : '' }}
+                                                                {{ $appointment_time === $time ? 'bg-brand-teal-600 text-brand-teal-600 border-brand-teal-700' : '' }}
                                                                 {{ $slot['disabled'] ? 'bg-gray-100 text-gray-400 cursor-not-allowed border-gray-200' : '' }}
-                                                                {{ !$slot['disabled'] && $slot['remaining_capacity'] == 1 ? 'bg-red-100 border-red-200 text-red-800' : '' }}
-                                                                {{ !$slot['disabled'] && $slot['remaining_capacity'] > 1 && $slot['remaining_capacity'] <= $fillingUpThreshold ? 'bg-brand-orange-50 border-brand-orange-200 text-brand-orange-700' : '' }}
-                                                                {{ !$slot['disabled'] && $slot['remaining_capacity'] > $fillingUpThreshold ? 'bg-brand-teal-50 border-brand-teal-200 hover:bg-brand-teal-100 text-brand-teal-800' : '' }}">
+                                                                {{ !$slot['disabled'] ? 'bg-brand-teal-50 border-brand-teal-200 hover:bg-brand-teal-100 text-brand-teal-800' : '' }}">
                                                                 <div class="text-sm font-medium">
                                                                     {{ date('h:i A', strtotime($slot['start'])) }}
                                                                 </div>
@@ -517,11 +512,9 @@
                                                             <button wire:click="selectTimeSlot('{{ $time }}')"
                                                                 @if ($slot['disabled']) disabled @endif
                                                                 class="p-3 border rounded-lg text-center transition-all duration-200
-                                                                {{ $appointment_time === $time ? 'bg-brand-teal-600 text-white border-brand-teal-700' : '' }}
+                                                                {{ $appointment_time === $time ? 'bg-brand-teal-600 text-brand-teal-600 border-brand-teal-700' : '' }}
                                                                 {{ $slot['disabled'] ? 'bg-gray-100 text-gray-400 cursor-not-allowed border-gray-200' : '' }}
-                                                                {{ !$slot['disabled'] && $slot['remaining_capacity'] == 1 ? 'bg-red-100 border-red-200 text-red-800' : '' }}
-                                                                {{ !$slot['disabled'] && $slot['remaining_capacity'] > 1 && $slot['remaining_capacity'] <= $fillingUpThreshold ? 'bg-brand-orange-50 border-brand-orange-200 text-brand-orange-700' : '' }}
-                                                                {{ !$slot['disabled'] && $slot['remaining_capacity'] > $fillingUpThreshold ? 'bg-brand-teal-50 border-brand-teal-200 hover:bg-brand-teal-100 text-brand-teal-800' : '' }}">
+                                                                {{ !$slot['disabled'] ? 'bg-brand-teal-50 border-brand-teal-200 hover:bg-brand-teal-100 text-brand-teal-800' : '' }}">
                                                                 <div class="text-sm font-medium">
                                                                     {{ date('h:i A', strtotime($slot['start'])) }}
                                                                 </div>
@@ -544,27 +537,12 @@
                                             <div
                                                 class="flex flex-wrap justify-end gap-2 border-t pt-3 text-xs text-gray-600">
                                                 <div class="flex items-center">
-                                                    <div
-                                                        class="w-3 h-3 bg-brand-teal-50 border border-brand-teal-200 rounded-full mr-1">
+                                                    <div class="w-3 h-3 bg-brand-teal-50 border border-brand-teal-200 rounded-full mr-1">
                                                     </div>
-                                                    <span>Available
-                                                        ({{ $fillingUpThreshold + 1 }}-{{ $maxSlots }})</span>
+                                                    <span>Available</span>
                                                 </div>
                                                 <div class="flex items-center">
-                                                    <div
-                                                        class="w-3 h-3 bg-brand-orange-50 border border-brand-orange-200 rounded-full mr-1">
-                                                    </div>
-                                                    <span>Filling Up (2-{{ $fillingUpThreshold }})</span>
-                                                </div>
-                                                <div class="flex items-center">
-                                                    <div
-                                                        class="w-3 h-3 bg-red-100 border border-red-200 rounded-full mr-1">
-                                                    </div>
-                                                    <span>Last Slot</span>
-                                                </div>
-                                                <div class="flex items-center">
-                                                    <div
-                                                        class="w-3 h-3 bg-gray-100 border border-gray-200 rounded-full mr-1">
+                                                    <div class="w-3 h-3 bg-gray-100 border border-gray-200 rounded-full mr-1">
                                                     </div>
                                                     <span>Full</span>
                                                 </div>
