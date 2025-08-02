@@ -28,23 +28,33 @@ class Login extends Component
 
     public function login()
     {
-        $this->validate();
+        try {
+            $this->validate();
 
-        $credentials = [
-            'email' => $this->email,
-            'password' => $this->password,
-        ];
+            $credentials = [
+                'email' => $this->email,
+                'password' => $this->password,
+            ];
 
-        if (Auth::attempt($credentials, $this->remember)) {
-            $user = Auth::user();
+            if (Auth::attempt($credentials, $this->remember)) {
+                $user = Auth::user();
 
-            session()->flash('success', 'Login successful! Welcome back, ' . $user->name . '.');
+                session()->flash('success', 'Login successful! Welcome back, ' . $user->name . '.');
 
-            return $this->redirectBasedOnRole($user);
+                return $this->redirectBasedOnRole($user);
+            }
+
+            $this->addError('password', 'The provided credentials do not match our records.');
+            session()->flash('error', 'Invalid credentials. Please try again.');
+            
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Handle validation errors gracefully
+            session()->flash('error', 'Please check your input and try again.');
+        } catch (\Exception $e) {
+            // Handle any other exceptions
+            session()->flash('error', 'An error occurred during login. Please try again.');
+            \Log::error('Login error: ' . $e->getMessage());
         }
-
-        $this->addError('password', 'The provided credentials do not match our records.');
-        session()->flash('error', 'Invalid credentials. Please try again.');
     }
 
     protected function redirectBasedOnRole($user)

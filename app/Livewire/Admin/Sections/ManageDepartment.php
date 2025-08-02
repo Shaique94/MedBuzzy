@@ -42,6 +42,19 @@ class ManageDepartment extends Component
         $this->dispatch('department-deleted');
     }
 
+    public function toggleStatus($departmentId)
+    {
+        try {
+            $department = Department::findOrFail($departmentId);
+            $department->status = $department->status ? 0 : 1;
+            $department->save();
+
+            session()->flash('message', 'Department status updated successfully.');
+        } catch (\Exception $e) {
+            session()->flash('error', 'Error updating department status: ' . $e->getMessage());
+        }
+    }
+
     public function save()
     {
         $this->validate();
