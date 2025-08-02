@@ -15,12 +15,30 @@
     <link rel="canonical" href="{{ url()->current() }}">
 
     <style>
+        /* Sidebar Styles */
+        .sidebar-link {
+            transition: all 0.3s ease;
+            border-radius: 0.75rem;
+            margin: 0.25rem 0;
+        }
+        
         .sidebar-link:hover,
         .sidebar-link.active {
-            background: linear-gradient(90deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0) 100%);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(79, 172, 254, 0.08) 100%);
             border-left: 4px solid #3b82f6;
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
         }
 
+        .sidebar-link i {
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-link:hover i {
+            transform: scale(1.1);
+        }
+
+        /* Notification Styles */
         .notification-dot {
             position: absolute;
             top: 3px;
@@ -29,12 +47,107 @@
             height: 8px;
             border-radius: 50%;
             background-color: #ef4444;
+            animation: pulse 2s infinite;
         }
 
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Chart and Grid Styles */
         .chart-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1.5rem;
+        }
+
+        /* Mobile Sidebar Overlay */
+        .sidebar-overlay {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+        }
+
+        /* Responsive Container */
+        .responsive-container {
+            max-width: 100%;
+            padding: 0.75rem;
+        }
+
+        @media (min-width: 640px) {
+            .responsive-container {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .responsive-container {
+                padding: 2rem;
+            }
+        }
+
+        /* Enhanced Button Animations */
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Form Input Enhancements */
+        .form-input {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            background: linear-gradient(white, white) padding-box,
+                        linear-gradient(135deg, #e5e7eb, #f3f4f6) border-box;
+        }
+
+        .form-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Card Hover Effects */
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Loading Animations */
+        .loading-shimmer {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Responsive Text Sizing */
+        .responsive-text-sm { font-size: 0.75rem; }
+        .responsive-text-base { font-size: 0.875rem; }
+        .responsive-text-lg { font-size: 1rem; }
+
+        @media (min-width: 640px) {
+            .responsive-text-sm { font-size: 0.875rem; }
+            .responsive-text-base { font-size: 1rem; }
+            .responsive-text-lg { font-size: 1.125rem; }
+        }
+
+        @media (min-width: 1024px) {
+            .responsive-text-sm { font-size: 0.875rem; }
+            .responsive-text-base { font-size: 1rem; }
+            .responsive-text-lg { font-size: 1.25rem; }
         }
     </style>
 
@@ -46,16 +159,28 @@
 <body class="bg-gray-50 font-sans antialiased">
 
     <!-- Mobile Header with Toggle -->
-    <div class="md:hidden bg-white p-4 shadow-md flex items-center justify-between sticky top-0 z-30">
-        <button onclick="toggleSidebar()" class="text-gray-700">
+    <div class="lg:hidden bg-white shadow-lg p-3 sm:p-4 flex items-center justify-between sticky top-0 z-30 border-b border-gray-200">
+        <button onclick="toggleSidebar()" class="text-gray-700 hover:text-blue-600 transition-colors duration-200 p-2 rounded-lg hover:bg-blue-50">
             <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path d="M4 6h16M4 12h16M4 18h16" />
             </svg>
         </button>
-        <span class="font-semibold text-lg text-blue-700">Doctor Dashboard</span>
-        <div class="relative">
-            <i class="fas fa-bell text-gray-600 text-xl"></i>
-            <span class="notification-dot"></span>
+        <div class="flex items-center space-x-2">
+            <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center">
+                <i class="fas fa-user-md text-sm"></i>
+            </div>
+            <span class="responsive-text-lg font-bold text-blue-800">MedBuzzy</span>
+        </div>
+        <div class="flex items-center space-x-3">
+            <div class="relative">
+                <button class="text-gray-600 hover:text-blue-600 transition-colors duration-200 p-2 rounded-lg hover:bg-gray-100">
+                    <i class="fas fa-bell text-lg"></i>
+                    <span class="notification-dot"></span>
+                </button>
+            </div>
+            <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
+                <i class="fas fa-user text-gray-600 text-sm"></i>
+            </div>
         </div>
     </div>
 
@@ -66,33 +191,72 @@
         <livewire:admin.sidebar />
 
         <!-- Main Content Area -->
-        <div class="flex-1 flex flex-col md:ml-64 transition-all duration-300">
+        <div class="flex-1 flex flex-col lg:ml-64 transition-all duration-300">
 
             <!-- Header -->
             <livewire:admin.header />
 
             <!-- Page Content -->
-            {{ $slot }}
+            <main class="flex-1 responsive-container bg-gray-50 min-h-screen">
+                {{ $slot }}
+            </main>
 
             <!-- Footer -->
-              <footer class="mt-12 bg-gray-50 shadow-inner">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0">
-            <div class="text-sm text-gray-500 text-center md:text-left">
-                &copy; {{ date('Y') }} <span class="font-semibold text-blue-600">MedBuzzy</span>. All rights reserved.
-            </div>
-           
-        </div>
-    </footer>
+            <footer class="bg-white shadow-inner border-t border-gray-200">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0">
+                    <div class="responsive-text-sm text-gray-500 text-center">
+                        &copy; {{ date('Y') }} <span class="font-semibold text-blue-600">MedBuzzy</span>. All rights reserved.
+                    </div>
+                </div>
+            </footer>
 
         </div>
     </div>
+
+    <!-- Sidebar Overlay for Mobile -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-15 lg:hidden hidden sidebar-overlay" onclick="toggleSidebar()"></div>
 
     <!-- Sidebar Toggle Script -->
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('-translate-x-full');
+            const overlay = document.getElementById('sidebar-overlay');
+            
+            if (sidebar.classList.contains('-translate-x-full')) {
+                // Show sidebar
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden'); // Prevent scroll
+            } else {
+                // Hide sidebar
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            }
         }
+
+        // Close sidebar on window resize if desktop
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 1024) { // lg breakpoint
+                const sidebar = document.getElementById('sidebar');
+                const overlay = document.getElementById('sidebar-overlay');
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            }
+        });
+
+        // Add active state to current sidebar link
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPath = window.location.pathname;
+            const sidebarLinks = document.querySelectorAll('.sidebar-link');
+            
+            sidebarLinks.forEach(link => {
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('active');
+                }
+            });
+        });
     </script>
 
     @livewireScripts

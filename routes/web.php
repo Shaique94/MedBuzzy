@@ -12,6 +12,7 @@ use App\Livewire\Admin\Sections\Dashboard;
 use App\Livewire\Admin\Sections\EditDoctor;
 use App\Livewire\Admin\Sections\ManageDepartment;
 use App\Livewire\Admin\Sections\ManageDoctor;
+use App\Livewire\Admin\Sections\ListDoctor;
 use App\Livewire\Doctor\Section\CreateSlot;
 use App\Livewire\Doctor\Section\Leave;
 use App\Livewire\Doctor\Section\Manager\CreateManger;
@@ -102,13 +103,15 @@ Route::prefix('manager')->name('manager.')->group(function () {
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/manage-doctors', ManageDoctor::class)->name('manage.doctors');
+    Route::get('/doctors', ListDoctor::class)->name('doctors.list');
     Route::get('/manage-departments', ManageDepartment::class)->name('departments');
     Route::get('/appointment', All::class)->name('appointment');
     Route::get('/appointment/add', Add::class)->name('add.appointment');
     Route::get('/appointment/update/{id}', Update::class)->name('update.appointment');
     Route::get('/appointment/view/{id}', ViewDetails::class)->name('view.appointment');
     Route::get('/review',AdminReviewManagement::class)->name('reviewapprovel');
-  Route::get('/doctors/edit/{id}', EditDoctor::class)->name('editDoctor');});
+    Route::get('/doctors/edit/{id}', EditDoctor::class)->name('editDoctor');
+});
 
 Route::get('/storage-link', function () {
     Artisan::call('storage:link');
