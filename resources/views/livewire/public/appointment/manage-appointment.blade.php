@@ -399,7 +399,7 @@
                                             <!-- Time Slots Tabs -->
                                             <div x-data="{ activeTab: 'morning' }" class="mb-5">
                                                 <div class="border-b border-gray-200">
-                                                    <nav class="-mb-px flex space-x-6" aria-label="Tabs">
+                                                    <nav class="-mb-px flex space-x-6 overflow-auto" aria-label="Tabs">
                                                         <button @click="activeTab = 'morning'"
                                                             :class="activeTab === 'morning' ?
                                                                 'border-brand-teal-500 text-brand-teal-600' :
