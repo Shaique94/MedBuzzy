@@ -4,269 +4,208 @@
     <livewire:admin.doctor.update-doctor />
     <livewire:admin.doctor.view-doctor />
     
-    <div class="container mx-auto max-w-8xl">
+    <div class="container mx-auto max-w-8xl px-2 sm:px-4 lg:px-6">
         <!-- Enhanced Header Section -->
-        <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8 mb-6 lg:mb-8">
+        <div class="bg-white rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8 mb-4 sm:mb-6 lg:mb-8">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
-                <div>
-                    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-gray-900 tracking-tight">Doctor Management</h1>
-                    <p class="text-gray-600 mt-2 responsive-text-base">Manage all doctors in your medical practice</p>
-                    <div class="flex items-center mt-3 space-x-4 text-sm text-gray-500">
+                <div class="flex-1">
+                    <div class="flex items-center mb-2">
+                        <div class="bg-blue-100 p-2 rounded-lg mr-3">
+                            <i class="fas fa-user-md text-blue-600 text-xl"></i>
+                        </div>
+                        <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">Doctor Management</h1>
+                    </div>
+                    <p class="text-gray-600 text-sm sm:text-base mb-2">Manage all doctors in your medical practice</p>
+                    <div class="flex flex-wrap items-center gap-4 text-xs sm:text-sm text-gray-500">
                         <span class="flex items-center">
-                            <i class="fas fa-users mr-2 text-blue-500"></i>
-                            {{ $doctors->total() }} Total Doctors
+                            <i class="fas fa-users mr-1 text-blue-500"></i>
+                            {{ $doctors->total() ?? 0 }} Total
                         </span>
                         <span class="flex items-center">
-                            <i class="fas fa-clock mr-2 text-green-500"></i>
-                            Last updated {{ now()->diffForHumans() }}
+                            <i class="fas fa-clock mr-1 text-green-500"></i>
+                            Updated {{ now()->diffForHumans() }}
                         </span>
                     </div>
                 </div>
-                <button wire:click="openCreateModal" class="btn-primary flex items-center px-4 py-3 sm:px-6 sm:py-3 rounded-xl font-medium shadow-lg transition-all duration-300 text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                    <span class="responsive-text-base">Add New Doctor</span>
-                </button>
+                
+                <!-- Search and Add Button -->
+                <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                    <!-- Search Bar -->
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-gray-400 text-sm"></i>
+                        </div>
+                        <input type="text" 
+                               wire:model.live.debounce.300ms="search" 
+                               placeholder="Search doctors..." 
+                               class="pl-10 pr-4 py-2 sm:py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full sm:w-64 text-sm transition-all duration-200">
+                    </div>
+                    
+                    <!-- Add Doctor Button -->
+                    <button wire:click="openCreateModal" 
+                            class="bg-blue-600  hover:bg-blue-800 text-white px-4 py-2 sm:py-2.5 rounded-lg font-medium shadow-lg transition-all duration-300 flex items-center justify-center space-x-2 hover:shadow-xl transform hover:-translate-y-0.5 text-sm sm:text-base">
+                        <i class="fas fa-plus text-sm"></i>
+                        <span class="hidden sm:inline">Add Doctor</span>
+                        <span class="sm:hidden">Add</span>
+                    </button>
+                </div>
             </div>
         </div>
 
         <!-- Success/Error Messages -->
         @if (session()->has('message'))
-        <div class="mb-6 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded-lg flex items-start">
-            <svg class="h-5 w-5 text-green-500 mr-3 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div class="mb-4 sm:mb-6 p-3 sm:p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded-lg flex items-start">
+            <svg class="h-4 w-4 sm:h-5 sm:w-5 text-green-500 mr-2 sm:mr-3 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
             </svg>
-            <p>{{ session('message') }}</p>
+            <p class="text-sm sm:text-base">{{ session('message') }}</p>
         </div>
         @endif
 
         @if (session()->has('error'))
-        <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-lg flex items-start">
-            <svg class="h-5 w-5 text-red-500 mr-3 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div class="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-lg flex items-start">
+            <svg class="h-4 w-4 sm:h-5 sm:w-5 text-red-500 mr-2 sm:mr-3 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <p>{{ session('error') }}</p>
+            <p class="text-sm sm:text-base">{{ session('error') }}</p>
         </div>
         @endif
 
-        <!-- Enhanced Search and Filter Section -->
-        <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6 mb-6">
-            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0 lg:space-x-4">
-                <!-- Search Bar -->
-                <div class="flex-1 relative">
-                    <input type="text" 
-                           placeholder="Search by name, email, department..." 
-                           wire:model.live.debounce.300ms="search" 
-                           class="form-input w-full px-4 py-3 pl-12 border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 responsive-text-base">
-                    <svg class="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-                    </svg>
-                    @if($search)
-                        <button wire:click="$set('search', '')" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </button>
-                    @endif
-                </div>
-                
-                <!-- Quick Filters -->
-                <div class="flex flex-wrap gap-2 lg:flex-nowrap">
-                    <button class="px-4 py-2 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors duration-200 responsive-text-sm">
-                        <i class="fas fa-filter mr-2"></i>All Doctors
-                    </button>
-                    <button class="px-4 py-2 bg-green-50 text-green-700 rounded-lg hover:bg-green-100 transition-colors duration-200 responsive-text-sm">
-                        <i class="fas fa-check-circle mr-2"></i>Active
-                    </button>
-                    <button class="px-4 py-2 bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition-colors duration-200 responsive-text-sm">
-                        <i class="fas fa-pause-circle mr-2"></i>Inactive
-                    </button>
-                </div>
-            </div>
-        </div>
-
         <!-- Enhanced Doctors Table -->
-        <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+        <div class="bg-white rounded-xl sm:rounded-2xl shadow-lg overflow-hidden">
             <!-- Desktop Table -->
             <div class="overflow-x-auto hidden lg:block">
                 <table class="w-full table-auto">
                     <thead class="bg-gradient-to-r from-gray-50 to-gray-100">
                         <tr>
-                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Doctor</th>
-                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Department</th>
-                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Schedule</th>
-                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Contact</th>
-                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Fee</th>
-                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
+                            <th class="px-4 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Doctor
+                            </th>
+                            <th class="px-4 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Department
+                            </th>
+                            <th class="px-4 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Contact
+                            </th>
+                            <th class="px-4 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Schedule
+                            </th>
+                            <th class="px-4 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Fee
+                            </th>
+                            <th class="px-4 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Status
+                            </th>
+                            <th class="px-4 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Actions
+                            </th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-100">
+                    <tbody class="divide-y divide-gray-200">
                         @forelse($doctors as $doctor)
-                        <tr class="hover:bg-blue-50/50 transition-all duration-200 card-hover">
-                            <!-- Doctor Info -->
-                            <td class="px-6 py-5">
+                        <tr class="hover:bg-gray-50 transition-colors duration-200">
+                            <td class="px-4 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
-                                    <div class="flex-shrink-0 h-14 w-14 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center shadow-md">
-                                        @if ($doctor->image)
-                                            <img src="{{ $doctor->image }}" class="h-14 w-14 rounded-full object-cover ring-2 ring-blue-200" alt="{{ $doctor->user->name }}">
+                                    <div class="flex-shrink-0 h-10 w-10">
+                                        @if($doctor->image)
+                                            <img class="h-10 w-10 rounded-full object-cover ring-2 ring-blue-100" 
+                                                 src="{{ $doctor->image }}" 
+                                                 alt="{{ $doctor->user->name }}">
                                         @else
-                                            <span class="text-blue-600 font-bold text-lg">{{ substr($doctor->user->name, 0, 1) }}</span>
+                                            <div class="h-10 w-10 rounded-full bg-gradient-to-r from-blue-400 to-blue-600 flex items-center justify-center ring-2 ring-blue-100">
+                                                <span class="text-white font-semibold text-sm">
+                                                    {{ substr($doctor->user->name, 0, 1) }}
+                                                </span>
+                                            </div>
                                         @endif
                                     </div>
-                                    <div class="ml-4">
-                                        <div class="text-sm font-semibold text-gray-900">{{ $doctor->user->name }}</div>
-                                        <div class="text-xs text-gray-500 mt-1">
-                                            @if (is_array($doctor->qualification))
-                                                {{ implode(', ', array_slice($doctor->qualification, 0, 2)) }}
-                                                @if(count($doctor->qualification) > 2)
-                                                    <span class="text-gray-400">+{{ count($doctor->qualification) - 2 }} more</span>
+                                    <div class="ml-3">
+                                        <div class="text-sm font-medium text-gray-900">{{ $doctor->user->name }}</div>
+                                        <div class="text-xs text-gray-500 truncate max-w-32">
+                                            @if($doctor->qualification && is_array($doctor->qualification))
+                                                {{ implode(', ', array_slice($doctor->qualification, 0, 1)) }}
+                                                @if(count($doctor->qualification) > 1)
+                                                    <span class="text-blue-600">+{{ count($doctor->qualification) - 1 }}</span>
                                                 @endif
-                                            @else
-                                                {{ $doctor->qualification ?? 'No qualification specified' }}
                                             @endif
                                         </div>
-                                        @if($doctor->city || $doctor->state)
-                                        <div class="text-xs text-gray-400 mt-1 flex items-center">
-                                            <i class="fas fa-map-marker-alt mr-1"></i>
-                                            {{ $doctor->city }}, {{ $doctor->state }}
-                                        </div>
-                                        @endif
                                     </div>
                                 </div>
                             </td>
-
-                            <!-- Department -->
-                            <td class="px-6 py-5">
-                                <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-green-100 text-green-800 shadow-sm">
-                                    <i class="fas fa-building mr-2 text-xs"></i>
-                                    {{ $doctor->department->name }}
+                            <td class="px-4 py-4 whitespace-nowrap">
+                                <span class="inline-flex px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
+                                    {{ $doctor->department->name ?? 'N/A' }}
                                 </span>
                             </td>
-
-                            <!-- Schedule -->
-                            <td class="px-6 py-5">
+                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
                                 <div class="space-y-1">
-                                    <div class="text-sm font-medium text-gray-900 flex items-center">
-                                        <i class="fas fa-clock mr-2 text-blue-500"></i>
-                                        {{ \Carbon\Carbon::parse($doctor->start_time)->format('h:i A') }} - {{ \Carbon\Carbon::parse($doctor->end_time)->format('h:i A') }}
+                                    <div class="flex items-center text-xs">
+                                        <i class="fas fa-envelope text-gray-400 mr-1 w-3"></i>
+                                        <span class="truncate max-w-28">{{ $doctor->user->email }}</span>
+                                    </div>
+                                    <div class="flex items-center text-xs">
+                                        <i class="fas fa-phone text-gray-400 mr-1 w-3"></i>
+                                        <span>{{ $doctor->user->phone ?? 'N/A' }}</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
+                                <div class="space-y-1">
+                                    <div class="font-medium text-xs">
+                                        {{ \Carbon\Carbon::parse($doctor->start_time)->format('g:i A') }} - 
+                                        {{ \Carbon\Carbon::parse($doctor->end_time)->format('g:i A') }}
                                     </div>
                                     <div class="text-xs text-gray-500">
-                                        @if (is_array($doctor->available_days) && count($doctor->available_days) > 0)
-                                            {{ implode(', ', array_slice($doctor->available_days, 0, 3)) }}
-                                            @if(count($doctor->available_days) > 3)
-                                                <span class="text-gray-400">+{{ count($doctor->available_days) - 3 }} more</span>
-                                            @endif
-                                        @else
-                                            <span class="text-red-500">No schedule set</span>
-                                        @endif
-                                    </div>
-                                    <div class="text-xs text-gray-400 flex items-center space-x-2">
-                                        <span>{{ $doctor->slot_duration_minutes }}min slots</span>
-                                        <span>•</span>
-                                        <span>{{ $doctor->patients_per_slot }} patient(s)</span>
+                                        {{ count($doctor->available_days ?? []) }} days/week
                                     </div>
                                 </div>
                             </td>
-
-                            <!-- Contact -->
-                            <td class="px-6 py-5">
-                                <div class="space-y-1">
-                                    <div class="text-sm text-gray-600 flex items-center">
-                                        <i class="fas fa-envelope mr-2 text-gray-400"></i>
-                                        <span class="truncate">{{ $doctor->user->email }}</span>
-                                    </div>
-                                    <div class="text-sm text-gray-600 flex items-center">
-                                        <i class="fas fa-phone mr-2 text-gray-400"></i>
-                                        {{ $doctor->user->phone ?? 'No phone' }}
-                                    </div>
+                            <td class="px-4 py-4 whitespace-nowrap">
+                                <div class="text-sm font-medium text-gray-900">
+                                    ₹{{ number_format($doctor->fee) }}
                                 </div>
                             </td>
-
-                            <!-- Fee -->
-                            <td class="px-6 py-5">
-                                <div class="text-lg font-bold text-gray-900 flex items-center">
-                                    <i class="fas fa-rupee-sign mr-1 text-green-500"></i>
-                                    {{ number_format($doctor->fee, 0) }}
-                                </div>
-                                <div class="text-xs text-gray-500">Per consultation</div>
+                            <td class="px-4 py-4 whitespace-nowrap">
+                                <!-- Toggle Switch for Status -->
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" 
+                                           wire:click="toggleStatus({{ $doctor->id }})"
+                                           {{ $doctor->status == 1 ? 'checked' : '' }}
+                                           class="sr-only peer">
+                                    <div class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-green-500"></div>
+                                </label>
+                                <span class="ml-2 text-xs font-medium text-gray-700">
+                                    {{ $doctor->status == 1 ? 'Active' : 'Inactive' }}
+                                </span>
                             </td>
-
-                            <!-- Status -->
-                            <td class="px-6 py-5">
-                                @if($doctor->status == 1)
-                                    <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                                        <svg class="w-3 h-3 mr-2" fill="currentColor" viewBox="0 0 8 8">
-                                            <circle cx="4" cy="4" r="3" />
-                                        </svg>
-                                        Active
-                                    </span>
-                                @elseif($doctor->status == 0)
-                                    <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-red-100 text-red-800">
-                                        <svg class="w-3 h-3 mr-2" fill="currentColor" viewBox="0 0 8 8">
-                                            <circle cx="4" cy="4" r="3" />
-                                        </svg>
-                                        Inactive
-                                    </span>
-                                @else
-                                    <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
-                                        <svg class="w-3 h-3 mr-2" fill="currentColor" viewBox="0 0 8 8">
-                                            <circle cx="4" cy="4" r="3" />
-                                        </svg>
-                                        On Leave
-                                    </span>
-                                @endif
-                            </td>
-
-                            <!-- Actions -->
-                            <td class="px-6 py-5">
-                                <div class="flex items-center space-x-2">
-                                    <button wire:click="openViewModal({{ $doctor->id }})" class="flex items-center px-3 py-2 text-blue-600 hover:text-blue-800 transition-colors duration-200 bg-blue-50 hover:bg-blue-100 rounded-lg shadow-sm">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                        </svg>
-                                        <span class="text-sm font-medium">View</span>
+                            <td class="px-4 py-4 whitespace-nowrap text-center">
+                                <div class="flex items-center justify-center space-x-1">
+                                    <button wire:click="openViewModal({{ $doctor->id }})" 
+                                            class="text-blue-600 hover:text-blue-900 transition-colors duration-200 p-1.5 hover:bg-blue-50 rounded-lg">
+                                        <i class="fas fa-eye text-xs"></i>
                                     </button>
-                                    <button wire:click="openUpdateModal({{ $doctor->id }})" class="flex items-center px-3 py-2 text-indigo-600 hover:text-indigo-800 transition-colors duration-200 bg-indigo-50 hover:bg-indigo-100 rounded-lg shadow-sm">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                        </svg>
-                                        <span class="text-sm font-medium">Edit</span>
+                                    <button wire:click="openUpdateModal({{ $doctor->id }})" 
+                                            class="text-green-600 hover:text-green-900 transition-colors duration-200 p-1.5 hover:bg-green-50 rounded-lg">
+                                        <i class="fas fa-edit text-xs"></i>
                                     </button>
-                                    <button wire:click="confirmDelete({{ $doctor->id }})" class="flex items-center px-3 py-2 text-red-600 hover:text-red-800 transition-colors duration-200 bg-red-50 hover:bg-red-100 rounded-lg shadow-sm">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                        </svg>
-                                        <span class="text-sm font-medium">Delete</span>
+                                    <button wire:click="confirmDelete({{ $doctor->id }})" 
+                                            class="text-red-600 hover:text-red-900 transition-colors duration-200 p-1.5 hover:bg-red-50 rounded-lg">
+                                        <i class="fas fa-trash text-xs"></i>
                                     </button>
                                 </div>
                             </td>
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="7" class="px-4 py-12 sm:px-6 text-center text-gray-500">
-                                <div class="flex flex-col items-center justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    <h3 class="text-lg font-medium text-gray-700 mb-2">No doctors found</h3>
-                                    <p class="text-sm text-gray-500 mb-4">
-                                        @if($search)
-                                            No doctors match your search criteria. Try adjusting your search terms.
-                                        @else
-                                            Get started by adding your first doctor to the system.
-                                        @endif
-                                    </p>
-                                    @if(!$search)
-                                    <button wire:click="openCreateModal" class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                                        </svg>
-                                        Add First Doctor
+                            <td colspan="7" class="px-6 py-12 text-center">
+                                <div class="flex flex-col items-center">
+                                    <i class="fas fa-user-md text-gray-300 text-6xl mb-4"></i>
+                                    <h3 class="text-lg font-medium text-gray-900 mb-2">No doctors found</h3>
+                                    <p class="text-gray-500 mb-6">Get started by adding your first doctor to the system.</p>
+                                    <button wire:click="openCreateModal" 
+                                            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200">
+                                        <i class="fas fa-plus mr-2"></i>Add First Doctor
                                     </button>
-                                    @endif
                                 </div>
                             </td>
                         </tr>
@@ -278,7 +217,7 @@
             <!-- Enhanced Mobile Cards -->
             <div class="lg:hidden space-y-4 p-4">
                 @forelse($doctors as $doctor)
-                <div class="card-hover bg-white rounded-xl p-4 shadow-lg border border-gray-100">
+                <div class="bg-white rounded-xl p-4 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-200">
                     <div class="flex items-start space-x-4">
                         <div class="flex-shrink-0 h-14 w-14 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center shadow-md">
                             @if ($doctor->image)
@@ -298,13 +237,16 @@
                                             {{ number_format($doctor->fee, 0) }}
                                         </span>
                                         <span class="text-gray-400">•</span>
-                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
-                                            @if($doctor->status == 1) bg-green-100 text-green-800 
-                                            @elseif($doctor->status == 0) bg-red-100 text-red-800 
-                                            @else bg-yellow-100 text-yellow-800 @endif">
-                                            @if($doctor->status == 1) Active 
-                                            @elseif($doctor->status == 0) Inactive 
-                                            @else On Leave @endif
+                                        <!-- Toggle Switch for Status -->
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" 
+                                                   wire:click="toggleStatus({{ $doctor->id }})"
+                                                   {{ $doctor->status == 1 ? 'checked' : '' }}
+                                                   class="sr-only peer">
+                                            <div class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-green-500"></div>
+                                        </label>
+                                        <span class="text-xs font-medium text-gray-700">
+                                            {{ $doctor->status == 1 ? 'Active' : 'Inactive' }}
                                         </span>
                                     </div>
                                 </div>

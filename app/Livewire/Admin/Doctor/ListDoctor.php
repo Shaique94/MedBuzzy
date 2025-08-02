@@ -88,6 +88,20 @@ class ListDoctor extends Component
         $this->dispatch('openViewModal', $doctorId);
     }
 
+    public function toggleStatus($doctorId)
+    {
+        try {
+            $doctor = Doctor::findOrFail($doctorId);
+            $doctor->status = $doctor->status == 1 ? 0 : 1;
+            $doctor->save();
+
+            session()->flash('message', 'Doctor status updated successfully.');
+            $this->dispatch('refreshDoctorList');
+        } catch (\Exception $e) {
+            session()->flash('error', 'Error updating doctor status: ' . $e->getMessage());
+        }
+    }
+
     #[Layout('layouts.admin')]
     public function render()
     {

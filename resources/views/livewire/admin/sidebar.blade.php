@@ -6,7 +6,7 @@
             <div class="bg-white text-blue-600 rounded-full w-10 h-10 flex items-center justify-center mr-3 shadow-lg">
                 <i class="fas fa-user-md text-lg"></i>
             </div>
-            <span class="text-xl font-bold text-blue-800">Medbuzzy</span>
+            <span class="text-xl font-bold text-white">Medbuzzy</span>
         </div>
 
         <!-- Navigation -->
@@ -36,20 +36,8 @@
                 <span class="ml-3">Reviews</span>
             </a>
 
-            <!-- Quick Actions Section -->
-            <div class="pt-4 mt-4 border-t border-gray-200">
-                <p class="text-xs uppercase tracking-wider text-gray-500 font-semibold px-3 lg:px-4 mb-2">Quick Actions</p>
-                
-                <button onclick="window.location.href='{{ route('admin.doctors.list') }}'" class="sidebar-link flex items-center w-full px-3 lg:px-4 py-3 text-gray-700 responsive-text-base">
-                    <i class="fas fa-plus text-green-500 w-5 lg:w-6 text-center"></i>
-                    <span class="ml-3">Add Doctor</span>
-                </button>
-                
-                <button onclick="window.location.href='{{ route('admin.appointment') }}'" class="sidebar-link flex items-center w-full px-3 lg:px-4 py-3 text-gray-700 responsive-text-base">
-                    <i class="fas fa-eye text-purple-500 w-5 lg:w-6 text-center"></i>
-                    <span class="ml-3">View Appointments</span>
-                </button>
-            </div>
+           
+           
         </nav>
 
         <!-- User Profile Section -->
