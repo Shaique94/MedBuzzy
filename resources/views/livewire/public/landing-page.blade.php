@@ -155,85 +155,60 @@
             <!-- Doctors Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4 sm:p-6">
                 @forelse ($doctors as $doctor)
-                    <div class="bg-white rounded-xl border border-brand-teal-100 flex flex-col">
-                        <!-- Doctor Image/Placeholder -->
-                        <div class="relative h-56 bg-gradient-to-br from-brand-teal-50 to-brand-orange-50 flex items-center justify-center">
-                            <div class="w-32 h-32 bg-white rounded-full flex items-center justify-center border-4 border-white overflow-hidden">
+                    <div class="bg-white rounded-xl border border-brand-teal-100 shadow-sm hover:shadow-md transition-all duration-300">
+                        <!-- Doctor Header -->
+                        <div class="relative bg-brand-teal-50 rounded-t-xl p-4 flex items-center">
+                            <!-- Doctor Image/Initial -->
+                            <div class="w-12 h-12 mr-3 bg-white rounded-full flex items-center justify-center border-2 border-white overflow-hidden shadow-sm">
                                 @if ($doctor->image)
                                     <img src="{{ $doctor->image }}" class="w-full h-full object-cover" alt="{{ $doctor->user->name }}">
                                 @else
-                                    <span class="text-3xl font-bold text-brand-teal-600">{{ substr($doctor->user->name, 0, 1) }}</span>
+                                    <span class="text-xl font-bold text-brand-teal-600">{{ substr($doctor->user->name, 0, 1) }}</span>
                                 @endif
                             </div>
-                            <!-- Verified Badge -->
-                            <span class="absolute top-4 right-4 bg-brand-teal-500 text-white text-xs px-3 py-1.5 rounded-full flex items-center font-semibold border border-white">
-                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            
+                            <!-- Doctor Name & Specialty -->
+                            <div class="flex-1 min-w-0">
+                                <h3 class="font-bold text-gray-800 text-base truncate">{{ $doctor->user->name }}</h3>
+                                <p class="text-brand-teal-600 text-xs font-medium truncate">{{ $doctor->department->name }}</p>
+                            </div>
+                            
+                            <!-- Rating Badge -->
+                            <div class="flex items-center bg-white px-1.5 py-0.5 rounded-md shadow-sm border border-gray-100">
+                                <svg class="w-3 h-3 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
                                 </svg>
-                                Verified
-                            </span>
+                                <span class="text-xs font-medium ml-1">{{ number_format($doctor->reviews()->where('approved', true)->avg('rating') ?? 0, 1) }}</span>
+                            </div>
                         </div>
 
                         <!-- Doctor Details -->
-                        <div class="p-6 flex-grow flex flex-col">
+                        <div class="p-4">
+                            <!-- Availability -->
                             <div class="mb-3">
-                                <h3 class="font-bold text-lg text-gray-800 truncate">{{ $doctor->user->name }}</h3>
-                                <p class="text-brand-teal-600 font-medium text-sm mt-1">{{ $doctor->department->name }}</p>
-                            </div>
-                            <!-- Rating -->
-                            <div class="mb-3 flex items-center">
-                                <div class="flex text-brand-orange-400 mr-2">
-                                    @php
-                                        $avgRating = $doctor->reviews()->where('approved', true)->avg('rating') ?? 0;
-                                        $fullStars = floor($avgRating);
-                                        $hasHalfStar = ($avgRating - $fullStars) >= 0.5;
-                                        $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
-                                    @endphp
-                                    @for ($i = 0; $i < $fullStars; $i++)
-                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                        </svg>
-                                    @endfor
-                                    @if($hasHalfStar)
-                                        <div class="relative w-4 h-4">
-                                            <svg class="w-4 h-4 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
-                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                            </svg>
-                                            <svg class="absolute top-0 left-0 w-4 h-4 text-brand-orange-400" fill="currentColor" viewBox="0 0 20 20" style="clip-path: inset(0 50% 0 0)">
-                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                            </svg>
-                                        </div>
-                                    @endif
-                                    @for ($i = 0; $i < $emptyStars; $i++)
-                                        <svg class="w-4 h-4 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                        </svg>
-                                    @endfor
-                                </div>
-                                <span class="text-gray-500 text-xs">({{ $doctor->reviews()->where('approved', true)->count() }} reviews)</span>
-                            </div>
-                            <!-- Experience and Fees -->
-                            <div class="grid grid-cols-2 gap-2 mb-4">
-                                <div>
-                                    <p class="text-gray-400 text-xs uppercase">Experience</p>
-                                    <p class="font-semibold text-gray-800 text-sm">{{ $doctor->experience ?? '12' }} yrs</p>
-                                </div>
-                                <div>
-                                    <p class="text-gray-400 text-xs uppercase">Fees</p>
-                                    <p class="font-semibold text-gray-800 text-sm">₹ {{ $doctor->fee }}</p>
+                                <p class="text-xs text-gray-500 mb-1">Next Available:</p>
+                                <div class="flex items-center justify-between">
+                                    <p class="text-sm font-medium text-gray-800">Contact for availability</p>
                                 </div>
                             </div>
-                            <!-- Buttons -->
-                            <div class="mt-auto grid grid-cols-2 gap-3">
-                                <a href="{{ route('doctor-detail', ['slug' => $doctor->slug]) }}"
-                                    class="text-center border-2 border-brand-teal-500 text-brand-teal-500 hover:bg-brand-teal-500 hover:text-white py-2 rounded-lg text-sm font-semibold transition-all duration-200">
-                                    View Profile
-                                </a>
-                                <a href="{{ route('appointment', ['doctor_slug' => $doctor->slug]) }}"
-                                    class="text-center bg-brand-teal-500 hover:bg-brand-teal-600 text-white py-2 rounded-lg text-sm font-semibold transition">
-                                    Book Appointment
-                                </a>
+                            
+                            <!-- Stats -->
+                            <div class="grid grid-cols-2 gap-2 mb-3">
+                                <div class="bg-gray-50 rounded p-2 text-center">
+                                    <div class="font-medium text-gray-800 text-sm">{{ $doctor->experience ?? '3+' }} yrs</div>
+                                    <div class="text-xs text-gray-500">Experience</div>
+                                </div>
+                                <div class="bg-gray-50 rounded p-2 text-center">
+                                    <div class="font-medium text-gray-800 text-sm">By Appt</div>
+                                    <div class="text-xs text-gray-500">Consultation</div>
+                                </div>
                             </div>
+
+                            <!-- Book Button -->
+                            <a href="{{ route('appointment', ['doctor_slug' => $doctor->slug]) }}"
+                               class="w-full block bg-brand-teal-500 text-white py-2.5 rounded-lg text-sm font-medium hover:bg-brand-teal-600 transition-colors text-center">
+                                Book Appointment
+                            </a>
                         </div>
                     </div>
                 @empty

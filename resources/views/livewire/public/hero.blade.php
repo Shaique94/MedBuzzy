@@ -173,25 +173,22 @@
                                             x-transition:leave="transition-opacity duration-200"
                                             x-transition:leave-start="opacity-100 scale-100"
                                             x-transition:leave-end="opacity-0 scale-95"
-                                            class="absolute inset-0 bg-white rounded-2xl p-6 space-y-4"
+                                            class="absolute inset-0 bg-white rounded-2xl p-4 sm:p-6 space-y-3 sm:space-y-4"
                                             style="will-change: opacity, transform;">
-                                            <div class="flex items-center gap-3">
-                                                <div
-                                                    class="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center overflow-hidden border-2 border-white">
+                                            <div class="flex items-center gap-2 sm:gap-3">
+                                                <div class="w-12 h-12 sm:w-16 sm:h-16 bg-teal-100 rounded-full flex items-center justify-center overflow-hidden border-2 border-white shadow-sm">
                                                     @if ($doctor->image)
                                                         <img src="{{ $doctor->image }}"
                                                             alt="{{ $doctor->user->name }}"
                                                             class="w-full h-full object-cover">
                                                     @else
                                                         <span
-                                                            class="text-2xl font-bold text-teal-600">{{ substr($doctor->user->name, 0, 1) }}</span>
+                                                            class="text-xl sm:text-2xl font-bold text-teal-600">{{ substr($doctor->user->name, 0, 1) }}</span>
                                                     @endif
                                                 </div>
-                                                <div class="flex-1">
-                                                    <div class="font-semibold text-gray-900 text-lg">
-                                                        {{ $doctor->user->name }}</div>
-                                                    <div class="text-sm text-teal-600 font-medium">
-                                                        {{ $doctor->department->name ?? 'General Medicine' }}</div>
+                                                <div class="flex-1 min-w-0">
+                                                    <div class="font-semibold text-gray-900 text-base sm:text-lg truncate">{{ $doctor->user->name }}</div>
+                                                    <div class="text-xs sm:text-sm text-teal-600 font-medium truncate">{{ $doctor->department->name ?? 'General Medicine' }}</div>
                                                 </div>
                                                 <div class="text-right">
                                                     <div class="flex text-yellow-400 justify-end mb-1">
@@ -204,7 +201,7 @@
 
                                                         {{-- Full Stars --}}
                                                         @for ($i = 0; $i < $fullStars; $i++)
-                                                            <svg class="w-4 h-4" fill="currentColor"
+                                                            <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor"
                                                                 viewBox="0 0 20 20">
                                                                 <path
                                                                     d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
@@ -214,14 +211,14 @@
 
                                                         {{-- Half Star --}}
                                                         @if ($hasHalfStar)
-                                                            <div class="relative w-4 h-4">
-                                                                <svg class="w-4 h-4 text-gray-300" fill="currentColor"
+                                                            <div class="relative w-3 h-3 sm:w-4 sm:h-4">
+                                                                <svg class="w-3 h-3 sm:w-4 sm:h-4 text-gray-300" fill="currentColor"
                                                                     viewBox="0 0 20 20">
                                                                     <path
                                                                         d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
                                                                     </path>
                                                                 </svg>
-                                                                <svg class="absolute top-0 left-0 w-4 h-4 text-yellow-400"
+                                                                <svg class="absolute top-0 left-0 w-3 h-3 sm:w-4 sm:h-4 text-yellow-400"
                                                                     fill="currentColor" viewBox="0 0 20 20"
                                                                     style="clip-path: inset(0 50% 0 0)">
                                                                     <path
@@ -233,7 +230,7 @@
 
                                                         {{-- Empty Stars --}}
                                                         @for ($i = 0; $i < $emptyStars; $i++)
-                                                            <svg class="w-4 h-4 text-gray-300" fill="currentColor"
+                                                            <svg class="w-3 h-3 sm:w-4 sm:h-4 text-gray-300" fill="currentColor"
                                                                 viewBox="0 0 20 20">
                                                                 <path
                                                                     d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
@@ -241,23 +238,22 @@
                                                             </svg>
                                                         @endfor
                                                     </div>
-                                                    <div class="text-xs text-gray-500">
+                                                    <div class="text-[10px] sm:text-xs text-gray-500">
                                                         @if ($avgRating > 0)
-                                                            {{ number_format($avgRating, 1) }} rating
+                                                            {{ number_format($avgRating, 1) }}
                                                             @if ($doctor->reviews_count > 0)
-                                                                ({{ $doctor->reviews_count }}
-                                                                {{ $doctor->reviews_count == 1 ? 'review' : 'reviews' }})
+                                                                ({{ $doctor->reviews_count }})
                                                             @endif
                                                         @else
-                                                            No ratings yet
+                                                            No ratings
                                                         @endif
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div class="space-y-3">
-                                                <div class="text-sm text-gray-700 font-medium">Next Available:</div>
-                                                <div class="bg-teal-50 rounded-lg p-3 border border-teal-100">
+                                                <div class="text-xs sm:text-sm text-gray-700 font-medium">Next Available:</div>
+                                                <div class="bg-teal-50 rounded-lg p-2 sm:p-3 border border-teal-100">
                                                     @php
                                                         $availableDays = is_array($doctor->available_days)
                                                             ? $doctor->available_days
@@ -320,32 +316,29 @@ if (!$nextSlot) {
                                                         }
                                                     @endphp
 
-                                                    <div class="font-medium text-teal-800">{{ $nextSlot['day'] }},
-                                                        {{ $nextSlot['time'] }}</div>
-                                                    <div class="text-sm text-teal-600">₹{{ $doctor->fee ?? 500 }}
-                                                        consultation</div>
+                                                    <div class="font-medium text-xs sm:text-sm text-teal-800">{{ $nextSlot['day'] }}, {{ $nextSlot['time'] }}</div>
+                                                    <div class="text-[10px] sm:text-xs text-teal-600">₹{{ $doctor->fee ?? 500 }} consultation</div>
                                                 </div>
 
                                                 <div class="grid grid-cols-2 gap-2 text-sm">
-                                                    <div class="bg-gray-50 rounded p-2 text-center">
-                                                        <div class="font-medium text-gray-800">
-                                                            {{ $doctor->experience ?? '5+' }} yrs</div>
-                                                        <div class="text-xs text-gray-500">Experience</div>
+                                                    <div class="bg-gray-50 rounded p-1 sm:p-2 text-center">
+                                                        <div class="font-medium text-gray-800 text-xs sm:text-sm">{{ $doctor->experience ?? '5+' }} yrs</div>
+                                                        <div class="text-[9px] sm:text-xs text-gray-500">Experience</div>
                                                     </div>
-                                                    <div class="bg-gray-50 rounded p-2 text-center">
-                                                        <div class="font-medium text-gray-800">
+                                                    <div class="bg-gray-50 rounded p-1 sm:p-2 text-center">
+                                                        <div class="font-medium text-gray-800 text-xs sm:text-sm">
                                                             @if (!empty($availableDays))
                                                                 {{ count($availableDays) }} days
                                                             @else
                                                                 By Appt
                                                             @endif
                                                         </div>
-                                                        <div class="text-xs text-gray-500">Available</div>
+                                                        <div class="text-[9px] sm:text-xs text-gray-500">Available</div>
                                                     </div>
                                                 </div>
 
                                                 <a href="{{ route('appointment', ['doctor_slug' => $doctor->slug]) }}"
-                                                    class="w-full block bg-teal-600 text-white py-3 rounded-lg font-medium hover:bg-teal-700 transition-colors text-center">
+                                                    class="w-full block bg-teal-600 text-white py-2 sm:py-3 rounded-lg font-medium hover:bg-teal-700 transition-colors text-center text-sm sm:text-base">
                                                     Book Appointment
                                                 </a>
                                             </div>
@@ -355,16 +348,16 @@ if (!$nextSlot) {
                             </div>
                             <!-- Carousel Controls -->
                             <button @click="prev" :disabled="transitioning"
-                                class="absolute left-0 top-1/2 -translate-y-1/2 bg-white border border-teal-200 rounded-full p-2 shadow hover:bg-teal-50 transition -translate-x-1/2 disabled:opacity-50 disabled:cursor-not-allowed">
-                                <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor"
+                                class="absolute left-0 top-1/2 -translate-y-1/2 bg-white border border-teal-200 rounded-full p-1 sm:p-2 shadow hover:bg-teal-50 transition -translate-x-1/2 disabled:opacity-50 disabled:cursor-not-allowed">
+                                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-teal-600" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M15 19l-7-7 7-7"></path>
                                 </svg>
                             </button>
                             <button @click="next" :disabled="transitioning"
-                                class="absolute right-0 top-1/2 -translate-y-1/2 bg-white border border-teal-200 rounded-full p-2 shadow hover:bg-teal-50 transition translate-x-1/2 disabled:opacity-50 disabled:cursor-not-allowed">
-                                <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor"
+                                class="absolute right-0 top-1/2 -translate-y-1/2 bg-white border border-teal-200 rounded-full p-1 sm:p-2 shadow hover:bg-teal-50 transition translate-x-1/2 disabled:opacity-50 disabled:cursor-not-allowed">
+                                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-teal-600" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9 5l7 7-7 7"></path>
