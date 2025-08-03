@@ -592,7 +592,9 @@
                                             class="mt-2 flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center sm:justify-start">
                                             <p class="text-sm text-gray-600">
                                                 {{ \Carbon\Carbon::parse($appointment_date)->format('l, F j, Y') }}</p>
-                                            <p class="text-sm text-gray-600">{{ $appointment_time }}</p>
+                                            <p class="text-sm text-gray-600">
+                                                {{ \Carbon\Carbon::createFromFormat('H:i', $appointment_time)->format('h:i A') }}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
