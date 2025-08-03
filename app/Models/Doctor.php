@@ -29,6 +29,7 @@ class Doctor extends Model
         'unavailable_from',
         'unavailable_to',
         'max_booking_days',
+        'experience',
     ];
 
     protected $casts = [
@@ -60,7 +61,7 @@ class Doctor extends Model
         if (!$this->user) {
             $this->load('user');
         }
-        
+
         if (!$this->user) {
             return null;
         }
@@ -92,7 +93,7 @@ class Doctor extends Model
         return $this->belongsTo(User::class, 'manager_id');
     }
 
-        public function managers()
+    public function managers()
     {
         return $this->belongsToMany(User::class, 'managers', 'doctor_id', 'user_id');
     }
@@ -102,7 +103,7 @@ class Doctor extends Model
         return $this->hasMany(Appointment::class);
     }
 
-       public function reviews()
+    public function reviews()
     {
         return $this->hasMany(Review::class);
     }
@@ -134,7 +135,7 @@ class Doctor extends Model
         return $dayName && in_array($dayName, $this->available_days ?? []);
     }
 
-      public function getRatingAttribute()
+    public function getRatingAttribute()
     {
         return $this->reviews()->where('approved', true)->avg('rating') ?? 0;
     }
@@ -310,5 +311,5 @@ class Doctor extends Model
     }
 }
 
-  
+
 
