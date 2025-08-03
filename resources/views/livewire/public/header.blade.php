@@ -4,14 +4,14 @@
         <div class="container mx-auto px-4 flex justify-between items-center text-sm">
            
             <div class="flex items-center space-x-4">
-              <a href="mailto:{{ $contactDetails['email'] }}" class="flex items-center space-x-2 hover:text-brand-teal-100 transition-colors">
+              <a wire:navigate href="mailto:{{ $contactDetails['email'] }}" class="flex items-center space-x-2 hover:text-brand-teal-100 transition-colors">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
                         <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
                     </svg>
                     {{ $contactDetails['email'] }}
                 </a>
-                <a href="tel:{{ $contactDetails['phone'] }}" class="font-semibold hover:text-brand-teal-100 transition-colors">{{ $contactDetails['phone'] }}</a>
+                <a wire:navigate href="tel:{{ $contactDetails['phone'] }}" class="font-semibold hover:text-brand-teal-100 transition-colors">{{ $contactDetails['phone'] }}</a>
             </div>
         </div>
     </div>
@@ -21,7 +21,7 @@
         <div class="flex justify-between items-center">
             <!-- Logo -->
             <div class="flex items-center">
-                <a href="/" class="flex items-center">
+                <a wire:navigate href="/" class="flex items-center">
                     <img src="/logo/logo.png" alt="MedBuzzy Logo" class="h-16 md:h-20">
                 </a>
             </div>
@@ -32,11 +32,11 @@
                     class="text-gray-700 hover:text-brand-teal-600 font-medium transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-brand-teal-50">
                     Find Doctor
                 </a>
-                <a href="{{ route('about-us') }}"
+                <a wire:navigate href="{{ route('about-us') }}"
                     class="text-gray-700 hover:text-brand-teal-600 font-medium transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-brand-teal-50">
                     About
                 </a>
-                <a href="{{ route('contact-us') }}"
+                <a wire:navigate href="{{ route('contact-us') }}"
                     class="text-gray-700 hover:text-brand-teal-600 font-medium transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-brand-teal-50">
                     Contact
                 </a>
@@ -70,7 +70,7 @@
                 @endauth
                 
                 <!-- Book Now Button -->
-                <a href="{{ route('appointment') }}"
+                <a wire:navigate href="{{ route('appointment') }}"
                     class="bg-brand-orange-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-brand-orange-600 transition-colors duration-200 flex items-center shadow-md hover:shadow-lg whitespace-nowrap">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -82,11 +82,11 @@
 
                 @guest
                     <div class="hidden md:flex items-center space-x-3">
-                        <a href="/login"
+                        <a wire:navigate href="/login"
                             class="text-gray-600 hover:text-brand-teal-600 font-medium transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-brand-teal-50 whitespace-nowrap">
                             Login
                         </a>
-                        {{-- <a href="/register"
+                        {{-- <a wire:navigate href="/register"
                             class="bg-brand-teal-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-brand-teal-700 transition-colors duration-200 shadow-md hover:shadow-lg whitespace-nowrap">
                             Sign Up
                         </a> --}}
@@ -108,7 +108,7 @@
     <!-- Mobile Menu -->
     <div class="lg:hidden bg-white border-t hidden shadow-lg" id="mobile-menu">
         <nav class="container mx-auto px-4 py-4 space-y-2">
-            <a href="/"
+            <a wire:navigate href="/"
                 class="block text-gray-700 hover:text-brand-teal-600 font-medium py-2 px-3 rounded-lg hover:bg-brand-teal-50 transition-colors duration-200 mobile-menu-link">
                 Home
             </a>
@@ -116,11 +116,11 @@
                 class="block text-gray-700 hover:text-brand-teal-600 font-medium py-2 px-3 rounded-lg hover:bg-brand-teal-50 transition-colors duration-200 mobile-menu-link">
                 Find Doctor
             </a>
-            <a href="{{ route('about-us') }}"
+            <a wire:navigate href="{{ route('about-us') }}"
                 class="block text-gray-700 hover:text-brand-teal-600 font-medium py-2 px-3 rounded-lg hover:bg-brand-teal-50 transition-colors duration-200 mobile-menu-link">
                 About
             </a>
-            <a href="{{ route('contact-us') }}"
+            <a wire:navigate href="{{ route('contact-us') }}"
                 class="block text-gray-700 hover:text-brand-teal-600 font-medium py-2 px-3 rounded-lg hover:bg-brand-teal-50 transition-colors duration-200 mobile-menu-link">
                 Contact
             </a>
@@ -143,7 +143,7 @@
                         </button>
                     </form>
                 @else
-                    <a href="/login"
+                    <a wire:navigate href="/login"
                         class="block text-center text-gray-600 hover:text-brand-teal-600 font-medium py-2 px-3 rounded-lg hover:bg-brand-teal-50 transition-colors duration-200 mobile-menu-link">
                         Login
                     </a>
@@ -152,7 +152,7 @@
                         Sign Up
                     </a> --}}
                 @endauth
-                <a href="{{ route('appointment') }}"
+                <a wire:navigate href="{{ route('appointment') }}"
                     class="block text-center bg-brand-orange-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-brand-orange-600 transition-colors duration-200 shadow-md hover:shadow-lg mobile-menu-link">
                     Book Appointment
                 </a>

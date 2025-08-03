@@ -159,7 +159,7 @@
             <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-100 mb-8 sm:mb-10">
                 <h3 class="text-lg font-semibold text-gray-800 mb-6">Quick Actions</h3>
                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-                    <a href="{{ route('admin.appointment') }}" class="group flex flex-col items-center p-4 rounded-lg hover:bg-blue-50 transition-colors">
+                    <a wire:navigate href="{{ route('admin.appointment') }}" class="group flex flex-col items-center p-4 rounded-lg hover:bg-blue-50 transition-colors">
                         <div class="bg-blue-100 p-3 rounded-lg mb-3 group-hover:bg-blue-200 transition-colors">
                             <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
@@ -168,7 +168,7 @@
                         <span class="text-sm font-medium text-gray-700 text-center">View Appointments</span>
                     </a>
 
-                    <a href="{{ route('admin.add.appointment') }}" class="group flex flex-col items-center p-4 rounded-lg hover:bg-green-50 transition-colors">
+                    <a wire:navigate href="{{ route('admin.add.appointment') }}" class="group flex flex-col items-center p-4 rounded-lg hover:bg-green-50 transition-colors">
                         <div class="bg-green-100 p-3 rounded-lg mb-3 group-hover:bg-green-200 transition-colors">
                             <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
@@ -177,7 +177,7 @@
                         <span class="text-sm font-medium text-gray-700 text-center">Add Appointment</span>
                     </a>
 
-                    <a href="{{ route('admin.manage.doctors') }}" class="group flex flex-col items-center p-4 rounded-lg hover:bg-amber-50 transition-colors">
+                    <a wire:navigate href="{{ route('admin.manage.doctors') }}" class="group flex flex-col items-center p-4 rounded-lg hover:bg-amber-50 transition-colors">
                         <div class="bg-amber-100 p-3 rounded-lg mb-3 group-hover:bg-amber-200 transition-colors">
                             <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
@@ -186,7 +186,7 @@
                         <span class="text-sm font-medium text-gray-700 text-center">Manage Doctors</span>
                     </a>
 
-                    <a href="{{ route('admin.departments') }}" class="group flex flex-col items-center p-4 rounded-lg hover:bg-indigo-50 transition-colors">
+                    <a wire:navigate href="{{ route('admin.departments') }}" class="group flex flex-col items-center p-4 rounded-lg hover:bg-indigo-50 transition-colors">
                         <div class="bg-indigo-100 p-3 rounded-lg mb-3 group-hover:bg-indigo-200 transition-colors">
                             <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
@@ -197,7 +197,7 @@
 
                   
 
-                    <a href="{{ route('admin.reviewapprovel') }}" class="group flex flex-col items-center p-4 rounded-lg hover:bg-gray-50 transition-colors">
+                    <a wire:navigate href="{{ route('admin.reviewapprovel') }}" class="group flex flex-col items-center p-4 rounded-lg hover:bg-gray-50 transition-colors">
                         <div class="bg-gray-100 p-3 rounded-lg mb-3 group-hover:bg-gray-200 transition-colors">
                             <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 00-2 2z"></path>
@@ -228,7 +228,7 @@
                                     {{ count($appointments) }} Today
                                 </span>
                             </div>
-                            <a href="{{route('admin.appointment')}}"
+                            <a wire:navigate href="{{route('admin.appointment')}}"
                                 class="inline-flex items-center px-4 py-2 border border-blue-300 rounded-lg text-sm font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 hover:border-blue-400 transition-all duration-200">
                                 <span>View All</span>
                                 <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -326,14 +326,14 @@
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                                                 </svg>
                                             </button>
-                                            <a href="{{ route('admin.update.appointment', $appointment->id) }}"
+                                            <a wire:navigate href="{{ route('admin.update.appointment', $appointment->id) }}"
                                                 class="p-2 text-amber-600 hover:text-amber-800 hover:bg-amber-100 rounded-lg transition-all duration-200 group-hover:scale-110"
                                                 title="Edit Appointment">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                                 </svg>
                                             </a>
-                                            <a href="{{ route('appointment.receipt', ['appointment' => $appointment->id]) }}"
+                                            <a wire:navigate href="{{ route('appointment.receipt', ['appointment' => $appointment->id]) }}"
                                                 class="p-2 text-green-600 hover:text-green-800 hover:bg-green-100 rounded-lg transition-all duration-200 group-hover:scale-110"
                                                 title="Print Receipt">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -351,7 +351,7 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                             </svg>
                                             <p class="text-sm text-gray-500">No upcoming appointments found.</p>
-                                            <a href="{{ route('admin.add.appointment') }}" class="mt-2 text-blue-600 hover:text-blue-800 text-sm font-medium">Schedule an appointment</a>
+                                            <a wire:navigate href="{{ route('admin.add.appointment') }}" class="mt-2 text-blue-600 hover:text-blue-800 text-sm font-medium">Schedule an appointment</a>
                                         </div>
                                     </td>
                                 </tr>
@@ -418,14 +418,14 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                                     </svg>
                                 </button>
-                                <a href="{{ route('admin.update.appointment', $appointment->id) }}"
+                                <a wire:navigate href="{{ route('admin.update.appointment', $appointment->id) }}"
                                     class="p-2 text-amber-600 hover:text-amber-800 hover:bg-amber-100 rounded-lg transition-all duration-200"
                                     title="Edit Appointment">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                     </svg>
                                 </a>
-                                <a href="{{ route('appointment.receipt', ['appointment' => $appointment->id]) }}"
+                                <a wire:navigate href="{{ route('appointment.receipt', ['appointment' => $appointment->id]) }}"
                                     class="p-2 text-green-600 hover:text-green-800 hover:bg-green-100 rounded-lg transition-all duration-200"
                                     title="Print Receipt">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -442,7 +442,7 @@
                                 </svg>
                                 <h3 class="text-lg font-medium text-gray-900 mb-2">No appointments scheduled</h3>
                                 <p class="text-sm text-gray-500 mb-4">Get started by scheduling your first appointment</p>
-                                <a href="{{ route('admin.add.appointment') }}" 
+                                <a wire:navigate href="{{ route('admin.add.appointment') }}" 
                                    class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>

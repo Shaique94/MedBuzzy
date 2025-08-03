@@ -11,27 +11,27 @@
 
         <!-- Navigation -->
         <nav class="flex-1 mt-4 lg:mt-6 px-3 lg:px-4 space-y-1 overflow-y-auto">
-            <a href="/admin/dashboard" class="sidebar-link flex items-center px-3 lg:px-4 py-3 text-gray-700 responsive-text-base">
+            <a wire:navigate href="/admin/dashboard" class="sidebar-link flex items-center px-3 lg:px-4 py-3 text-gray-700 responsive-text-base">
                 <i class="fas fa-chart-line text-blue-500 w-5 lg:w-6 text-center"></i>
                 <span class="ml-3">Dashboard</span>
             </a>
 
-            <a href="{{route('admin.appointment')}}" class="sidebar-link flex items-center px-3 lg:px-4 py-3 text-gray-700 responsive-text-base">
+            <a wire:navigate href="{{route('admin.appointment')}}" class="sidebar-link flex items-center px-3 lg:px-4 py-3 text-gray-700 responsive-text-base">
                 <i class="fas fa-calendar-check text-blue-500 w-5 lg:w-6 text-center"></i>
                 <span class="ml-3">Appointments</span>
             </a>
 
-            <a href="{{ route('admin.departments') }}" class="sidebar-link flex items-center px-3 lg:px-4 py-3 text-gray-700 responsive-text-base">
+            <a wire:navigate href="{{ route('admin.departments') }}" class="sidebar-link flex items-center px-3 lg:px-4 py-3 text-gray-700 responsive-text-base">
                 <i class="fas fa-building text-blue-500 w-5 lg:w-6 text-center"></i>
                 <span class="ml-3">Departments</span>
             </a>
 
-            <a href="{{ route('admin.doctors.list') }}" class="sidebar-link flex items-center px-3 lg:px-4 py-3 text-gray-700 responsive-text-base">
+            <a wire:navigate href="{{ route('admin.doctors.list') }}" class="sidebar-link flex items-center px-3 lg:px-4 py-3 text-gray-700 responsive-text-base">
                 <i class="fas fa-user-md text-blue-500 w-5 lg:w-6 text-center"></i>
                 <span class="ml-3">Manage Doctors</span>
             </a>
 
-            <a href="{{route('admin.reviewapprovel')}}" class="sidebar-link flex items-center px-3 lg:px-4 py-3 text-gray-700 responsive-text-base">
+            <a wire:navigate href="{{route('admin.reviewapprovel')}}" class="sidebar-link flex items-center px-3 lg:px-4 py-3 text-gray-700 responsive-text-base">
                 <i class="fas fa-star text-blue-500 w-5 lg:w-6 text-center"></i>
                 <span class="ml-3">Reviews</span>
             </a>

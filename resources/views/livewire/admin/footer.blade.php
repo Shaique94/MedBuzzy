@@ -6,9 +6,9 @@
                 <p class="text-sm">© {{ date('Y') }} MedBuzzy. All rights reserved.</p>
             </div>
             <div class="flex space-x-4">
-                <a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a>
-                <a href="#" class="text-gray-400 hover:text-white">Terms of Service</a>
-                <a href="#" class="text-gray-400 hover:text-white">Contact Us</a>
+                <a wire:navigate href="#" class="text-gray-400 hover:text-white">Privacy Policy</a>
+                <a wire:navigate href="#" class="text-gray-400 hover:text-white">Terms of Service</a>
+                <a wire:navigate href="#" class="text-gray-400 hover:text-white">Contact Us</a>
             </div>
         </div>
     </div>

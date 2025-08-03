@@ -136,41 +136,41 @@
                             Contents</h3>
                         <div class="overflow-y-auto max-h-[calc(100vh-12rem)] pr-2 scrollbar-thin scrollbar-thumb-brand-teal-300 scrollbar-track-gray-100">
                             <ul class="space-y-2 sm:space-y-3 text-sm sm:text-base">
-                                <li><a href="#overview"
+                                <li><a wire:navigate href="#overview"
                                         class="toc-item block text-gray-700 hover:text-brand-orange-600">1. Overview</a>
                                 </li>
-                                <li><a href="#data-collection"
+                                <li><a wire:navigate href="#data-collection"
                                         class="toc-item block text-gray-700 hover:text-brand-orange-600">2. Personal Information</a>
                                 </li>
-                                <li><a href="#data-usage"
+                                <li><a wire:navigate href="#data-usage"
                                         class="toc-item block text-gray-700 hover:text-brand-orange-600">3. How We Use Data</a></li>
-                                <li><a href="#data-retention"
+                                <li><a wire:navigate href="#data-retention"
                                         class="toc-item block text-gray-700 hover:text-brand-orange-600">4. Data Retention</a>
                                 </li>
-                                <li><a href="#data-sharing"
+                                <li><a wire:navigate href="#data-sharing"
                                         class="toc-item block text-gray-700 hover:text-brand-orange-600">5. Data Sharing</a>
                                 </li>
-                                <li><a href="#security"
+                                <li><a wire:navigate href="#security"
                                         class="toc-item block text-gray-700 hover:text-brand-orange-600">6. Data Protection</a></li>
-                                <li><a href="#user-rights"
+                                <li><a wire:navigate href="#user-rights"
                                         class="toc-item block text-gray-700 hover:text-brand-orange-600">7. Your Rights</a>
                                 </li>
-                                <li><a href="#access-rights"
+                                <li><a wire:navigate href="#access-rights"
                                         class="toc-item block text-gray-700 hover:text-brand-orange-600 ml-4">• Access & Correction</a>
                                 </li>
-                                <li><a href="#consent-withdrawal"
+                                <li><a wire:navigate href="#consent-withdrawal"
                                         class="toc-item block text-gray-700 hover:text-brand-orange-600 ml-4">• Consent Withdrawal</a>
                                 </li>
-                                <li><a href="#account-deletion"
+                                <li><a wire:navigate href="#account-deletion"
                                         class="toc-item block text-gray-700 hover:text-brand-orange-600 ml-4">• Account Deletion</a>
                                 </li>
-                                <li><a href="#third-party"
+                                <li><a wire:navigate href="#third-party"
                                         class="toc-item block text-gray-700 hover:text-brand-orange-600">8. Third-Party Services</a></li>
-                                <li><a href="#google-api"
+                                <li><a wire:navigate href="#google-api"
                                         class="toc-item block text-gray-700 hover:text-brand-orange-600">9. Google API Policy</a></li>
-                                <li><a href="#policy-changes"
+                                <li><a wire:navigate href="#policy-changes"
                                         class="toc-item block text-gray-700 hover:text-brand-orange-600">10. Policy Changes</a></li>
-                                <li><a href="#contact"
+                                <li><a wire:navigate href="#contact"
                                         class="toc-item block text-gray-700 hover:text-brand-orange-600">11. Contact Us</a></li>
                             </ul>
                         </div>
@@ -529,7 +529,7 @@
                             <div class="bg-blue-50 rounded-lg p-4 sm:p-5">
                                 <h3 id="access-rights" class="font-bold text-blue-700 mb-2 text-sm sm:text-base">a) Access, Update and Correction Rights</h3>
                                 <p class="text-gray-700 text-sm sm:text-base leading-relaxed mb-3">
-                                    You have the right to access your personal information, request updation, correction, and deletion. If your personal information changes, you may correct, delete inaccuracies, or amend information by making the change on our member information page or by contacting us through <a href="mailto:helpdeskmedbuzzy@gmail.com" class="text-blue-600 hover:underline">helpdeskmedbuzzy@gmail.com</a>.
+                                    You have the right to access your personal information, request updation, correction, and deletion. If your personal information changes, you may correct, delete inaccuracies, or amend information by making the change on our member information page or by contacting us through <a wire:navigate href="mailto:helpdeskmedbuzzy@gmail.com" class="text-blue-600 hover:underline">helpdeskmedbuzzy@gmail.com</a>.
                                 </p>
                                 <p class="text-gray-700 text-sm sm:text-base leading-relaxed">
                                     We will make good faith efforts to make requested changes in our then active databases as soon as reasonably practicable. If you provide any information that is untrue, inaccurate, out of date, or incomplete (or subsequently becomes untrue, inaccurate, out of date or incomplete), or we have reasonable grounds to suspect that the information provided by you is untrue, inaccurate, out of date or incomplete, we may, at our sole discretion, discontinue the provision of the Services to you.
@@ -596,7 +596,7 @@
                         </div>
                         <div class="bg-blue-50 rounded-lg p-4 sm:p-5">
                             <p class="text-gray-700 text-sm sm:text-base leading-relaxed">
-                                GM(O)Pvt. Ltd use of information received from Google APIs will adhere to Google API Services User Data Policy including the Limited Use requirements and Limited Use Requirements shall apply to both raw data obtained from Restricted and Sensitive Scopes and data aggregated, anonymized, or otherwise derived from that raw data. Google API Services User Data Policy is available at <a href="https://developers.google.com/terms/api-services-user-data-policy" class="text-blue-600 hover:underline" target="_blank">Google API Services User Data Policy | Google for Developers</a>
+                                GM(O)Pvt. Ltd use of information received from Google APIs will adhere to Google API Services User Data Policy including the Limited Use requirements and Limited Use Requirements shall apply to both raw data obtained from Restricted and Sensitive Scopes and data aggregated, anonymized, or otherwise derived from that raw data. Google API Services User Data Policy is available at <a wire:navigate href="https://developers.google.com/terms/api-services-user-data-policy" class="text-blue-600 hover:underline" target="_blank">Google API Services User Data Policy | Google for Developers</a>
                             </p>
                         </div>
                     </div>
@@ -644,11 +644,11 @@
                                         <div class="space-y-2">
                                             <p class="text-gray-700 text-sm sm:text-base flex items-center">
                                                 <i class="fas fa-envelope text-brand-teal-600 mr-2 sm:mr-3 w-4 sm:w-5"></i>
-                                                <a href="mailto:helpdeskmedbuzzy@gmail.com" class="hover:text-brand-teal-700 hover:underline">helpdeskmedbuzzy@gmail.com</a>
+                                                <a wire:navigate href="mailto:helpdeskmedbuzzy@gmail.com" class="hover:text-brand-teal-700 hover:underline">helpdeskmedbuzzy@gmail.com</a>
                                             </p>
                                             <p class="text-gray-700 text-sm sm:text-base flex items-center">
                                                 <i class="fas fa-phone text-brand-teal-600 mr-2 sm:mr-3 w-4 sm:w-5"></i>
-                                                <a href="tel:+919430808079" class="hover:text-brand-teal-700 hover:underline">+91 9430808079</a>
+                                                <a wire:navigate href="tel:+919430808079" class="hover:text-brand-teal-700 hover:underline">+91 9430808079</a>
                                             </p>
                                             <p class="text-gray-700 text-sm sm:text-base flex items-start">
                                                 <i class="fas fa-map-marker-alt text-brand-teal-600 mr-2 sm:mr-3 w-4 sm:w-5 mt-1"></i>

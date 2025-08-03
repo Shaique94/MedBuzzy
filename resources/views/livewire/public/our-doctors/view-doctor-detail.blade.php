@@ -467,14 +467,14 @@
                                             @endif
                                         </p>
                                         <div class="flex flex-col sm:flex-row gap-3">
-                                            <a href="tel:{{ $doctor->user->phone ?? '+91 943-080-8079' }}" 
+                                            <a wire:navigate href=navigate wire:navigate wire:navigate href="tel:{{ $doctor->user->phone ?? '+91 943-080-8079' }}" 
                                                class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                                                 </svg>
                                                 Call
                                             </a>
-                                            <a href="https://maps.google.com/?q=@if($doctor->city && $doctor->state){{ urlencode($doctor->city . ', ' . $doctor->state . ', India') }}@else Purnea,Bihar,India @endif" 
+                                            <a wire:navigate href=navigate wire:navigate wire:navigate href="https://maps.google.com/?q=@if($doctor->city && $doctor->state){{ urlencode($doctor->city . ', ' . $doctor->state . ', India') }}@else Purnea,Bihar,India @endif" 
                                                target="_blank"
                                                class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -539,7 +539,7 @@
                                     Write a Review
                                 </button>
                             @else
-                                <a href="{{ route('login') }}" class="bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-6 rounded-lg inline-flex items-center gap-2 transition-colors">
+                                <a wire:navigate href=navigate wire:navigate wire:navigate href="{{ route('login') }}" class="bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-6 rounded-lg inline-flex items-center gap-2 transition-colors">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
                                     </svg>
@@ -572,7 +572,7 @@
                     </button>
                 </div>
                 <div class="space-y-4">
-                    <a href="tel:{{ $doctor->user->phone ?? '+919430808079' }}" 
+                    <a wire:navigate href=navigate wire:navigate wire:navigate href="tel:{{ $doctor->user->phone ?? '+919430808079' }}" 
                        class="flex items-center gap-3 p-3 bg-green-50 hover:bg-green-100 rounded-lg transition-colors">
                         <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -585,7 +585,7 @@
                         </div>
                     </a>
                     
-                    <a href="https://wa.me/{{ str_replace(['+', ' ', '-'], '', $doctor->user->phone ?? '919430808079') }}" 
+                    <a wire:navigate href=navigate wire:navigate wire:navigate href="https://wa.me/{{ str_replace(['+', ' ', '-'], '', $doctor->user->phone ?? '919430808079') }}" 
                        target="_blank"
                        class="flex items-center gap-3 p-3 bg-green-50 hover:bg-green-100 rounded-lg transition-colors">
                         <div class="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center">

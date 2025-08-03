@@ -271,7 +271,7 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         {{-- <button class="text-blue-600 hover:text-blue-900 mr-3">View</button> --}}
-                                     <a href="{{ route('appointment.receipt', $payment->appointment_id) }}" 
+                                     <a wire:navigate href="{{ route('appointment.receipt', $payment->appointment_id) }}" 
    target="_blank"
    class="text-green-600 hover:text-green-900">
     Receipt

@@ -9,7 +9,7 @@
 
         @if($showLoginMessage)
             <div class="alert alert-warning bg-yellow-100 border-l-4 border-yellow-500 text-yellow-900 p-4 mb-6 rounded-r-lg">
-                Please <a href="{{ route('login') }}" class="underline hover:text-yellow-700">login</a> to submit a review!
+                Please <a wire:navigate href="{{ route('login') }}" class="underline hover:text-yellow-700">login</a> to submit a review!
             </div>
         @endif
 

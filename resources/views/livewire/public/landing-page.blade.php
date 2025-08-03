@@ -104,7 +104,7 @@
                             $icon = $icons[$name] ?? array_values($icons)[random_int(0, count($icons) - 1)];
                             $doctorCount = count($department->doctors) ?? random_int(10, 50);
                         @endphp
-                        <a href="{{ route('our-doctors', ['department_id' => $department->id]) }}"
+                        <a wire:navigate href="{{ route('our-doctors', ['department_id' => $department->id]) }}"
                             class="group text-center p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 w-40 md:w-48 snap-start">
                             <div
                                 class="w-16 h-16 mx-auto mb-4 bg-{{ $color }}-100 rounded-full flex items-center justify-center group-hover:bg-{{ $color }}-200 transition-colors">
@@ -129,7 +129,7 @@
             </div>
 
             <div class="text-center mt-12">
-                <a href="{{ route('our-doctors') }}"
+                <a wire:navigate href="{{ route('our-doctors') }}"
                     class="inline-flex items-center px-6 py-3 bg-teal-600 text-white rounded-lg font-medium hover:bg-teal-700 transition-colors">
                     View All Specialties
                     <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -205,7 +205,7 @@
                             </div>
 
                             <!-- Book Button -->
-                            <a href="{{ route('appointment', ['doctor_slug' => $doctor->slug]) }}"
+                            <a wire:navigate href="{{ route('appointment', ['doctor_slug' => $doctor->slug]) }}"
                                class="w-full block bg-brand-teal-500 text-white py-2.5 rounded-lg text-sm font-medium hover:bg-brand-teal-600 transition-colors text-center">
                                 Book Appointment
                             </a>
@@ -368,7 +368,7 @@
 
                     <!-- CTA Button -->
                     <div class="text-center lg:text-left mt-12">
-                        <a href="{{ route('appointment') }}"
+                        <a wire:navigate href="{{ route('appointment') }}"
                             class="inline-flex items-center px-8 py-4 bg-teal-500 text-white font-bold rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 group">
                             <svg class="w-6 h-6 mr-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>

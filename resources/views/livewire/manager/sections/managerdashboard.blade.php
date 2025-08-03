@@ -35,7 +35,7 @@
                         </div>
                     </div>
                     <div class="bg-gray-50 px-6 py-3">
-                        <a href="{{route('manager.appointments')}}" class="text-sm font-medium text-blue-600 hover:text-blue-500">View all<span aria-hidden="true"> →</span></a>
+                        <a wire:navigate href="{{route('manager.appointments')}}" class="text-sm font-medium text-blue-600 hover:text-blue-500">View all<span aria-hidden="true"> →</span></a>
                     </div>
                 </div>
 
@@ -63,7 +63,7 @@
                         </div>
                     </div>
                     <div class="bg-gray-50 px-6 py-3">
-                        <a href="{{ route('manager.manage.doctors') }}" class="text-sm font-medium text-purple-600 hover:text-purple-500">View all<span aria-hidden="true"> →</span></a>
+                        <a wire:navigate href="{{ route('manager.manage.doctors') }}" class="text-sm font-medium text-purple-600 hover:text-purple-500">View all<span aria-hidden="true"> →</span></a>
                     </div>
                 </div>
 
@@ -91,7 +91,7 @@
                         </div>
                     </div>
                     <div class="bg-gray-50 px-6 py-3">
-                        <a href="{{route('manager.appointments')}}" class="text-sm font-medium text-green-600 hover:text-green-500">View all<span aria-hidden="true"> →</span></a>
+                        <a wire:navigate href="{{route('manager.appointments')}}" class="text-sm font-medium text-green-600 hover:text-green-500">View all<span aria-hidden="true"> →</span></a>
                     </div>
                 </div>
 
@@ -111,7 +111,7 @@
                         </div>
                     </div>
                     <div class="bg-gray-50 px-6 py-3">
-                        <a href="#" class="text-sm font-medium text-green-600 hover:text-green-500">View payments<span aria-hidden="true"> →</span></a>
+                        <a wire:navigate href="#" class="text-sm font-medium text-green-600 hover:text-green-500">View payments<span aria-hidden="true"> →</span></a>
                     </div>
                 </div>
             </div>
@@ -225,7 +225,7 @@
                                             >Reschedule
                                             </button>
                                             @endif
-                                            <a href="{{ route('doctor.patients.view', $appointment->patient->id) }}" 
+                                            <a wire:navigate href="{{ route('doctor.patients.view', $appointment->patient->id) }}" 
                                                class="text-blue-600 hover:text-blue-800 font-medium transition-colors
                                                       hover:underline underline-offset-4 decoration-2"
                                                title="View Patient">

@@ -110,7 +110,7 @@
                                 </svg>
                                 <span>Book Appointment</span>
                             </a>
-                            <a href="#emergency"
+                            <a wire:navigate href="#emergency"
                                 class="border-2 border-teal-600 text-teal-600 hover:bg-teal-50 px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200 flex items-center justify-center space-x-2">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -337,7 +337,7 @@ if (!$nextSlot) {
                                                     </div>
                                                 </div>
 
-                                                <a href="{{ route('appointment', ['doctor_slug' => $doctor->slug]) }}"
+                                                <a wire:navigate href="{{ route('appointment', ['doctor_slug' => $doctor->slug]) }}"
                                                     class="w-full block bg-teal-600 text-white py-2 sm:py-3 rounded-lg font-medium hover:bg-teal-700 transition-colors text-center text-sm sm:text-base">
                                                     Book Appointment
                                                 </a>

@@ -78,7 +78,7 @@
 
             <!-- Action buttons -->
             <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mb-6">
-                <a href="{{ route('appointment.receipt', ['appointment' => $appointment->id]) }}" 
+                <a wire:navigate href="{{ route('appointment.receipt', ['appointment' => $appointment->id]) }}" 
                    class="w-full sm:w-auto px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 active:bg-teal-800 transition-all duration-200 flex items-center justify-center font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -97,7 +97,7 @@
 
             <!-- Help text -->
             <div class="text-center text-xs sm:text-sm text-gray-500 space-y-2">
-                <p>Need to make changes? Contact our support at <a href="mailto:support@example.com" class="text-teal-600 hover:text-teal-700 hover:underline transition-colors">support@example.com</a></p>
+                <p>Need to make changes? Contact our support at <a wire:navigate href="mailto:support@example.com" class="text-teal-600 hover:text-teal-700 hover:underline transition-colors">support@example.com</a></p>
                 <p>Your appointment ID: <span class="font-mono font-medium text-gray-700 bg-gray-100 px-2 py-1 rounded text-xs">{{ $appointment->id }}</span></p>
             </div>
         </div>

@@ -43,13 +43,13 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                     </svg>
-                    <a href="tel:{{ $contactDetails['phone'] }}" class="hover:text-blue-800 transition-colors">{{ $contactDetails['phone'] }}</a>
+                    <a wire:navigate href="tel:{{ $contactDetails['phone'] }}" class="hover:text-blue-800 transition-colors">{{ $contactDetails['phone'] }}</a>
                 </li>
                 <li class="flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
-                    <a href="mailto:{{ $contactDetails['email'] }}" class="hover:text-blue-800 transition-colors">{{ $contactDetails['email'] }}</a>
+                    <a wire:navigate href="mailto:{{ $contactDetails['email'] }}" class="hover:text-blue-800 transition-colors">{{ $contactDetails['email'] }}</a>
                 </li>
                 <li class="flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -61,7 +61,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.35 16.5c-.77.833.192 2.5 1.732 2.5z" />
                     </svg>
-                    <span>Emergency: <a href="tel:{{ $contactDetails['emergency_phone'] }}" class="hover:text-red-800 transition-colors">{{ $contactDetails['emergency_phone'] }}</a></span>
+                    <span>Emergency: <a wire:navigate href="tel:{{ $contactDetails['emergency_phone'] }}" class="hover:text-red-800 transition-colors">{{ $contactDetails['emergency_phone'] }}</a></span>
                 </li>
             </ul>
         </div>

@@ -31,7 +31,7 @@
             <span class="ml-2 sm:ml-3 font-medium text-sm sm:text-base">Dashboard</span>
         </a>
 
-        <a href="{{ route('manager.manage.doctors') }}" class="flex items-center px-3 sm:px-4 py-2.5 sm:py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-all duration-200 group">
+        <a wire:navigate href="{{ route('manager.manage.doctors') }}" class="flex items-center px-3 sm:px-4 py-2.5 sm:py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-all duration-200 group">
             <span class="bg-green-100 p-1.5 sm:p-2 rounded-lg group-hover:bg-green-200 transition-colors duration-200 flex-shrink-0">
                 <svg class="w-4 h-4 sm:w-5 sm:h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A7 7 0 0112 15a7 7 0 016.879 2.804M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -40,7 +40,7 @@
             <span class="ml-2 sm:ml-3 font-medium text-sm sm:text-base">Doctors</span>
         </a>
 
-        <a href="{{route('manager.appointments')}}" class="flex items-center px-3 sm:px-4 py-2.5 sm:py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-all duration-200 group">
+        <a wire:navigate href="{{route('manager.appointments')}}" class="flex items-center px-3 sm:px-4 py-2.5 sm:py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-all duration-200 group">
             <span class="bg-yellow-100 p-1.5 sm:p-2 rounded-lg group-hover:bg-yellow-200 transition-colors duration-200 flex-shrink-0">
                 <svg class="w-4 h-4 sm:w-5 sm:h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10m-7 4h4m-9 5h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v11a2 2 0 002 2z"></path>

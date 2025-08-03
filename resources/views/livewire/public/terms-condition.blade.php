@@ -161,27 +161,27 @@
                             Contents</h3>
                         <div class="pr-2">
                             <ul class="space-y-2 sm:space-y-3 text-sm sm:text-base">
-                                <li><a href="#overview" class="toc-item block text-gray-700 hover:text-brand-orange-600">Terms Overview</a></li>
-                                <li><a href="#general" class="toc-item block text-gray-700 hover:text-brand-orange-600">1. General</a></li>
-                                <li><a href="#eligibility" class="toc-item block text-gray-700 hover:text-brand-orange-600">2. Eligibility</a></li>
-                                <li><a href="#services" class="toc-item block text-gray-700 hover:text-brand-orange-600">3. Our Services</a></li>
-                                <li><a href="#platform-use" class="toc-item block text-gray-700 hover:text-brand-orange-600">4. Platform Use</a></li>
-                                <li><a href="#prohibited-content" class="toc-item block text-gray-700 hover:text-brand-orange-600">5. Prohibited Content</a></li>
-                                <li><a href="#indemnity" class="toc-item block text-gray-700 hover:text-brand-orange-600">6. Indemnity</a></li>
-                                <li><a href="#liability" class="toc-item block text-gray-700 hover:text-brand-orange-600">7. Limitation of Liability</a></li>
-                                <li><a href="#platform-modification" class="toc-item block text-gray-700 hover:text-brand-orange-600">8. Platform Modification</a></li>
-                                <li><a href="#data-policy" class="toc-item block text-gray-700 hover:text-brand-orange-600">9. Data & Information</a></li>
-                                <li><a href="#intellectual-property" class="toc-item block text-gray-700 hover:text-brand-orange-600">10. Intellectual Property</a></li>
-                                <li><a href="#other-conditions" class="toc-item block text-gray-700 hover:text-brand-orange-600">11. Other Conditions</a></li>
-                                <li><a href="#miscellaneous" class="toc-item block text-gray-700 hover:text-brand-orange-600">12. Miscellaneous</a></li>
-                                <li><a href="#third-party-links" class="toc-item block text-gray-700 hover:text-brand-orange-600 ml-4">• 12.1 Third-Party Links</a></li>
-                                <li><a href="#amendments" class="toc-item block text-gray-700 hover:text-brand-orange-600 ml-4">• 12.2 Amendments</a></li>
-                                <li><a href="#force-majeure" class="toc-item block text-gray-700 hover:text-brand-orange-600 ml-4">• 12.3 Force Majeure</a></li>
-                                <li><a href="#termination" class="toc-item block text-gray-700 hover:text-brand-orange-600 ml-4">• 12.4 Termination</a></li>
-                                <li><a href="#jurisdiction" class="toc-item block text-gray-700 hover:text-brand-orange-600 ml-4">• 12.5 Jurisdiction</a></li>
-                                <li><a href="#severability" class="toc-item block text-gray-700 hover:text-brand-orange-600 ml-4">• 12.6 Severability</a></li>
-                                <li><a href="#waiver" class="toc-item block text-gray-700 hover:text-brand-orange-600 ml-4">• 12.7 Waiver</a></li>
-                                <li><a href="#grievance-contact" class="toc-item block text-gray-700 hover:text-brand-orange-600 ml-4">• 12.8 Contact & Grievance</a></li>
+                                <li><a wire:navigate href=navigate href="#overview" class="toc-item block text-gray-700 hover:text-brand-orange-600">Terms Overview</a></li>
+                                <li><a wire:navigate href=navigate href="#general" class="toc-item block text-gray-700 hover:text-brand-orange-600">1. General</a></li>
+                                <li><a wire:navigate href=navigate href="#eligibility" class="toc-item block text-gray-700 hover:text-brand-orange-600">2. Eligibility</a></li>
+                                <li><a wire:navigate href=navigate href="#services" class="toc-item block text-gray-700 hover:text-brand-orange-600">3. Our Services</a></li>
+                                <li><a wire:navigate href=navigate href="#platform-use" class="toc-item block text-gray-700 hover:text-brand-orange-600">4. Platform Use</a></li>
+                                <li><a wire:navigate href=navigate href="#prohibited-content" class="toc-item block text-gray-700 hover:text-brand-orange-600">5. Prohibited Content</a></li>
+                                <li><a wire:navigate href=navigate href="#indemnity" class="toc-item block text-gray-700 hover:text-brand-orange-600">6. Indemnity</a></li>
+                                <li><a wire:navigate href=navigate href="#liability" class="toc-item block text-gray-700 hover:text-brand-orange-600">7. Limitation of Liability</a></li>
+                                <li><a wire:navigate href=navigate href="#platform-modification" class="toc-item block text-gray-700 hover:text-brand-orange-600">8. Platform Modification</a></li>
+                                <li><a wire:navigate href=navigate href="#data-policy" class="toc-item block text-gray-700 hover:text-brand-orange-600">9. Data & Information</a></li>
+                                <li><a wire:navigate href=navigate href="#intellectual-property" class="toc-item block text-gray-700 hover:text-brand-orange-600">10. Intellectual Property</a></li>
+                                <li><a wire:navigate href=navigate href="#other-conditions" class="toc-item block text-gray-700 hover:text-brand-orange-600">11. Other Conditions</a></li>
+                                <li><a wire:navigate href=navigate href="#miscellaneous" class="toc-item block text-gray-700 hover:text-brand-orange-600">12. Miscellaneous</a></li>
+                                <li><a wire:navigate href=navigate href="#third-party-links" class="toc-item block text-gray-700 hover:text-brand-orange-600 ml-4">• 12.1 Third-Party Links</a></li>
+                                <li><a wire:navigate href=navigate href="#amendments" class="toc-item block text-gray-700 hover:text-brand-orange-600 ml-4">• 12.2 Amendments</a></li>
+                                <li><a wire:navigate href=navigate href="#force-majeure" class="toc-item block text-gray-700 hover:text-brand-orange-600 ml-4">• 12.3 Force Majeure</a></li>
+                                <li><a wire:navigate href=navigate href="#termination" class="toc-item block text-gray-700 hover:text-brand-orange-600 ml-4">• 12.4 Termination</a></li>
+                                <li><a wire:navigate href=navigate href="#jurisdiction" class="toc-item block text-gray-700 hover:text-brand-orange-600 ml-4">• 12.5 Jurisdiction</a></li>
+                                <li><a wire:navigate href=navigate href="#severability" class="toc-item block text-gray-700 hover:text-brand-orange-600 ml-4">• 12.6 Severability</a></li>
+                                <li><a wire:navigate href=navigate href="#waiver" class="toc-item block text-gray-700 hover:text-brand-orange-600 ml-4">• 12.7 Waiver</a></li>
+                                <li><a wire:navigate href=navigate href="#grievance-contact" class="toc-item block text-gray-700 hover:text-brand-orange-600 ml-4">• 12.8 Contact & Grievance</a></li>
                             </ul>
                         </div>
                     </div>
@@ -640,7 +640,7 @@
                             <div class="bg-green-50 rounded-lg p-4 sm:p-5">
                                 <h3 class="font-bold text-green-700 mb-2 text-sm sm:text-base">9.1 Privacy Rights</h3>
                                 <p class="text-gray-700 text-sm sm:text-base leading-relaxed">
-                                    We respect your right to privacy in respect of any personal information provided to us for the purposes of availing our Services. To see how we collect and use your personal information, please see our Privacy Policy available at <a href="https://www.medbuzzy.com/privacy" class="text-brand-teal-600 hover:underline">https://www.medbuzzy.com/privacy</a>.
+                                    We respect your right to privacy in respect of any personal information provided to us for the purposes of availing our Services. To see how we collect and use your personal information, please see our Privacy Policy available at <a wire:navigate href=navigate href="https://www.medbuzzy.com/privacy" class="text-brand-teal-600 hover:underline">https://www.medbuzzy.com/privacy</a>.
                                 </p>
                             </div>
 
@@ -730,7 +730,7 @@
                             <div class="bg-green-50 rounded-lg p-4 sm:p-5">
                                 <h3 class="font-bold text-green-700 mb-2 text-sm sm:text-base">11.1 Payment and Refund</h3>
                                 <p class="text-gray-700 text-sm sm:text-base leading-relaxed">
-                                    Please note that your payments are processed in accordance with applicable laws as amended from time to time and You may refer to our Payment and Refunds Policy for details, and such policy available at <a href="https://www.medbuzzy.com/refund-policy" class="text-brand-teal-600 hover:underline">https://www.medbuzzy.com/refund-policy</a>
+                                    Please note that your payments are processed in accordance with applicable laws as amended from time to time and You may refer to our Payment and Refunds Policy for details, and such policy available at <a wire:navigate href=navigate href="https://www.medbuzzy.com/refund-policy" class="text-brand-teal-600 hover:underline">https://www.medbuzzy.com/refund-policy</a>
                                 </p>
                             </div>
 
@@ -954,11 +954,11 @@
                                         <div class="space-y-2">
                                             <p class="text-gray-700 text-sm sm:text-base flex items-center">
                                                 <i class="fas fa-envelope text-brand-teal-600 mr-2 sm:mr-3 w-4 sm:w-5"></i>
-                                                <a href="mailto:grievance@apollo247.org" class="hover:text-brand-teal-700 hover:underline">grievance@apollo247.org</a>
+                                                <a wire:navigate href=navigate href="mailto:grievance@apollo247.org" class="hover:text-brand-teal-700 hover:underline">grievance@apollo247.org</a>
                                             </p>
                                             <p class="text-gray-700 text-sm sm:text-base flex items-center">
                                                 <i class="fas fa-phone text-brand-teal-600 mr-2 sm:mr-3 w-4 sm:w-5"></i>
-                                                <a href="tel:+918045050412" class="hover:text-brand-teal-700 hover:underline">080-45050412</a>
+                                                <a wire:navigate href=navigate href="tel:+918045050412" class="hover:text-brand-teal-700 hover:underline">080-45050412</a>
                                             </p>
                                         </div>
                                     </div>
@@ -976,11 +976,11 @@
                                         <div class="space-y-2">
                                             <p class="text-gray-700 text-sm sm:text-base flex items-center">
                                                 <i class="fas fa-envelope text-brand-teal-600 mr-2 sm:mr-3 w-4 sm:w-5"></i>
-                                                <a href="mailto:grievancemedbuzzy@gmail.com" class="hover:text-brand-teal-700 hover:underline">grievancemedbuzzy@gmail.com</a>
+                                                <a wire:navigate href=navigate href="mailto:grievancemedbuzzy@gmail.com" class="hover:text-brand-teal-700 hover:underline">grievancemedbuzzy@gmail.com</a>
                                             </p>
                                             <p class="text-gray-700 text-sm sm:text-base flex items-center">
                                                 <i class="fas fa-phone text-brand-teal-600 mr-2 sm:mr-3 w-4 sm:w-5"></i>
-                                                <a href="tel:+914041894747" class="hover:text-brand-teal-700 hover:underline">040-41894747</a>
+                                                <a wire:navigate href=navigate href="tel:+914041894747" class="hover:text-brand-teal-700 hover:underline">040-41894747</a>
                                             </p>
                                         </div>
                                     </div>

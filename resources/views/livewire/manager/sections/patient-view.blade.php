@@ -12,7 +12,7 @@
         </div>
         
         @if($latestAppointment)
-            <a href="{{ route('appointment.receipt', ['appointment' => $latestAppointment->id]) }}"
+            <a wire:navigate href="{{ route('appointment.receipt', ['appointment' => $latestAppointment->id]) }}"
                class="flex items-center justify-center sm:justify-start space-x-2 px-3 sm:px-4 py-2 sm:py-3 bg-white border border-blue-200 rounded-lg shadow-sm hover:bg-blue-50 transition-colors text-sm sm:text-base"
                title="Print Receipt">
                <svg class="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -136,7 +136,7 @@
         </div>
         
         <div class="flex space-x-2 sm:space-x-3 w-full sm:w-auto">
-            <a href=""
+            <a wire:navigate href=""
                class="flex-1 sm:flex-initial flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 sm:py-3 bg-white border border-blue-200 rounded-lg shadow-sm hover:bg-blue-50 transition-colors text-sm"
                title="Edit Patient">
                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

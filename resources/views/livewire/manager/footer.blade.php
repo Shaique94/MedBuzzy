@@ -6,9 +6,9 @@
                 © {{ date('Y') }} MedBuzzy Manager Panel. All rights reserved.
             </p>
             <div class="flex justify-center space-x-4">
-                <a href="#" class="text-xs text-gray-500 hover:text-indigo-600 transition-colors">Privacy Policy</a>
-                <a href="#" class="text-xs text-gray-500 hover:text-indigo-600 transition-colors">Terms</a>
-                <a href="#" class="text-xs text-gray-500 hover:text-indigo-600 transition-colors">Support</a>
+                <a wire:navigate href="#" class="text-xs text-gray-500 hover:text-indigo-600 transition-colors">Privacy Policy</a>
+                <a wire:navigate href="#" class="text-xs text-gray-500 hover:text-indigo-600 transition-colors">Terms</a>
+                <a wire:navigate href="#" class="text-xs text-gray-500 hover:text-indigo-600 transition-colors">Support</a>
             </div>
             <!-- Mobile Status Info -->
             <div class="mt-2 pt-2 border-t border-gray-100">
@@ -36,13 +36,13 @@
 
             <div class="flex items-center space-x-6">
                 <div class="flex items-center space-x-4">
-                    <a href="#" class="text-sm text-gray-500 hover:text-indigo-600 transition-colors duration-200">
+                    <a wire:navigate href="#" class="text-sm text-gray-500 hover:text-indigo-600 transition-colors duration-200">
                         Privacy Policy
                     </a>
-                    <a href="#" class="text-sm text-gray-500 hover:text-indigo-600 transition-colors duration-200">
+                    <a wire:navigate href="#" class="text-sm text-gray-500 hover:text-indigo-600 transition-colors duration-200">
                         Terms of Service
                     </a>
-                    <a href="#" class="text-sm text-gray-500 hover:text-indigo-600 transition-colors duration-200">
+                    <a wire:navigate href="#" class="text-sm text-gray-500 hover:text-indigo-600 transition-colors duration-200">
                         Support
                     </a>
                 </div>

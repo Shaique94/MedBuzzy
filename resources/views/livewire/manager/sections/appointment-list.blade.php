@@ -25,7 +25,7 @@
                 </div>
             </div>
             {{-- <div class="flex flex-col sm:flex-row gap-3">
-                <a href=""
+                <a wire:navigate href=""
                     class="bg-white hover:bg-blue-50 text-blue-600 px-5 py-2.5 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 shadow-md hover:shadow-lg font-medium">
                     <i class="fas fa-plus"></i>
                     <span>New Appointment</span>
@@ -212,14 +212,14 @@
                     wire:click="$dispatch('openModal', {id: {{ $appointment->id }} })">
                     <i class="fas fa-eye block mb-1"></i>View
                 </button>
-                <a href="" class="bg-yellow-50 text-yellow-600 py-2 px-2 rounded-lg text-xs font-medium hover:bg-yellow-100 transition-colors text-center">
+                <a wire:navigate href="" class="bg-yellow-50 text-yellow-600 py-2 px-2 rounded-lg text-xs font-medium hover:bg-yellow-100 transition-colors text-center">
                     <i class="fas fa-pencil-alt block mb-1"></i>Edit
                 </a>
                 <button class="bg-red-50 text-red-600 py-2 px-2 rounded-lg text-xs font-medium hover:bg-red-100 transition-colors text-center"
                     wire:click="confirmCancel({{ $appointment->id }})">
                     <i class="fas fa-times block mb-1"></i>Cancel
                 </button>
-                <a href="{{ route('appointment.receipt', ['appointment' => $appointment->id]) }}"
+                <a wire:navigate href="{{ route('appointment.receipt', ['appointment' => $appointment->id]) }}"
                    class="bg-green-50 text-green-600 py-2 px-2 rounded-lg text-xs font-medium hover:bg-green-100 transition-colors text-center">
                     <i class="fas fa-print block mb-1"></i>Print
                 </a>
@@ -363,7 +363,7 @@
                                 <i class="fas fa-eye"></i>
                             </button>
                             
-                            <a href=""
+                            <a wire:navigate href=""
                                 class="text-yellow-500 hover:text-yellow-700 p-2 rounded-full hover:bg-yellow-50"
                                 title="Edit">
                                 <i class="fas fa-pencil-alt"></i>
@@ -375,7 +375,7 @@
                                 <i class="fas fa-times"></i>
                             </button>
                             
-                            <a href="{{ route('appointment.receipt', ['appointment' => $appointment->id]) }}"
+                            <a wire:navigate href="{{ route('appointment.receipt', ['appointment' => $appointment->id]) }}"
                                 class="text-green-600 hover:text-green-800 p-2 rounded-full hover:bg-green-50"
                                 title="Print Receipt">
                                 <i class="fas fa-print"></i>
