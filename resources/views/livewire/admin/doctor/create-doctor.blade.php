@@ -159,12 +159,31 @@
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <!-- Pincode -->
                                 <div>
-                                    <label for="pincode"
-                                        class="block text-sm font-medium text-gray-700 mb-2">Pincode</label>
-                                    <input type="text" id="pincode" wire:model.live.debounce.500ms="pincode"
-                                        maxlength="6"
-                                        class="w-full px-4 py-3 border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
-                                        placeholder="123456">
+                                    <label for="pincode" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Pincode *
+                                        @if ($isProcessing)
+                                            <span class="text-blue-500 text-xs">(verifying...)</span>
+                                        @endif
+                                    </label>
+                                    <div class="relative">
+                                        <input type="text" id="pincode" wire:model.live.debounce.500ms="pincode"
+                                            maxlength="6"
+                                            class="w-full px-4 py-3 border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                                            placeholder="123456" {{ $isProcessing ? 'disabled' : '' }}>
+                                        @if ($isProcessing)
+                                            <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                                <svg class="animate-spin h-5 w-5 text-blue-500"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 24 24">
+                                                    <circle class="opacity-25" cx="12" cy="12" r="10"
+                                                        stroke="currentColor" stroke-width="4"></circle>
+                                                    <path class="opacity-75" fill="currentColor"
+                                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                                    </path>
+                                                </svg>
+                                            </div>
+                                        @endif
+                                    </div>
                                     @error('pincode')
                                         <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                                     @enderror
@@ -172,11 +191,11 @@
 
                                 <!-- City -->
                                 <div>
-                                    <label for="city"
-                                        class="block text-sm font-medium text-gray-700 mb-2">City</label>
+                                    <label for="city" class="block text-sm font-medium text-gray-700 mb-2">City
+                                        *</label>
                                     <input type="text" id="city" wire:model="city"
                                         class="w-full px-4 py-3 border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
-                                        placeholder="City name">
+                                        placeholder="City name" {{ $isProcessing ? 'disabled' : '' }}>
                                     @error('city')
                                         <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                                     @enderror
@@ -184,11 +203,11 @@
 
                                 <!-- State -->
                                 <div>
-                                    <label for="state"
-                                        class="block text-sm font-medium text-gray-700 mb-2">State</label>
+                                    <label for="state" class="block text-sm font-medium text-gray-700 mb-2">State
+                                        *</label>
                                     <input type="text" id="state" wire:model="state"
                                         class="w-full px-4 py-3 border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
-                                        placeholder="State name">
+                                        placeholder="State name" {{ $isProcessing ? 'disabled' : '' }}>
                                     @error('state')
                                         <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                                     @enderror
