@@ -370,6 +370,9 @@ class ManageAppointment extends Component
         if (isset($this->availableSlots[$time]) && !$this->availableSlots[$time]['disabled']) {
             $this->appointment_time = $time;
             $this->validate(['appointment_time' => $this->rules['appointment_time']]);
+            
+            // Automatically proceed to the next step after selecting a time slot
+            $this->nextStep();
         }
     }
 
@@ -379,7 +382,13 @@ class ManageAppointment extends Component
         $this->step++;
 
         if ($this->step === 2) {
-            $this->generateTimeSlots();
+            // Default to today's date when reaching the date selection step
+            if (empty($this->appointment_date)) {
+                $today = Carbon::today()->format('Y-m-d');
+                $this->setAppointmentDate($today);
+            } else {
+                $this->generateTimeSlots();
+            }
         }
     }
 

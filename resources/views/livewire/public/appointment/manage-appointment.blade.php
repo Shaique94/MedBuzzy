@@ -627,7 +627,7 @@
                                             (ईमेल)</label>
                                         <input type="email" wire:model.live.debounce.500ms="newPatient.email"
                                             class="w-full px-4 py-3 border {{ $errors->has('newPatient.email') ? 'border-red-500' : 'border-gray-300' }} rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
-                                            placeholder="john@example.com (john@example.com)">
+                                            placeholder="sadique@example.com">
                                         @error('newPatient.email')
                                             <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                                         @enderror
@@ -639,7 +639,7 @@
                                                 class="text-red-500">*</span></label>
                                         <input type="tel" wire:model.live.debounce.500ms="newPatient.phone"
                                             class="w-full px-4 py-3 border {{ $errors->has('newPatient.phone') ? 'border-red-500' : 'border-gray-300' }} rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
-                                            placeholder="+91 9876543210 (+91 9876543210)">
+                                            placeholder="+91 9876543210">
                                         @error('newPatient.phone')
                                             <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                                         @enderror
@@ -651,7 +651,7 @@
                                                 class="text-red-500">*</span></label>
                                         <input type="number" wire:model.live.debounce.500ms="newPatient.age"
                                             class="w-full px-4 py-3 border {{ $errors->has('newPatient.age') ? 'border-red-500' : 'border-gray-300' }} rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
-                                            placeholder="30 (30)" min="0" max="120">
+                                            placeholder="30" min="0" max="120">
                                         @error('newPatient.age')
                                             <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                                         @enderror
@@ -681,7 +681,7 @@
                                             <input type="text" wire:model.live.debounce.500ms="pincode"
                                                 maxlength="6"
                                                 class="w-full px-4 py-3 border {{ $errors->has('newPatient.pincode') ? 'border-red-500' : 'border-gray-300' }} rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
-                                                placeholder="123456 (123456)">
+                                                placeholder="854301">
                                             @if (strlen($pincode) == 6)
                                                 <div wire:loading wire:target="pincode"
                                                     class="absolute right-3 top-1/2 transform -translate-y-1/2">
@@ -707,7 +707,7 @@
                                                 class="text-red-500">*</span></label>
                                         <input type="text" wire:model.live="newPatient.state"
                                             class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
-                                            placeholder="State (राज्य)">
+                                            placeholder="State (राज्य)" disabled>
                                     </div>
 
                                     <!-- District -->
@@ -716,7 +716,7 @@
                                             <span class="text-red-500">*</span></label>
                                         <input type="text" wire:model.live="newPatient.district"
                                             class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
-                                            placeholder="District (जिला)">
+                                            placeholder="District (जिला)" disabled>
                                     </div>
 
                                     <!-- Address -->
