@@ -25,6 +25,7 @@ class User extends Authenticatable
         'role',
         'google_id',
         'avatar',
+        'gender',
         'email_verified_at',
         'remember_token',
 
