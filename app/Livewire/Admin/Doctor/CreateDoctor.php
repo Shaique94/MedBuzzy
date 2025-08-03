@@ -11,8 +11,8 @@ use Livewire\Attributes\Title;
 use Livewire\Component;
 use Illuminate\Support\Str;
 use Livewire\WithFileUploads;
-use App\Services\ImageKitService; 
-use App\Services\PincodeService; 
+use App\Services\ImageKitService;
+use App\Services\PincodeService;
 
 #[Title('Create Doctor')]
 class CreateDoctor extends Component
@@ -22,7 +22,7 @@ class CreateDoctor extends Component
     public $departments;
     public $showModal = false;
     public $name;
-    public $email; 
+    public $email;
     public $department_id;
     public $available_days = [];
     public $phone;
@@ -36,12 +36,14 @@ class CreateDoctor extends Component
     public $end_time = '17:00';
     public $slot_duration_minutes = 30;
     public $patients_per_slot = 1;
-    public $max_booking_days = 7; 
-    public $imageUrl; 
+    public $max_booking_days = 7;
+    public $imageUrl;
     public $imageId;
     public $pincode;
     public $city;
-    public $state;  
+    public $state;
+    public $gender;
+public $experience;
 
     protected $listeners = ['openCreateModal' => 'openModal'];
 
@@ -75,7 +77,7 @@ class CreateDoctor extends Component
             'city',
             'state',
         ]);
-        
+
         $this->status = 1;
         $this->start_time = '09:00';
         $this->end_time = '17:00';
@@ -115,16 +117,16 @@ class CreateDoctor extends Component
     public function fetchPincodeDetails($pincode)
     {
         \Log::info('CreateDoctor: Fetching pincode details', ['pincode' => $pincode]);
-        
+
         $result = PincodeService::getLocationByPincode($pincode);
-        
+
         \Log::info('CreateDoctor: PincodeService result', $result);
-        
+
         if ($result['success']) {
             $this->city = $result['data']['city'];
             $this->state = $result['data']['state'];
             $this->resetErrorBag('pincode');
-            
+
             \Log::info('CreateDoctor: Successfully updated location', [
                 'city' => $this->city,
                 'state' => $this->state
@@ -134,7 +136,7 @@ class CreateDoctor extends Component
                 'pincode' => $pincode,
                 'error' => $result['error']
             ]);
-            
+
             $this->addError('pincode', $result['error']);
             $this->city = '';
             $this->state = '';
@@ -162,6 +164,8 @@ class CreateDoctor extends Component
             'pincode' => 'nullable|digits:6',
             'city' => 'nullable|string|max:100',
             'state' => 'nullable|string|max:100',
+            'gender' => 'required|in:male,female,other',
+            'experience' => 'required|integer|min:0|max:50',
         ]);
 
         try {
@@ -184,8 +188,8 @@ class CreateDoctor extends Component
                 $imageId = $response->result->fileId;
             }
 
-            $qualifications = $this->qualification ? 
-                array_filter(array_map('trim', explode(',', $this->qualification))) : 
+            $qualifications = $this->qualification ?
+                array_filter(array_map('trim', explode(',', $this->qualification))) :
                 null;
 
             // Create new user
@@ -194,6 +198,7 @@ class CreateDoctor extends Component
                 'email' => $this->email,
                 'password' => Hash::make($this->password),
                 'phone' => $this->phone,
+                'gender' => $this->gender,
                 'role' => 'doctor',
             ]);
 
@@ -217,6 +222,7 @@ class CreateDoctor extends Component
                 'pincode' => $this->pincode,
                 'city' => $this->city,
                 'state' => $this->state,
+                'experience' => $this->experience,
             ]);
 
             $this->reset([
@@ -242,6 +248,8 @@ class CreateDoctor extends Component
                 'pincode',
                 'city',
                 'state',
+                'gender',
+                'experience',
             ]);
 
             session()->flash('message', 'Doctor created successfully.');
@@ -252,7 +260,7 @@ class CreateDoctor extends Component
             if (isset($user)) {
                 $user->delete();
             }
-            
+
             if (isset($imageId)) {
                 try {
                     $imageKit = new ImageKitService();
@@ -261,7 +269,7 @@ class CreateDoctor extends Component
                     \Log::error('Failed to delete uploaded image: ' . $deleteException->getMessage());
                 }
             }
-            
+
             session()->flash('error', 'Error creating doctor: ' . $e->getMessage());
         }
     }
