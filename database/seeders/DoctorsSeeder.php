@@ -27,6 +27,8 @@ class DoctorsSeeder extends Seeder
                 'name' => $name,
                 'email' => strtolower(str_replace(' ', '.', $name)) . '@example.com',
                 'password' => bcrypt('password'),
+                "gender" => 'male',
+                "role" => 'doctor', // Assuming role is needed
             ]);
             $users[] = $user->id;
         }
@@ -45,6 +47,7 @@ class DoctorsSeeder extends Seeder
                 'slug' => 'dr-rahul-sharma',
                 'created_at' => now(),
                 'updated_at' => now(),
+                'experience' => '5 years',
             ],
             [
                 'user_id' => $users[1] ?? 1,
@@ -53,8 +56,10 @@ class DoctorsSeeder extends Seeder
                 'status' => 1,
                 'qualification' => json_encode(['MBBS', 'DM Cardiology']),
                 'slug' => 'dr-anita-verma',
+
                 'created_at' => now(),
                 'updated_at' => now(),
+                'experience' => '6 years',
             ],
             [
                 'user_id' => $users[2] ?? 1,
@@ -65,6 +70,7 @@ class DoctorsSeeder extends Seeder
                 'slug' => 'dr-vikram-singh',
                 'created_at' => now(),
                 'updated_at' => now(),
+                'experience' => '7 years',
             ],
             [
                 'user_id' => $users[3] ?? 1,
@@ -75,6 +81,7 @@ class DoctorsSeeder extends Seeder
                 'slug' => 'dr-priya-mehta',
                 'created_at' => now(),
                 'updated_at' => now(),
+                'experience' => '8 years',
             ],
             [
                 'user_id' => $users[4] ?? 1,
@@ -85,6 +92,7 @@ class DoctorsSeeder extends Seeder
                 'slug' => 'dr-arjun-patel',
                 'created_at' => now(),
                 'updated_at' => now(),
+                'experience' => '9 years',
             ],
             [
                 'user_id' => $users[5] ?? 1,
@@ -95,6 +103,7 @@ class DoctorsSeeder extends Seeder
                 'slug' => 'dr-neha-gupta',
                 'created_at' => now(),
                 'updated_at' => now(),
+                'experience' => '10 years',
             ],
         ];
 

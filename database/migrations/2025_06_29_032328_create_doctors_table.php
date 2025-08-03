@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->string('image')->nullable();
             $table->json('qualification')->nullable(); // ✅ Now JSON
             $table->string('slug')->nullable();
+            $table->string('experience')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
