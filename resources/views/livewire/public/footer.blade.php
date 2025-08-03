@@ -1,4 +1,4 @@
-<div><footer class="bg-gray-800 text-white pt-12 pb-6">
+<div><footer class="bg-gray-800 text-white pt-12 pb-10">
     <div class="container mx-auto px-4">
         <!-- Mobile Footer with Collapsible Sections -->
         <div class="md:hidden">

@@ -1,12 +1,8 @@
-<div class="min-h-screen bg-gradient-to-br from-teal-50 via-white to-teal-100 flex items-center justify-center p-2 sm:p-4">
-    <div class="bg-white p-4 sm:p-6 lg:p-10 rounded-2xl shadow-xl w-full max-w-sm sm:max-w-md lg:max-w-lg mx-auto transition-all duration-300 hover:shadow-2xl border border-teal-100/50">
+<div class="lg:min-h-screen bg-gradient-to-br from-teal-50 via-white to-teal-100 flex items-center justify-center p-2 sm:p-4">
+    <div class="bg-white p-4 sm:p-6 lg:p-10 rounded-2xl w-full max-w-md sm:max-w-md lg:max-w-lg mx-auto transition-all duration-300 border border-teal-100/50">
         <!-- Header with Branding -->
         <div class="text-center mb-6 sm:mb-8">
-            <div class="bg-gradient-to-r from-teal-500 to-teal-600 w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-5 shadow-md">
-                <svg class="w-7 h-7 sm:w-9 sm:h-9 text-white" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 7V17M17 12H7M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </div>
+           
             <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-1">Welcome to <span class="text-orange-400">MedBuzzy</span></h1>
             <p class="text-teal-600 font-medium text-sm sm:text-base">Your trusted health partner</p>
             <p class="text-gray-500 text-xs sm:text-sm mt-2">Sign in to continue your health journey</p>

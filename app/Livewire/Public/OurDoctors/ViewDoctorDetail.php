@@ -15,7 +15,8 @@ class ViewDoctorDetail extends Component
     public $slug;
     public $averageRating = 0;
     public $countFeedback = 0;
-    public $approvedReviews = []; // Add property for approved reviews
+    public $approvedReviews = []; 
+    public $relatedDoctors = []; // Added property for related doctors
 
     public function mount($slug)
     {
@@ -40,6 +41,45 @@ class ViewDoctorDetail extends Component
 
         // Calculate review metrics
         $this->calculateReviewMetrics();
+        
+        // Load related doctors
+        $this->loadRelatedDoctors();
+    }
+    
+    public function loadRelatedDoctors()
+    {
+        if (!$this->doctor || !$this->doctor->department_id) {
+            return;
+        }
+        
+        $this->relatedDoctors = Doctor::where('department_id', $this->doctor->department_id)
+            ->where('id', '!=', $this->doctor->id)
+            ->with(['user', 'department'])
+            ->withAvg(['reviews' => function($query) {
+                $query->where('approved', true);
+            }], 'rating')
+            ->withCount(['reviews' => function($query) {
+                $query->where('approved', true);
+            }])
+            ->limit(3)
+            ->get();
+            
+        // If not enough related doctors in same department, get more doctors
+        if ($this->relatedDoctors->count() < 3) {
+            $additionalDoctors = Doctor::where('id', '!=', $this->doctor->id)
+                ->whereNotIn('id', $this->relatedDoctors->pluck('id')->toArray())
+                ->with(['user', 'department'])
+                ->withAvg(['reviews' => function($query) {
+                    $query->where('approved', true);
+                }], 'rating')
+                ->withCount(['reviews' => function($query) {
+                    $query->where('approved', true);
+                }])
+                ->limit(3 - $this->relatedDoctors->count())
+                ->get();
+                
+            $this->relatedDoctors = $this->relatedDoctors->merge($additionalDoctors);
+        }
     }
 
     public function calculateReviewMetrics()
@@ -86,6 +126,7 @@ class ViewDoctorDetail extends Component
         return view('livewire.public.our-doctors.view-doctor-detail', [
             'doctor' => $this->doctor,
             'approvedReviews' => $this->approvedReviews,
+            'relatedDoctors' => $this->relatedDoctors
         ]);
     }
 }
