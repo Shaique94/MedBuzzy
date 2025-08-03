@@ -113,6 +113,19 @@
                                     <span>{{ $contactDetails['phone'] }}</span>
                                 </a>
                             </li>
+                             @if($contactDetails['emergency_phone'])
+                         
+                            <li>
+                                <a href="tel:{{$contactDetails['emergency_phone'] }}" class="flex items-center text-gray-400 hover:text-white">
+                                    <div class="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center mr-3">
+                                        <svg class="h-4 w-4 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                                        </svg>
+                                    </div>
+                                    <span>Support: {{ $contactDetails['emergency_phone'] }}</span>
+                                </a>
+                            </li>
+                            @endif
                             <li>
                                 <a href="mailto:{{ $contactDetails['email'] }}" class="flex items-center text-gray-400 hover:text-white">
                                     <div class="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center mr-3">
@@ -132,18 +145,7 @@
                                 </div>
                                 <span>{{ $contactDetails['address'] }}</span>
                             </li>
-                            @if($contactDetails['emergency_phone'])
-                            <li>
-                                <a href="tel:{{ $contactDetails['emergency_phone'] }}" class="flex items-center text-red-400 hover:text-red-300">
-                                    <div class="w-8 h-8 bg-red-900 rounded-full flex items-center justify-center mr-3">
-                                        <svg class="h-4 w-4 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.35 16.5c-.77.833.192 2.5 1.732 2.5z"/>
-                                        </svg>
-                                    </div>
-                                    <span>Emergency: {{ $contactDetails['emergency_phone'] }}</span>
-                                </a>
-                            </li>
-                            @endif
+                           
                         </ul>
                     </div>
                 </div>
@@ -214,6 +216,16 @@
                         </svg>
                         <a href="tel:{{ $contactDetails['phone'] }}" class="hover:text-white transition-colors">{{ $contactDetails['phone'] }}</a>
                     </li>
+
+                      @if($contactDetails['emergency_phone'])
+                   
+                    <li class="flex items-center text-gray-400">
+                        <svg class="h-5 w-5 mr-2 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                        </svg>
+                        <a href="tel:{{ $contactDetails['emergency_phone'] }}" class="hover:text-white transition-colors">Support: {{ $contactDetails['emergency_phone'] }}</a>
+                    </li>
+                    @endif
                     <li class="flex items-center text-gray-400">
                         <svg class="h-5 w-5 mr-2 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
@@ -227,18 +239,7 @@
                         </svg>
                         {{ $contactDetails['address'] }}
                     </li>
-                    @if($contactDetails['emergency_phone'])
-                    <li>
-                        <a href="tel:{{ $contactDetails['emergency_phone'] }}" class="flex items-center text-red-400 hover:text-red-300">
-                            <div class="w-8 h-8 bg-red-900 rounded-full flex items-center justify-center mr-3">
-                                <svg class="h-4 w-4 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.35 16.5c-.77.833.192 2.5 1.732 2.5z"/>
-                                </svg>
-                            </div>
-                            <span>Emergency: {{ $contactDetails['emergency_phone'] }}</span>
-                        </a>
-                    </li>
-                    @endif
+                  
                 </ul>
             </div>
         </div>
