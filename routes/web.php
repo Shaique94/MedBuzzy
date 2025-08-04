@@ -59,7 +59,9 @@ Route::get('/register', Register::class)->name('register');
 Route::get('/review',Review::class)->name('review');
 Route::get('/appointment/{doctor_slug?}', ManageAppointment::class)->name('appointment');
 Route::get('/appointment/confirmation/{appointment}', AppointmentConfirmation::class)->name('appointment.confirmation');
+Route::get('/appointment/receipt/{appointment}/download', [AppointmentReceiptController::class, 'download'])->name('appointment.receipt.download');
 Route::get('/appointment/receipt/{appointment}', [AppointmentReceiptController::class, 'download'])->name('appointment.receipt');
+
 Route::get('/about-us', About::class)->name('about-us');
 Route::get('/contact-us', Contact::class)->name('contact-us');
 
@@ -71,7 +73,7 @@ Route::post('/logout', function () {
 })->name('logout');
 
 // Doctor Routes
-Route::prefix('doc')->name('doctor.')->group(function () {
+Route::prefix('doc')->name('doctor.')->middleware(['auth', 'is_doctor'])->group(function () {
     Route::get('/dashboard', Doctordashboard::class)->name('dashboard');
     Route::get('/profile', Profile::class)->name('profile');
     Route::get('/leave', Leave::class)->name('add-leave');
@@ -87,7 +89,7 @@ Route::prefix('doc')->name('doctor.')->group(function () {
 });
 
 // Manager Routes
-Route::prefix('manager')->name('manager.')->group(function () {
+Route::prefix('manager')->name('manager.')->middleware(['auth', 'is_manager'])->group(function () {
     Route::get('/dashboard', Managerdashboard::class)->name('dashboard');
     Route::get('/appointments', AppointmentList::class)->name('appointments');
     Route::get('/profile', ManagerProfile::class)->name('profile');
@@ -100,7 +102,7 @@ Route::prefix('manager')->name('manager.')->group(function () {
 });
 
 // Admin Routes
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin'])->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/manage-doctors', ManageDoctor::class)->name('manage.doctors');
     Route::get('/doctors', ListDoctor::class)->name('doctors.list');

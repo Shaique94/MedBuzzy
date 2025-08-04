@@ -2,7 +2,7 @@
     @if($showModel)
     <div class="bg-white rounded-lg shadow-xl m-2 overflow-hidden">
     <!-- Modal Header -->
-    <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">
+    <div class="bg-blue-600 px-6 py-4">
         <div class="flex items-center justify-between">
             <h3 class="text-xl font-bold text-white flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">

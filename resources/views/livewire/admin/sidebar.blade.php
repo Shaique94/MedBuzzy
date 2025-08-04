@@ -2,7 +2,7 @@
     class="fixed h-full w-64 bg-white shadow-xl transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out z-20 border-r border-gray-200">
     <div class="flex flex-col h-full">
         <!-- Brand/Logo -->
-        <div class="flex items-center justify-center h-16 lg:h-20 border-b border-gray-200 px-4 lg:px-6 bg-gradient-to-r from-blue-600 to-blue-700">
+        <div class="flex items-center justify-center h-16 lg:h-20 border-b border-gray-200 px-4 lg:px-6 bg-blue-600">
             <div class="bg-white text-blue-600 rounded-full w-10 h-10 flex items-center justify-center mr-3 shadow-lg">
                 <i class="fas fa-user-md text-lg"></i>
             </div>

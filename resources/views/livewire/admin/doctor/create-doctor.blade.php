@@ -51,7 +51,7 @@
                     <form wire:submit.prevent="save" class="space-y-4 lg:space-y-6">
                         <!-- Personal Information Section -->
                         <div
-                            class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 lg:p-6 border border-blue-100">
+                            class="bg-blue-50 rounded-xl p-4 lg:p-6 border border-blue-100">
                             <h4 class="text-lg font-semibold text-gray-900 mb-3 lg:mb-4 flex items-center">
                                 <svg class="h-5 w-5 text-blue-500 mr-2" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor">

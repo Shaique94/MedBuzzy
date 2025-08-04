@@ -21,7 +21,8 @@ class ListDoctor extends Component
     protected $listeners = [
         'refreshDoctorList' => '$refresh',
         'doctorCreated' => '$refresh',
-        'doctorUpdated' => '$refresh'
+        'doctorUpdated' => '$refresh',
+        'confirmDeleteDoctor' => 'deleteDoctor'
     ];
 
     public function updatingSearch()
@@ -31,10 +32,44 @@ class ListDoctor extends Component
 
     public function confirmDelete($id)
     {
-        $this->confirmingDelete = true;
-        $this->doctorIdToDelete = $id;
+        $doctor = Doctor::with('user')->findOrFail($id);
+        
+        $this->dispatch('openDeleteModal', [
+            'title' => 'Delete Doctor',
+            'message' => 'Are you sure you want to delete this doctor? All associated appointments and data will be permanently removed.',
+            'confirmText' => 'Delete Doctor',
+            'cancelText' => 'Cancel',
+            'itemName' => $doctor->user->name,
+            'itemType' => 'doctor',
+            'deleteAction' => 'confirmDeleteDoctor',
+            'itemId' => $id
+        ]);
     }
 
+    public function deleteDoctor($id)
+    {
+        try {
+            $doctor = Doctor::findOrFail($id);
+            $user = $doctor->user;
+            $doctorName = $user->name;
+
+            // Delete image if exists
+            if ($doctor->image_id) {
+                $imageKit = new ImageKitService();
+                $imageKit->delete($doctor->image_id);
+            }
+
+            $doctor->delete();
+            $user->delete();
+
+            session()->flash('message', "Doctor '{$doctorName}' has been successfully deleted.");
+            $this->dispatch('refreshDoctorList');
+        } catch (\Exception $e) {
+            session()->flash('error', 'Error deleting doctor: ' . $e->getMessage());
+        }
+    }
+
+    // Keep old methods for backward compatibility
     public function cancelDelete()
     {
         $this->confirmingDelete = false;
@@ -47,30 +82,10 @@ class ListDoctor extends Component
             return;
         }
 
-        try {
-            $doctor = Doctor::findOrFail($this->doctorIdToDelete);
-            $user = $doctor->user;
-
-            // Delete image if exists
-            if ($doctor->image_id) {
-                $imageKit = new ImageKitService();
-                $imageKit->delete($doctor->image_id);
-            }
-
-            $doctor->delete();
-            $user->delete();
-
-            session()->flash('message', 'Doctor deleted successfully.');
-            
-            $this->confirmingDelete = false;
-            $this->doctorIdToDelete = null;
-            
-            $this->dispatch('refreshDoctorList');
-        } catch (\Exception $e) {
-            session()->flash('error', 'Error deleting doctor: ' . $e->getMessage());
-            $this->confirmingDelete = false;
-            $this->doctorIdToDelete = null;
-        }
+        $this->deleteDoctor($this->doctorIdToDelete);
+        
+        $this->confirmingDelete = false;
+        $this->doctorIdToDelete = null;
     }
 
     public function openCreateModal()

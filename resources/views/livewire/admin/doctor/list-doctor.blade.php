@@ -4,6 +4,9 @@
     <livewire:admin.doctor.update-doctor />
     <livewire:admin.doctor.view-doctor />
     
+    <!-- Include Delete Confirmation Modal -->
+    <livewire:components.delete-confirmation-modal />
+    
     <div class="container mx-auto max-w-8xl px-2 sm:px-4 lg:px-6">
         <!-- Enhanced Header Section -->
         <div class="bg-white rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8 mb-4 sm:mb-6 lg:mb-8">
@@ -112,7 +115,7 @@
                                                  src="{{ $doctor->image }}" 
                                                  alt="{{ $doctor->user->name }}">
                                         @else
-                                            <div class="h-10 w-10 rounded-full bg-gradient-to-r from-blue-400 to-blue-600 flex items-center justify-center ring-2 ring-blue-100">
+                                            <div class="h-10 w-10 rounded-full bg-blue-600 flex items-center justify-center ring-2 ring-blue-100">
                                                 <span class="text-white font-semibold text-sm">
                                                     {{ substr($doctor->user->name, 0, 1) }}
                                                 </span>
@@ -219,7 +222,7 @@
                 @forelse($doctors as $doctor)
                 <div class="bg-white rounded-xl p-4 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-200">
                     <div class="flex items-start space-x-4">
-                        <div class="flex-shrink-0 h-14 w-14 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center shadow-md">
+                        <div class="flex-shrink-0 h-14 w-14 bg-blue-200 rounded-full flex items-center justify-center shadow-md">
                             @if ($doctor->image)
                                 <img src="{{ $doctor->image }}" class="h-14 w-14 rounded-full object-cover ring-2 ring-blue-200" alt="{{ $doctor->user->name }}">
                             @else
@@ -266,13 +269,13 @@
                             
                             <!-- Action Buttons -->
                             <div class="mt-4 flex space-x-2">
-                                <button wire:click="openViewModal({{ $doctor->id }})" class="flex-1 text-center px-3 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-200 transition-colors duration-200">
+                                <button wire:click="openViewModal({{ $doctor->id }})" class="flex-1 text-center px-3 py-3 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-200 transition-colors duration-200 min-h-[44px] touch-target">
                                     <i class="fas fa-eye mr-1"></i>View
                                 </button>
-                                <button wire:click="openUpdateModal({{ $doctor->id }})" class="flex-1 text-center px-3 py-2 bg-indigo-100 text-indigo-700 rounded-lg text-sm font-medium hover:bg-indigo-200 transition-colors duration-200">
+                                <button wire:click="openUpdateModal({{ $doctor->id }})" class="flex-1 text-center px-3 py-3 bg-indigo-100 text-indigo-700 rounded-lg text-sm font-medium hover:bg-indigo-200 transition-colors duration-200 min-h-[44px] touch-target">
                                     <i class="fas fa-edit mr-1"></i>Edit
                                 </button>
-                                <button wire:click="confirmDelete({{ $doctor->id }})" class="flex-1 text-center px-3 py-2 bg-red-100 text-red-700 rounded-lg text-sm font-medium hover:bg-red-200 transition-colors duration-200">
+                                <button wire:click="confirmDelete({{ $doctor->id }})" class="flex-1 text-center px-3 py-3 bg-red-100 text-red-700 rounded-lg text-sm font-medium hover:bg-red-200 transition-colors duration-200 min-h-[44px] touch-target">
                                     <i class="fas fa-trash mr-1"></i>Delete
                                 </button>
                             </div>
@@ -320,73 +323,6 @@
             </div>
             @endif
         </div>
-
-        <!-- Enhanced Delete Confirmation Modal -->
-        @if($confirmingDelete)
-        <div class="fixed inset-0 z-50 overflow-y-auto bg-gray-900/60 backdrop-blur-sm flex items-center justify-center p-4" x-data x-trap.inert.noscroll="true">
-            <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full transform transition-all duration-300 animate-pulse">
-                <div class="p-6">
-                    <!-- Header -->
-                    <div class="flex items-center justify-between mb-6">
-                        <h3 class="text-lg font-semibold text-gray-900">Confirm Deletion</h3>
-                        <button wire:click="cancelDelete" class="text-gray-400 hover:text-gray-500 transition-colors duration-200 p-1 rounded-lg hover:bg-gray-100">
-                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </div>
-                    
-                    <!-- Warning Icon -->
-                    <div class="flex items-center justify-center w-16 h-16 mx-auto mb-6 bg-red-100 rounded-full">
-                        <svg class="w-8 h-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
-                        </svg>
-                    </div>
-                    
-                    <!-- Content -->
-                    <div class="text-center mb-6">
-                        <h4 class="text-lg font-medium text-gray-900 mb-3">Delete Doctor?</h4>
-                        <p class="text-gray-600 responsive-text-sm">Are you sure you want to delete this doctor? This action will permanently remove:</p>
-                        <ul class="responsive-text-sm text-gray-600 mt-3 space-y-1 text-left bg-gray-50 rounded-lg p-3">
-                            <li class="flex items-center">
-                                <i class="fas fa-times-circle text-red-500 mr-2 w-4"></i>
-                                Doctor profile and account
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-times-circle text-red-500 mr-2 w-4"></i>
-                                All associated data
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-times-circle text-red-500 mr-2 w-4"></i>
-                                Appointment history
-                            </li>
-                        </ul>
-                        <p class="text-red-600 responsive-text-sm font-medium mt-3 bg-red-50 rounded-lg p-2">
-                            <i class="fas fa-exclamation-triangle mr-2"></i>
-                            This action cannot be undone!
-                        </p>
-                    </div>
-                    
-                    <!-- Actions -->
-                    <div class="flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-3">
-                        <button wire:click="cancelDelete" class="flex-1 px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200 font-medium">
-                            <i class="fas fa-arrow-left mr-2"></i>Cancel
-                        </button>
-                        <button wire:click="delete" class="flex-1 px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors duration-200 font-medium flex items-center justify-center">
-                            <svg wire:loading wire:target="delete" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            <span wire:loading.remove wire:target="delete">
-                                <i class="fas fa-trash mr-2"></i>Yes, Delete
-                            </span>
-                            <span wire:loading wire:target="delete">Deleting...</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        @endif
     </div>
 
     <style>
@@ -470,6 +406,11 @@
             .responsive-grid {
                 grid-template-columns: 1fr;
                 gap: 1rem;
+            }
+            
+            .touch-target {
+                min-height: 44px;
+                min-width: 44px;
             }
         }
 

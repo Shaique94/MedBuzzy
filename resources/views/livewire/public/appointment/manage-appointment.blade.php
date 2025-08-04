@@ -91,29 +91,28 @@
                             <div
                                 class="bg-gradient-to-r from-brand-teal-50 to-brand-teal-100 p-5 rounded-xl border border-brand-teal-200">
                                 <h2 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
-                                    <svg class="h-5 w-5 mr-2 text-brand-teal-600" fill="currentColor"
-                                        viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd"
-                                            d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
-                                    Filter by Department
-                                </h2>
-                                <div class="flex flex-wrap gap-2">
-                                    <button type="button" wire:click="$set('selectedDepartment', null)"
-                                        class="px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200
-                                    {{ !$selectedDepartment ? 'bg-brand-teal-600 text-white shadow-md' : 'bg-white hover:bg-brand-orange-50 text-gray-800 border border-gray-200' }}">
-                                        All Specialties
-                                    </button>
-                                    @foreach ($departments as $department)
-                                        <button type="button"
-                                            wire:click="$set('selectedDepartment', {{ $department->id }})"
-                                            class="px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 shadow-sm
-                                        {{ $selectedDepartment === $department->id ? 'bg-brand-teal-600 text-white shadow-md' : 'bg-white hover:bg-brand-orange-50 text-gray-800 border border-gray-200' }}">
-                                            {{ $department->name }}
-                                        </button>
-                                    @endforeach
-                                </div>
+            <svg class="h-5 w-5 mr-2 text-brand-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+            </svg>
+            Filter by Department
+        </h2>
+        <!-- Department buttons with original design and hover/click behavior -->
+        <div class="flex flex-wrap gap-2">
+            <button type="button" wire:click="$set('selectedDepartment', null)"
+                class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300
+                {{ !$selectedDepartment ? 'ring-2 ring-brand-teal-500 bg-brand-teal-50 border-brand-teal-200' : 'bg-gradient-to-br from-brand-teal-50 to-brand-orange-50 hover:to-brand-orange-100 hover:shadow-md' }}"
+                title="Show all specialties">
+                All Specialties
+            </button>
+            @foreach ($departments as $department)
+                <button type="button" wire:click="$set('selectedDepartment', {{ $department->id }})"
+                    class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300
+                    {{ $selectedDepartment === $department->id ? 'ring-2 ring-brand-teal-500 bg-brand-teal-50 border-brand-teal-200' : 'bg-gradient-to-br from-brand-teal-50 to-brand-orange-50 hover:to-brand-orange-100 hover:shadow-md' }}"
+                    title="Filter by {{ $department->name }}">
+                    {{ $department->name }}
+                </button>
+            @endforeach
+        </div>
                             </div>
 
                             <!-- Doctors List -->
