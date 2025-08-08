@@ -1,18 +1,21 @@
 <div>
-    <div class="flex justify-between items-center mb-8">
-        <h2 class="text-3xl font-bold text-gray-900">Schedule Management</h2>
-        @if (!$showForm)
-            <button wire:click="$toggle('showForm')"
-                class="flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white px-5 py-2.5 rounded-lg transition duration-200 transform hover:scale-105">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd"
-                        d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                        clip-rule="evenodd" />
-                </svg>
-                {{ $doctor ? 'Edit Schedule' : 'Create Schedule' }}
-            </button>
-        @endif
-    </div>
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 md:mb-8">
+    <!-- Title -->
+    <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Schedule Management</h2>
+    
+    <!-- Button - conditionally shown -->
+    @if (!$showForm)
+        <button wire:click="$toggle('showForm')"
+            class="flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg transition duration-200 transform hover:scale-105 w-full sm:w-auto justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                    clip-rule="evenodd" />
+            </svg>
+            <span>{{ $doctor ? 'Edit Schedule' : 'Create Schedule' }}</span>
+        </button>
+    @endif
+</div>
 
     @if (session()->has('success'))
         <div class="mb-4 p-3 bg-green-100 text-green-700 rounded">
