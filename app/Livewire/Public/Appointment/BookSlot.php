@@ -3,7 +3,9 @@
 namespace App\Livewire\Public\Appointment;
 
 use Livewire\Component;
+use Livewire\Attributes\Title;
 
+#[Title('Book Appointment Slot')]
 class BookSlot extends Component
 {
     

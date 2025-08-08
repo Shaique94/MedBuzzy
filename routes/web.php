@@ -1,14 +1,18 @@
 <?php
 
 use App\Http\Controllers\SocialiteController;
+use App\Livewire\Admin\AdminReviewApproval;
 use App\Livewire\Admin\Appointment\Add;
 use App\Livewire\Admin\Appointment\All;
 use App\Livewire\Admin\Appointment\Update;
 use App\Livewire\Admin\Appointment\ViewDetails;
 use App\Livewire\Admin\Auth\Login;
+use App\Livewire\Admin\Review\AdminReviewManagement;
 use App\Livewire\Admin\Sections\Dashboard;
+use App\Livewire\Admin\Sections\EditDoctor;
 use App\Livewire\Admin\Sections\ManageDepartment;
 use App\Livewire\Admin\Sections\ManageDoctor;
+use App\Livewire\Admin\Doctor\ListDoctor;
 use App\Livewire\Doctor\Section\CreateSlot;
 use App\Livewire\Doctor\Section\Leave;
 use App\Livewire\Doctor\Section\Manager\CreateManger;
@@ -25,6 +29,7 @@ use App\Livewire\Public\Section\About;
 use App\Livewire\Public\Section\Contact;
 use App\Livewire\Public\Signup\Register;
 use App\Livewire\Public\TermsCondition;
+use App\Livewire\Public\PrivacyPolicy;
 use App\Livewire\Doctor\Profile;
 use App\Livewire\Manager\Sections\Managerdashboard;
 use App\Livewire\Manager\Sections\AppointmentList;
@@ -47,25 +52,28 @@ Route::get('/auth/google-callback', [SocialiteController::class, 'handleGoogleCa
 Route::get('/', LandingPage::class)->name('hero');
 Route::get('/our-doctors', OurDoctors::class)->name('our-doctors');
 Route::get('/terms-conditions', TermsCondition::class)->name('terms-conditons');
-Route::get('/doctor/{doctor_id}', ViewDoctorDetail::class)->name('doctor-detail');
+Route::get('/privacy-policy', PrivacyPolicy::class)->name('privacy-policy');
+Route::get('/doctor/{slug}', ViewDoctorDetail::class)->name('doctor-detail');
 Route::get('/contact-us', ContactUs::class)->name('contact-us');
 Route::get('/register', Register::class)->name('register');
 Route::get('/review',Review::class)->name('review');
-Route::get('/appointment', ManageAppointment::class)->name('appointment');
+Route::get('/appointment/{doctor_slug?}', ManageAppointment::class)->name('appointment');
 Route::get('/appointment/confirmation/{appointment}', AppointmentConfirmation::class)->name('appointment.confirmation');
+Route::get('/appointment/receipt/{appointment}/download', [AppointmentReceiptController::class, 'download'])->name('appointment.receipt.download');
 Route::get('/appointment/receipt/{appointment}', [AppointmentReceiptController::class, 'download'])->name('appointment.receipt');
+
 Route::get('/about-us', About::class)->name('about-us');
 Route::get('/contact-us', Contact::class)->name('contact-us');
 
 // Authentication Routes
-Route::get('/login', Login::class)->name('admin.login');
+Route::get('/login', Login::class)->name('login');
 Route::post('/logout', function () {
     Auth::logout();
     return redirect('/login');
 })->name('logout');
 
 // Doctor Routes
-Route::prefix('doc')->name('doctor.')->group(function () {
+Route::prefix('doc')->name('doctor.')->middleware(['auth', 'is_doctor'])->group(function () {
     Route::get('/dashboard', Doctordashboard::class)->name('dashboard');
     Route::get('/profile', Profile::class)->name('profile');
     Route::get('/leave', Leave::class)->name('add-leave');
@@ -81,7 +89,7 @@ Route::prefix('doc')->name('doctor.')->group(function () {
 });
 
 // Manager Routes
-Route::prefix('manager')->name('manager.')->group(function () {
+Route::prefix('manager')->name('manager.')->middleware(['auth', 'is_manager'])->group(function () {
     Route::get('/dashboard', Managerdashboard::class)->name('dashboard');
     Route::get('/appointments', AppointmentList::class)->name('appointments');
     Route::get('/profile', ManagerProfile::class)->name('profile');
@@ -94,14 +102,17 @@ Route::prefix('manager')->name('manager.')->group(function () {
 });
 
 // Admin Routes
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin'])->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/manage-doctors', ManageDoctor::class)->name('manage.doctors');
+    Route::get('/doctors', ListDoctor::class)->name('doctors.list');
     Route::get('/manage-departments', ManageDepartment::class)->name('departments');
     Route::get('/appointment', All::class)->name('appointment');
     Route::get('/appointment/add', Add::class)->name('add.appointment');
     Route::get('/appointment/update/{id}', Update::class)->name('update.appointment');
     Route::get('/appointment/view/{id}', ViewDetails::class)->name('view.appointment');
+    Route::get('/review',AdminReviewManagement::class)->name('reviewapprovel');
+    Route::get('/doctors/edit/{id}', EditDoctor::class)->name('editDoctor');
 });
 
 Route::get('/storage-link', function () {

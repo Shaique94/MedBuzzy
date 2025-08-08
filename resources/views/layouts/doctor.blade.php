@@ -5,7 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Doctor Dashboard</title>
+    
+    <title>{{ $title ? $title . ' | Doctor Dashboard - MedBuzzy' : 'Doctor Dashboard - MedBuzzy' }}</title>
 
     <!-- Tailwind (optional, if not already included in app.css) -->
     <script src="https://cdn.tailwindcss.com"></script>

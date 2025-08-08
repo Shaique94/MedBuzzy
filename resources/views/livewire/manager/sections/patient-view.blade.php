@@ -1,74 +1,125 @@
 <div class="print-content"> 
-<div class="py-6 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+<div class="py-3 sm:py-4 lg:py-6 px-2 sm:px-4 lg:px-8 max-w-5xl mx-auto">
     <!-- Header with print button -->
- <div class="flex justify-between items-center mb-8 px-1">
-    <div class="flex items-center space-x-4">
-        <h1 class="text-3xl font-bold text-blue-800">Patient Details</h1>
-        @if($patient->active)
-            <span class="px-3 py-1 text-sm font-medium rounded-full bg-blue-100 text-blue-800">
-                Active
-            </span>
-        @endif
-    </div>
-    
-    @if($latestAppointment)
-        <a href="{{ route('appointment.receipt', ['appointment' => $latestAppointment->id]) }}"
-           class="flex items-center space-x-2 px-4 py-2 bg-white border border-blue-200 rounded-lg shadow-sm hover:bg-blue-50 transition-colors"
-           title="Print Receipt">
-           <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
-            </svg>
-            <span class="text-sm font-medium text-blue-700 hidden md:inline">Print Receipt</span>
-        </a>
-    @endif
-</div>
-
-    <!-- Patient details card -->
-    <div class="bg-white shadow rounded-lg overflow-hidden mb-6 print:shadow-none">
-        <div class="px-6 py-4 border-b border-gray-200">
-            <h2 class="text-lg font-medium text-gray-900 capitalize">{{ $patient->name }}</h2>
-            <p class="text-sm text-gray-500">Patient ID: {{ $patient->id }}</p>
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 lg:mb-8 px-1 space-y-4 sm:space-y-0">
+        <div class="flex items-center space-x-3 sm:space-x-4">
+            <h1 class="text-2xl sm:text-3xl font-bold text-blue-800">Patient Details</h1>
+            @if($patient->active)
+                <span class="px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium rounded-full bg-blue-100 text-blue-800">
+                    Active
+                </span>
+            @endif
         </div>
         
-        <div class="px-6 py-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Personal Information -->
-            <div>
-                <h3 class="text-md font-medium text-gray-700 mb-3">Personal Information</h3>
-                <div class="space-y-2">
-                    <div class="flex">
-                        <span class="text-gray-500 w-32">Age/Gender:</span>
-                        <span class="text-gray-800">{{ $patient->age }} years / {{ ucfirst($patient->gender) }}</span>
+        @if($latestAppointment)
+            <a wire:navigate href="{{ route('appointment.receipt', ['appointment' => $latestAppointment->id]) }}"
+               class="flex items-center justify-center sm:justify-start space-x-2 px-3 sm:px-4 py-2 sm:py-3 bg-white border border-blue-200 rounded-lg shadow-sm hover:bg-blue-50 transition-colors text-sm sm:text-base"
+               title="Print Receipt">
+               <svg class="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                </svg>
+                <span class="font-medium text-blue-700">
+                    <span class="hidden sm:inline">Print Receipt</span>
+                    <span class="sm:hidden">Print</span>
+                </span>
+            </a>
+        @endif
+    </div>
+
+    <!-- Patient details card -->
+    <div class="bg-white shadow-sm rounded-lg lg:rounded-xl overflow-hidden mb-4 sm:mb-6 print:shadow-none">
+        <div class="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200 bg-gray-50">
+            <h2 class="text-lg sm:text-xl font-medium text-gray-900 capitalize">{{ $patient->name }}</h2>
+            <p class="text-xs sm:text-sm text-gray-500">Patient ID: {{ $patient->id }}</p>
+        </div>
+        
+        <div class="px-4 sm:px-6 py-4 sm:py-6">
+            <!-- Mobile: Stack layout -->
+            <div class="block sm:hidden space-y-6">
+                <!-- Personal Information -->
+                <div>
+                    <h3 class="text-base font-medium text-gray-700 mb-3 pb-2 border-b border-gray-200">Personal Information</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span class="text-gray-500 text-sm">Age/Gender:</span>
+                            <span class="text-gray-800 text-sm font-medium">{{ $patient->age }} years / {{ ucfirst($patient->gender) }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-500 text-sm">Phone:</span>
+                            <span class="text-gray-800 text-sm font-medium">{{ $patient->phone }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-500 text-sm">Email:</span>
+                            <span class="text-gray-800 text-sm font-medium break-all">{{ $patient->email ?? 'N/A' }}</span>
+                        </div>
                     </div>
-                    <div class="flex">
-                        <span class="text-gray-500 w-32">Phone:</span>
-                        <span class="text-gray-800">{{ $patient->phone }}</span>
-                    </div>
-                    <div class="flex">
-                        <span class="text-gray-500 w-32">Email:</span>
-                        <span class="text-gray-800">{{ $patient->email ?? 'N/A' }}</span>
+                </div>
+                
+                <!-- Address Information -->
+                <div>
+                    <h3 class="text-base font-medium text-gray-700 mb-3 pb-2 border-b border-gray-200">Address Information</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <span class="text-gray-500 text-sm block">Address:</span>
+                            <span class="text-gray-800 text-sm font-medium">{{ $patient->address }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-500 text-sm">Pincode:</span>
+                            <span class="text-gray-800 text-sm font-medium">{{ $patient->pincode ?? 'N/A' }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-500 text-sm">District:</span>
+                            <span class="text-gray-800 text-sm font-medium">{{ $patient->district ?? 'N/A' }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-500 text-sm">State/Country:</span>
+                            <span class="text-gray-800 text-sm font-medium">{{ $patient->state ?? 'N/A' }}, {{ $patient->country ?? 'India' }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
             
-            <!-- Address Information -->
-            <div>
-                <h3 class="text-md font-medium text-gray-700 mb-3">Address Information</h3>
-                <div class="space-y-2">
-                    <div class="flex">
-                        <span class="text-gray-500 w-32">Address:</span>
-                        <span class="text-gray-800">{{ $patient->address }}</span>
+            <!-- Desktop: Grid layout -->
+            <div class="hidden sm:grid sm:grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+                <!-- Personal Information -->
+                <div>
+                    <h3 class="text-lg font-medium text-gray-700 mb-4 pb-2 border-b border-gray-200">Personal Information</h3>
+                    <div class="space-y-3">
+                        <div class="flex">
+                            <span class="text-gray-500 w-32">Age/Gender:</span>
+                            <span class="text-gray-800 font-medium">{{ $patient->age }} years / {{ ucfirst($patient->gender) }}</span>
+                        </div>
+                        <div class="flex">
+                            <span class="text-gray-500 w-32">Phone:</span>
+                            <span class="text-gray-800 font-medium">{{ $patient->phone }}</span>
+                        </div>
+                        <div class="flex">
+                            <span class="text-gray-500 w-32">Email:</span>
+                            <span class="text-gray-800 font-medium break-all">{{ $patient->email ?? 'N/A' }}</span>
+                        </div>
                     </div>
-                    <div class="flex">
-                        <span class="text-gray-500 w-32">Pincode:</span>
-                        <span class="text-gray-800">{{ $patient->pincode ?? 'N/A' }}</span>
-                    </div>
-                    <div class="flex">
-                        <span class="text-gray-500 w-32">District:</span>
-                        <span class="text-gray-800">{{ $patient->district ?? 'N/A' }}</span>
-                    </div>
-                    <div class="flex">
-                        <span class="text-gray-500 w-32">State/Country:</span>
-                        <span class="text-gray-800">{{ $patient->state ?? 'N/A' }}, {{ $patient->country ?? 'India' }}</span>
+                </div>
+                
+                <!-- Address Information -->
+                <div>
+                    <h3 class="text-lg font-medium text-gray-700 mb-4 pb-2 border-b border-gray-200">Address Information</h3>
+                    <div class="space-y-3">
+                        <div class="flex">
+                            <span class="text-gray-500 w-32">Address:</span>
+                            <span class="text-gray-800 font-medium">{{ $patient->address }}</span>
+                        </div>
+                        <div class="flex">
+                            <span class="text-gray-500 w-32">Pincode:</span>
+                            <span class="text-gray-800 font-medium">{{ $patient->pincode ?? 'N/A' }}</span>
+                        </div>
+                        <div class="flex">
+                            <span class="text-gray-500 w-32">District:</span>
+                            <span class="text-gray-800 font-medium">{{ $patient->district ?? 'N/A' }}</span>
+                        </div>
+                        <div class="flex">
+                            <span class="text-gray-500 w-32">State/Country:</span>
+                            <span class="text-gray-800 font-medium">{{ $patient->state ?? 'N/A' }}, {{ $patient->country ?? 'India' }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -76,24 +127,27 @@
     </div>
 
     <!-- Action buttons -->
-    <div class="flex flex-wrap gap-4 justify-between items-center bg-white px-6 py-4 shadow rounded-lg print:hidden">
-        <div class="flex items-center space-x-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-between items-start sm:items-center bg-white px-4 sm:px-6 py-3 sm:py-4 shadow-sm rounded-lg lg:rounded-xl print:hidden mb-6">
+        <div class="flex items-center space-x-2 text-xs sm:text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <span class="text-sm text-gray-500">Created: {{ $patient->created_at->format('d M Y, h:i A') }}</span>
+            <span class="text-gray-500">Created: {{ $patient->created_at->format('d M Y, h:i A') }}</span>
         </div>
         
-     <div class="flex space-x-3">
-    <a href=""
-       class="flex items-center space-x-2 px-4 py-2 bg-white border border-blue-200 rounded-lg shadow-sm hover:bg-blue-50 transition-colors"
-       title="Edit Patient">
-       <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-        </svg>
-        <span class="text-sm font-medium text-blue-700">Edit Patient</span>
-    </a>
-</div>
+        <div class="flex space-x-2 sm:space-x-3 w-full sm:w-auto">
+            <a wire:navigate href=""
+               class="flex-1 sm:flex-initial flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 sm:py-3 bg-white border border-blue-200 rounded-lg shadow-sm hover:bg-blue-50 transition-colors text-sm"
+               title="Edit Patient">
+               <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                </svg>
+                <span class="font-medium text-blue-700">
+                    <span class="hidden sm:inline">Edit Patient</span>
+                    <span class="sm:hidden">Edit</span>
+                </span>
+            </a>
+        </div>
     </div>
 
     <!-- Appointments/Transactions section -->

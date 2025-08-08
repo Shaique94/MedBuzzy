@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class Doctor extends Model
 {
@@ -17,6 +18,9 @@ class Doctor extends Model
         'image',
         'image_id',
         'qualification',
+        'pincode',
+        'city',
+        'state',
         'slug',
         'start_time',
         'end_time',
@@ -25,6 +29,10 @@ class Doctor extends Model
         'unavailable_from',
         'unavailable_to',
         'max_booking_days',
+        'experience',
+        'pincode',
+        'city',
+        'state',
     ];
 
     protected $casts = [
@@ -33,6 +41,45 @@ class Doctor extends Model
         'unavailable_from' => 'date',
         'unavailable_to' => 'date',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($doctor) {
+            if (empty($doctor->slug)) {
+                $doctor->slug = $doctor->generateSlug();
+            }
+        });
+
+        static::updating(function ($doctor) {
+            if ($doctor->isDirty('user_id') && empty($doctor->slug)) {
+                $doctor->slug = $doctor->generateSlug();
+            }
+        });
+    }
+
+    public function generateSlug()
+    {
+        if (!$this->user) {
+            $this->load('user');
+        }
+
+        if (!$this->user) {
+            return null;
+        }
+
+        $baseSlug = Str::slug($this->user->name);
+        $slug = $baseSlug;
+        $counter = 1;
+
+        while (static::where('slug', $slug)->where('id', '!=', $this->id)->exists()) {
+            $slug = $baseSlug . '-' . $counter;
+            $counter++;
+        }
+
+        return $slug;
+    }
 
     public function user()
     {
@@ -49,7 +96,7 @@ class Doctor extends Model
         return $this->belongsTo(User::class, 'manager_id');
     }
 
-        public function managers()
+    public function managers()
     {
         return $this->belongsToMany(User::class, 'managers', 'doctor_id', 'user_id');
     }
@@ -59,7 +106,7 @@ class Doctor extends Model
         return $this->hasMany(Appointment::class);
     }
 
-       public function reviews()
+    public function reviews()
     {
         return $this->hasMany(Review::class);
     }
@@ -89,6 +136,16 @@ class Doctor extends Model
         $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
         $dayName = $days[$dayOfWeek - 1] ?? null;
         return $dayName && in_array($dayName, $this->available_days ?? []);
+    }
+
+    public function getRatingAttribute()
+    {
+        return $this->reviews()->where('approved', true)->avg('rating') ?? 0;
+    }
+
+    public function getReviewCountAttribute()
+    {
+        return $this->reviews()->where('approved', true)->count();
     }
 
     public function availableTimeSlots($date)
@@ -257,5 +314,5 @@ class Doctor extends Model
     }
 }
 
-  
+
 

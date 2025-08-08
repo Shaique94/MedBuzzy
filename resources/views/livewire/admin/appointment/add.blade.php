@@ -2,16 +2,27 @@
     <!-- Form Container -->
     <div class="bg-white rounded-xl shadow-lg overflow-hidden">
         <!-- Header Section -->
-        <div class="bg-blue-500 px-6 py-4 text-white">
-            <div class="flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                <h2 class="text-xl font-semibold">New Patient & Appointment</h2>
+        <div class="bg-blue-500 px-4 py-4 flex  justify-between text-white">
+            <div>
+                <div class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <h2 class="text-xl font-semibold">New Patient & Appointment</h2>
+                </div>
+                <p class="text-blue-100 text-sm mt-1">Please fill in all required fields marked with *</p>
             </div>
-            <p class="text-blue-100 text-sm mt-1">Please fill in all required fields marked with *</p>
+            <div>
+               <a wire:navigate href="">
+                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+               </a>
+            </div>
+
         </div>
 
         <!-- Form Content -->

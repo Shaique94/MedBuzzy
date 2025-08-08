@@ -4,9 +4,11 @@ namespace App\Livewire\Admin\Appointment;
 
 use App\Models\Appointment;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Carbon\Carbon;
 
+#[Title('All Appointments')]
 class All extends Component
 { 
     public $appointments;

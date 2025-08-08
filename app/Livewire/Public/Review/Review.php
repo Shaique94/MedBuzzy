@@ -5,27 +5,35 @@ namespace App\Livewire\Public\Review;
 
 
 
+use App\Models\Doctor;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Title;
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
 
+#[Title('Write Review')]
 class Review extends Component
-{
-    public $doctor;
+{ public $doctor;
+
+    public $doctor_id;
     public $rating = 5;
     public $comment;
-
     public $showModal = false;
-
-
-    public $doctor_id=8;
     public $showLoginMessage = false;
 
+    public function mount($doctor_id = null)
+    {
+        if ($doctor_id) {
+            $this->doctor = Doctor::findOrFail($doctor_id);
+        }
+    }
+
     #[On('reviewModal')] 
-    public function reviewDetails(){
-
-        $this->showModal=true;
-
+    public function reviewDetails($doctor_id)
+    {
+        $this->doctor = Doctor::findOrFail($doctor_id);
+        $this->showModal = true;
     }
 
     protected $rules = [
@@ -37,24 +45,19 @@ class Review extends Component
     {
         $this->rating = $rating;
     }
-    // public function mount($doctor)
-    // {
-    //     $this->doctor = $doctor;
-    // }
-
+   
     public function submitReview()
     {
-        // if (!Auth::check()) {
-        //     $this->showLoginMessage = true;
-        //     return;
-        // }
+        if (!Auth::check()) {
+            $this->showLoginMessage = true;
+            return;
+        }
 
         $this->validate();
-          
-        \App\Models\Review::create([
-            'doctor_id' => $this->doctor_id, // Add this line
-            // 'user_id' => Auth::id(),
-            'user_id'=>2,
+
+         \App\Models\Review::create([
+            'doctor_id' => $this->doctor->id,
+            'user_id' => Auth::id(),
             'rating' => $this->rating,
             'comment' => $this->comment,
             'approved' => false // Needs admin approval
@@ -62,7 +65,9 @@ class Review extends Component
 
         $this->reset(['rating', 'comment']);
         session()->flash('message', 'Review submitted for admin approval!');
+        $this->showModal = false;
     }
+
     #[Layout('layouts.public')]
     public function render()
     {

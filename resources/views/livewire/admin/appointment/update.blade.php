@@ -1,6 +1,8 @@
-<div class="bg-white rounded-lg shadow-xl m-2    overflow-hidden">
+<div>
+    @if($showModel)
+    <div class="bg-white rounded-lg shadow-xl m-2 overflow-hidden">
     <!-- Modal Header -->
-    <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">
+    <div class="bg-blue-600 px-6 py-4">
         <div class="flex items-center justify-between">
             <h3 class="text-xl font-bold text-white flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -8,7 +10,7 @@
                 </svg>
                 Update Patient & Appointment
             </h3>
-            <button wire:click="$emit('closeModal')" class="text-blue-100 hover:text-white">
+            <button wire:click="closeModal" class="text-blue-100 hover:text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -18,7 +20,7 @@
 
     <!-- Modal Body -->
     <div class="p-6 space-y-8">
-        <form wire:submit.prevent="update">
+        <form wire:submit="update" id="update-form">
             <!-- Patient Information Section -->
             <div class="space-y-6">
                 <div class="flex items-center space-x-3 border-b border-blue-100 pb-3">
@@ -138,90 +140,17 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Appointment Details Section -->
-            <div class="space-y-6">
-                <div class="flex items-center space-x-3 border-b border-blue-100 pb-3">
-                    <div class="bg-blue-100 p-2 rounded-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </div>
-                    <h4 class="text-lg font-semibold text-gray-800">Appointment Details</h4>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Doctor -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Select Doctor <span class="text-red-500">*</span></label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </div>
-                            <select wire:model="doctor_id" 
-                                    class="pl-10 w-full border border-gray-300 rounded-lg py-2 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
-                                <option value="">Select Doctor</option>
-                                @foreach($doctors as $doctor)
-                                    <option value="{{ $doctor->id }}">{{ $doctor->user->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        @error('doctor_id') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
-                    </div>
-
-                    <!-- Appointment Date -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Appointment Date <span class="text-red-500">*</span></label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                            </div>
-                            <input type="date" wire:model="appointment_date" 
-                                   min="{{ now()->toDateString() }}" max="{{ now()->addDay()->toDateString() }}"
-                                   class="pl-10 w-full border border-gray-300 rounded-lg py-2 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
-                        </div>
-                        @error('appointment_date') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
-                    </div>
-
-                    <!-- Appointment Time -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Appointment Time <span class="text-red-500">*</span></label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </div>
-                            <input type="time" wire:model="appointment_time" 
-                                   class="pl-10 w-full border border-gray-300 rounded-lg py-2 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
-                        </div>
-                        @error('appointment_time') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
-                    </div>
-
-                    <!-- Notes -->
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Additional Notes</label>
-                        <textarea rows="3" wire:model="notes" 
-                                  class="w-full border border-gray-300 rounded-lg py-2 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                                  placeholder="Any special requirements or notes"></textarea>
-                        @error('notes') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
-                    </div>
-                </div>
-            </div>
+           
         </form>
     </div>
 
     <!-- Modal Footer -->
     <div class="flex justify-between items-center px-6 py-4 bg-gray-50 border-t border-gray-100">
-        <button type="button" wire:click="$emit('closeModal')" 
+        <button type="button" wire:click="closeModal" 
                 class="px-4 py-2 text-gray-600 hover:text-gray-800 font-medium rounded-lg transition">
             Cancel
         </button>
-        <button type="button" wire:click="update" 
+        <button type="submit" form="update-form" 
                 class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-md hover:shadow-lg transition flex items-center"
                 wire:loading.attr="disabled">
             <svg wire:loading wire:target="update" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -237,4 +166,7 @@
             <span wire:loading wire:target="update">Updating...</span>
         </button>
     </div>
+</div>
+
+@endif
 </div>

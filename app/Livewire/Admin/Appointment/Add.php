@@ -9,8 +9,10 @@ use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Title('Book New Appointment')]
 class Add extends Component
 {
     public $name;
@@ -29,6 +31,8 @@ class Add extends Component
     public $payment_method = "cash";
     public $notes;
     public $doctors;
+
+    
 
     public function mount()
     {
@@ -119,7 +123,7 @@ class Add extends Component
         session()->flash('success', 'Appointment booked successfully.');
         return redirect()->route('admin.appointment');
     }
-
+ 
     public function resetForm()
     {
         $this->reset([

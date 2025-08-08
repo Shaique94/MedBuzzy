@@ -7,14 +7,19 @@ use App\Models\Department;
 use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Payment;
+use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Razorpay\Api\Api;
 
+#[Title('Book Appointment')]
 class ManageAppointment extends Component
 {
     public $step = 1;
@@ -45,8 +50,8 @@ class ManageAppointment extends Component
     public $slot_enabled = true;
     public $currentMonth;
     public $isProcessing = false;
-
-
+    public $activeTimeTab = 'morning'; // Track active time tab (morning/afternoon/evening)
+    public $availableDates = []; // To store available dates for tabs
 
     protected $rules = [
         'doctor_id' => 'required|exists:doctors,id',
@@ -54,7 +59,7 @@ class ManageAppointment extends Component
         'appointment_time' => 'required_if:slot_enabled,true',
         'newPatient.name' => 'required|string|min:3|max:255',
         'newPatient.email' => 'nullable|email|max:255',
-        'newPatient.phone' => 'required|string|min:10|max:15',
+        'newPatient.phone' => 'required|string|digits:10',
         'newPatient.age' => 'required|integer|min:1|max:120',
         'newPatient.gender' => 'required|string|in:male,female,other',
         'newPatient.pincode' => 'required|digits:6',
@@ -81,17 +86,27 @@ class ManageAppointment extends Component
         'newPatient.address.min' => 'Address must be at least 10 characters.',
     ];
 
-    public function mount()
+    public function mount($doctor_slug = null)
     {
         date_default_timezone_set('Asia/Kolkata');
         Carbon::setLocale('en');
         config(['app.timezone' => 'Asia/Kolkata']);
-
-        $this->departments = cache()->remember('departments', now()->addHours(24), fn() => Department::all());
-        $this->doctors = cache()->remember('doctors', now()->addHours(24), fn() => Doctor::with(['user', 'department'])->get());
+        $this->departments = cache()->remember('departments', now()->addHours(24), fn() => Department::where('status', 1)->orderBy('name', 'desc')->get());
+        // $this->doctors = cache()->remember('doctors', now()->addHours(24), fn() => Doctor::with(['user', 'department'])->get());
+         $this->doctors = $this->getFilteredDoctors();
         $this->currentMonth = now()->startOfMonth()->format('Y-m-d');
 
-        if (request()->has('doctor_id')) {
+        // Handle slug parameter from route
+        if ($doctor_slug) {
+            $this->selectedDoctor = Doctor::with(['user', 'department'])->where('slug', $doctor_slug)->first();
+            if ($this->selectedDoctor) {
+                $this->doctor_id = $this->selectedDoctor->id;
+                $this->selectedDepartment = $this->selectedDoctor->department_id;
+                $this->step = 2;
+            }
+        }
+        // Handle legacy doctor_id query parameter for backward compatibility
+        elseif (request()->has('doctor_id')) {
             $this->doctor_id = request()->query('doctor_id');
             $this->selectedDoctor = Doctor::with(['user', 'department'])->find($this->doctor_id);
             if ($this->selectedDoctor) {
@@ -99,8 +114,39 @@ class ManageAppointment extends Component
                 $this->step = 2;
             }
         }
-    }
 
+        // When mounting with a selected doctor, prepare the available dates
+        if ($this->selectedDoctor) {
+            $this->prepareAvailableDates();
+        }
+    }
+     public function updatedSelectedDepartment()
+    {
+        // Reset doctor and appointment-related fields when department changes
+        $this->doctor_id = null;
+        $this->selectedDoctor = null;
+        $this->appointment_date = null;
+        $this->appointment_time = null;
+        $this->availableSlots = [];
+        // Refresh doctor list based on new department filter
+        $this->doctors = $this->getFilteredDoctors();
+    }
+     protected function getFilteredDoctors()
+    {
+        // Cache doctors based on department filter for 24 hours
+        return cache()->remember("doctors_department_{$this->selectedDepartment}", now()->addHours(24), fn() => 
+            Doctor::when($this->selectedDepartment, function ($query) {
+                // Apply department filter if selectedDepartment is set
+                return $query->where('department_id', $this->selectedDepartment);
+            })
+            ->whereHas('department', function ($query) {
+                $query->where('status', 1);
+            })
+            ->where('status', '1')
+            ->with(['user', 'department'])
+            ->get()
+        );
+    }
     public function updated($propertyName)
     {
         if (in_array($propertyName, ['pincode', 'selectedDepartment', 'doctor_id', 'appointment_date'])) {
@@ -114,33 +160,108 @@ class ManageAppointment extends Component
     {
         $this->newPatient['pincode'] = $value;
         $this->validateOnly('newPatient.pincode');
-
-        if (strlen($value) === 6) {
-            $this->isProcessing = true;
-            try {
-                $response = Http::timeout(5)->get("https://api.postalpincode.in/pincode/{$value}");
-
-                if ($response->successful()) {
-                    $data = $response->json();
-                    if (isset($data[0]['Status']) && $data[0]['Status'] === 'Success' && !empty($data[0]['PostOffice'])) {
-                        $postOffice = $data[0]['PostOffice'][0];
-                        $this->newPatient['district'] = $postOffice['District'] ?? '';
-                        $this->newPatient['state'] = $postOffice['State'] ?? '';
-                        $this->resetErrorBag('newPatient.pincode');
-                    } else {
-                        $this->addError('newPatient.pincode', 'Invalid pincode or no data found.');
-                    }
-                } else {
-                    $this->addError('newPatient.pincode', 'Invalid pincode or no data found.');
-                }
-            } catch (\Exception $e) {
-                $this->addError('newPatient.pincode', 'Unable to verify pincode. Please try again later.');
+        if (empty($value) || !preg_match('/^\d{6}$/', $value)) {
+            if (!empty($value)) {
+                $this->addError('newPatient.pincode', 'Please enter a valid 6-digit PIN code');
             }
-            $this->isProcessing = false;
-        } else {
-            $this->newPatient['district'] = '';
-            $this->newPatient['state'] = '';
-            $this->resetErrorBag('newPatient.pincode');
+            return;
+        }
+
+        $this->isProcessing = true;
+        try {
+            $url = "https://api.postalpincode.in/pincode/{$value}";
+            $context = stream_context_create([
+                'http' => [
+                    'timeout' => 5,
+                ]
+            ]);
+            $response = file_get_contents($url, false, $context);
+
+            if ($response === false) {
+                $this->addError('newPatient.pincode', 'Failed to connect to the API');
+                $this->isProcessing = false;
+                return;
+            }
+
+            $data = json_decode($response, true);
+            if (isset($data[0]['Status']) && $data[0]['Status'] === 'Success' && !empty($data[0]['PostOffice'])) {
+                $postOffice = $data[0]['PostOffice'][0];
+                $this->newPatient['district'] = $postOffice['District'] ?? '';
+                $this->newPatient['state'] = $postOffice['State'] ?? '';
+                $this->resetErrorBag('newPatient.pincode');
+            } else {
+                $this->addError('newPatient.pincode', 'Invalid PIN code or no data found');
+            }
+        } catch (\Exception $e) {
+            $this->addError('newPatient.pincode', 'Unable to verify PIN code: ' . $e->getMessage());
+        }
+
+        $this->isProcessing = false;
+
+    }
+
+    // Generate the available dates for the selected doctor
+    public function prepareAvailableDates()
+    {
+        if (!$this->selectedDoctor) {
+            $this->availableDates = [];
+            return;
+        }
+
+        $availableDays = is_array($this->selectedDoctor->available_days)
+            ? $this->selectedDoctor->available_days
+            : (is_string($this->selectedDoctor->available_days)
+                ? json_decode($this->selectedDoctor->available_days, true)
+                : []);
+
+        $availableDayNumbers = [];
+        $dayNameToNumber = [
+            'Sunday' => 0, 'Monday' => 1, 'Tuesday' => 2, 'Wednesday' => 3,
+            'Thursday' => 4, 'Friday' => 5, 'Saturday' => 6,
+        ];
+
+        foreach ($availableDays as $dayName) {
+            if (isset($dayNameToNumber[$dayName])) {
+                $availableDayNumbers[] = $dayNameToNumber[$dayName];
+            }
+        }
+
+        $today = Carbon::today();
+        $maxBookingDays = $this->selectedDoctor->max_booking_days ?? 30;
+        $endDate = $today->copy()->addDays($maxBookingDays - 1);
+        $onLeaveDates = [];
+
+        if ($this->selectedDoctor->unavailable_from && $this->selectedDoctor->unavailable_to) {
+            $startDate = Carbon::parse($this->selectedDoctor->unavailable_from, 'Asia/Kolkata');
+            $endDate = Carbon::parse($this->selectedDoctor->unavailable_to, 'Asia/Kolkata');
+            for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
+                $onLeaveDates[] = $date->format('Y-m-d');
+            }
+        }
+
+        $this->availableDates = [];
+        $currentDate = $today->copy();
+        $daysAdded = 0;
+
+        while ($daysAdded < $maxBookingDays && $currentDate <= $endDate) {
+            $formattedDate = $currentDate->format('Y-m-d');
+            $isAvailableDay = in_array($currentDate->dayOfWeek, $availableDayNumbers);
+            $isOnLeave = in_array($formattedDate, $onLeaveDates);
+            $isBookable = $isAvailableDay && !$isOnLeave;
+
+            if ($isBookable || $currentDate->isToday()) {
+                $this->availableDates[] = [
+                    'date' => $formattedDate,
+                    'isToday' => $currentDate->isToday(),
+                    'dayName' => $currentDate->format('D'),
+                    'dayNumber' => $currentDate->format('j'),
+                    'monthName' => $currentDate->format('M'),
+                    'fullDate' => $currentDate->format('l, F j, Y'),
+                ];
+                $daysAdded++;
+            }
+
+            $currentDate->addDay();
         }
     }
 
@@ -150,42 +271,28 @@ class ManageAppointment extends Component
         $this->appointment_time = null;
         $this->validate(['appointment_date' => $this->rules['appointment_date']]);
         $this->generateTimeSlots();
+
+        // Set active time tab based on current time of day when selecting a date
+        if ($this->appointment_date === Carbon::today()->format('Y-m-d')) {
+            $now = Carbon::now('Asia/Kolkata');
+            $hour = (int)$now->format('H');
+
+            if ($hour < 12) {
+                $this->activeTimeTab = 'morning';
+            } elseif ($hour < 16) {
+                $this->activeTimeTab = 'afternoon';
+            } else {
+                $this->activeTimeTab = 'evening';
+            }
+        } else {
+            // Default to morning tab for other days
+            $this->activeTimeTab = 'morning';
+        }
     }
 
-    public function clearAppointmentDate()
+    public function setActiveTimeTab($tab)
     {
-        $this->appointment_date = null;
-        $this->appointment_time = null;
-        $this->availableSlots = [];
-    }
-
-    public function previousMonth()
-    {
-        $this->currentMonth = Carbon::parse($this->currentMonth)->subMonth()->startOfMonth()->format('Y-m-d');
-        $this->appointment_date = null;
-        $this->appointment_time = null;
-        $this->availableSlots = [];
-    }
-
-    public function nextMonth()
-    {
-        $this->currentMonth = Carbon::parse($this->currentMonth)->addMonth()->startOfMonth()->format('Y-m-d');
-        $this->appointment_date = null;
-        $this->appointment_time = null;
-        $this->availableSlots = [];
-    }
-
-    public function updatedSelectedDepartment($value)
-    {
-        $this->doctors = $value
-            ? Doctor::with(['user', 'department'])->where('department_id', $value)->get()
-            : Doctor::with(['user', 'department'])->get();
-        $this->doctor_id = null;
-        $this->selectedDoctor = null;
-        $this->appointment_date = null;
-        $this->appointment_time = null;
-        $this->availableSlots = [];
-        $this->currentMonth = now()->startOfMonth()->format('Y-m-d');
+        $this->activeTimeTab = $tab;
     }
 
     public function updatedDoctorId($value)
@@ -196,7 +303,7 @@ class ManageAppointment extends Component
         $this->appointment_time = null;
         $this->availableSlots = [];
         $this->currentMonth = now()->startOfMonth()->format('Y-m-d');
-        $this->generateTimeSlots();
+        $this->prepareAvailableDates(); // Prepare available dates when doctor changes
     }
 
     public function generateTimeSlots()
@@ -245,6 +352,43 @@ class ManageAppointment extends Component
             ];
             $currentSlot->addMinutes($duration);
         }
+
+        // After generating slots, check if the selected tab has any slots
+        // If not, switch to a tab that does have slots
+        $morningSlots = $afternoonSlots = $eveningSlots = 0;
+
+        foreach ($this->availableSlots as $time => $slot) {
+            $hour = (int)date('H', strtotime($slot['start']));
+
+            if ($hour < 12) {
+                $morningSlots++;
+            } elseif ($hour < 16) {
+                $afternoonSlots++;
+            } else {
+                $eveningSlots++;
+            }
+        }
+
+        // Auto-switch to a tab with slots if current tab has none
+        if ($this->activeTimeTab === 'morning' && $morningSlots === 0) {
+            if ($afternoonSlots > 0) {
+                $this->activeTimeTab = 'afternoon';
+            } elseif ($eveningSlots > 0) {
+                $this->activeTimeTab = 'evening';
+            }
+        } elseif ($this->activeTimeTab === 'afternoon' && $afternoonSlots === 0) {
+            if ($morningSlots > 0) {
+                $this->activeTimeTab = 'morning';
+            } elseif ($eveningSlots > 0) {
+                $this->activeTimeTab = 'evening';
+            }
+        } elseif ($this->activeTimeTab === 'evening' && $eveningSlots === 0) {
+            if ($morningSlots > 0) {
+                $this->activeTimeTab = 'morning';
+            } elseif ($afternoonSlots > 0) {
+                $this->activeTimeTab = 'afternoon';
+            }
+        }
     }
 
     public function selectTimeSlot($time)
@@ -252,6 +396,9 @@ class ManageAppointment extends Component
         if (isset($this->availableSlots[$time]) && !$this->availableSlots[$time]['disabled']) {
             $this->appointment_time = $time;
             $this->validate(['appointment_time' => $this->rules['appointment_time']]);
+            
+            // Automatically proceed to the next step after selecting a time slot
+            $this->nextStep();
         }
     }
 
@@ -261,7 +408,13 @@ class ManageAppointment extends Component
         $this->step++;
 
         if ($this->step === 2) {
-            $this->generateTimeSlots();
+            // Default to today's date when reaching the date selection step
+            if (empty($this->appointment_date)) {
+                $today = Carbon::today()->format('Y-m-d');
+                $this->setAppointmentDate($today);
+            } else {
+                $this->generateTimeSlots();
+            }
         }
     }
 
@@ -299,7 +452,6 @@ class ManageAppointment extends Component
             ]);
         }
     }
-
 
     protected $listeners = [
         'payment-failed' => 'handlePaymentFailed',
@@ -354,8 +506,6 @@ class ManageAppointment extends Component
         }
     }
 
-
-
     #[On('payment-success')]
     // Add this method to handle successful payment
     public function handlePaymentSuccess($paymentId, $allData)
@@ -373,7 +523,6 @@ class ManageAppointment extends Component
             $patientInfo = $allData[0]['patientData'];
             $appointmentInfo = $allData[0]['appointmentData'];
 
-           
             // 2. Verify payment with Razorpay
             $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret'));
             $payment = $api->payment->fetch($paymentId);
@@ -396,38 +545,54 @@ class ManageAppointment extends Component
                     'state' => $patientInfo['state'] ?? null,
                 ]
             );
-            // 4. Create appointment
+
+            // 4. Create user account with default password
+            $defaultPassword = 'patient@123'; // More secure default password
+            $user = User::firstOrCreate(
+                ['email' => $patientInfo['email']],
+                [
+                    'name' => $patientInfo['name'],
+                    'phone' => $patientInfo['phone'],
+                    'email' => $patientInfo['email'],
+                    'password' => Hash::make($defaultPassword),
+                ]
+            );
+
+            // 5. Create appointment
             $appointment = Appointment::create([
                 'doctor_id' => $appointmentInfo['doctor_id'],
                 'patient_id' => $patient->id,
                 'appointment_date' => $appointmentInfo['appointment_date'],
                 'appointment_time' => $appointmentInfo['appointment_time'],
                 'notes' => $appointmentInfo['notes'] ?? null,
-               'status' => 'scheduled',
-               'rescheduled' => false,
-    'is_rescheduled' => false,
-    'original_date' => null,
-    'rescheduled_at' => null,
+                'status' => 'scheduled',
+                'rescheduled' => false,
+                'is_rescheduled' => false,
+                'original_appointment_id' => null,
+                'rescheduled_at' => null,
             ]);
 
-            // 5. Record payment
-           $payment = Payment::create([
+            // 6. Record payment
+            $payment = Payment::create([
                 'appointment_id' => $appointment->id,
                 'patient_id' => $patient->id,
                 'amount' => $paymentDetails['amount'],
                 'transaction_id' => $paymentId,
-                // 'order_id' => $paymentDetails['orderId'],
                 'status' => 'paid',
                 'method' => 'upi',
-                // 'payment_details' => json_encode($payment->toArray()),
             ]);
+
             DB::commit();
 
-            // 6. Send confirmation (uncomment to implement)
+            // 7. Log in the user automatically
+            Auth::login($user);
+
+            // 8. Send confirmation (uncomment to implement)
             // $patient->notify(new AppointmentConfirmed($appointment));
+            // $user->notify(new AccountCreated($user, $defaultPassword));
 
             return redirect()->route('appointment.confirmation', $appointment->id)
-                ->with('success', 'Appointment booked successfully!');
+                ->with('success', 'Appointment booked successfully! You have been automatically logged in.');
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -441,83 +606,22 @@ class ManageAppointment extends Component
         }
     }
 
-
-
     public function handlePaymentFailed($data)
     {
         session()->flash('error', 'Payment failed: ' . $data['error']);
     }
 
-
-
     #[Layout('layouts.public')]
     public function render()
     {
-        $today = now('Asia/Kolkata');
-        $currentMonthDate = Carbon::parse($this->currentMonth, 'Asia/Kolkata');
-        $startOfMonth = $currentMonthDate->copy()->startOfMonth();
-        $endOfMonth = $currentMonthDate->copy()->endOfMonth();
-        $startDayOfWeek = $startOfMonth->dayOfWeek;
-        $daysInMonth = $currentMonthDate->daysInMonth;
-
-        $availableDayNumbers = [];
-        $weekdaysFull = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-
-        if ($this->selectedDoctor && is_array($this->selectedDoctor->available_days)) {
-            foreach ($this->selectedDoctor->available_days as $day) {
-                $availableDayNumbers[] = array_search($day, $weekdaysFull);
-            }
-        }
-
-        $hasAvailableDays = !empty($availableDayNumbers);
-        $bookingStart = $today->copy()->startOfDay();
-        $validBookingDays = [];
-        $bookingEnd = $bookingStart->copy();
-
-        if ($this->selectedDoctor && $hasAvailableDays) {
-            $maxBookingDays = $this->selectedDoctor->max_booking_days ?? 30;
-            $currentDate = $bookingStart->copy();
-            $daysCounted = 0;
-            $onLeaveDates = [];
-
-            if ($this->selectedDoctor->unavailable_from && $this->selectedDoctor->unavailable_to) {
-                $startDate = Carbon::parse($this->selectedDoctor->unavailable_from, 'Asia/Kolkata');
-                $endDate = Carbon::parse($this->selectedDoctor->unavailable_to, 'Asia/Kolkata');
-                for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
-                    $onLeaveDates[] = $date->format('Y-m-d');
-                }
-            }
-
-            while ($daysCounted < $maxBookingDays && $currentDate->lte($endOfMonth)) {
-                $formattedDate = $currentDate->format('Y-m-d');
-                $isAvailableDay = in_array($currentDate->dayOfWeek, $availableDayNumbers);
-                $isOnLeave = in_array($formattedDate, $onLeaveDates);
-
-                if ($isAvailableDay && !$isOnLeave && ($currentDate->isToday() || $currentDate->isFuture())) {
-                    $validBookingDays[] = $formattedDate;
-                    $daysCounted++;
-                }
-                $bookingEnd = $currentDate->copy()->endOfDay();
-                $currentDate->addDay();
-            }
-        } else {
-            $onLeaveDates = [];
-        }
-
         return view('livewire.public.appointment.manage-appointment', [
             'selectedDepartment' => $this->selectedDepartment,
             'departments' => $this->departments,
             'selectedDoctor' => $this->selectedDoctor,
             'currentMonth' => $this->currentMonth,
-            'startDayOfWeek' => $startDayOfWeek,
-            'daysInMonth' => $daysInMonth,
-            'availableDayNumbers' => $availableDayNumbers,
-            'bookingStart' => $bookingStart,
-            'bookingEnd' => $bookingEnd,
-            'onLeaveDates' => $onLeaveDates,
-            'weekdaysFull' => $weekdaysFull,
-            'hasAvailableDays' => $hasAvailableDays,
-            'validBookingDays' => $validBookingDays,
+            'onLeaveDates' => $onLeaveDates ?? [],
+            'availableDates' => $this->availableDates,
+            'activeTimeTab' => $this->activeTimeTab,
         ]);
     }
 }

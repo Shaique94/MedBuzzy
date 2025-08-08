@@ -120,7 +120,7 @@
                 <!-- Login Link -->
                 <p class="text-center text-sm text-brand-teal-600 mt-4">
                     Already have an account? 
-                    <a href="/login" class="text-brand-orange-500 font-medium hover:underline">Sign in</a>
+                    <a wire:navigate href="/login" class="text-brand-orange-500 font-medium hover:underline">Sign in</a>
                 </p>
             </form>
         </div>
