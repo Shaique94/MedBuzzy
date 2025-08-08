@@ -260,16 +260,12 @@
                                             </span>
                                         @endif
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {{ $payment->transaction_id ?? 'N/A' }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        {{-- <button class="text-blue-600 hover:text-blue-900 mr-3">View</button> --}}
-                                     <a wire:navigate href="{{ route('appointment.receipt', $payment->appointment_id) }}" 
-   target="_blank"
-   class="text-green-600 hover:text-green-900">
-    Receipt
-</a>
+                                    <td class="px-3 sm:px-6 py-3 whitespace-nowrap text-xs sm:text-sm font-medium">
+                                        <a href="{{ route('appointment.receipt', $payment->appointment_id) }}" 
+                                           target="_blank"
+                                           class="text-green-600 hover:text-green-900">
+                                            Receipt
+                                        </a>
                                     </td>
                                 </tr>
                             @empty

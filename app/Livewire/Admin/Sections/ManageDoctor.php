@@ -131,27 +131,27 @@ class ManageDoctor extends Component
 
     public function fetchPincodeDetails($pincode)
     {
-        Log::info('ManageDoctor: Fetching pincode details', ['pincode' => $pincode]);
+        // Log::info('ManageDoctor: Fetching pincode details', ['pincode' => $pincode]);
         
         $result = PincodeService::getLocationByPincode($pincode);
         
-        Log::info('ManageDoctor: PincodeService result', $result);
+        // Log::info('ManageDoctor: PincodeService result', $result);
         
         if ($result['success']) {
             $this->city = $result['data']['city'];
             $this->state = $result['data']['state'];
             $this->resetErrorBag('pincode');
 
-            Log::info('ManageDoctor: Successfully updated location', [
-                'city' => $this->city,
-                'state' => $this->state
-            ]);
+            //  Log::info('ManageDoctor: Successfully updated location', [
+            //     'city' => $this->city,
+            //     'state' => $this->state
+            // ]);
         } else {
-            Log::error('ManageDoctor: Failed to fetch pincode details', [
-                'pincode' => $pincode,
-                'error' => $result['error']
-            ]);
-            
+            // Log::error('ManageDoctor: Failed to fetch pincode details', [
+            // //     'pincode' => $pincode,
+            // //     'error' => $result['error']
+            // ]);
+
             $this->addError('pincode', $result['error']);
             $this->city = '';
             $this->state = '';
