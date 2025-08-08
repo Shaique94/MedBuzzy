@@ -102,7 +102,7 @@ class ManageDoctor extends Component
     
         Doctor::create([
             'user_id' => $user->id,
-            'manager_id' => 1, 
+           'manager_id' => auth()->id(),
             'department_id' => $this->department_id,
             'fee' => $this->fee,
             'status' => $this->status,

@@ -202,8 +202,9 @@
                                 <div class="mb-4">
                                     <h3 class="font-bold text-lg text-gray-900 mb-1 truncate">{{ $doctor->user->name }}
                                     </h3>
-                                    <p class="text-brand-teal-600 font-medium text-sm">{{ $doctor->department->name }}
-                                    </p>
+                                   <p class="text-brand-teal-600 font-medium text-sm">
+     {{ $doctor->department->name ?? 'General Practice' }}
+</p>
                                 </div>
 
                                 <!-- Rating -->

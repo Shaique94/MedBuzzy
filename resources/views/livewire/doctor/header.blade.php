@@ -1,12 +1,19 @@
 <div class="bg-white shadow-md px-6 py-4 flex items-center justify-between">
 
     <!-- Left: Page title -->
-    <h1 class="text-xl font-semibold text-gray-800">
-        Dashboard
-    </h1>
+     <div class="flex items-center">
+    <div class="md:hidden">
+        <button onclick="toggleSidebar()" class="text-gray-700 focus:outline-none">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2"
+                 viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+        </button>
+    </div>
+</div>
 
     <!-- Right: Actions -->
-    <div class="flex items-center space-x-4">
+    <div class="flex items-center space-x-4 md:">
 
         <!-- Notifications icon (optional) -->
         <button class="text-gray-500 hover:text-gray-700 focus:outline-none relative">
