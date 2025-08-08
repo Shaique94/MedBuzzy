@@ -43,8 +43,33 @@ class CreateDoctor extends Component
     public $city;
     public $state;
     public $gender;
-public $experience;
-
+    public $experience;
+    public $isProcessing = false; // Add loading state
+    protected function rules()
+    {
+        return [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email',
+            'department_id' => 'required|exists:departments,id',
+            'available_days' => 'required|array|min:1',
+            'status' => 'required|in:0,1,2',
+            'phone' => 'required|string|max:15',
+            'fee' => 'required|numeric|min:0',
+            'qualification' => 'nullable|string|max:255',
+            'password' => 'required|string|min:6|confirmed',
+            'photo' => 'nullable|image|max:10240',
+            'start_time' => 'required|date_format:H:i',
+            'end_time' => 'required|date_format:H:i|after:start_time',
+            'slot_duration_minutes' => 'required|integer|min:5|max:120',
+            'patients_per_slot' => 'required|integer|min:1|max:10',
+            'max_booking_days' => 'required|integer|min:1|max:30',
+            'pincode' => 'required|digits:6',
+            'city' => 'required|string|max:100',
+            'state' => 'required|string|max:100',
+            'gender' => 'required|in:male,female,other',
+            'experience' => 'required|integer|min:0|max:50',
+        ];
+    }
     protected $listeners = ['openCreateModal' => 'openModal'];
 
     public function mount()
@@ -76,6 +101,9 @@ public $experience;
             'pincode',
             'city',
             'state',
+            'gender',
+            'experience',
+            'isProcessing'
         ]);
 
         $this->status = 1;
@@ -96,11 +124,14 @@ public $experience;
     public function updatedPincode($value)
     {
         if (strlen($value) === 6) {
+            $this->validateOnly('pincode');
             $this->fetchPincodeDetails($value);
         } else {
             if (strlen($value) < 6) {
                 $this->resetErrorBag('pincode');
             }
+            $this->city = '';
+            $this->state = '';
         }
     }
 
@@ -116,31 +147,34 @@ public $experience;
 
     public function fetchPincodeDetails($pincode)
     {
-        \Log::info('CreateDoctor: Fetching pincode details', ['pincode' => $pincode]);
+        $this->isProcessing = true;
 
-        $result = PincodeService::getLocationByPincode($pincode);
+        try {
+            $result = PincodeService::getLocationByPincode($pincode);
 
-        \Log::info('CreateDoctor: PincodeService result', $result);
+            if ($result['success']) {
+                $this->city = $result['data']['city'] ?? '';
+                $this->state = $result['data']['state'] ?? '';
+                $this->resetErrorBag('pincode');
 
-        if ($result['success']) {
-            $this->city = $result['data']['city'];
-            $this->state = $result['data']['state'];
-            $this->resetErrorBag('pincode');
-
-            \Log::info('CreateDoctor: Successfully updated location', [
-                'city' => $this->city,
-                'state' => $this->state
-            ]);
-        } else {
-            \Log::error('CreateDoctor: Failed to fetch pincode details', [
-                'pincode' => $pincode,
-                'error' => $result['error']
-            ]);
-
-            $this->addError('pincode', $result['error']);
+                \Log::info('Pincode lookup successful', [
+                    'pincode' => $pincode,
+                    'city' => $this->city,
+                    'state' => $this->state
+                ]);
+            } else {
+                $this->addError('pincode', $result['error'] ?? 'Invalid PIN code');
+                $this->city = '';
+                $this->state = '';
+            }
+        } catch (\Exception $e) {
+            $this->addError('pincode', 'Service unavailable. Please try again later.');
             $this->city = '';
             $this->state = '';
+            \Log::error('Pincode lookup failed: ' . $e->getMessage());
         }
+
+        $this->isProcessing = false;
     }
 
     public function save()
@@ -161,9 +195,9 @@ public $experience;
             'slot_duration_minutes' => 'required|integer|min:5|max:120',
             'patients_per_slot' => 'required|integer|min:1|max:10',
             'max_booking_days' => 'required|integer|min:1|max:30',
-            'pincode' => 'nullable|digits:6',
-            'city' => 'nullable|string|max:100',
-            'state' => 'nullable|string|max:100',
+            'pincode' => 'required|digits:6',
+            'city' => 'required|string|max:100',
+            'state' => 'required|string|max:100',
             'gender' => 'required|in:male,female,other',
             'experience' => 'required|integer|min:0|max:50',
         ]);
@@ -250,6 +284,7 @@ public $experience;
                 'state',
                 'gender',
                 'experience',
+                'isProcessing'
             ]);
 
             session()->flash('message', 'Doctor created successfully.');
