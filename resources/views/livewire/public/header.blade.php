@@ -45,6 +45,17 @@
             <!-- Right Side Actions -->
             <div class="flex items-center space-x-4">
                 @auth
+                    <!-- Admin Dashboard Link (Only for admin users) -->
+                    @if(auth()->user()->role === 'admin')
+                        <a wire:navigate href="{{ route('admin.dashboard') }}"
+                            class="hidden lg:flex items-center space-x-2 text-gray-700 hover:text-brand-teal-600 font-medium transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-brand-teal-50">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h2a2 2 0 00-2 2"/>
+                            </svg>
+                            <span>Admin Dashboard</span>
+                        </a>
+                    @endif
+
                     <!-- User Profile -->
                     <div class="hidden lg:flex items-center space-x-3 group relative">
                         <div class="flex items-center space-x-2">
@@ -133,6 +144,17 @@
                         </div>
                         <span class="text-gray-700 font-medium">{{ auth()->user()->name }}</span>
                     </div>
+                    
+                    @if(auth()->user()->role === 'admin')
+                        <a wire:navigate href="{{ route('admin.dashboard') }}"
+                            class="block text-gray-700 hover:text-brand-teal-600 font-medium py-2 px-3 rounded-lg hover:bg-brand-teal-50 transition-colors duration-200 flex items-center space-x-2 mobile-menu-link">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h2a2 2 0 00-2 2"/>
+                            </svg>
+                            <span>Admin Dashboard</span>
+                        </a>
+                    @endif
+                    
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="w-full text-left text-red-600 hover:text-red-700 font-medium py-2 px-3 rounded-lg hover:bg-red-50 transition-colors duration-200 flex items-center space-x-2 mobile-menu-link">

@@ -12,7 +12,7 @@
                 <div class="flex items-center">
                     <div class="relative flex-grow">
                         <input type="text" wire:model.live.debounce.300ms="searchQuery"
-                            placeholder="Search by name, specialty, or qualification"
+                            placeholder="Search by name, specialty"
                             class="w-full pl-4 pr-12 py-3 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-1 focus:ring-teal-500 focus:border-teal-500">
                         <div class="absolute inset-y-0 right-0 flex items-center pr-3">
                             @if($searchQuery)

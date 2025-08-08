@@ -22,6 +22,10 @@ class ManageDepartment extends Component
         'name' => 'required|string|max:255|unique:departments,name',
     ];
 
+    protected $listeners = [
+        'confirmDeleteDepartment' => 'deleteDepartment'
+    ];
+
     public function mount()
     {
         // Initialization if needed
@@ -35,11 +39,40 @@ class ManageDepartment extends Component
         $this->showModal = true;
     }
 
-    public function delete($id)
+    public function confirmDelete($id)
     {
         $department = Department::findOrFail($id);
-        $department->delete();
-        $this->dispatch('department-deleted');
+        
+        $this->dispatch('openDeleteModal', [
+            'title' => 'Delete Department',
+            'message' => 'Are you sure you want to delete this department? All associated data will be permanently removed.',
+            'confirmText' => 'Delete Department',
+            'cancelText' => 'Cancel',
+            'itemName' => $department->name,
+            'itemType' => 'department',
+            'deleteAction' => 'confirmDeleteDepartment',
+            'itemId' => $id
+        ]);
+    }
+
+    public function deleteDepartment($id)
+    {
+        try {
+            $department = Department::findOrFail($id);
+            $departmentName = $department->name;
+            $department->delete();
+            
+            session()->flash('message', "Department '{$departmentName}' has been successfully deleted.");
+            $this->dispatch('department-deleted');
+        } catch (\Exception $e) {
+            session()->flash('error', 'Error deleting department: ' . $e->getMessage());
+        }
+    }
+
+    public function delete($id)
+    {
+        // Keep the old method for backward compatibility or redirect to confirmDelete
+        $this->confirmDelete($id);
     }
 
     public function toggleStatus($departmentId)
@@ -73,7 +106,7 @@ class ManageDepartment extends Component
     public function render()
     {
         return view('livewire.admin.sections.manage-department', [
-            'departments' => Department::paginate(5),
+            'departments' => Department::latest()->paginate(5),
         ]);
     }
 }

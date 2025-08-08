@@ -59,7 +59,7 @@ class ManageAppointment extends Component
         'appointment_time' => 'required_if:slot_enabled,true',
         'newPatient.name' => 'required|string|min:3|max:255',
         'newPatient.email' => 'nullable|email|max:255',
-        'newPatient.phone' => 'required|string|min:10|max:15',
+        'newPatient.phone' => 'required|string|digits:10',
         'newPatient.age' => 'required|integer|min:1|max:120',
         'newPatient.gender' => 'required|string|in:male,female,other',
         'newPatient.pincode' => 'required|digits:6',
@@ -91,9 +91,9 @@ class ManageAppointment extends Component
         date_default_timezone_set('Asia/Kolkata');
         Carbon::setLocale('en');
         config(['app.timezone' => 'Asia/Kolkata']);
-
-        $this->departments = cache()->remember('departments', now()->addHours(24), fn() => Department::all());
-        $this->doctors = cache()->remember('doctors', now()->addHours(24), fn() => Doctor::with(['user', 'department'])->get());
+        $this->departments = cache()->remember('departments', now()->addHours(24), fn() => Department::where('status', 1)->orderBy('name', 'desc')->get());
+        // $this->doctors = cache()->remember('doctors', now()->addHours(24), fn() => Doctor::with(['user', 'department'])->get());
+         $this->doctors = $this->getFilteredDoctors();
         $this->currentMonth = now()->startOfMonth()->format('Y-m-d');
 
         // Handle slug parameter from route
@@ -120,7 +120,33 @@ class ManageAppointment extends Component
             $this->prepareAvailableDates();
         }
     }
-
+     public function updatedSelectedDepartment()
+    {
+        // Reset doctor and appointment-related fields when department changes
+        $this->doctor_id = null;
+        $this->selectedDoctor = null;
+        $this->appointment_date = null;
+        $this->appointment_time = null;
+        $this->availableSlots = [];
+        // Refresh doctor list based on new department filter
+        $this->doctors = $this->getFilteredDoctors();
+    }
+     protected function getFilteredDoctors()
+    {
+        // Cache doctors based on department filter for 24 hours
+        return cache()->remember("doctors_department_{$this->selectedDepartment}", now()->addHours(24), fn() => 
+            Doctor::when($this->selectedDepartment, function ($query) {
+                // Apply department filter if selectedDepartment is set
+                return $query->where('department_id', $this->selectedDepartment);
+            })
+            ->whereHas('department', function ($query) {
+                $query->where('status', 1);
+            })
+            ->where('status', '1')
+            ->with(['user', 'department'])
+            ->get()
+        );
+    }
     public function updated($propertyName)
     {
         if (in_array($propertyName, ['pincode', 'selectedDepartment', 'doctor_id', 'appointment_date'])) {

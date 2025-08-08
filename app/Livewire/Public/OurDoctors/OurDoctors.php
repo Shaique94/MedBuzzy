@@ -115,14 +115,22 @@ class OurDoctors extends Component
             });
         }
         
-        // Gender filter
+        // Gender filter - UPDATED to use users table
         if (!empty($this->genderFilter) && count($this->genderFilter) < 2) {
-            $query->where('doctors.gender', $this->genderFilter[0]);
+            $query->where('users.gender', $this->genderFilter[0]);
         }
         
         // Experience filter
         if ($this->minExperience > 0) {
-            $query->where('doctors.experience', '>=', $this->minExperience);
+            // Convert experience string to integer for proper numeric comparison
+            $query->where(function($q) {
+                $q->whereRaw('CAST(doctors.experience AS SIGNED) >= ?', [$this->minExperience])
+                  ->orWhere(function($q2) {
+                      // Handle experience values with '+' suffix like "5+"
+                      $q2->where('doctors.experience', 'LIKE', '%+%')
+                         ->whereRaw('CAST(REPLACE(doctors.experience, "+", "") AS SIGNED) >= ?', [$this->minExperience]);
+                  });
+            });
         }
         
         // Rating filter
