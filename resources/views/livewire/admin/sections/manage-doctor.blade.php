@@ -60,9 +60,9 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                    {{ $doctor->department ? $doctor->department->name : 'General Practice' }}
+                            <td class="px-4 py-3 sm:px-6 sm:py-4">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 shadow-sm">
+                                    {{ $doctor->department->name }}
                                 </span>
                             </td>
                             <td class="px-4 py-3 sm:px-6 sm:py-4">

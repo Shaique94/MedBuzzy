@@ -14,14 +14,9 @@ class LandingPage extends Component
     public $doctors;
     public $departments;
 
- public function mount()
+    public function mount()
     {
-        $this->doctors = Doctor::with(['department', 'user'])
-            ->whereNotNull('department_id')
-            ->inRandomOrder()
-            ->limit(4)
-            ->get();
-            
+        $this->loadDoctors();
         $this->departments = Department::where('status', true)->get();
     }
 
@@ -44,4 +39,3 @@ class LandingPage extends Component
         return view('livewire.public.landing-page');
     }
 }
-

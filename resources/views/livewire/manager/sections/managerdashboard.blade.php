@@ -118,26 +118,26 @@
 
             <!-- Upcoming Appointments -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-             <!-- Bulk Actions Header -->
-<div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-    <h2 class="text-lg font-semibold text-gray-900">Upcoming Appointments</h2>
-    
-    <div class="flex items-center space-x-4">
-         <div class="flex items-center">
+                <!-- Bulk Actions Header -->
+                <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+                    <h2 class="text-lg font-semibold text-gray-900">Upcoming Appointments</h2>
+                    
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center">
                             <input type="checkbox" id="select-all" 
                                    class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                                    @change="toggleSelectAll">
                             <label for="select-all" class="ml-2 text-sm text-gray-700">Select All</label>
                         </div>
-        
-        <button id="bulkRescheduleBtn"
-                class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700 
-                       disabled:opacity-50 disabled:cursor-not-allowed"
-                disabled>
-            Reschedule Selected
-        </button>
-    </div>
-</div>
+                        
+                        <button id="bulkRescheduleBtn"
+                                class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700 
+                                       disabled:opacity-50 disabled:cursor-not-allowed"
+                                disabled>
+                            Reschedule Selected
+                        </button>
+                    </div>
+                </div>
                 
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
@@ -155,14 +155,13 @@
                             @forelse($appointments as $appointment)
                                 <tr class="hover:bg-gray-50 transition-colors duration-150">
                                     <!-- Checkbox Column -->
-                                   <td class="px-6 py-4 whitespace-nowrap">
-    <input type="checkbox" 
-           class="appointment-checkbox h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-           value="{{ $appointment->id }}"
-           data-doctor-id="{{ $appointment->doctor_id }}"
-           {{-- data-reschedule-available="{{ $appointment->isReschedulingRequired() && $appointment->canBeRescheduled() ? 'true' : 'false' }}" --}}
-           @change="updateBulkRescheduleBtn">
-</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <input type="checkbox" 
+                                               class="appointment-checkbox h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                               value="{{ $appointment->id }}"
+                                               data-doctor-id="{{ $appointment->doctor_id }}"
+                                               @change="updateBulkRescheduleBtn">
+                                    </td>
                                     
                                     <!-- Patient Column -->
                                     <td class="px-6 py-4 whitespace-nowrap">
@@ -214,7 +213,7 @@
                                     <!-- Actions Column -->
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <div class="flex justify-end space-x-2 items-center">
-                                           @if($appointment->isReschedulingRequired() && $appointment->canBeRescheduled())
+                                            @if($appointment->canBeRescheduled())
                                             <button 
                                                 id="rescheduleBtn-{{ $appointment->id }}"
                                                 class="text-purple-600 hover:text-purple-900 p-1 rounded-md hover:bg-purple-50 transition-colors
@@ -665,12 +664,12 @@ document.addEventListener('DOMContentLoaded', function() {
         checkbox.addEventListener('change', updateBulkRescheduleBtn);
     });
 
-  // Add event listener to "Select All"
+    // Add event listener to "Select All"
     document.getElementById('select-all').addEventListener('change', function() {
         const checkAll = this.checked;
-           checkboxes.forEach(checkbox => {
+        checkboxes.forEach(checkbox => {
             checkbox.checked = checkAll;
-    });
+        });
         updateBulkRescheduleBtn();
     });
 

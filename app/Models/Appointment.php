@@ -133,43 +133,38 @@ protected function findNextAvailableDate(Doctor $doctor, int $maxAttempts): ?Car
      * Check if appointment can be rescheduled
      */
 
-public function isReschedulingRequired(): bool
+  public function canBeRescheduled(): bool
 {
-    // Check if doctor is on leave for this appointment date
-    $appointmentDate = Carbon::parse($this->appointment_date);
-    return $this->doctor->isOnLeave($appointmentDate);
-}
+    
+  // Explicit list of statuses that cannot be rescheduled
+    $invalidStatuses = ['completed', 'cancelled', 'no-show', 'rescheduled'];
+    
+    // Check if appointment is in invalid status
+    if (in_array($this->status, $invalidStatuses)) {
+        return false;
+    }
 
- public function canBeRescheduled(): bool
-{
-    return $this->hasValidStatus() 
-        && $this->isFutureAppointment() 
-        && $this->isNotAlreadyRescheduled();
-}
+        // return Carbon::parse($this->appointment_date)
+        //         ->tz(config('app.timezone'))
+        //         ->isFuture();
+         // Check if appointment is already rescheduled
+    if ($this->rescheduled) {
+        return false;
+    }
 
-protected function hasValidStatus(): bool
-{
-    return !in_array($this->status, ['completed', 'cancelled', 'no-show']);
-}
+    // Check if appointment date is in the future
+    if (Carbon::parse($this->appointment_date)
+            ->tz(config('app.timezone'))
+            ->isPast()) {
+        return false;
+    }
 
-protected function isFutureAppointment(): bool
-{
-    return Carbon::parse($this->appointment_date)
-        ->tz(config('app.timezone'))
-        ->isFuture();
-}
+    // Check if doctor is available (not on leave)
+    if ($this->doctor->isOnLeave(Carbon::parse($this->appointment_date))) {
+        return false;
+    }
 
-protected function isNotAlreadyRescheduled(): bool
-{
-    return !$this->rescheduled;
-}
-
-protected function doctorIsAvailable(): bool
-{
-    // Check both leave status and day availability
-    $appointmentDate = Carbon::parse($this->appointment_date);
-    return !$this->doctor->isOnLeave($appointmentDate)
-        && $this->doctor->isAvailableOn($appointmentDate->dayOfWeekIso);
+    return true;
 }
 
 
