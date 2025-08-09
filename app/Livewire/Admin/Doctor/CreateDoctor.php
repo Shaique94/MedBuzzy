@@ -121,11 +121,14 @@ class CreateDoctor extends Component
     public function updatedPincode($value)
     {
         if (strlen($value) === 6) {
+            $this->validateOnly('pincode');
             $this->fetchPincodeDetails($value);
         } else {
             if (strlen($value) < 6) {
                 $this->resetErrorBag('pincode');
             }
+            $this->city = '';
+            $this->state = '';
         }
     }
 

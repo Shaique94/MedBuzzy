@@ -1,19 +1,29 @@
-<div class="h-full bg-white shadow-md flex flex-col">
+<div class="h-full bg-white shadow-md flex flex-col transition-all duration-300 ease-in-out">
     <!-- Profile Section -->
-   <div class="p-6 border-b flex items-center space-x-4">
-    @if($doctor->image)
-        <img src="{{ $doctor->image }}?v={{ time() }}" 
-             alt="Doctor Profile" 
-             class="w-12 h-12 rounded-full object-cover border-2 border-blue-100"
-             wire:key="sidebar-profile-image-{{ $doctor->id }}-{{ now()->timestamp }}">
-    @else
-        <div class="w-12 h-12 rounded-full bg-blue-100 border-2 border-blue-200 flex items-center justify-center text-blue-600 font-semibold">
-            {{ substr($doctor->user->name, 0, 1) }}
-        </div>
-    @endif
-        <div>
-            <h2 class="font-semibold text-gray-800 text-lg">{{ $doctor->user->name }}</h2>
-            <p class="text-gray-500 text-sm">{{ $doctor->department->name ?? 'No Department' }}</p>
+    <div class="p-6 border-b flex items-center space-x-4">
+        @if($doctor->image)
+            <img src="{{ $doctor->image }}?v={{ time() }}" 
+                 alt="Doctor Profile" 
+                 class="w-12 h-12 rounded-full object-cover border-2 border-blue-100 transition-all duration-300"
+                 wire:key="sidebar-profile-image-{{ $doctor->id }}-{{ now()->timestamp }}">
+        @else
+            <div class="w-12 h-12 rounded-full bg-blue-100 border-2 border-blue-200 flex items-center justify-center text-blue-600 font-semibold transition-all duration-300">
+                {{ substr($doctor->user->name, 0, 1) }}
+            </div>
+        @endif
+        <div class="flex flex-1 items-center justify-between ">
+            <div>
+                <h2 class="font-semibold text-gray-800 text-lg transition-all duration-300">{{ $doctor->user->name }}</h2>
+                <p class="text-gray-500 text-sm transition-all duration-300">{{ $doctor->department->name ?? 'No Department' }}</p>
+            </div>
+
+            <!-- Close Button with Animation -->
+            <button id="sidebarToggle" onclick="toggleSidebar()" 
+                    class="md:hidden text-gray-500 hover:text-gray-700 focus:outline-none transition-all duration-300 transform hover:rotate-90">
+                <svg id="closeIcon" class="h-6 w-6 transition-all duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
         </div>
     </div>
 
