@@ -31,33 +31,63 @@ class ViewDoctor extends Component
 
             // Load doctor with all necessary relationships
             $this->doctor = Doctor::with([
-                'user',
-                'department',
-                'appointments' => function($query) {
-                    $query->with(['patient' => function($q) {
+                'user' => function ($query) {
+                    $query->select('id', 'name', 'email', 'phone');
+                },
+                'department' => function ($query) {
+                    $query->select('id', 'name');
+                },
+                'appointments' => function ($query) {
+                    $query->with(['patient' => function ($q) {
                         $q->select('id', 'name');
                     }])
                     ->select('id', 'doctor_id', 'patient_id', 'appointment_date', 'appointment_time', 'status', 'created_at')
                     ->latest()
                     ->take(5);
                 },
-                'reviews' => function($query) {
+                'reviews' => function ($query) {
                     $query->where('approved', true)
                           ->select('id', 'doctor_id', 'rating', 'comment', 'created_at')
                           ->latest()
                           ->take(5);
                 }
-            ])->findOrFail($doctorId);
-            
-            // Validate that the doctor has required relationships
-            if (!$this->doctor) {
-                throw new \Exception('Doctor not found');
-            }
-            
+            ])
+            ->select([
+                'id',
+                'user_id',
+                'department_id',
+                'status',
+                'fee',
+                'experience',
+                'qualification',
+                'created_at',
+                'start_time',
+                'end_time',
+                'available_days',
+                'slot_duration_minutes',
+                'patients_per_slot',
+                'max_booking_days',
+                'unavailable_from',
+                'unavailable_to',
+                'image',
+                'city',
+                'state',
+                'pincode',
+                'verification_documents',
+                'registration_number',
+                'clinic_hospital_name',
+                'languages_spoken',
+                'achievements_awards',
+                'professional_bio',
+                'social_media_links'
+            ])
+            ->findOrFail($doctorId);
+
+            // Validate required relationships
             if (!$this->doctor->user) {
                 throw new \Exception('Doctor user data not found');
             }
-            
+
             if (!$this->doctor->department) {
                 throw new \Exception('Doctor department data not found');
             }
@@ -69,14 +99,15 @@ class ViewDoctor extends Component
 
             // Calculate additional statistics
             $this->calculateDoctorStats();
-            
+
             $this->showModal = true;
-            
+
             \Log::info('Doctor details loaded successfully', [
                 'doctor_id' => $doctorId,
-                'doctor_name' => $this->doctor->user->name
+                'doctor_name' => $this->doctor->user->name,
+                'has_verification_documents' => !empty($this->doctor->verification_documents)
             ]);
-            
+
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             \Log::warning('Doctor not found', ['doctor_id' => $doctorId]);
             session()->flash('error', 'Doctor not found.');
@@ -87,7 +118,6 @@ class ViewDoctor extends Component
                 'doctor_id' => $doctorId,
                 'trace' => $e->getTraceAsString()
             ]);
-            
             session()->flash('error', 'An error occurred while loading doctor details. Please try again.');
             $this->showModal = false;
             $this->doctor = null;
@@ -101,26 +131,26 @@ class ViewDoctor extends Component
         }
 
         try {
+            // Cache query results to avoid multiple database hits
+            $appointmentsQuery = $this->doctor->appointments();
+            $reviewsQuery = $this->doctor->reviews()->where('approved', true);
+
             // Calculate total appointments count
-            $this->doctor->total_appointments = $this->doctor->appointments()->count();
+            $this->doctor->total_appointments = $appointmentsQuery->count();
 
             // Calculate average rating from approved reviews
-            $this->doctor->average_rating = $this->doctor->reviews()
-                ->where('approved', true)
-                ->avg('rating') ?? 0;
+            $this->doctor->average_rating = $reviewsQuery->avg('rating') ?? 0;
 
             // Calculate total approved reviews count
-            $this->doctor->total_reviews = $this->doctor->reviews()
-                ->where('approved', true)
-                ->count();
+            $this->doctor->total_reviews = $reviewsQuery->count();
 
             // Get recent appointments with patient names
-            $this->doctor->recent_appointments = $this->doctor->appointments()
+            $this->doctor->recent_appointments = $appointmentsQuery
                 ->with(['patient:id,name'])
                 ->latest()
                 ->take(3)
                 ->get()
-                ->map(function($appointment) {
+                ->map(function ($appointment) {
                     return [
                         'patient_name' => $appointment->patient->name ?? 'Unknown Patient',
                         'appointment_date' => $appointment->appointment_date,
@@ -137,7 +167,7 @@ class ViewDoctor extends Component
             \Log::warning('Error calculating doctor stats: ' . $e->getMessage(), [
                 'doctor_id' => $this->doctor->id
             ]);
-            
+
             // Set default values on error
             $this->doctor->total_appointments = 0;
             $this->doctor->average_rating = 0;
@@ -150,6 +180,7 @@ class ViewDoctor extends Component
     {
         $this->showModal = false;
         $this->doctor = null;
+        \Log::info('Doctor details modal closed');
     }
 
     public function getDoctorProperty()
@@ -159,6 +190,8 @@ class ViewDoctor extends Component
 
     public function render()
     {
-        return view('livewire.admin.doctor.view-doctor');
+        return view('livewire.admin.doctor.view-doctor', [
+            'doctor' => $this->doctor
+        ]);
     }
 }

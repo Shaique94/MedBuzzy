@@ -12,12 +12,12 @@ use Livewire\Component;
 use Illuminate\Support\Str;
 use Livewire\WithFileUploads;
 use App\Services\ImageKitService;
-use App\Services\PincodeService;
+use App\Traits\DoctorFormTrait;
 
 #[Title('Create Doctor')]
 class CreateDoctor extends Component
 {
-    use WithFileUploads;
+    use WithFileUploads, DoctorFormTrait;
 
     public $departments;
     public $showModal = false;
@@ -43,7 +43,15 @@ class CreateDoctor extends Component
     public $city;
     public $state;
     public $gender;
-public $experience;
+    public $experience;
+    public $languages_spoken;
+    public $clinic_hospital_name;
+    public $registration_number;
+    public $professional_bio;
+    public $achievements_awards;
+    public $verification_documents = [];
+    public $social_media_links = [];
+    public $social_media_platforms = ['twitter', 'facebook', 'instagram'];
 
     protected $listeners = ['openCreateModal' => 'openModal'];
 
@@ -53,6 +61,19 @@ public $experience;
     }
 
     public function openModal()
+    {
+        $this->resetForm();
+        $this->showModal = true;
+    }
+
+    public function closeModal()
+    {
+        $this->showModal = false;
+        $this->resetErrorBag();
+        $this->resetForm();
+    }
+
+    private function resetForm()
     {
         $this->reset([
             'name',
@@ -76,21 +97,25 @@ public $experience;
             'pincode',
             'city',
             'state',
+            'gender',
+            'experience',
+            'languages_spoken',
+            'clinic_hospital_name',
+            'registration_number',
+            'professional_bio',
+            'achievements_awards',
+            'verification_documents',
+            'social_media_links',
         ]);
 
+        // Set defaults
         $this->status = 1;
         $this->start_time = '09:00';
         $this->end_time = '17:00';
         $this->slot_duration_minutes = 30;
         $this->patients_per_slot = 1;
         $this->max_booking_days = 7;
-        $this->showModal = true;
-    }
-
-    public function closeModal()
-    {
-        $this->showModal = false;
-        $this->resetErrorBag();
+        $this->social_media_links = [];
     }
 
     public function updatedPincode($value)
@@ -114,64 +139,100 @@ public $experience;
         $this->resetErrorBag('pincode');
     }
 
-    public function fetchPincodeDetails($pincode)
+
+
+
+
+    private function getValidationRules()
     {
-        \Log::info('CreateDoctor: Fetching pincode details', ['pincode' => $pincode]);
+        $rules = $this->getCommonValidationRules();
+        
+        // Add create-specific rules
+        $rules['email'] = 'required|email|max:255|unique:users,email';
+        $rules['phone'] = 'required|string|max:15|unique:users,phone';
+        $rules['password'] = 'required|string|min:6|confirmed';
+        $rules['photo'] = 'nullable|image|max:10240';
+        $rules['registration_number'] = 'nullable|string|max:50|unique:doctors,registration_number';
 
-        $result = PincodeService::getLocationByPincode($pincode);
+        return $rules;
+    }
 
-        \Log::info('CreateDoctor: PincodeService result', $result);
+    private function processArrayFields()
+    {
+        return [
+            'qualifications' => $this->qualification ? 
+                array_filter(array_map('trim', explode(',', $this->qualification))) : 
+                null,
+            'languages' => $this->languages_spoken ? 
+                array_filter(array_map('trim', explode(',', $this->languages_spoken))) : 
+                null,
+            'achievements' => $this->achievements_awards ? 
+                array_filter(array_map('trim', explode(',', $this->achievements_awards))) : 
+                null,
+        ];
+    }
 
-        if ($result['success']) {
-            $this->city = $result['data']['city'];
-            $this->state = $result['data']['state'];
-            $this->resetErrorBag('pincode');
-
-            \Log::info('CreateDoctor: Successfully updated location', [
-                'city' => $this->city,
-                'state' => $this->state
-            ]);
-        } else {
-            \Log::error('CreateDoctor: Failed to fetch pincode details', [
-                'pincode' => $pincode,
-                'error' => $result['error']
-            ]);
-
-            $this->addError('pincode', $result['error']);
-            $this->city = '';
-            $this->state = '';
+    private function processDocuments()
+    {
+        if (!$this->verification_documents) {
+            return null;
         }
+
+        $imageKit = new ImageKitService();
+        $documents = [];
+        
+        foreach ($this->verification_documents as $index => $file) {
+            try {
+                $response = $imageKit->upload(
+                    fopen($file->getRealPath(), 'r'),
+                    'document_' . time() . '_' . $index . '.' . $file->getClientOriginalExtension(),
+                    'doctor_documents'
+                );
+
+                if (!isset($response->result->url)) {
+                    throw new \Exception('Document upload failed for file ' . $file->getClientOriginalName());
+                }
+
+                $documents[] = $response->result->url;
+            } catch (\Exception $e) {
+                \Log::error('Document upload failed', [
+                    'file' => $file->getClientOriginalName(),
+                    'error' => $e->getMessage()
+                ]);
+                throw $e;
+            }
+        }
+
+        return $documents;
+    }
+
+    private function processSocialMedia()
+    {
+        if (!$this->social_media_links) {
+            return null;
+        }
+
+        $socialMedia = [];
+        foreach ($this->social_media_links as $link) {
+            if (!empty($link['platform']) && !empty($link['url'])) {
+                $socialMedia[$link['platform']] = $link['url'];
+            }
+        }
+
+        return empty($socialMedia) ? null : $socialMedia;
     }
 
     public function save()
     {
-        $this->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email',
-            'department_id' => 'required|exists:departments,id',
-            'available_days' => 'required|array|min:1',
-            'status' => 'required|in:0,1,2',
-            'phone' => 'required|string|max:15',
-            'fee' => 'required|numeric|min:0',
-            'qualification' => 'nullable|string|max:255',
-            'password' => 'required|string|min:6|confirmed',
-            'photo' => 'nullable|image|max:10240',
-            'start_time' => 'required|date_format:H:i',
-            'end_time' => 'required|date_format:H:i|after:start_time',
-            'slot_duration_minutes' => 'required|integer|min:5|max:120',
-            'patients_per_slot' => 'required|integer|min:1|max:10',
-            'max_booking_days' => 'required|integer|min:1|max:30',
-            'pincode' => 'nullable|digits:6',
-            'city' => 'nullable|string|max:100',
-            'state' => 'nullable|string|max:100',
-            'gender' => 'required|in:male,female,other',
-            'experience' => 'required|integer|min:0|max:50',
-        ]);
+        $this->validate($this->getValidationRules());
 
         try {
+            \DB::beginTransaction();
+
             $imageUrl = null;
             $imageId = null;
 
+            // Handle photo upload
             if ($this->photo) {
                 $imageKit = new ImageKitService();
                 $response = $imageKit->upload(
@@ -181,20 +242,27 @@ public $experience;
                 );
 
                 if (!isset($response->result->url)) {
-                    throw new \Exception('Image upload failed');
+                    throw new \Exception('Photo upload failed');
                 }
 
                 $imageUrl = $response->result->url;
                 $imageId = $response->result->fileId;
             }
 
-            $qualifications = $this->qualification ?
-                array_filter(array_map('trim', explode(',', $this->qualification))) :
-                null;
+            // Process array fields
+            $arrayFields = $this->processArrayFields();
+            
+            // Process documents
+            $documents = $this->processDocuments();
+            
+            // Process social media
+            $socialMedia = $this->processSocialMedia();
+
+            $capitalizedName = ucfirst(trim($this->name));
 
             // Create new user
             $user = User::create([
-                'name' => $this->name,
+                'name' => $capitalizedName,
                 'email' => $this->email,
                 'password' => Hash::make($this->password),
                 'phone' => $this->phone,
@@ -210,7 +278,7 @@ public $experience;
                 'fee' => $this->fee,
                 'status' => $this->status,
                 'available_days' => $this->available_days,
-                'qualification' => $qualifications,
+                'qualification' => $arrayFields['qualifications'],
                 'image' => $imageUrl,
                 'image_id' => $imageId,
                 'slug' => Str::slug($this->name),
@@ -223,53 +291,49 @@ public $experience;
                 'city' => $this->city,
                 'state' => $this->state,
                 'experience' => $this->experience,
+                'languages_spoken' => $arrayFields['languages'],
+                'clinic_hospital_name' => $this->clinic_hospital_name,
+                'registration_number' => $this->registration_number,
+                'professional_bio' => $this->professional_bio,
+                'achievements_awards' => $arrayFields['achievements'],
+                'verification_documents' => $documents,
+                'social_media_links' => $socialMedia,
             ]);
 
-            $this->reset([
-                'name',
-                'email',
-                'password',
-                'password_confirmation',
-                'phone',
-                'status',
-                'available_days',
-                'fee',
-                'department_id',
-                'qualification',
-                'photo',
-                'start_time',
-                'end_time',
-                'slot_duration_minutes',
-                'patients_per_slot',
-                'max_booking_days',
-                'showModal',
-                'imageUrl',
-                'imageId',
-                'pincode',
-                'city',
-                'state',
-                'gender',
-                'experience',
-            ]);
+            \DB::commit();
 
+            $this->resetForm();
             session()->flash('message', 'Doctor created successfully.');
             $this->dispatch('doctorCreated');
             $this->dispatch('refreshDoctorList');
             $this->closeModal();
-        } catch (\Exception $e) {
-            if (isset($user)) {
-                $user->delete();
-            }
 
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            
+            // Clean up uploaded files on error
             if (isset($imageId)) {
                 try {
                     $imageKit = new ImageKitService();
                     $imageKit->delete($imageId);
-                } catch (\Exception $deleteException) {
-                    \Log::error('Failed to delete uploaded image: ' . $deleteException->getMessage());
+                } catch (\Exception $cleanupError) {
+                    \Log::error('Failed to cleanup uploaded image: ' . $cleanupError->getMessage());
                 }
             }
 
+            // Clean up user if created
+            if (isset($user)) {
+                try {
+                    $user->delete();
+                } catch (\Exception $cleanupError) {
+                    \Log::error('Failed to cleanup created user: ' . $cleanupError->getMessage());
+                }
+            }
+
+            \Log::error('Error creating doctor: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
+            
             session()->flash('error', 'Error creating doctor: ' . $e->getMessage());
         }
     }

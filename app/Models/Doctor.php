@@ -18,6 +18,13 @@ class Doctor extends Model
         'image',
         'image_id',
         'qualification',
+        'languages_spoken',
+        'clinic_hospital_name',
+        'registration_number',
+        'professional_bio',
+        'achievements_awards',
+        'verification_documents',
+        'social_media_links',
         'pincode',
         'city',
         'state',
@@ -37,46 +44,54 @@ class Doctor extends Model
         'available_days' => 'array',
         'unavailable_from' => 'date',
         'unavailable_to' => 'date',
+        'languages_spoken' => 'array',
+        'achievements_awards' => 'array',
+        'verification_documents' => 'array',
+        'social_media_links' => 'array',
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
+   protected static function boot()
+{
+    parent::boot();
 
-        static::creating(function ($doctor) {
-            if (empty($doctor->slug)) {
-                $doctor->slug = $doctor->generateSlug();
-            }
-        });
+    static::creating(function ($doctor) {
+        $doctor->slug = $doctor->generateSlug();
+    });
 
-        static::updating(function ($doctor) {
-            if ($doctor->isDirty('user_id') && empty($doctor->slug)) {
-                $doctor->slug = $doctor->generateSlug();
-            }
-        });
+    static::updating(function ($doctor) {
+        if ($doctor->isDirty('user_id') || $doctor->user->isDirty('name')) {
+            $doctor->slug = $doctor->generateSlug();
+        }
+    });
+}
+
+   public function generateSlug()
+{
+    if (!$this->user) {
+        $this->load('user');
     }
 
-    public function generateSlug()
-    {
-        if (!$this->user) {
-            $this->load('user');
-        }
+    // Fallback to name directly if user is not available
+    $name = $this->user ? $this->user->name : $this->name;
 
-        if (!$this->user) {
-            return null;
-        }
+    // Capitalize the first letter of the name
+    $name = ucfirst(trim($name));
 
-        $baseSlug = Str::slug($this->user->name);
-        $slug = $baseSlug;
-        $counter = 1;
-
-        while (static::where('slug', $slug)->where('id', '!=', $this->id)->exists()) {
-            $slug = $baseSlug . '-' . $counter;
-            $counter++;
-        }
-
-        return $slug;
+    if (!$name) {
+        return null;
     }
+
+    $baseSlug = Str::slug($name);
+    $slug = $baseSlug;
+    $counter = 1;
+
+    while (static::where('slug', $slug)->where('id', '!=', $this->id)->exists()) {
+        $slug = $baseSlug . '-' . $counter;
+        $counter++;
+    }
+
+    return $slug;
+}
 
     public function user()
     {

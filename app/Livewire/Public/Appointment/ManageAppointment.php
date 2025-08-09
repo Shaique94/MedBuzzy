@@ -322,7 +322,7 @@ class ManageAppointment extends Component
 
         $now = Carbon::now('Asia/Kolkata');
         $isToday = Carbon::parse($this->appointment_date)->isToday();
-
+       
         while ($currentSlot->lt($endTime)) {
             $slotEnd = $currentSlot->copy()->addMinutes($duration);
             if ($slotEnd->gt($endTime))

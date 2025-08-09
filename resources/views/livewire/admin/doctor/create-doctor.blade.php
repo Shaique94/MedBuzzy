@@ -140,6 +140,18 @@
                                         <span class="text-red-500 responsive-text-sm mt-1 block">{{ $message }}</span>
                                     @enderror
                                 </div>
+
+                                <!-- Languages Spoken -->
+                                <div>
+                                    <label for="languages_spoken"
+                                        class="block responsive-text-sm font-medium text-gray-700 mb-2">Languages Spoken</label>
+                                    <input type="text" id="languages_spoken" wire:model="languages_spoken"
+                                        class="form-input w-full px-3 py-2 lg:px-4 lg:py-3 border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 responsive-text-base"
+                                        placeholder="English, Hindi (comma separated)">
+                                    @error('languages_spoken')
+                                        <span class="text-red-500 responsive-text-sm mt-1 block">{{ $message }}</span>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
 
@@ -190,6 +202,18 @@
                                         class="w-full px-4 py-3 border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                                         placeholder="State name">
                                     @error('state')
+                                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <!-- Clinic/Hospital Name -->
+                                <div>
+                                    <label for="clinic_hospital_name"
+                                        class="block text-sm font-medium text-gray-700 mb-2">Clinic/Hospital Name</label>
+                                    <input type="text" id="clinic_hospital_name" wire:model="clinic_hospital_name"
+                                        class="w-full px-4 py-3 border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                                        placeholder="City Hospital">
+                                    @error('clinic_hospital_name')
                                         <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -250,6 +274,108 @@
                                     @error('status')
                                         <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                                     @enderror
+                                </div>
+
+                                <!-- Registration Number -->
+                                <div>
+                                    <label for="registration_number"
+                                        class="block text-sm font-medium text-gray-700 mb-2">Registration Number</label>
+                                    <input type="text" id="registration_number" wire:model="registration_number"
+                                        class="w-full px-4 py-3 border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                                        placeholder="REG12345">
+                                    @error('registration_number')
+                                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <!-- Achievements and Awards -->
+                                <div>
+                                    <label for="achievements_awards"
+                                        class="block text-sm font-medium text-gray-700 mb-2">Achievements & Awards</label>
+                                    <input type="text" id="achievements_awards" wire:model="achievements_awards"
+                                        class="w-full px-4 py-3 border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                                        placeholder="Best Doctor 2023, Award 2024 (comma separated)">
+                                    @error('achievements_awards')
+                                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Professional Bio -->
+                            <div class="mt-4">
+                                <label for="professional_bio"
+                                    class="block text-sm font-medium text-gray-700 mb-2">Professional Bio</label>
+                                <textarea id="professional_bio" wire:model="professional_bio"
+                                    class="w-full px-4 py-3 border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                                    rows="4" placeholder="Enter doctor's professional biography"></textarea>
+                                @error('professional_bio')
+                                    <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <!-- Verification Documents -->
+                            <div class="mt-4">
+                                <label for="verification_documents"
+                                    class="block text-sm font-medium text-gray-700 mb-2">Verification Documents</label>
+                                <input type="file" id="verification_documents" wire:model="verification_documents"
+                                    multiple accept=".pdf,.jpg,.png,.jpeg"
+                                    class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                @error('verification_documents.*')
+                                    <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>
+                                @enderror
+                                @if ($verification_documents)
+                                    <div class="mt-2">
+                                        @foreach ($verification_documents as $index => $file)
+                                            <div class="flex items-center space-x-2">
+                                                <span class="text-sm text-gray-600">{{ $file->getClientOriginalName() }}</span>
+                                                <button type="button" wire:click="removeVerificationDocument({{ $index }})"
+                                                    class="text-red-500 hover:text-red-700">
+                                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                            d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
+                            </div>
+
+                            <!-- Social Media Links -->
+                            <div class="mt-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Social Media Links</label>
+                                <div class="space-y-2">
+                                    @foreach ($social_media_links as $index => $link)
+                                        <div class="flex items-center space-x-2">
+                                            <select wire:model="social_media_links.{{ $index }}.platform"
+                                                class="w-1/3 px-4 py-3 border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                                                <option value="">Select Platform</option>
+                                                <option value="twitter">Twitter</option>
+                                                <option value="facebook">Facebook</option>
+                                                <option value="instagram">Instagram</option>
+                                            </select>
+                                            <input type="url" wire:model="social_media_links.{{ $index }}.url"
+                                                class="w-2/3 px-4 py-3 border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                                                placeholder="https://platform.com/username">
+                                            <button type="button" wire:click="removeSocialMediaLink({{ $index }})"
+                                                class="text-red-500 hover:text-red-700">
+                                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        @error('social_media_links.' . $index . '.platform')
+                                            <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                                        @enderror
+                                        @error('social_media_links.' . $index . '.url')
+                                            <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                                        @enderror
+                                    @endforeach
+                                    <button type="button" wire:click="addSocialMediaLink"
+                                        class="mt-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-full text-sm font-semibold hover:bg-blue-100">
+                                        Add Social Media Link
+                                    </button>
                                 </div>
                             </div>
                         </div>

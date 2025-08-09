@@ -50,6 +50,16 @@
                         </button>
                     </div>
 
+                    <!-- Success/Error Messages -->
+                    @if (session()->has('error'))
+                        <div class="mb-4 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-lg flex items-start">
+                            <svg class="h-5 w-5 text-red-500 mr-3 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                            </svg>
+                            <p>{{ session('error') }}</p>
+                        </div>
+                    @endif
+
                     <!-- Enhanced Content Grid -->
                     <div class="grid grid-cols-1 xl:grid-cols-3 gap-4 lg:gap-6 grid-responsive">
                         <!-- Left Column - Personal & Professional Info -->
@@ -96,6 +106,63 @@
                                 </div>
                             </div>
 
+                            <!-- Professional Details -->
+                            <div class="bg-purple-50 rounded-xl p-4 lg:p-6 border border-purple-100 section">
+                                <h4 class="text-base lg:text-lg font-semibold text-gray-900 mb-3 lg:mb-4 flex items-center">
+                                    <svg class="h-5 w-5 text-purple-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6" />
+                                    </svg>
+                                    Professional Details
+                                </h4>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-4 grid-responsive">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 responsive-text-sm">Clinic/Hospital Name</label>
+                                        <p class="mt-1 text-base text-gray-900 responsive-text-base">{{ $doctor->clinic_hospital_name ?? 'Not specified' }}</p>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 responsive-text-sm">Registration Number</label>
+                                        <p class="mt-1 text-base text-gray-900 responsive-text-base">{{ $doctor->registration_number ?? 'Not specified' }}</p>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 responsive-text-sm">Languages Spoken</label>
+                                        <p class="mt-1 text-base text-gray-900 responsive-text-base">
+                                            @if(isset($doctor->languages_spoken) && is_array($doctor->languages_spoken) && count($doctor->languages_spoken) > 0)
+                                                {{ implode(', ', $doctor->languages_spoken) }}
+                                            @else
+                                                {{ $doctor->languages_spoken ?? 'Not specified' }}
+                                            @endif
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 responsive-text-sm">Achievements & Awards</label>
+                                        <p class="mt-1 text-base text-gray-900 responsive-text-base">
+                                            @if(isset($doctor->achievements_awards) && is_array($doctor->achievements_awards) && count($doctor->achievements_awards) > 0)
+                                                {{ implode(', ', $doctor->achievements_awards) }}
+                                            @else
+                                                {{ $doctor->achievements_awards ?? 'Not specified' }}
+                                            @endif
+                                        </p>
+                                    </div>
+                                    <div class="sm:col-span-2">
+                                        <label class="block text-sm font-medium text-gray-700 responsive-text-sm">Professional Bio</label>
+                                        <p class="mt-1 text-base text-gray-900 responsive-text-base">{{ $doctor->professional_bio ?? 'Not specified' }}</p>
+                                    </div>
+                                    @if(isset($doctor->social_media_links) && is_array($doctor->social_media_links) && count($doctor->social_media_links) > 0)
+                                        <div class="sm:col-span-2">
+                                            <label class="block text-sm font-medium text-gray-700 responsive-text-sm">Social Media Links</label>
+                                            <div class="mt-1 space-y-2">
+                                                @foreach($doctor->social_media_links as $platform => $url)
+                                                    <div class="flex items-center space-x-2">
+                                                        <span class="text-sm font-medium text-gray-700 capitalize responsive-text-sm">{{ $platform }}</span>
+                                                        <a href="{{ $url }}" target="_blank" class="text-sm text-blue-600 hover:underline responsive-text-sm" aria-label="Visit {{ $platform }} profile">{{ Str::limit($url, 50) }}</a>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+
                             <!-- Location Information -->
                             @if(isset($doctor->city) || isset($doctor->state) || isset($doctor->pincode))
                                 <div class="bg-gray-50 rounded-xl p-4 lg:p-6 border border-gray-100 section">
@@ -119,6 +186,25 @@
                                             <label class="block text-sm font-medium text-gray-700 responsive-text-sm">Pincode</label>
                                             <p class="mt-1 text-base text-gray-900 responsive-text-base">{{ $doctor->pincode ?? 'Not specified' }}</p>
                                         </div>
+                                    </div>
+                                </div>
+                            @endif
+
+                            <!-- Verification Documents -->
+                            @if(isset($doctor->verification_documents) && is_array($doctor->verification_documents) && count($doctor->verification_documents) > 0)
+                                <div class="bg-gray-50 rounded-xl p-4 lg:p-6 border border-gray-100 section">
+                                    <h4 class="text-base lg:text-lg font-semibold text-gray-900 mb-3 lg:mb-4 flex items-center">
+                                        <svg class="h-5 w-5 text-purple-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        Verification Documents
+                                    </h4>
+                                    <div class="space-y-2">
+                                        @foreach($doctor->verification_documents as $index => $doc)
+                                            <div class="flex items-center space-x-2">
+                                                <a href="{{ $doc }}" target="_blank" class="text-sm text-blue-600 hover:underline responsive-text-sm" aria-label="View verification document {{ $index + 1 }}">{{ basename($doc) }}</a>
+                                            </div>
+                                        @endforeach
                                     </div>
                                 </div>
                             @endif
@@ -238,7 +324,7 @@
                                                             {{ $appointment->patient->name ?? $appointment->patient_name ?? 'Unknown Patient' }}
                                                         @endif
                                                     </p>
-                                                    <p class="text-xs text-gray-500">
+                                                    <p class="text-xs text-gray-500 responsive-text-xs">
                                                         @if(is_array($appointment))
                                                             {{ \Carbon\Carbon::parse($appointment['appointment_date'])->format('M d, Y') }}
                                                         @else
@@ -271,7 +357,7 @@
                                 <div class="bg-gray-50 rounded-xl p-4 lg:p-6 border border-gray-100 section">
                                     <h4 class="text-base lg:text-lg font-semibold text-gray-900 mb-3 lg:mb-4 flex items-center">
                                         <svg class="h-5 w-5 text-yellow-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3 .922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                                         </svg>
                                         Recent Reviews
                                     </h4>
@@ -282,11 +368,11 @@
                                                     <div class="flex items-center">
                                                         @for($i = 1; $i <= 5; $i++)
                                                             <svg class="h-4 w-4 {{ $i <= $review->rating ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20">
-                                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.719c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3 .921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784 .57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.719c-.783-.57-.38-1.81 .588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                                             </svg>
                                                         @endfor
                                                     </div>
-                                                    <span class="ml-2 text-xs text-gray-500">{{ $review->created_at->diffForHumans() }}</span>
+                                                    <span class="ml-2 text-xs text-gray-500 responsive-text-xs">{{ $review->created_at->diffForHumans() }}</span>
                                                 </div>
                                                 <p class="text-sm text-gray-700 responsive-text-sm">{{ Str::limit($review->comment, 100) }}</p>
                                             </div>
@@ -299,7 +385,7 @@
 
                     <!-- Enhanced Footer Actions -->
                     <div class="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3 pt-4 lg:pt-6 border-t border-gray-200 mt-6 no-print">
-                        <button wire:click="closeModal" class="w-full sm:w-auto px-6 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 transition-all duration-200 font-medium responsive-text-base min-h-[44px] touch-target">
+                        <button wire:click="closeModal" class="w-full sm:w-auto px-6 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 transition-all duration-200 font-medium responsive-text-base min-h-[44px] touch-target" aria-label="Close doctor details modal">
                             <svg class="inline-block w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                             </svg>
@@ -317,7 +403,7 @@
                     <div class="mb-4">
                         <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
                             <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.732 16.5c-.77 .833 .192 2.5 1.732 2.5z" />
                             </svg>
                         </div>
                     </div>
@@ -472,7 +558,6 @@
                 if (event.key === 'Escape') {
                     const modal = document.querySelector('#doctor-modal-content');
                     if (modal) {
-                        // Trigger Livewire closeModal event
                         window.Livewire.emit('closeModal');
                     }
                 }
