@@ -16,7 +16,8 @@ class ViewDetails extends Component
     #[On('openModal')] 
     public function viewDetails($id)
     {
-        $this->appointment = Appointment::find($id);
+        $this->appointment = Appointment::with(['doctor.user', 'doctor.department', 'patient', 'payment'])
+            ->find($id);
         $this->showModal = true;
     }
 

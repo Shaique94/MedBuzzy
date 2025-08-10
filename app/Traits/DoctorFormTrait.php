@@ -17,6 +17,11 @@ trait DoctorFormTrait
             'component' => class_basename($this)
         ]);
 
+        // Set processing state if the property exists
+        if (property_exists($this, 'isProcessing')) {
+            $this->isProcessing = true;
+        }
+
         $result = PincodeService::getLocationByPincode($pincode);
 
         Log::info('PincodeService result', [
@@ -44,6 +49,11 @@ trait DoctorFormTrait
             $this->addError('pincode', $result['error']);
             $this->city = '';
             $this->state = '';
+        }
+
+        // Reset processing state if the property exists
+        if (property_exists($this, 'isProcessing')) {
+            $this->isProcessing = false;
         }
     }
 

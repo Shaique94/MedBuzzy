@@ -1,4 +1,5 @@
-<div class="bg-white w-[380px] md:w-full  m-2 sm:m-4 shadow rounded-xl overflow-hidden">
+<div>
+    <div class="bg-white w-[380px] md:w-full  m-2 sm:m-4 shadow rounded-xl overflow-hidden">
                 <!-- Header Section -->
                 <div class="bg-blue-500 px-4 sm:px-6 lg:px-8 py-4 md:py-6 text-white">
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-6">
@@ -43,7 +44,7 @@
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <i class="far fa-calendar text-gray-400"></i>
                                     </div>
-                                    <input type="date" wire:model="fromDate"
+                                    <input type="date" wire:model.live="fromDate"
                                         class="w-full pl-10 pr-4 py-2 sm:py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition shadow-sm text-sm sm:text-base">
                                 </div>
                             </div>
@@ -53,27 +54,59 @@
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <i class="far fa-calendar text-gray-400"></i>
                                     </div>
-                                    <input type="date" wire:model="toDate"
+                                    <input type="date" wire:model.live="toDate"
                                         class="w-full pl-10 pr-4 py-2 sm:py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition shadow-sm text-sm sm:text-base">
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Action Buttons -->
-                    <div class="flex flex-wrap gap-2 sm:gap-3 mt-4 sm:mt-6">
-                        <button wire:click="loadAppointments"
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg transition flex items-center gap-2 shadow-md hover:shadow-lg text-sm sm:text-base">
-                            <i class="fas fa-filter"></i>
-                            <span>Apply Filters</span>
-                        </button>
-                        <button wire:click="resetFilters"
-                            class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg transition flex items-center gap-2 shadow-sm hover:shadow-md text-sm sm:text-base">
-                            <i class="fas fa-sync-alt"></i>
-                            <span>Reset</span>
-                        </button>
+                    <!-- Per Page Selector and Action Buttons -->
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-4 sm:mt-6">
+                        <div class="flex items-center gap-2">
+                            <label class="text-sm font-medium text-gray-700">Show:</label>
+                            <select wire:model.live="perPage" 
+                                class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            <span class="text-sm text-gray-600">appointments per page</span>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-2 sm:gap-3">
+                            <button wire:click="resetPage"
+                                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg transition flex items-center gap-2 shadow-md hover:shadow-lg text-sm sm:text-base">
+                                <i class="fas fa-filter"></i>
+                                <span>Apply Filters</span>
+                            </button>
+                            <button wire:click="resetFilters"
+                                class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg transition flex items-center gap-2 shadow-sm hover:shadow-md text-sm sm:text-base">
+                                <i class="fas fa-sync-alt"></i>
+                                <span>Reset</span>
+                            </button>
+                            <button wire:click="refreshAppointments"
+                                class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg transition flex items-center gap-2 shadow-md hover:shadow-lg text-sm sm:text-base">
+                                <i class="fas fa-refresh"></i>
+                                <span>Refresh Data</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Messages -->
+                @if (session()->has('message'))
+                    <div class="mx-4 sm:mx-6 lg:mx-8 mb-4 p-3 bg-green-100 text-green-700 rounded-lg text-sm">
+                        {{ session('message') }}
+                    </div>
+                @endif
+
+                @if (session()->has('error'))
+                    <div class="mx-4 sm:mx-6 lg:mx-8 mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm">
+                        {{ session('error') }}
+                    </div>
+                @endif
 
                 <!-- Table Section -->
                 <div class="overflow-x-auto">
@@ -112,7 +145,7 @@
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-100">
                             @forelse ($appointments as $index => $appointment)
-                                <tr class="hover:bg-gray-50 transition-colors duration-150">
+                                <tr wire:key="appointment-{{ $appointment->id }}" class="hover:bg-gray-50 transition-colors duration-150">
                                     <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                         {{ $index + 1 }}
                                     </td>
@@ -187,19 +220,34 @@
                                     </td>
                                     <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <div class="flex justify-end space-x-1 sm:space-x-2">
-                                            <div>
-                                                <button class="text-blue-600 hover:text-blue-900 p-2 rounded-full hover:bg-blue-50"
-                                                    wire:click="$dispatch('openModal', {id: {{ $appointment->id }})"
-                                                    title="View Details">
-                                                    <i class="fas fa-eye"></i>
-                                                </button>
-                                                <livewire:admin.appointment.view-details />
-                                            </div>
-                                            <a wire:navigate href="{{ route('appointment.receipt', ['appointment' => $appointment->id]) }}"
+                                            <button class="text-blue-600 hover:text-blue-900 p-2 rounded-full hover:bg-blue-50"
+                                                wire:click="viewAppointment({{ $appointment->id }})"
+                                                onclick="console.log('View clicked for {{ $appointment->id }}')"
+                                                title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button onclick="printReceipt({{ $appointment->id }})"
                                                 class="text-gray-500 hover:text-gray-700 p-1 sm:p-2 rounded-lg hover:bg-gray-50 transition"
                                                 title="Print Receipt">
                                                 <i class="fas fa-print text-sm sm:text-base"></i>
+                                            </button>
+                                            <a href="{{ route('appointment.receipt.download', ['appointment' => $appointment->id]) }}"
+                                                class="text-green-500 hover:text-green-700 p-1 sm:p-2 rounded-lg hover:bg-green-50 transition"
+                                                title="Download Receipt" download>
+                                                <i class="fas fa-download text-sm sm:text-base"></i>
                                             </a>
+                                            <button class="text-orange-500 hover:text-orange-700 p-1 sm:p-2 rounded-lg hover:bg-orange-50 transition"
+                                                wire:click="editAppointment({{ $appointment->id }})"
+                                                onclick="console.log('Edit clicked for {{ $appointment->id }}')"
+                                                title="Update Appointment">
+                                                <i class="fas fa-edit text-sm sm:text-base"></i>
+                                            </button>
+                                            <button class="text-purple-500 hover:text-purple-700 p-1 sm:p-2 rounded-lg hover:bg-purple-50 transition"
+                                                wire:click="managePayment({{ $appointment->id }})"
+                                                onclick="console.log('Payment clicked for {{ $appointment->id }}')"
+                                                title="Manage Payment">
+                                                <i class="fas fa-credit-card text-sm sm:text-base"></i>
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -223,13 +271,45 @@
                 </div>
 
                 <!-- Pagination -->
-                {{-- @if ($appointments->hasPages())
+                @if ($appointments->hasPages())
                     <div class="px-4 sm:px-6 py-4 border-t border-gray-100">
                         {{ $appointments->links() }}
                     </div>
-                @endif --}}
+                @endif
             </div>
 
-            <!-- Footer -->
-        </div>
-    </div>
+        
+
+        <!-- Edit Modal Component -->
+        @livewire('admin.appointment.edit-modal')
+        
+        <!-- Payment Modal Component -->
+        @livewire('admin.appointment.payment-modal')
+
+        <!-- View Details Component -->
+        @livewire('admin.appointment.view-details')
+
+    <script>
+        function printReceipt(appointmentId) {
+            console.log('Print receipt clicked for appointment:', appointmentId);
+            const printUrl = `/appointment/receipt/${appointmentId}`;
+            const printWindow = window.open(printUrl, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+            
+            if (printWindow) {
+                printWindow.onload = function() {
+                    setTimeout(() => {
+                        printWindow.print();
+                        printWindow.focus();
+                    }, 500);
+                };
+            } else {
+                alert('Pop-up blocked! Please allow pop-ups for this site to print receipts.');
+            }
+        }
+
+        // Debug action buttons
+        document.addEventListener('livewire:init', () => {
+            console.log('Livewire initialized for appointment list');
+        });
+    </script>
+</div>

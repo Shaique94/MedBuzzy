@@ -60,7 +60,7 @@ Route::get('/review',Review::class)->name('review');
 Route::get('/appointment/{doctor_slug?}', ManageAppointment::class)->name('appointment');
 Route::get('/appointment/confirmation/{appointment}', AppointmentConfirmation::class)->name('appointment.confirmation');
 Route::get('/appointment/receipt/{appointment}/download', [AppointmentReceiptController::class, 'download'])->name('appointment.receipt.download');
-Route::get('/appointment/receipt/{appointment}', [AppointmentReceiptController::class, 'download'])->name('appointment.receipt');
+Route::get('/appointment/receipt/{appointment}', [AppointmentReceiptController::class, 'view'])->name('appointment.receipt');
 
 Route::get('/about-us', About::class)->name('about-us');
 Route::get('/contact-us', Contact::class)->name('contact-us');

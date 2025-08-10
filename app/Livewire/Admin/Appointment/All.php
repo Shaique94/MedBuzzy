@@ -4,66 +4,129 @@ namespace App\Livewire\Admin\Appointment;
 
 use App\Models\Appointment;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Livewire\WithPagination;
 use Carbon\Carbon;
 
 #[Title('All Appointments')]
 class All extends Component
-{ 
-    public $appointments;
+{
+    use WithPagination;
+    
     public $search = '';
     public $fromDate;
     public $toDate;
+    public $perPage = 10;
 
-    
+    // Modal properties
+    public $showViewModal = false;
+    public $showPaymentModal = false;
+    public $showEditModal = false;
+    public $selectedAppointment = null;
+
+    public function updatedPerPage()
+    {
+        $this->resetPage();
+    }
+
     public function updatedSearch()
     {
-        $this->loadAppointments();
+        $this->resetPage(); // Reset to page 1 when searching
     }
 
     public function updatedFromDate()
     {
-        $this->loadAppointments();
+        $this->resetPage();
     }
 
     public function updatedToDate()
     {
-        $this->loadAppointments();
+        $this->resetPage();
     }
 
     public function updateStatus($id, string $status)
     {
-        $validStatuses = ['pending', 'scheduled', 'completed', 'cancelled', 'checked_in'];
-        
-        if (!in_array($status, $validStatuses)) {
-            session()->flash('error', 'Invalid status selected');
-            return;
+        try {
+            $validStatuses = ['pending', 'scheduled', 'completed', 'cancelled', 'checked_in'];
+            
+            if (!in_array($status, $validStatuses)) {
+                session()->flash('error', 'Invalid status selected');
+                return;
+            }
+
+            $appointment = Appointment::findOrFail($id);
+            $oldStatus = $appointment->status;
+            
+            // Skip update if status is the same
+            if ($oldStatus === $status) {
+                return;
+            }
+            
+            $appointment->status = $status;
+            $appointment->save();
+            
+            session()->flash('message', "Status updated from '{$oldStatus}' to '{$status}' successfully");
+            $this->loadAppointments(); // Refresh the list
+        } catch (\Exception $e) {
+            session()->flash('error', 'Failed to update appointment status. Please try again.');
         }
-    
-        $appointment = Appointment::findOrFail($id);
-        $appointment->status = $status;
-        $appointment->save();
-        
-        session()->flash('message', 'Status updated successfully');
-        $this->loadAppointments(); // Refresh the list
     }
 
-    public function loadAppointments()
+    public function editAppointment($id)
     {
-        $query = Appointment::with(['doctor.user', 'patient'])
-            ->orderBy('appointment_date', 'asc')
+        $this->dispatch('openEditModal', appointmentId: $id);
+    }
+
+    public function managePayment($id)
+    {
+        $this->dispatch('openPaymentModal', appointmentId: $id);
+    }
+
+    public function printReceipt($id)
+    {
+        $this->dispatch('printReceipt', appointmentId: $id);
+    }
+
+    public function refreshAppointments()
+    {
+        $this->resetPage();
+        session()->flash('message', 'Appointments refreshed successfully.');
+    }
+
+    public function viewAppointment($id)
+    {
+        $this->dispatch('openModal', id: $id);
+    }
+
+    public function closeModal()
+    {
+        $this->showViewModal = false;
+        $this->showPaymentModal = false;
+        $this->showEditModal = false;
+        $this->selectedAppointment = null;
+    }
+
+    public function getAppointmentsProperty()
+    {
+        $query = Appointment::with(['doctor.user', 'patient', 'payment'])
+            ->orderBy('appointment_date', 'desc')
             ->orderBy('appointment_time', 'asc');
 
-        // Date range filter
+        // Date range filter - apply even if only one date is provided
         if ($this->fromDate && $this->toDate) {
+            // Both dates provided - filter range
             $query->whereBetween('appointment_date', [
                 Carbon::parse($this->fromDate)->startOfDay(),
                 Carbon::parse($this->toDate)->endOfDay()
             ]);
-        } else {
-            // Default to today's appointments
-            $query->whereDate('appointment_date', Carbon::today());
+        } elseif ($this->fromDate) {
+            // Only from date - show appointments from this date onwards
+            $query->where('appointment_date', '>=', Carbon::parse($this->fromDate)->startOfDay());
+        } elseif ($this->toDate) {
+            // Only to date - show appointments up to this date
+            $query->where('appointment_date', '<=', Carbon::parse($this->toDate)->endOfDay());
         }
 
         // Search functionality
@@ -83,26 +146,47 @@ class All extends Component
             });
         }
 
-        $this->appointments = $query->get();
+        return $query->paginate($this->perPage);
     }
  public function resetFilters()
     {
         $this->search = '';
-        $this->fromDate = Carbon::today()->toDateString();
-        $this->toDate = Carbon::today()->toDateString();
-        $this->loadAppointments();
+        $this->fromDate = null;
+        $this->toDate = null;
+        $this->resetPage();
     }
 
     public function mount()
     {
-        $this->fromDate = Carbon::today()->toDateString();
-        $this->toDate = Carbon::today()->toDateString();
-        $this->loadAppointments();
+        // Don't set default dates - let admin choose the date range
+        $this->fromDate = null;
+        $this->toDate = null;
+    }
+
+    #[On('paymentUpdated')]
+    public function refreshList()
+    {
+        $this->resetPage();
+    }
+
+    #[On('appointmentUpdated')]
+    public function refreshListAfterEdit()
+    {
+        $this->resetPage();
+    }
+
+    #[On('appointmentCreated')]
+    public function handleAppointmentCreated()
+    {
+        $this->resetPage();
+        session()->flash('success', 'New appointment has been created successfully!');
     }
 
     #[Layout('layouts.admin')]
     public function render()
     {
-        return view('livewire.admin.appointment.all');
+        return view('livewire.admin.appointment.all', [
+            'appointments' => $this->appointments
+        ]);
     }
 }

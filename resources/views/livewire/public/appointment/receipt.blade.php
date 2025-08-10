@@ -34,13 +34,15 @@
         }
 
         .logo {
-            width: 70px;
-            height: 70px;
-            border: 2px solid #0d9488;
+            width: 120px;
+            height: 120px;
+            border: 3px solid #0d9488;
             border-radius: 50%;
-            margin: 0 auto 5px;
-            object-fit: cover;
+            margin: 0 auto 10px;
+            object-fit: contain;
             display: block;
+            background: white;
+            padding: 10px;
         }
 
         .hospital-title h3 {
@@ -158,6 +160,11 @@
             color: white;
         }
 
+        .btn-print {
+            background: #059669;
+            color: white;
+        }
+
         .btn svg {
             width: 16px;
             height: 16px;
@@ -185,8 +192,22 @@
 
     <div class="box">
         <div class="header">
+            <div class="action-buttons">
+                <a href="javascript:history.back()" class="btn btn-back">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    Back
+                </a>
+                <button onclick="window.print()" class="btn btn-print">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                    </svg>
+                    Print
+                </button>
+            </div>
             <div class="appointment-status">✓ Confirmed</div>
-            <img src="/logo/logo.png" class="w-5 h-5" alt="">
+            <img src="/logo/logo.png" class="logo" alt="MedBuzzy Logo">
             <div class="hospital-title">
                 <h3>MedBuzzy</h3>
                 <div class="tagline">Your Trusted Healthcare Partner</div>
@@ -216,7 +237,7 @@
                     </div>
                     <div class="info-group">
                         <div class="label">Amount Paid</div>
-                        <div class="value">₹{{ number_format($appointment->payment->paid_amount ?? 0, 2) }} ({{ $appointment->payment->status ?? 'pending' }})</div>
+                        <div class="value">₹{{ number_format($appointment->payment->amount ?? 0, 2) }} ({{ $appointment->payment->status ?? 'pending' }})</div>
                     </div>
                 </td>
                 <td class="content-cell">

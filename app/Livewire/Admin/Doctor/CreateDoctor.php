@@ -52,6 +52,7 @@ class CreateDoctor extends Component
     public $verification_documents = [];
     public $social_media_links = [];
     public $social_media_platforms = ['twitter', 'facebook', 'instagram'];
+    public $isProcessing = false;
 
     protected $listeners = ['openCreateModal' => 'openModal'];
 
@@ -106,6 +107,7 @@ class CreateDoctor extends Component
             'achievements_awards',
             'verification_documents',
             'social_media_links',
+            'isProcessing',
         ]);
 
         // Set defaults
