@@ -1,5 +1,4 @@
 <div>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -87,8 +86,57 @@
             background: #14b8a6;
             transform: translateX(-50%);
         }
+
+        /* New Leadership Styles */
+        .leader-card {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .leader-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .leader-image {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border: 4px solid white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .leader-header {
+            background: linear-gradient(135deg, #0d9488 0%, #115e59 100%);
+            height: 120px;
+            position: relative;
+        }
+
+        .leader-content {
+            margin-top: 75px;
+        }
+
+        .position-badge {
+            background-color: #f59e0b;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .leader-image {
+                width: 120px;
+                height: 120px;
+            }
+            .leader-content {
+                margin-top: 60px;
+            }
+        }
     </style>
-    </head>
 
     <body class="bg-gray-50">
         <!-- Hero Section -->
@@ -99,8 +147,7 @@
                         <span class="block">About MedBuzzy India</span>
                         <span class="block text-brand-orange-300 mt-2">Your Healthcare Partner</span>
                     </h1>
-                    <p
-                        class="mt-4 max-w-md mx-auto text-lg text-brand-teal-100 sm:text-xl md:mt-6 md:text-2xl md:max-w-3xl">
+                    <p class="mt-4 max-w-md mx-auto text-lg text-brand-teal-100 sm:text-xl md:mt-6 md:text-2xl md:max-w-3xl">
                         Connecting patients with India's top doctors across 100+ hospitals
                     </p>
                 </div>
@@ -166,8 +213,6 @@
                                     with features designed for Indian healthcare needs.
                                 </p>
                             </div>
-
-
                         </div>
                         <div class="rounded-xl overflow-hidden shadow-xl border-4 border-white">
                             <img src="https://images.unsplash.com/photo-1581056771107-24ca5f033842?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
@@ -181,10 +226,8 @@
                     <h2 class="text-3xl font-bold text-center text-brand-teal-800 mb-12">Why Choose MedBuzzy India</h2>
                     <div class="grid gap-8 md:grid-cols-3">
                         <!-- Feature 1 -->
-                        <div
-                            class="feature-card bg-white p-8 rounded-xl shadow-md border border-brand-teal-100 hover:border-brand-teal-300 transition-all">
-                            <div
-                                class="flex items-center justify-center h-16 w-16 rounded-xl bg-brand-teal-100 text-brand-teal-600 mb-6 feature-icon">
+                        <div class="feature-card bg-white p-8 rounded-xl shadow-md border border-brand-teal-100 hover:border-brand-teal-300 transition-all">
+                            <div class="flex items-center justify-center h-16 w-16 rounded-xl bg-brand-teal-100 text-brand-teal-600 mb-6 feature-icon">
                                 <i class="fas fa-user-md text-2xl"></i>
                             </div>
                             <h3 class="text-xl font-semibold text-gray-900">Verified Indian Doctors</h3>
@@ -195,10 +238,8 @@
                         </div>
 
                         <!-- Feature 2 -->
-                        <div
-                            class="feature-card bg-white p-8 rounded-xl shadow-md border border-brand-teal-100 hover:border-brand-teal-300 transition-all">
-                            <div
-                                class="flex items-center justify-center h-16 w-16 rounded-xl bg-brand-teal-100 text-brand-teal-600 mb-6 feature-icon">
+                        <div class="feature-card bg-white p-8 rounded-xl shadow-md border border-brand-teal-100 hover:border-brand-teal-300 transition-all">
+                            <div class="flex items-center justify-center h-16 w-16 rounded-xl bg-brand-teal-100 text-brand-teal-600 mb-6 feature-icon">
                                 <i class="fas fa-headset text-2xl"></i>
                             </div>
                             <h3 class="text-xl font-semibold text-gray-900">24/7 Hindi & English Support</h3>
@@ -209,10 +250,8 @@
                         </div>
 
                         <!-- Feature 3 -->
-                        <div
-                            class="feature-card bg-white p-8 rounded-xl shadow-md border border-brand-teal-100 hover:border-brand-teal-300 transition-all">
-                            <div
-                                class="flex items-center justify-center h-16 w-16 rounded-xl bg-brand-teal-100 text-brand-teal-600 mb-6 feature-icon">
+                        <div class="feature-card bg-white p-8 rounded-xl shadow-md border border-brand-teal-100 hover:border-brand-teal-300 transition-all">
+                            <div class="flex items-center justify-center h-16 w-16 rounded-xl bg-brand-teal-100 text-brand-teal-600 mb-6 feature-icon">
                                 <i class="fas fa-rupee-sign text-2xl"></i>
                             </div>
                             <h3 class="text-xl font-semibold text-gray-900">Transparent Indian Pricing</h3>
@@ -228,137 +267,134 @@
 
         <!-- Leadership Section -->
         <div class="py-16 bg-brand-teal-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center">
-            <h2 class="text-3xl font-extrabold text-brand-teal-800 sm:text-4xl">Our Leadership</h2>
-            <p class="mt-4 max-w-2xl text-xl text-gray-600 mx-auto">
-                The team dedicated to improving healthcare access in India
-            </p>
-        </div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-extrabold text-brand-teal-800 sm:text-4xl">Our Leadership</h2>
+                    <p class="mt-4 max-w-2xl text-xl text-gray-600 mx-auto">
+                        The team dedicated to improving healthcare access in India
+                    </p>
+                </div>
 
-        <!-- Executive Leadership -->
-        <div class="mt-12 space-y-8">
-            <h3 class="text-2xl font-bold text-brand-teal-700 text-center">Executive Team</h3>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <!-- CEO 1 -->
-                <div class="bg-white rounded-xl shadow-md overflow-hidden transition-transform duration-300 hover:shadow-lg hover:-translate-y-1">
-                    <div class="flex flex-col md:flex-row">
-                        <div class="md:w-1/3 bg-brand-teal-100 flex items-center justify-center p-4">
-                            <img class="h-48 w-48 md:h-full md:w-full object-cover rounded-full md:rounded-none" 
-                                 src="/leaders/IMG-20250718-WA0004 (1).jpg" 
-                                 alt="Sourav Kumar Sah">
-                        </div>
-                        <div class="md:w-2/3 p-6">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <h3 class="text-xl font-bold text-gray-900">Mr. Sourav Kumar Sah</h3>
-                                    <p class="text-brand-orange-500 font-medium">Chief Executive Officer</p>
-                                </div>
-                                
+                <!-- Founder -->
+                <div class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="leader-card bg-white rounded-xl overflow-hidden">
+                        <div class="leader-header relative">
+                            <div class="absolute -bottom-12 left-1/2 transform -translate-x-1/2">
+                                <img src="/leaders/Papa.jpg" alt="Ramotar Sah" class="leader-image rounded-full">
                             </div>
-                            <p class="mt-4 text-gray-600 text-sm md:text-base">
-                                Sourav Kumar Sah leads Gauriram Medbuzzy with a visionary mindset and a deep passion for
-                                revolutionizing healthcare delivery in India. As CEO, he is responsible for strategic
-                                decision-making, business expansion, stakeholder relations, and driving innovation
-                                across the organization.
+                        </div>
+                        <div class="leader-content p-6 text-center">
+                            <div class="position-badge">Founder</div>
+                            <h3 class="text-xl font-bold text-gray-900">Ramotar Sah</h3>
+                            <p class="mt-4 text-gray-600 text-sm">
+                                The company "Gauriram Medbuzzy (OPC) Private Limited," which is the top provider of
+                                healthcare services in India, Ramotar Sah was founded by Ramotar Sah. He has
+                                been a social crusader and self-made serial entrepreneur for fifty years. His personal
+                                goal is to educate consumers and society about the importance of time, the worth of
+                                health, and how to choose the finest medical professionals and medications. He
+                                frequently takes risks since he firmly believes in having a vision and carrying
+                                it out quickly and accurately. Ramotar Sah is a firm believer in leading his team
+                                down a progressive route. In society, he is also referred to as a health assistant.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Co-Founder -->
+                    <div class="leader-card bg-white rounded-xl overflow-hidden">
+                        <div class="leader-header relative">
+                            <div class="absolute -bottom-12 left-1/2 transform -translate-x-1/2">
+                                <img src="/leaders/Rajeev.jpg" alt="R.K. Ranjan" class="leader-image rounded-full">
+                            </div>
+                        </div>
+                        <div class="leader-content p-6 text-center">
+                            <div class="position-badge">Co-Founder</div>
+                            <h3 class="text-xl font-bold text-gray-900">R.K. Ranjan</h3>
+                            <p class="mt-4 text-gray-600 text-sm">
+                                RK Ranjan oversees Medbuzzy's product service and technology, executing the
+                                founder's ideas for the online platform. He formally believes in creating value
+                                for all stakeholders, and he handles operational integrity, data security, and
+                                privacy system support. Preserving thinkers, diligent workers, and
+                                problem solvers make up RK Ranjan's team. Thus, preserve the website's and the
+                                app's integrity for the future. RK Ranjan is primarily a proponent of understanding
+                                stakeholder sentiment and fostering an atmosphere of openness and trust.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- CEOs -->
+                    <div class="leader-card bg-white rounded-xl overflow-hidden">
+                        <div class="leader-header relative">
+                            <div class="absolute -bottom-12 left-1/2 transform -translate-x-1/2 flex space-x-4">
+                                <img src="/leaders/IMG-20250718-WA0004 (1).jpg" alt="Sourav Kumar Sah" class="leader-image rounded-full">
+                                <img src="/leaders/IMG-20250718-WA0005.jpg" alt="Ranjeet Kumar" class="leader-image rounded-full">
+                            </div>
+                        </div>
+                        <div class="leader-content p-6 text-center">
+                            <div class="position-badge">Chief Executive Officers</div>
+                            <h3 class="text-xl font-bold text-gray-900">Sourav Kumar Sah & Ranjeet Kumar</h3>
+                            <p class="mt-4 text-gray-600 text-sm">
+                                Sourav Kumar Sah and Ranjeet Kumar lead Gauriram Medbuzzy with a visionary mindset and a deep
+                                passion for revolutionizing healthcare delivery in India. As CEOs, they are
+                                responsible for strategic decision-making, business expansion, stakeholder
+                                relations, and driving innovation across the organization. Known for their
+                                hands-on leadership style, they believe in empowering their team,
+                                streamlining digital operations, and delivering exceptional value to both patients and
+                                healthcare professionals. Under their leadership, the company aims to transform healthcare accessibility across India.
                             </p>
                         </div>
                     </div>
                 </div>
 
-                <!-- CEO 2 -->
-                <div class="bg-white rounded-xl shadow-md overflow-hidden transition-transform duration-300 hover:shadow-lg hover:-translate-y-1">
-                    <div class="flex flex-col md:flex-row">
-                        <div class="md:w-1/3 bg-brand-teal-100 flex items-center justify-center p-4">
-                            <img class="h-48 w-48 md:h-full md:w-full object-cover rounded-full md:rounded-none" 
-                                 src="/leaders/IMG-20250718-WA0005.jpg" 
-                                 alt="Ranjeet Kumar">
-                        </div>
-                        <div class="md:w-2/3 p-6">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <h3 class="text-xl font-bold text-gray-900">Mr. Ranjeet Kumar</h3>
-                                    <p class="text-brand-orange-500 font-medium">Chief Executive Officer</p>
+                <!-- Medical Advisory Board -->
+                <div class="mt-16">
+                    <h3 class="text-2xl font-bold text-brand-teal-700 text-center mb-8">Medical Advisory Board</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+                        <!-- Medical Advisor 1 -->
+                        <div class="leader-card bg-white rounded-xl overflow-hidden">
+                            <div class="leader-header relative">
+                                <div class="absolute -bottom-12 left-1/2 transform -translate-x-1/2">
+                                    <img src="/leaders/Pankaj.jpg" alt="Pankaj Kumar" class="leader-image rounded-full">
                                 </div>
-                               
                             </div>
-                            <p class="mt-4 text-gray-600 text-sm md:text-base">
-                                Ranjeet Kumar leads Medbuzzy as its Chief Executive Officer, responsible for overall business strategy, management, and growth. With a deep understanding of healthcare challenges in India, he is focused on building a platform that simplifies access to medical services.
-                            </p>
+                            <div class="leader-content p-6 text-center">
+                                <div class="position-badge">Medical Advisory Board</div>
+                                <h3 class="text-xl font-bold text-gray-900">Mr. Pankaj Kumar</h3>
+                                <p class="mt-4 text-gray-600 text-sm">
+                                    Dr Pankaj Kumar is the Chief Healthcare Strategy Officer at Medbuzzy and
+                                    Chairman of the Advisory Board. In a career spanning nearly one decade, Dr Pankaj is a
+                                    General Medical Practitioner with 10 years of experience seeking a residency in
+                                    obstetrics to utilize advanced skills in diagnosing ailments, administering medication,
+                                    prescribing medication, and suggesting lifestyle changes. Detail-oriented and
+                                    exceptional follow through skills with the ability to multi-task and prioritize.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Medical Advisor 2 -->
+                        <div class="leader-card bg-white rounded-xl overflow-hidden">
+                            <div class="leader-header relative">
+                                <div class="absolute -bottom-12 left-1/2 transform -translate-x-1/2">
+                                    <img src="/leaders/Dr. sneha gupta.jpeg" alt="Dr. Sneha Gupta" class="leader-image rounded-full">
+                                </div>
+                            </div>
+                            <div class="leader-content p-6 text-center">
+                                <div class="position-badge">Medical Advisory Board</div>
+                                <h3 class="text-xl font-bold text-gray-900">Dr. Sneha Gupta</h3>
+                                <p class="mt-4 text-gray-600 text-sm">
+                                    Dr Sneha Gupta has over 20 years of experience in healthcare consulting,
+                                    budgeting, operations management, medical devices, and physician relations.
+                                    Thorough and well-organized in attending to administrative functions to ensure
+                                    patient histories, examination results, and treatments were properly recorded
+                                    and maintained. Recognized for consistent reliability and resourcefulness in
+                                    problem-solving situations. Demonstrated ability to provide high-quality patient
+                                    care and supervise support staff.
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Leadership Team -->
-        <div class="mt-16">
-            <h3 class="text-2xl font-bold text-brand-teal-700 text-center mb-8">Leadership Team</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- CEO Card -->
-                <div class="bg-white rounded-xl shadow-md overflow-hidden transition-transform duration-300 hover:shadow-lg hover:-translate-y-1">
-                    <div class="relative h-48 bg-gradient-to-r from-brand-teal-500 to-brand-teal-700">
-                        <div class="absolute -bottom-16 left-1/2 transform -translate-x-1/2">
-                            <div class="bg-white p-1 rounded-full shadow-xl">
-                                <img class="h-32 w-32 rounded-full object-cover border-4 border-white"
-                                    src="/leaders/Rajeev.jpg" alt="Sourav Kumar Sah">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="pt-20 pb-8 px-6 text-center">
-                        <h3 class="text-xl font-bold text-gray-900">Mr. Rajeev Kumar</h3>
-                        <p class="text-brand-orange-500 font-medium">Chief Executive Officer</p>
-                        
-                        <p class="mt-4 text-gray-600 text-sm">
-                            Leads MedBuzzy with a visionary mindset and deep passion for revolutionizing healthcare
-                            in India.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Medical Director -->
-                <div class="bg-white rounded-xl shadow-md overflow-hidden transition-transform duration-300 hover:shadow-lg hover:-translate-y-1">
-                    <div class="relative h-48 bg-gradient-to-r from-brand-teal-500 to-brand-teal-700">
-                        <div class="absolute -bottom-16 left-1/2 transform -translate-x-1/2">
-                            <div class="bg-white p-1 rounded-full shadow-xl">
-                                <img class="h-32 w-32 rounded-full object-cover border-4 border-white"
-                                    src="/leaders/Papa.jpg" alt="Dr. Rajesh Sharma">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="pt-20 pb-8 px-6 text-center">
-                        <h3 class="text-xl font-bold text-gray-900">Dr. Rajesh Sharma</h3>
-                        <p class="text-brand-orange-500 font-medium">Medical Director</p>
-                        
-                        <p class="mt-4 text-gray-600 text-sm">
-                            Former HOD at Apollo Hospitals, specialist in Cardiology with 18+ years experience.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- CTO -->
-                <div class="bg-white rounded-xl shadow-md overflow-hidden transition-transform duration-300 hover:shadow-lg hover:-translate-y-1">
-                    <div class="relative h-48 bg-gradient-to-r from-brand-teal-500 to-brand-teal-700">
-                        <div class="absolute -bottom-16 left-1/2 transform -translate-x-1/2">
-                            <div class="bg-white p-1 rounded-full shadow-xl">
-                                <img class="h-32 w-32 rounded-full object-cover border-4 border-white"
-                                    src="/leaders/Pankaj.jpg" alt="Amit Singh">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="pt-20 pb-8 px-6 text-center">
-                        <h3 class="text-xl font-bold text-gray-900">Mr. Pankaj Kumar</h3>
-                        <p class="text-brand-orange-500 font-medium">Chief Technology Officer</p>
-                        
-                        <p class="mt-4 text-gray-600 text-sm">
-                            B.Tech IIT Delhi, Former Flipkart Lead. Building tech for India's healthcare challenges.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
         <!-- Partner Hospitals Section -->
         <div class="py-16 bg-white">
@@ -392,7 +428,5 @@
                 </div>
             </div>
         </div>
-
-
-
+    </body>
 </div>
