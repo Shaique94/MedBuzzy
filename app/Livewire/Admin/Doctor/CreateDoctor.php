@@ -56,6 +56,11 @@ class CreateDoctor extends Component
 
     protected $listeners = ['openCreateModal' => 'openModal'];
 
+    public function rules()
+    {
+        return $this->getValidationRules();
+    }
+
     public function mount()
     {
         $this->departments = Department::all();
@@ -119,34 +124,6 @@ class CreateDoctor extends Component
         $this->max_booking_days = 7;
         $this->social_media_links = [];
     }
-
-    public function updatedPincode($value)
-    {
-        if (strlen($value) === 6) {
-            $this->validateOnly('pincode');
-            $this->fetchPincodeDetails($value);
-        } else {
-            if (strlen($value) < 6) {
-                $this->resetErrorBag('pincode');
-            }
-            $this->city = '';
-            $this->state = '';
-        }
-    }
-
-    public function updatedCity($value)
-    {
-        $this->resetErrorBag('pincode');
-    }
-
-    public function updatedState($value)
-    {
-        $this->resetErrorBag('pincode');
-    }
-
-
-
-
 
     private function getValidationRules()
     {
