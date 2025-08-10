@@ -4,25 +4,83 @@
         <!-- Contact Form -->
         <div class="bg-white p-6 rounded-lg shadow-lg">
             <h2 class="text-2xl font-semibold text-gray-800 mb-4">Get in Touch</h2>
-            <form action="#" method="POST">
+            
+        <form wire:submit.prevent="submit">
                 <!-- Name -->
                 <div class="mb-4">
                     <label for="name" class="block text-gray-700 font-semibold mb-2">Name</label>
-                    <input type="text" id="name" name="name" placeholder="Your Name" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    <input 
+                        type="text" 
+                        id="name" 
+                        wire:model="name"
+                        class="py-3 px-4 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
+                        required
+                        placeholder="Your full name"
+                    >
+                    @error('name')<span class="text-red-500 text-sm mt-1">{{ $message }}</span>@enderror
                 </div>
+
                 <!-- Email -->
                 <div class="mb-4">
                     <label for="email" class="block text-gray-700 font-semibold mb-2">Email</label>
-                    <input type="email" id="email" name="email" placeholder="Your Email" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    <input 
+                        type="email" 
+                        id="email" 
+                        wire:model="email"
+                        class="py-3 px-4 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
+                        required
+                        placeholder="your.email@example.com"
+                    >
+                    @error('email')<span class="text-red-500 text-sm mt-1">{{ $message }}</span>@enderror
                 </div>
+
+                <!-- Phone -->
+                <div class="mb-4">
+                    <label for="phone" class="block text-gray-700 font-semibold mb-2">Phone (Optional)</label>
+                    <input 
+                        type="text" 
+                        id="phone" 
+                        wire:model="phone"
+                        class="py-3 px-4 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
+                        placeholder="Your phone number"
+                    >
+                    @error('phone')<span class="text-red-500 text-sm mt-1">{{ $message }}</span>@enderror
+                </div>
+
+                <!-- Subject -->
+                <div class="mb-4">
+                    <label for="subject" class="block text-gray-700 font-semibold mb-2">Subject</label>
+                    <input 
+                        type="text" 
+                        id="subject" 
+                        wire:model="subject"
+                        class="py-3 px-4 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
+                        required
+                        placeholder="Subject of your message"
+                    >
+                    @error('subject')<span class="text-red-500 text-sm mt-1">{{ $message }}</span>@enderror
+                </div>
+
                 <!-- Message -->
                 <div class="mb-4">
                     <label for="message" class="block text-gray-700 font-semibold mb-2">Message</label>
-                    <textarea id="message" name="message" rows="4" placeholder="Your Message" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"></textarea>
+                    <textarea 
+                        id="message" 
+                        wire:model="message" 
+                        rows="4" 
+                        placeholder="Your Message" 
+                        class="py-3 px-4 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
+                    ></textarea>
+                    @error('message')<span class="text-red-500 text-sm mt-1">{{ $message }}</span>@enderror
                 </div>
-                <!-- Submit Button -->
-                <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
-                    Send Message
+
+                <button 
+                    type="submit" 
+                    wire:loading.attr="disabled"
+                    class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition duration-150 ease-in-out"
+                >
+                    <span wire:loading.remove>Send Message</span>
+                    <span wire:loading>Sending...</span>
                 </button>
             </form>
         </div>
@@ -66,4 +124,11 @@
             </ul>
         </div>
     </div>
+
+<div class="mt-6 h-64 w-full rounded-lg overflow-hidden">
+  
+ <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d238102.51169974558!2d82.5430330148308!3d21.178181449890033!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e858d4332ca77e3%3A0x210504201aebfb8!2sMedbuzzy!5e0!3m2!1sen!2sin!4v1754839055050!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div>
+
+
 </div>
