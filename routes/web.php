@@ -78,7 +78,6 @@ Route::prefix('doc')->name('doctor.')->middleware(['auth', 'is_doctor'])->group(
     Route::get('/profile', Profile::class)->name('profile');
     Route::get('/leave', Leave::class)->name('add-leave');
     Route::get('/crateslot', CreateSlot::class)->name('create-slot');
-    Route::get('/patients/{id}', PatientView::class)->name('patients.view');
     Route::get('/payments', PaymentList::class)->name('payments');
 
     // Manager Routes under Doctor
@@ -99,7 +98,9 @@ Route::prefix('manager')->name('manager.')->middleware(['auth', 'is_manager'])->
     Route::post('/appointments/reschedule-all', [AppointmentController::class, 'rescheduleAll'])->name('appointments.reschedule-all');
     Route::post('/appointments/check-statuses', [AppointmentController::class, 'checkStatuses'])->name('appointments.check-statuses');
     Route::get('/doctors/{doctor}/slots', [AppointmentController::class, 'getAvailableSlots']);
+    
 });
+Route::get('manager/patients/{id}', PatientView::class)->name('doctor.patients.view');
 
 // Admin Routes
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin'])->group(function () {

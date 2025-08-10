@@ -184,37 +184,48 @@
 </header>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    // Initialize menu on first load and after Livewire navigation
+    document.addEventListener('DOMContentLoaded', setupMobileMenu);
+    document.addEventListener('livewire:navigated', setupMobileMenu);
+
+    function setupMobileMenu() {
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
-        const mobileMenuLinks = document.querySelectorAll('.mobile-menu-link');
-        
-        // Toggle mobile menu
-        mobileMenuButton.addEventListener('click', function() {
-            mobileMenu.classList.toggle('hidden');
-            mobileMenu.classList.toggle('block');
-            
-            // Toggle aria-expanded attribute
-            const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
-            mobileMenuButton.setAttribute('aria-expanded', !isExpanded);
+
+        if (!mobileMenuButton || !mobileMenu) return; // Exit if elements don't exist
+
+        // Remove old event listeners (if any) to prevent duplicates
+        mobileMenuButton.replaceWith(mobileMenuButton.cloneNode(true));
+        mobileMenu.replaceWith(mobileMenu.cloneNode(true));
+
+        // Get fresh references
+        const newButton = document.getElementById('mobile-menu-button');
+        const newMenu = document.getElementById('mobile-menu');
+
+        // Toggle menu on button click
+        newButton.addEventListener('click', function(e) {
+            e.stopPropagation(); // Prevent event bubbling
+            newMenu.classList.toggle('hidden');
+            newMenu.classList.toggle('block');
+            newButton.setAttribute('aria-expanded', newMenu.classList.contains('block'));
         });
-        
-        // Close mobile menu when clicking on any link
-        mobileMenuLinks.forEach(link => {
-            link.addEventListener('click', function() {
-                mobileMenu.classList.add('hidden');
-                mobileMenu.classList.remove('block');
-                mobileMenuButton.setAttribute('aria-expanded', 'false');
-            });
-        });
-        
+
         // Close menu when clicking outside
-        document.addEventListener('click', function(event) {
-            if (!mobileMenu.contains(event.target) && !mobileMenuButton.contains(event.target)) {
-                mobileMenu.classList.add('hidden');
-                mobileMenu.classList.remove('block');
-                mobileMenuButton.setAttribute('aria-expanded', 'false');
+        document.addEventListener('click', function(e) {
+            if (!newMenu.contains(e.target) && !newButton.contains(e.target)) {
+                newMenu.classList.add('hidden');
+                newMenu.classList.remove('block');
+                newButton.setAttribute('aria-expanded', 'false');
             }
         });
-    });
+
+        // Close menu when clicking links (optional)
+        document.querySelectorAll('.mobile-menu-link').forEach(link => {
+            link.addEventListener('click', () => {
+                newMenu.classList.add('hidden');
+                newMenu.classList.remove('block');
+                newButton.setAttribute('aria-expanded', 'false');
+            });
+        });
+    }
 </script>

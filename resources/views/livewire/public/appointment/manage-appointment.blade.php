@@ -15,11 +15,11 @@
                     flex-nowrap overflow-x-auto scrollbar-hide gap-0 sm:gap-0 px-2 sm:px-0"
                         style="min-width:0;">
                         @foreach ([
-                            1 => ['label' => 'Doctor', 'icon' => 'user-md'],
-                            2 => ['label' => 'Date & Time', 'icon' => 'calendar-alt'],
-                            3 => ['label' => 'Details', 'icon' => 'user-circle'],
-                            4 => ['label' => 'Confirm', 'icon' => 'check-circle'],
-                        ] as $stepNumber => $stepInfo)
+        1 => ['label' => 'Doctor', 'icon' => 'user-md'],
+        2 => ['label' => 'Date & Time', 'icon' => 'calendar-alt'],
+        3 => ['label' => 'Details', 'icon' => 'user-circle'],
+        4 => ['label' => 'Confirm', 'icon' => 'check-circle'],
+    ] as $stepNumber => $stepInfo)
                             <div class="flex flex-col items-center relative flex-1 min-w-[90px] sm:min-w-0 px-1">
                                 <div
                                     class="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full
@@ -91,28 +91,31 @@
                             <div
                                 class="bg-gradient-to-r from-brand-teal-50 to-brand-teal-100 p-5 rounded-xl border border-brand-teal-200">
                                 <h2 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
-            <svg class="h-5 w-5 mr-2 text-brand-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-            </svg>
-            Filter by Department
-        </h2>
-        <!-- Department buttons with original design and hover/click behavior -->
-        <div class="flex flex-wrap gap-2">
-            <button type="button" wire:click="$set('selectedDepartment', null)"
-                class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300
+                                    <svg class="h-5 w-5 mr-2 text-brand-teal-600" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                    </svg>
+                                    Filter by Department
+                                </h2>
+                                <!-- Department buttons with original design and hover/click behavior -->
+                                <div class="flex flex-wrap gap-2">
+                                    <button type="button" wire:click="$set('selectedDepartment', null)"
+                                        class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300
                 {{ !$selectedDepartment ? 'ring-2 ring-brand-teal-500 bg-brand-teal-50 border-brand-teal-200' : 'bg-gradient-to-br from-brand-teal-50 to-brand-orange-50 hover:to-brand-orange-100 hover:shadow-md' }}"
-                title="Show all specialties">
-                All Specialties
-            </button>
-            @foreach ($departments as $department)
-                <button type="button" wire:click="$set('selectedDepartment', {{ $department->id }})"
-                    class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300
+                                        title="Show all specialties">
+                                        All Specialties
+                                    </button>
+                                    @foreach ($departments as $department)
+                                        <button type="button"
+                                            wire:click="$set('selectedDepartment', {{ $department->id }})"
+                                            class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300
                     {{ $selectedDepartment === $department->id ? 'ring-2 ring-brand-teal-500 bg-brand-teal-50 border-brand-teal-200' : 'bg-gradient-to-br from-brand-teal-50 to-brand-orange-50 hover:to-brand-orange-100 hover:shadow-md' }}"
-                    title="Filter by {{ $department->name }}">
-                    {{ $department->name }}
-                </button>
-            @endforeach
-        </div>
+                                            title="Filter by {{ $department->name }}">
+                                            {{ $department->name }}
+                                        </button>
+                                    @endforeach
+                                </div>
                             </div>
 
                             <!-- Doctors List -->
@@ -343,14 +346,19 @@
                                                     aria-current="{{ $appointment_date === $dateTab['date'] ? 'page' : 'false' }}">
                                                     <div class="text-center">
                                                         @if ($dateTab['isToday'])
-                                                            <span class="block text-xs mb-1 font-semibold text-brand-teal-600">Today</span>
+                                                            <span
+                                                                class="block text-xs mb-1 font-semibold text-brand-teal-600">Today</span>
                                                         @elseif (\Carbon\Carbon::parse($dateTab['date'])->isTomorrow())
-                                                            <span class="block text-xs mb-1 font-semibold text-brand-teal-600">Tomorrow</span>
+                                                            <span
+                                                                class="block text-xs mb-1 font-semibold text-brand-teal-600">Tomorrow</span>
                                                         @else
-                                                            <span class="block text-xs mb-1 {{ $appointment_date === $dateTab['date'] ? 'font-semibold' : '' }}">{{ $dateTab['dayName'] }}</span>
+                                                            <span
+                                                                class="block text-xs mb-1 {{ $appointment_date === $dateTab['date'] ? 'font-semibold' : '' }}">{{ $dateTab['dayName'] }}</span>
                                                         @endif
-                                                        <span class="block text-base {{ $appointment_date === $dateTab['date'] ? 'font-bold' : 'font-medium' }}">{{ $dateTab['dayNumber'] }}</span>
-                                                        <span class="block text-xs {{ $appointment_date === $dateTab['date'] ? 'font-medium' : '' }}">{{ $dateTab['monthName'] }}</span>
+                                                        <span
+                                                            class="block text-base {{ $appointment_date === $dateTab['date'] ? 'font-bold' : 'font-medium' }}">{{ $dateTab['dayNumber'] }}</span>
+                                                        <span
+                                                            class="block text-xs {{ $appointment_date === $dateTab['date'] ? 'font-medium' : '' }}">{{ $dateTab['monthName'] }}</span>
                                                     </div>
                                                 </button>
                                             @endforeach
@@ -398,7 +406,8 @@
                                             <!-- Time Slots Tabs -->
                                             <div x-data="{ activeTab: 'morning' }" class="mb-5">
                                                 <div class="border-b border-gray-200">
-                                                    <nav class="-mb-px flex space-x-6 overflow-auto" aria-label="Tabs">
+                                                    <nav class="-mb-px flex space-x-6 overflow-auto"
+                                                        aria-label="Tabs">
                                                         <button @click="activeTab = 'morning'"
                                                             :class="activeTab === 'morning' ?
                                                                 'border-brand-teal-500 text-brand-teal-600' :
@@ -536,12 +545,14 @@
                                             <div
                                                 class="flex flex-wrap justify-end gap-2 border-t pt-3 text-xs text-gray-600">
                                                 <div class="flex items-center">
-                                                    <div class="w-3 h-3 bg-brand-teal-50 border border-brand-teal-200 rounded-full mr-1">
+                                                    <div
+                                                        class="w-3 h-3 bg-brand-teal-50 border border-brand-teal-200 rounded-full mr-1">
                                                     </div>
                                                     <span>Available</span>
                                                 </div>
                                                 <div class="flex items-center">
-                                                    <div class="w-3 h-3 bg-gray-100 border border-gray-200 rounded-full mr-1">
+                                                    <div
+                                                        class="w-3 h-3 bg-gray-100 border border-gray-200 rounded-full mr-1">
                                                     </div>
                                                     <span>Full</span>
                                                 </div>
@@ -636,13 +647,25 @@
 
                                     <!-- Phone -->
                                     <div>
-                                        <label class="block mb-2 text-sm font-medium text-gray-600">Phone (फोन) <span
-                                                class="text-red-500">*</span></label>
+                                        <label class="block mb-2 text-sm font-medium text-gray-600">
+                                            Phone (फोन) <span class="text-red-500">*</span>
+                                        </label>
                                         <input type="tel" wire:model.live.debounce.500ms="newPatient.phone"
+                                            maxlength="10"
+                                            oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);"
                                             class="w-full px-4 py-3 border {{ $errors->has('newPatient.phone') ? 'border-red-500' : 'border-gray-300' }} rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
-                                            placeholder="+91 9876543210">
+                                            placeholder="9876543210" pattern="[6-9]{1}[0-9]{9}"
+                                            title="Please enter a valid 10-digit Indian mobile number starting with 6,7,8 or 9">
                                         @error('newPatient.phone')
-                                            <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                                            <p class="mt-1 text-xs text-red-600">
+                                                @if ($message === 'The new patient.phone must be 10 digits.')
+                                                    Phone number must be exactly 10 digits
+                                                @elseif($message === 'The new patient.phone format is invalid.')
+                                                    Phone number must start with 6,7,8 or 9
+                                                @else
+                                                    {{ $message }}
+                                                @endif
+                                            </p>
                                         @enderror
                                     </div>
 
@@ -652,7 +675,9 @@
                                                 class="text-red-500">*</span></label>
                                         <input type="number" wire:model.live.debounce.500ms="newPatient.age"
                                             class="w-full px-4 py-3 border {{ $errors->has('newPatient.age') ? 'border-red-500' : 'border-gray-300' }} rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 transition"
-                                            placeholder="30" min="0" max="120">
+                                            placeholder="30" min="0" max="120"
+                                            oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 3);"
+                                            maxlength="3">
                                         @error('newPatient.age')
                                             <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                                         @enderror

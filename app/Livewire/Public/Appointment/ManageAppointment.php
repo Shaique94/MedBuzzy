@@ -59,7 +59,7 @@ class ManageAppointment extends Component
         'appointment_time' => 'required_if:slot_enabled,true',
         'newPatient.name' => 'required|string|min:3|max:255',
         'newPatient.email' => 'nullable|email|max:255',
-        'newPatient.phone' => 'required|string|digits:10',
+        'newPatient.phone' => 'required|string|digits:10|regex:/^[6-9]\d{9}$/',
         'newPatient.age' => 'required|integer|min:1|max:120',
         'newPatient.gender' => 'required|string|in:male,female,other',
         'newPatient.pincode' => 'required|digits:6',
@@ -75,7 +75,8 @@ class ManageAppointment extends Component
         'newPatient.name.required' => 'Patient name is required.',
         'newPatient.name.min' => 'Name must be at least 3 characters.',
         'newPatient.phone.required' => 'Phone number is required.',
-        'newPatient.phone.min' => 'Phone number must be at least 10 digits.',
+        'newPatient.phone.digits' => 'Phone number must be exactly 10 digits',
+        'newPatient.phone.regex' => 'Phone number must start with 6,7,8 or 9',
         'newPatient.age.required' => 'Age is required.',
         'newPatient.age.min' => 'Age must be at least 1 year.',
         'newPatient.age.max' => 'Age must be less than 120 years.',
@@ -93,7 +94,7 @@ class ManageAppointment extends Component
         config(['app.timezone' => 'Asia/Kolkata']);
         $this->departments = cache()->remember('departments', now()->addHours(24), fn() => Department::where('status', 1)->orderBy('name', 'desc')->get());
         // $this->doctors = cache()->remember('doctors', now()->addHours(24), fn() => Doctor::with(['user', 'department'])->get());
-         $this->doctors = $this->getFilteredDoctors();
+        $this->doctors = $this->getFilteredDoctors();
         $this->currentMonth = now()->startOfMonth()->format('Y-m-d');
 
         // Handle slug parameter from route
@@ -120,7 +121,7 @@ class ManageAppointment extends Component
             $this->prepareAvailableDates();
         }
     }
-     public function updatedSelectedDepartment()
+    public function updatedSelectedDepartment()
     {
         // Reset doctor and appointment-related fields when department changes
         $this->doctor_id = null;
@@ -131,20 +132,23 @@ class ManageAppointment extends Component
         // Refresh doctor list based on new department filter
         $this->doctors = $this->getFilteredDoctors();
     }
-     protected function getFilteredDoctors()
+    protected function getFilteredDoctors()
     {
         // Cache doctors based on department filter for 24 hours
-        return cache()->remember("doctors_department_{$this->selectedDepartment}", now()->addHours(24), fn() => 
+        return cache()->remember(
+            "doctors_department_{$this->selectedDepartment}",
+            now()->addHours(24),
+            fn() =>
             Doctor::when($this->selectedDepartment, function ($query) {
                 // Apply department filter if selectedDepartment is set
                 return $query->where('department_id', $this->selectedDepartment);
             })
-            ->whereHas('department', function ($query) {
-                $query->where('status', 1);
-            })
-            ->where('status', '1')
-            ->with(['user', 'department'])
-            ->get()
+                ->whereHas('department', function ($query) {
+                    $query->where('status', 1);
+                })
+                ->where('status', '1')
+                ->with(['user', 'department'])
+                ->get()
         );
     }
     public function updated($propertyName)
@@ -216,8 +220,13 @@ class ManageAppointment extends Component
 
         $availableDayNumbers = [];
         $dayNameToNumber = [
-            'Sunday' => 0, 'Monday' => 1, 'Tuesday' => 2, 'Wednesday' => 3,
-            'Thursday' => 4, 'Friday' => 5, 'Saturday' => 6,
+            'Sunday' => 0,
+            'Monday' => 1,
+            'Tuesday' => 2,
+            'Wednesday' => 3,
+            'Thursday' => 4,
+            'Friday' => 5,
+            'Saturday' => 6,
         ];
 
         foreach ($availableDays as $dayName) {
@@ -275,7 +284,7 @@ class ManageAppointment extends Component
         // Set active time tab based on current time of day when selecting a date
         if ($this->appointment_date === Carbon::today()->format('Y-m-d')) {
             $now = Carbon::now('Asia/Kolkata');
-            $hour = (int)$now->format('H');
+            $hour = (int) $now->format('H');
 
             if ($hour < 12) {
                 $this->activeTimeTab = 'morning';
@@ -358,7 +367,7 @@ class ManageAppointment extends Component
         $morningSlots = $afternoonSlots = $eveningSlots = 0;
 
         foreach ($this->availableSlots as $time => $slot) {
-            $hour = (int)date('H', strtotime($slot['start']));
+            $hour = (int) date('H', strtotime($slot['start']));
 
             if ($hour < 12) {
                 $morningSlots++;
@@ -396,7 +405,7 @@ class ManageAppointment extends Component
         if (isset($this->availableSlots[$time]) && !$this->availableSlots[$time]['disabled']) {
             $this->appointment_time = $time;
             $this->validate(['appointment_time' => $this->rules['appointment_time']]);
-            
+
             // Automatically proceed to the next step after selecting a time slot
             $this->nextStep();
         }
