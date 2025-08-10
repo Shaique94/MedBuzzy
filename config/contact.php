@@ -6,4 +6,6 @@ return [
     'email' => env('CONTACT_EMAIL', 'infomedbuzzy@gmail.com'),
     'working_hours' => env('CONTACT_WORKING_HOURS', 'Mon-Fri: 8am - 6pm | Sat: 9am - 2pm'),
     'emergency_phone' => env('CONTACT_EMERGENCY_PHONE', '+919430808080'),
+    'latitude' => env('CONTACT_LATITUDE', '21.14423624203604'),
+    'longitude' => env('CONTACT_LONGITUDE', '82.70789704309779'),
 ];

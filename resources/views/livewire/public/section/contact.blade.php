@@ -83,14 +83,13 @@
                             <!-- Google Maps Embed -->
                             <div class="aspect-w-16 aspect-h-9">
                                 <iframe 
-                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3771.715425060345!2d72.8215093149006!3d19.04372268710838!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c96a34dc4401%3A0x3ffc07e83942b13f!2sMedBuzzy%20Healthcare%20Center!5e0!3m2!1sen!2sin!4v1620000000000!5m2!1sen!2sin" 
-                                    width="100%" 
-                                    height="400" 
-                                    style="border:0;" 
-                                    allowfullscreen="" 
-                                    loading="lazy"
-                                    class="w-full h-96"
-                                ></iframe>
+    src="https://www.google.com/maps?q={{ env('CONTACT_LATITUDE') }},{{ env('CONTACT_LONGITUDE') }}&hl=es;z=14&output=embed"
+    width="100%" 
+    height="400" 
+    style="border:0;" 
+    allowfullscreen="" 
+    loading="lazy"
+></iframe>
                             </div>
                         </div>
                     </div>
