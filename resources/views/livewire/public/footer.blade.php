@@ -235,10 +235,19 @@
         <!-- Bottom Divider -->
         
         <div class="border-t border-gray-700 pt-6 text-center flex flex-col items-center text-sm text-gray-400">
-            <a href="https://play.google.com/store/apps/details?id=com.comestro.medbuzzy" target="_blank" rel="noopener noreferrer" class="flex items-center text-gray-400 hover:text-white">
-                                    <img src="{{ asset("logo/playstore.png") }}"  class="mb-3" alt="">
-                                </a>
-                                 <p class="mb-2">MedBuzzy is not a substitute for professional medical advice, diagnosis, or treatment.</p>
+            <a href="https://play.google.com/store/apps/details?id=com.comestro.medbuzzy" 
+               target="_blank" rel="noopener noreferrer" 
+               class="flex items-center text-gray-400 hover:text-white" 
+               x-data="{}" 
+               x-init="
+                  if (navigator.userAgent.indexOf('wv') > -1 || 
+                      navigator.userAgent.indexOf('Android') > -1 && navigator.userAgent.indexOf('Version') > -1) {
+                      $el.style.display = 'none';
+                  }
+               ">
+                <img src="{{ asset("logo/playstore.png") }}" class="mb-3" alt="Get our app on Google Play">
+            </a>
+            <p class="mb-2">MedBuzzy is not a substitute for professional medical advice, diagnosis, or treatment.</p>
             <p class="mb-4">Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition.</p>
             <p>© {{ date('Y') }} MedBuzzy. All rights reserved.</p>
         </div>
