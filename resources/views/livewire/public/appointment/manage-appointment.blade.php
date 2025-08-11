@@ -763,7 +763,7 @@
 
                     <!-- Step 4: Confirmation -->
                     @if ($step === 4)
-                        <div class="space-y-4 md:space-y-6 max-w-md md:max-w-3xl mx-auto px-2 sm:px-0">
+                        <div class="space-y-4 md:space-y-6 md:max-w-5xl mx-auto px-2 sm:px-0">
                             <!-- Header -->
                             <div class="text-center">
                                 <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Confirm Your Appointment</h2>
@@ -771,47 +771,127 @@
                                     confirmation</p>
                             </div>
 
-                            <div
-                                class="bg-brand-teal-50 p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl shadow-sm border border-brand-teal-100">
-                                <h3 class="text-sm sm:text-base md:text-xl font-semibold text-gray-800 mb-2 sm:mb-3">
-                                    Appointment Summary</h3>
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
-                                    <div class="space-y-2">
-                                        <p class="text-xs sm:text-sm font-medium text-gray-500">Doctor</p>
-                                        <div class="flex items-center gap-1 sm:gap-2">
-                                            <div
-                                                class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full overflow-hidden bg-white border-2 border-brand-teal-200">
-                                                <img src="{{ $selectedDoctor->image ?? 'https://ui-avatars.com/api/?name=' . urlencode($selectedDoctor->user->name) . '&background=random&rounded=true' }}"
-                                                    alt="Dr. {{ $selectedDoctor->user->name }}"
-                                                    class="w-full h-full object-cover">
+                            <div class="bg-white rounded-xl shadow-lg border border-brand-teal-200 overflow-hidden transition-all duration-300 hover:shadow-xl">
+                                <!-- Header -->
+                                <div class="bg-gradient-to-r from-brand-teal-500 to-brand-teal-600 p-4 sm:p-5">
+                                    <h3 class="text-base sm:text-lg md:text-xl font-bold text-white flex items-center">
+                                        <svg class="w-5 h-5 sm:w-6 sm:h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                                        </svg>
+                                        Appointment Summary
+                                    </h3>
+                                    <p class="text-xs sm:text-sm text-white/80 mt-1">Please review your appointment details</p>
+                                </div>
+                                
+                                <!-- Content -->
+                                <div class="p-4 sm:p-6">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <!-- Doctor Info -->
+                                        <div class="flex space-x-4 p-3 rounded-lg bg-brand-teal-50 border border-brand-teal-100">
+                                            <div class="flex-shrink-0">
+                                                <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden bg-white border-2 border-brand-teal-300 shadow-md">
+                                                    <img src="{{ $selectedDoctor->image ?? 'https://ui-avatars.com/api/?name=' . urlencode($selectedDoctor->user->name) . '&background=random&rounded=true' }}"
+                                                        alt="Dr. {{ $selectedDoctor->user->name }}" class="w-full h-full object-cover">
+                                                </div>
                                             </div>
-                                            <div>
-                                                <p class="text-xs sm:text-sm md:text-base font-semibold text-gray-800">
-                                                    Dr.
-                                                    {{ $selectedDoctor->user->name }}</p>
-                                                <p class="text-[10px] sm:text-xs text-brand-teal-600">
-                                                    {{ $selectedDoctor->department->name }}</p>
+                                            <div class="flex flex-col justify-center">
+                                                <span class="text-xs font-medium text-brand-teal-600 uppercase tracking-wider">Your Doctor</span>
+                                                <h4 class="text-sm sm:text-base md:text-lg font-bold text-gray-800 mt-1">Dr. {{ $selectedDoctor->user->name }}</h4>
+                                                <p class="text-xs sm:text-sm text-gray-600 mt-1">{{ $selectedDoctor->department->name }}</p>
+                                                <div class="flex items-center mt-2">
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-brand-teal-100 text-brand-teal-800">
+                                                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.414-1.414L11 9.586V6z" clip-rule="evenodd" />
+                                                        </svg>
+                                                        ₹{{ $selectedDoctor->fee }} Consultation Fee
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Appointment Details -->
+                                        <div class="p-3 rounded-lg bg-brand-orange-50 border border-brand-orange-100">
+                                            <div class="flex items-center mb-3">
+                                                <svg class="w-5 h-5 text-brand-orange-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                                                </svg>
+                                                <span class="text-xs font-medium text-brand-orange-800 uppercase tracking-wider">Date & Time</span>
+                                            </div>
+                                            <h4 class="text-sm sm:text-base font-bold text-gray-800">
+                                                {{ \Carbon\Carbon::parse($appointment_date)->format('l, F j, Y') }}
+                                            </h4>
+                                            <p class="mt-1 text-sm font-medium text-brand-orange-700">
+                                                {{ \Carbon\Carbon::createFromFormat('H:i', $appointment_time)->format('h:i A') }}
+                                            </p>
+                                            <div class="mt-3 flex items-center">
+                                                <svg class="w-4 h-4 text-brand-orange-400 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9z" clip-rule="evenodd" />
+                                                </svg>
+                                                <span class="text-xs text-gray-600">Please arrive 15 minutes early</span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="space-y-2">
-                                        <p class="text-xs sm:text-sm font-medium text-gray-500">Appointment</p>
-                                        <p class="text-xs sm:text-sm md:text-base font-semibold text-gray-800">
-                                            {{ \Carbon\Carbon::parse($appointment_date)->format('l, F j, Y') }}</p>
-                                        <p class="text-[10px] sm:text-xs text-gray-600">{{ $appointment_time }}</p>
-                                    </div>
-                                    <div class="space-y-2">
-                                        <p class="text-xs sm:text-sm font-medium text-gray-500">Patient</p>
-                                        <p class="text-xs sm:text-sm md:text-base font-semibold text-gray-800">
-                                            {{ $newPatient['name'] }}</p>
-                                        <p class="text-[10px] sm:text-xs text-gray-600">{{ $newPatient['age'] }} yrs,
-                                            {{ ucfirst($newPatient['gender']) }}</p>
-                                    </div>
-                                    <div class="space-y-2">
-                                        <p class="text-xs sm:text-sm font-medium text-gray-500">Contact</p>
-                                        <p class="text-xs sm:text-sm text-gray-800">
-                                            {{ $newPatient['email'] ?: 'Not provided' }}</p>
-                                        <p class="text-xs sm:text-sm text-gray-800">{{ $newPatient['phone'] }}</p>
+                                    
+                                    <!-- Patient Information -->
+                                    <div class="mt-6 p-4 rounded-lg bg-gray-50 border border-gray-200">
+                                        <h4 class="text-sm sm:text-base font-semibold text-gray-700 flex items-center mb-4">
+                                            <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                                            </svg>
+                                            Patient Information
+                                        </h4>
+                                        
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                                            <div>
+                                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                                                    <span class="text-xs text-gray-500">Full Name</span>
+                                                    <span class="text-sm sm:text-base font-medium text-gray-800">{{ $newPatient['name'] }}</span>
+                                                </div>
+                                                <div class="h-px bg-gray-200 my-2"></div>
+                                                
+                                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                                                    <span class="text-xs text-gray-500">Age & Gender</span>
+                                                    <span class="text-sm font-medium text-gray-800">{{ $newPatient['age'] }} yrs, {{ ucfirst($newPatient['gender']) }}</span>
+                                                </div>
+                                                <div class="h-px bg-gray-200 my-2"></div>
+                                                
+                                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                                                    <span class="text-xs text-gray-500">Location</span>
+                                                    <span class="text-sm font-medium text-gray-800">{{ $newPatient['district'] ?? 'Not available' }}, {{ $newPatient['state'] ?? 'Not available' }}</span>
+                                                </div>
+                                            </div>
+                                            
+                                            <div>
+                                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                                                    <span class="text-xs text-gray-500">Phone</span>
+                                                    <span class="text-sm sm:text-base font-medium text-gray-800">{{ $newPatient['phone'] }}</span>
+                                                </div>
+                                                <div class="h-px bg-gray-200 my-2"></div>
+                                                
+                                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                                                    <span class="text-xs text-gray-500">Email</span>
+                                                    <span class="text-sm font-medium text-gray-800 truncate">{{ $newPatient['email'] ?: 'Not provided' }}</span>
+                                                </div>
+                                                <div class="h-px bg-gray-200 my-2"></div>
+                                                
+                                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                                                    <span class="text-xs text-gray-500">Pincode</span>
+                                                    <span class="text-sm font-medium text-gray-800">{{ $newPatient['pincode'] ?? 'Not available' }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        @if(!empty($notes))
+                                        <div class="mt-4 p-3 bg-yellow-50 border border-yellow-100 rounded-md">
+                                            <h5 class="text-xs font-medium text-yellow-800 flex items-center">
+                                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H6z" clip-rule="evenodd" />
+                                                </svg>
+                                                Notes
+                                            </h5>
+                                            <p class="mt-1 text-xs text-gray-700">{{ $notes }}</p>
+                                        </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -868,7 +948,10 @@
                                     Confirm & Pay ₹50 Booking Fee
                                 </span>
                                 <span wire:loading wire:target="createOrder" class="flex items-center">
-                                    <svg class="animate-spin h-5 w-5 text-white mr-2"
+                                   
+                                    <span>Processing Payment...</span>
+
+                                     <svg class="animate-spin h-5 w-5 text-white mr-2"
                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                         <circle class="opacity-25" cx="12" cy="12" r="10"
                                             stroke="currentColor" stroke-width="4"></circle>
@@ -876,12 +959,11 @@
                                             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
                                         </path>
                                     </svg>
-                                    Processing Payment...
                                 </span>
                             </button>
 
                             <!-- Payment Disclaimer -->
-                            <div class="text-center px-2">
+                            <div class="text-center px-2 py-2">
                                 <p class="text-xs text-gray-500">
                                     <svg class="w-4 h-4 inline-block mr-1 -mt-1" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
@@ -899,7 +981,7 @@
 
                     <!-- Navigation Buttons -->
                     <div class="px-0 py-4 border-t border-gray-200 bg-gray-50 w-full">
-                        <div class="flex flex-col sm:flex-row justify-between gap-4 max-w-5xl mx-auto">
+                        <div class="flex flex-col-reverse sm:flex-row justify-between gap-4 max-w-5xl mx-auto">
                             @if ($step > 1)
                                 <button wire:click="previousStep"
                                     class="px-6 py-3 bg-white border border-brand-orange-300 text-brand-orange-600 rounded-lg hover:bg-brand-orange-50 transition flex items-center justify-center shadow-sm">

@@ -121,8 +121,8 @@
 
             <!-- Help text -->
             <div class="text-center text-xs sm:text-sm text-gray-500 space-y-2">
-                <p>Need to make changes? Contact our support at <a wire:navigate href="mailto:support@example.com"
-                        class="text-teal-600 hover:text-teal-700 hover:underline transition-colors">support@example.com</a>
+                <p>Need to make changes? Contact our support at <a href="mailto:infomedbuzzy@gmail.com"
+                        class="text-teal-600 hover:text-teal-700 hover:underline transition-colors">infomedbuzzy@gmail.com</a>
                 </p>
                 <p>Your appointment ID: <span
                         class="font-mono font-medium text-gray-700 bg-gray-100 px-2 py-1 rounded text-xs">{{ $appointment->id }}</span>

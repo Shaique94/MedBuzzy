@@ -4,14 +4,14 @@
         <div class="container mx-auto px-4 flex justify-between items-center text-sm">
            
             <div class="flex items-center space-x-4">
-              <a wire:navigate href="mailto:{{ $contactDetails['email'] }}" class="flex items-center space-x-2 hover:text-brand-teal-100 transition-colors">
+              <a href="mailto:{{ $contactDetails['email'] }}" class="flex items-center space-x-2 hover:text-brand-teal-100 transition-colors">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
                         <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
                     </svg>
                     {{ $contactDetails['email'] }}
                 </a>
-                <a wire:navigate href="tel:{{ $contactDetails['phone'] }}" class="font-semibold hover:text-brand-teal-100 transition-colors">{{ $contactDetails['phone'] }}</a>
+                <a href="tel:{{ $contactDetails['phone'] }}" class="font-semibold hover:text-brand-teal-100 transition-colors">{{ $contactDetails['phone'] }}</a>
             </div>
         </div>
     </div>
@@ -34,11 +34,11 @@
                 </a>
                 <a wire:navigate href="{{ route('about-us') }}"
                     class="text-gray-700 hover:text-brand-teal-600 font-medium transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-brand-teal-50">
-                    About
+                    About MedBuzzy
                 </a>
                 <a wire:navigate href="{{ route('contact-us') }}"
                     class="text-gray-700 hover:text-brand-teal-600 font-medium transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-brand-teal-50">
-                    Contact
+                    Contact Us
                 </a>
             </nav>
 
@@ -129,11 +129,11 @@
             </a>
             <a wire:navigate href="{{ route('about-us') }}"
                 class="block text-gray-700 hover:text-brand-teal-600 font-medium py-2 px-3 rounded-lg hover:bg-brand-teal-50 transition-colors duration-200 mobile-menu-link">
-                About
+                About Medbuzzy
             </a>
             <a wire:navigate href="{{ route('contact-us') }}"
                 class="block text-gray-700 hover:text-brand-teal-600 font-medium py-2 px-3 rounded-lg hover:bg-brand-teal-50 transition-colors duration-200 mobile-menu-link">
-                Contact
+                Contact Us
             </a>
             
             <div class="pt-4 border-t space-y-3">
