@@ -278,7 +278,7 @@
                 <!-- Leadership Cards Grid - Revised with side-by-side layout -->
                 <div class="mt-16">
                     <h3 class="text-2xl font-bold text-brand-teal-700 text-center mb-8">Founders</h3>
-                    <div class="grid grid-cols-1 gap-8">
+                    <div class="grid grid-cols-1 md:grid-cols-1 gap-8">
                         <!-- Founder -->
                         <div class="leadership-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
                             <div class="flex flex-col md:flex-row">
@@ -290,12 +290,10 @@
                                         Founder
                                     </div>
                                     <h3 class="text-3xl font-bold text-gray-900 mb-4">Ramotar Sah</h3>
-                                    <p class="text-gray-600">
+                                    <p class="text-gray-600 ">
                                         The company "Gauriram Medbuzzy (OPC) Private Limited," which is the top provider of
                                         healthcare services in India, Ramotar Sah was founded by Ramotar Sah. He has
-                                        been a social crusader and self-made serial entrepreneur for fifty years. His personal
-                                        goal is to educate consumers and society about the importance of time, the worth of
-                                        health, and how to choose the finest medical professionals and medications.
+                                        been a social crusader and self-made serial entrepreneur for fifty years.
                                     </p>
                                 </div>
                             </div>
@@ -312,12 +310,10 @@
                                         Co-Founder
                                     </div>
                                     <h3 class="text-3xl font-bold text-gray-900 mb-4">R.K. Ranjan</h3>
-                                    <p class="text-gray-600">
+                                    <p class="text-gray-600 ">
                                         RK Ranjan oversees Medbuzzy's product service and technology, executing the
                                         founder's ideas for the online platform. He formally believes in creating value
-                                        for all stakeholders, and he handles operational integrity, data security, and
-                                        privacy system support. Preserving thinkers, diligent workers, and
-                                        problem solvers make up RK Ranjan's team.
+                                        for all stakeholders.
                                     </p>
                                 </div>
                             </div>
@@ -326,7 +322,7 @@
 
                     <!-- CEOs Section - Side-by-side layout -->
                     <h3 class="text-2xl font-bold text-brand-teal-700 text-center mb-8 mt-16">Chief Executive Officers</h3>
-                    <div class="grid grid-cols-1 gap-8">
+                    <div class="grid grid-cols-1 md:grid-cols-1 gap-8">
                         <!-- CEO 1 -->
                         <div class="leadership-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
                             <div class="flex flex-col md:flex-row">
@@ -338,12 +334,9 @@
                                         Chief Executive Officer
                                     </div>
                                     <h3 class="text-3xl font-bold text-gray-900 mb-4">Sourav Kumar Sah</h3>
-                                    <p class="text-gray-600">
+                                    <p class="text-gray-600 ">
                                         Sourav Kumar Sah leads Gauriram Medbuzzy with a visionary mindset and a deep
-                                        passion for revolutionizing healthcare delivery in India. Known for his
-                                        hands-on leadership style, he believes in empowering his team,
-                                        streamlining digital operations, and delivering exceptional value to both patients and
-                                        healthcare professionals.
+                                        passion for revolutionizing healthcare delivery in India.
                                     </p>
                                 </div>
                             </div>
@@ -360,11 +353,9 @@
                                         Chief Executive Officer
                                     </div>
                                     <h3 class="text-3xl font-bold text-gray-900 mb-4">Ranjeet Kumar</h3>
-                                    <p class="text-gray-600">
+                                    <p class="text-gray-600 ">
                                         Ranjeet Kumar is responsible for strategic decision-making, business expansion, stakeholder
-                                        relations, and driving innovation across the organization. Under his leadership, 
-                                        the company aims to transform healthcare accessibility across India and provide
-                                        exceptional service to patients nationwide.
+                                        relations, and driving innovation across the organization.
                                     </p>
                                 </div>
                             </div>
@@ -373,7 +364,7 @@
 
                     <!-- Medical Advisory Board -->
                     <h3 class="text-2xl font-bold text-brand-teal-700 text-center mb-8 mt-16">Medical Advisory Board</h3>
-                    <div class="grid grid-cols-1 gap-8">
+                    <div class="grid grid-cols-1 md:grid-cols-1 gap-8">
                         <!-- Medical Advisor 1 -->
                         <div class="leadership-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
                             <div class="flex flex-col md:flex-row">
@@ -385,11 +376,9 @@
                                         Medical Advisor
                                     </div>
                                     <h3 class="text-3xl font-bold text-gray-900 mb-4">Mr. Pankaj Kumar</h3>
-                                    <p class="text-gray-600">
+                                    <p class="text-gray-600 ">
                                         Dr Pankaj Kumar is the Chief Healthcare Strategy Officer at Medbuzzy and
-                                        Chairman of the Advisory Board. In a career spanning nearly one decade, Dr Pankaj is a
-                                        General Medical Practitioner with 10 years of experience seeking a residency in
-                                        obstetrics to utilize advanced skills in diagnosing ailments.
+                                        Chairman of the Advisory Board with nearly one decade of experience.
                                     </p>
                                 </div>
                             </div>
@@ -406,11 +395,9 @@
                                         Medical Advisor
                                     </div>
                                     <h3 class="text-3xl font-bold text-gray-900 mb-4">Dr. Sneha Gupta</h3>
-                                    <p class="text-gray-600">
+                                    <p class="text-gray-600 ">
                                         Dr Sneha Gupta has over 20 years of experience in healthcare consulting,
-                                        budgeting, operations management, medical devices, and physician relations.
-                                        Recognized for consistent reliability and resourcefulness in
-                                        problem-solving situations.
+                                        budgeting, operations management, and physician relations.
                                     </p>
                                 </div>
                             </div>

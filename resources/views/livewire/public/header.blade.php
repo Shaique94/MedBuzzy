@@ -34,11 +34,11 @@
                 </a>
                 <a wire:navigate href="{{ route('about-us') }}"
                     class="text-gray-700 hover:text-brand-teal-600 font-medium transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-brand-teal-50">
-                    About
+                    About MedBuzzy
                 </a>
                 <a wire:navigate href="{{ route('contact-us') }}"
                     class="text-gray-700 hover:text-brand-teal-600 font-medium transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-brand-teal-50">
-                    Contact
+                    Contact Us
                 </a>
             </nav>
 
@@ -129,11 +129,11 @@
             </a>
             <a wire:navigate href="{{ route('about-us') }}"
                 class="block text-gray-700 hover:text-brand-teal-600 font-medium py-2 px-3 rounded-lg hover:bg-brand-teal-50 transition-colors duration-200 mobile-menu-link">
-                About
+                About Medbuzzy
             </a>
             <a wire:navigate href="{{ route('contact-us') }}"
                 class="block text-gray-700 hover:text-brand-teal-600 font-medium py-2 px-3 rounded-lg hover:bg-brand-teal-50 transition-colors duration-200 mobile-menu-link">
-                Contact
+                Contact Us
             </a>
             
             <div class="pt-4 border-t space-y-3">
