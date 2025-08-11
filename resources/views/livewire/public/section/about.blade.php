@@ -216,7 +216,7 @@
                         </div>
                         <div class="rounded-xl overflow-hidden shadow-xl border-4 border-white">
                             <img src="https://images.unsplash.com/photo-1581056771107-24ca5f033842?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                                alt="Indian hospital reception" class="w-full h-auto object-cover rounded-lg">
+                                alt="Indian hospital reception" class="w-full h-auto object-cover object-top  rounded-lg">
                         </div>
                     </div>
                 </div>
@@ -283,7 +283,7 @@
                         <div class="leadership-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
                             <div class="flex flex-col md:flex-row">
                                 <div class="md:w-1/5 bg-gradient-to-br from-teal-500 to-teal-700 flex items-center justify-center p-4 md:p-0">
-                                    <img src="/leaders/Papa.jpg" alt="Ramotar Sah" class="w-48 h-48 md:w-64 md:h-64 object-cover rounded-full md:rounded-none shadow-lg">
+                                    <img src="/leaders/Papa.jpg" alt="Ramotar Sah" class="w-48 h-48 md:w-64 md:h-64 object-cover object-top  rounded-full md:rounded-none shadow-lg">
                                 </div>
                                 <div class="md:w-4/5 p-6 md:p-8">
                                     <div class="inline-block px-4 py-1 rounded-full bg-teal-100 text-teal-800 font-medium text-sm mb-4">
@@ -303,7 +303,7 @@
                         <div class="leadership-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
                             <div class="flex flex-col md:flex-row">
                                 <div class="md:w-1/5 bg-gradient-to-br from-teal-500 to-teal-700 flex items-center justify-center p-4 md:p-0">
-                                    <img src="/leaders/Rajeev.jpg" alt="R.K. Ranjan" class="w-48 h-48 md:w-64 md:h-64 object-cover rounded-full md:rounded-none shadow-lg">
+                                    <img src="/leaders/Rajeev.jpg" alt="R.K. Ranjan" class="w-48 h-48 md:w-64 md:h-64 object-cover object-top  rounded-full md:rounded-none shadow-lg">
                                 </div>
                                 <div class="md:w-4/5 p-6 md:p-8">
                                     <div class="inline-block px-4 py-1 rounded-full bg-teal-100 text-teal-800 font-medium text-sm mb-4">
@@ -327,7 +327,7 @@
                         <div class="leadership-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
                             <div class="flex flex-col md:flex-row">
                                 <div class="md:w-1/5 bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center p-4 md:p-0">
-                                    <img src="/leaders/IMG-20250718-WA0004 (1).jpg" alt="Sourav Kumar Sah" class="w-48 h-48 md:w-64 md:h-64 object-cover rounded-full md:rounded-none shadow-lg">
+                                    <img src="/leaders/IMG-20250718-WA0004 (1).jpg" alt="Sourav Kumar Sah" class="w-48 h-48 md:w-64 md:h-64 object-cover object-top  rounded-full md:rounded-none shadow-lg">
                                 </div>
                                 <div class="md:w-4/5 p-6 md:p-8">
                                     <div class="inline-block px-4 py-1 rounded-full bg-orange-100 text-orange-800 font-medium text-sm mb-4">
@@ -346,7 +346,7 @@
                         <div class="leadership-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
                             <div class="flex flex-col md:flex-row">
                                 <div class="md:w-1/5 bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center p-4 md:p-0">
-                                    <img src="/leaders/IMG-20250718-WA0005.jpg" alt="Ranjeet Kumar" class="w-48 h-48 md:w-64 md:h-64 object-cover rounded-full md:rounded-none shadow-lg">
+                                    <img src="/leaders/IMG-20250718-WA0005.jpg" alt="Ranjeet Kumar" class="w-48 h-48 md:w-64 md:h-64 object-cover object-top  rounded-full md:rounded-none shadow-lg">
                                 </div>
                                 <div class="md:w-4/5 p-6 md:p-8">
                                     <div class="inline-block px-4 py-1 rounded-full bg-orange-100 text-orange-800 font-medium text-sm mb-4">
@@ -369,7 +369,7 @@
                         <div class="leadership-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
                             <div class="flex flex-col md:flex-row">
                                 <div class="md:w-1/5 bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center p-4 md:p-0">
-                                    <img src="/leaders/Pankaj.jpg" alt="Pankaj Kumar" class="w-48 h-48 md:w-64 md:h-64 object-cover rounded-full md:rounded-none shadow-lg">
+                                    <img src="/leaders/Pankaj.jpg" alt="Pankaj Kumar" class="w-48 h-48 md:w-64 md:h-64 object-cover object-top  rounded-full md:rounded-none shadow-lg">
                                 </div>
                                 <div class="md:w-4/5 p-6 md:p-8">
                                     <div class="inline-block px-4 py-1 rounded-full bg-blue-100 text-blue-800 font-medium text-sm mb-4">
@@ -388,7 +388,7 @@
                         <div class="leadership-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
                             <div class="flex flex-col md:flex-row">
                                 <div class="md:w-1/5 bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center p-4 md:p-0">
-                                    <img src="/leaders/Dr. sneha gupta.jpeg" alt="Dr. Sneha Gupta" class="w-48 h-48 md:w-64 md:h-64 object-cover rounded-full md:rounded-none shadow-lg">
+                                    <img src="/leaders/Dr. sneha gupta.jpeg" alt="Dr. Sneha Gupta" class="w-48 h-48 md:w-64 md:h-64 object-cover object-top  rounded-full md:rounded-none shadow-lg">
                                 </div>
                                 <div class="md:w-4/5 p-6 md:p-8">
                                     <div class="inline-block px-4 py-1 rounded-full bg-blue-100 text-blue-800 font-medium text-sm mb-4">
@@ -408,7 +408,7 @@
         </div>
 
         <!-- Partner Hospitals Section -->
-        <div class="py-16 bg-white">
+        {{-- <div class="py-16 bg-white">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center">
                     <h2 class="text-3xl font-extrabold text-brand-teal-800">Our Partner Hospitals</h2>
@@ -438,6 +438,6 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </body>
 </div>
