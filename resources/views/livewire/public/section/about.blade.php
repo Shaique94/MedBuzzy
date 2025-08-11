@@ -278,12 +278,12 @@
                 <!-- Leadership Cards Grid - Revised with side-by-side layout -->
                 <div class="mt-16">
                     <h3 class="text-2xl font-bold text-brand-teal-700 text-center mb-8">Founders</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-1 gap-8">
+                    <div class="grid grid-cols-1 gap-8">
                         <!-- Founder -->
                         <div class="leadership-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
                             <div class="flex flex-col md:flex-row">
-                                <div class="md:w-1/5 bg-gradient-to-br from-teal-500 to-teal-700 flex items-center justify-center">
-                                    <img src="/leaders/Papa.jpg" alt="Ramotar Sah" class="w-64 h-64 object-cover shadow-lg">
+                                <div class="md:w-1/5 bg-gradient-to-br from-teal-500 to-teal-700 flex items-center justify-center p-4 md:p-0">
+                                    <img src="/leaders/Papa.jpg" alt="Ramotar Sah" class="w-48 h-48 md:w-64 md:h-64 object-cover rounded-full md:rounded-none shadow-lg">
                                 </div>
                                 <div class="md:w-4/5 p-6 md:p-8">
                                     <div class="inline-block px-4 py-1 rounded-full bg-teal-100 text-teal-800 font-medium text-sm mb-4">
@@ -302,8 +302,8 @@
                         <!-- Co-Founder -->
                         <div class="leadership-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
                             <div class="flex flex-col md:flex-row">
-                                <div class="md:w-1/5 bg-gradient-to-br from-teal-500 to-teal-700 flex items-center justify-center">
-                                    <img src="/leaders/Rajeev.jpg" alt="R.K. Ranjan" class="w-64 h-64 object-cover">
+                                <div class="md:w-1/5 bg-gradient-to-br from-teal-500 to-teal-700 flex items-center justify-center p-4 md:p-0">
+                                    <img src="/leaders/Rajeev.jpg" alt="R.K. Ranjan" class="w-48 h-48 md:w-64 md:h-64 object-cover rounded-full md:rounded-none shadow-lg">
                                 </div>
                                 <div class="md:w-4/5 p-6 md:p-8">
                                     <div class="inline-block px-4 py-1 rounded-full bg-teal-100 text-teal-800 font-medium text-sm mb-4">
@@ -322,12 +322,12 @@
 
                     <!-- CEOs Section - Side-by-side layout -->
                     <h3 class="text-2xl font-bold text-brand-teal-700 text-center mb-8 mt-16">Chief Executive Officers</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-1 gap-8">
+                    <div class="grid grid-cols-1 gap-8">
                         <!-- CEO 1 -->
                         <div class="leadership-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
                             <div class="flex flex-col md:flex-row">
-                                <div class="md:w-1/5 bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center">
-                                    <img src="/leaders/IMG-20250718-WA0004 (1).jpg" alt="Sourav Kumar Sah" class="w-64 h-64 object-cover">
+                                <div class="md:w-1/5 bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center p-4 md:p-0">
+                                    <img src="/leaders/IMG-20250718-WA0004 (1).jpg" alt="Sourav Kumar Sah" class="w-48 h-48 md:w-64 md:h-64 object-cover rounded-full md:rounded-none shadow-lg">
                                 </div>
                                 <div class="md:w-4/5 p-6 md:p-8">
                                     <div class="inline-block px-4 py-1 rounded-full bg-orange-100 text-orange-800 font-medium text-sm mb-4">
@@ -345,8 +345,8 @@
                         <!-- CEO 2 -->
                         <div class="leadership-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
                             <div class="flex flex-col md:flex-row">
-                                <div class="md:w-1/5 bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center">
-                                    <img src="/leaders/IMG-20250718-WA0005.jpg" alt="Ranjeet Kumar" class="w-64 h-64 object-cover ">
+                                <div class="md:w-1/5 bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center p-4 md:p-0">
+                                    <img src="/leaders/IMG-20250718-WA0005.jpg" alt="Ranjeet Kumar" class="w-48 h-48 md:w-64 md:h-64 object-cover rounded-full md:rounded-none shadow-lg">
                                 </div>
                                 <div class="md:w-4/5 p-6 md:p-8">
                                     <div class="inline-block px-4 py-1 rounded-full bg-orange-100 text-orange-800 font-medium text-sm mb-4">
@@ -364,12 +364,12 @@
 
                     <!-- Medical Advisory Board -->
                     <h3 class="text-2xl font-bold text-brand-teal-700 text-center mb-8 mt-16">Medical Advisory Board</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-1 gap-8">
+                    <div class="grid grid-cols-1 gap-8">
                         <!-- Medical Advisor 1 -->
                         <div class="leadership-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
                             <div class="flex flex-col md:flex-row">
-                                <div class="md:w-1/5 bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
-                                    <img src="/leaders/Pankaj.jpg" alt="Pankaj Kumar" class="w-64 h-64 object-cover">
+                                <div class="md:w-1/5 bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center p-4 md:p-0">
+                                    <img src="/leaders/Pankaj.jpg" alt="Pankaj Kumar" class="w-48 h-48 md:w-64 md:h-64 object-cover rounded-full md:rounded-none shadow-lg">
                                 </div>
                                 <div class="md:w-4/5 p-6 md:p-8">
                                     <div class="inline-block px-4 py-1 rounded-full bg-blue-100 text-blue-800 font-medium text-sm mb-4">
@@ -387,8 +387,8 @@
                         <!-- Medical Advisor 2 -->
                         <div class="leadership-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
                             <div class="flex flex-col md:flex-row">
-                                <div class="md:w-1/5 bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
-                                    <img src="/leaders/Dr. sneha gupta.jpeg" alt="Dr. Sneha Gupta" class="w-64 h-64 object-cover ">
+                                <div class="md:w-1/5 bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center p-4 md:p-0">
+                                    <img src="/leaders/Dr. sneha gupta.jpeg" alt="Dr. Sneha Gupta" class="w-48 h-48 md:w-64 md:h-64 object-cover rounded-full md:rounded-none shadow-lg">
                                 </div>
                                 <div class="md:w-4/5 p-6 md:p-8">
                                     <div class="inline-block px-4 py-1 rounded-full bg-blue-100 text-blue-800 font-medium text-sm mb-4">
