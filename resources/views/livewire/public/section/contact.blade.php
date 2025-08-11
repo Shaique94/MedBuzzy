@@ -38,7 +38,7 @@
                             </div>
                             <div class="ml-4">
                                 <h3 class="text-lg font-medium text-gray-900">Phone Support</h3>
-                                <p class="mt-1 text-gray-600"><a wire:navigate href="tel:{{ $contactDetails['phone'] }}" class="hover:text-brand-teal-600 transition-colors">{{ $contactDetails['phone'] }}</a></p>
+                                <p class="mt-1 text-gray-600"><a href="tel:{{ $contactDetails['phone'] }}" class="hover:text-brand-teal-600 transition-colors">{{ $contactDetails['phone'] }}</a></p>
                                 <p class="mt-2 text-sm text-gray-500">{{ $contactDetails['working_hours'] }}</p>
                             </div>
                         </div>
@@ -51,7 +51,7 @@
                             </div>
                             <div class="ml-4">
                                 <h3 class="text-lg font-medium text-gray-900">Email Us</h3>
-                                <p class="mt-1 text-gray-600"><a wire:navigate href="mailto:{{ $contactDetails['email'] }}" class="hover:text-brand-teal-600 transition-colors">{{ $contactDetails['email'] }}</a></p>
+                                <p class="mt-1 text-gray-600"><a href="mailto:{{ $contactDetails['email'] }}" class="hover:text-brand-teal-600 transition-colors">{{ $contactDetails['email'] }}</a></p>
                                 <p class="mt-2 text-sm text-gray-500">Response time: Typically within 24 hours</p>
                             </div>
                         </div>
