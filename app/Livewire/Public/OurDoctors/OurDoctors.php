@@ -16,9 +16,10 @@ class OurDoctors extends Component
     use WithPagination;
     
     public $departments;
+    public $selectedDepartmentSlug = '';
 
     #[Url(as: 'department')]
-    public $department_id = null;
+       public $departmentSlug = null;
 
     #[Url(as: 'search')]
     public $searchQuery = '';
@@ -41,7 +42,7 @@ class OurDoctors extends Component
     #[Url(as: 'fee_max')]
     public $maxFee = 5000;
 
-    public function mount()
+    public function mount($department = null)
     {
         $this->departments = Department::all();
         
@@ -49,6 +50,14 @@ class OurDoctors extends Component
         if ($this->maxFee == 0) {
             $this->maxFee = 5000;
         }
+
+        // Handle department slug from URL
+    if ($department) {
+        $dept = Department::where('slug', $department)->first();
+        if ($dept) {
+            $this->departmentSlug = $dept->slug;
+        }
+    }
     }
 
     public function updatedSearchQuery()
@@ -58,7 +67,7 @@ class OurDoctors extends Component
 
     public function resetFilters()
     {
-        $this->department_id = null;
+        $this->departmentSlug = null;
         $this->genderFilter = [];
         $this->minExperience = 0;
         $this->minRating = 0;
@@ -75,7 +84,7 @@ class OurDoctors extends Component
     
     public function getHasActiveFiltersProperty()
     {
-        return $this->department_id || 
+        return $this->departmentSlug || 
                count($this->genderFilter) > 0 && count($this->genderFilter) < 2 ||
                $this->minExperience > 0 ||
                $this->minRating > 0 ||
@@ -99,9 +108,11 @@ class OurDoctors extends Component
                 $query->where('approved', true);
             }]);
 
-        if (!empty($this->department_id)) {
-            $query->where('doctors.department_id', $this->department_id);
-        }
+      if (!empty($this->departmentSlug)) {
+    $query->whereHas('department', function($q) {
+        $q->where('slug', $this->departmentSlug);
+    });
+}
 
         if (!empty($this->searchQuery)) {
             $query->where(function ($q) {
