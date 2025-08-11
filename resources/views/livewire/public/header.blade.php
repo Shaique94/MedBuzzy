@@ -45,8 +45,12 @@
             <!-- Right Side Actions -->
             <div class="flex items-center space-x-4">
                 @auth
-                    <!-- Admin Dashboard Link (Only for admin users) -->
-                    @if(auth()->user()->role === 'admin')
+                   
+
+                    <!-- User Profile -->
+                    <div class="hidden lg:flex items-center space-x-3 group relative">
+                        <div class="flex items-center space-x-2">
+                             @if(auth()->user()->role === 'admin')
                         <a wire:navigate href="{{ route('admin.dashboard') }}"
                             class="hidden lg:flex items-center space-x-2 text-gray-700 hover:text-brand-teal-600 font-medium transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-brand-teal-50">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -54,15 +58,12 @@
                             </svg>
                             <span>Admin Dashboard</span>
                         </a>
-                    @endif
-
-                    <!-- User Profile -->
-                    <div class="hidden lg:flex items-center space-x-3 group relative">
-                        <div class="flex items-center space-x-2">
+                    @else
                             <div class="w-9 h-9 rounded-full bg-brand-teal-100 flex items-center justify-center text-brand-teal-800 font-semibold">
                                 {{ substr(auth()->user()->name, 0, 1) }}
                             </div>
                             <span class="text-gray-700 font-medium">{{ auth()->user()->name }}</span>
+                        @endif
                         </div>
                         
                         <!-- Logout Dropdown -->

@@ -6,13 +6,13 @@
         </div>
         <div class="flex items-center space-x-3 sm:space-x-4 lg:space-x-6">
             <!-- Notifications -->
-            <div class="relative">
+            {{-- <div class="relative">
                 <button class="text-gray-600 hover:text-blue-600 transition-colors duration-200 p-2 rounded-lg hover:bg-blue-50">
                     <i class="fas fa-bell text-lg sm:text-xl"></i>
                     <span class="absolute top-1 right-1 inline-block w-2 h-2 bg-red-500 rounded-full notification-dot"></span>
                 </button>
             </div>
-            
+             --}}
             <!-- User Profile -->
             <div class="flex items-center space-x-2 sm:space-x-3">
                 <div class="relative">
@@ -37,11 +37,11 @@
                     </span>
                 </div>
                 <!-- Dropdown arrow for profile menu -->
-                <button class="text-gray-400 hover:text-gray-600 transition-colors duration-200 p-1">
+                {{-- <button class="text-gray-400 hover:text-gray-600 transition-colors duration-200 p-1">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
-                </button>
+                </button> --}}
             </div>
         </div>
     </div>

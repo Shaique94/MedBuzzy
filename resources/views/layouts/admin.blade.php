@@ -229,11 +229,8 @@
                 <path d="M4 6h16M4 12h16M4 18h16" />
             </svg>
         </button>
-        <div class="flex items-center space-x-1.5 sm:space-x-2">
-            <div class="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center shadow-lg">
-                <i class="fas fa-user-md text-xs sm:text-sm"></i>
-            </div>
-            <span class="text-sm sm:text-base md:text-lg font-bold text-blue-800 tracking-tight">MedBuzzy</span>
+     <div class="flex items-center space-x-1.5 sm:space-x-2">
+            <img src="/logo/logo.png" alt="MedBuzzy Logo" class="h-12 sm:h-12 md:h-20">
         </div>
         <div class="flex items-center space-x-1 sm:space-x-2 md:space-x-3">
             <!-- Notifications -->
