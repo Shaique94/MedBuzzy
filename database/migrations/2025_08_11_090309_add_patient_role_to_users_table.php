@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -11,9 +12,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('patients', function (Blueprint $table) {
-            $table->decimal('fee', 8, 2)->default(0)->after('country');
-        });
+        // Add 'patient' to the role enum
+        DB::statement("ALTER TABLE users MODIFY role ENUM('admin', 'doctor', 'manager', 'patient') NULL DEFAULT NULL");
     }
 
     /**
@@ -21,8 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('patients', function (Blueprint $table) {
-                   $table->dropColumn('fee');
-        });
+        // Remove 'patient' from the role enum
+        DB::statement("ALTER TABLE users MODIFY role ENUM('admin', 'doctor', 'manager') NULL DEFAULT NULL");
     }
 };

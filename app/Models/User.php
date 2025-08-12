@@ -75,4 +75,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Manager::class);
     }
+
+  public function patients()
+    {
+        return $this->hasMany(Patient::class);
+    }
 }

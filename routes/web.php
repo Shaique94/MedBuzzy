@@ -46,7 +46,7 @@ use Illuminate\Support\Facades\Artisan;
 
 // Google Auth Routes 
 Route::get('/auth/google', [SocialiteController::class, 'redirectToGoogle'])->name('google.login');
-Route::get('/auth/google-callback', [SocialiteController::class, 'handleGoogleCallback']);
+Route::get('/auth/google/callback', [SocialiteController::class, 'handleGoogleCallback']);
 
 
 // Public Routes
