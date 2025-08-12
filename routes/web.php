@@ -7,6 +7,7 @@ use App\Livewire\Admin\Appointment\All;
 use App\Livewire\Admin\Appointment\Update;
 use App\Livewire\Admin\Appointment\ViewDetails;
 use App\Livewire\Admin\Auth\Login;
+use App\Livewire\Admin\Enquiry\EnquiryApproval;
 use App\Livewire\Admin\Review\AdminReviewManagement;
 use App\Livewire\Admin\Sections\Dashboard;
 use App\Livewire\Admin\Sections\EditDoctor;
@@ -114,7 +115,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin'])->group(
     Route::get('/appointment/view/{id}', ViewDetails::class)->name('view.appointment');
     Route::get('/review',AdminReviewManagement::class)->name('reviewapprovel');
     Route::get('/doctors/edit/{id}', EditDoctor::class)->name('editDoctor');
+        Route::get('/enquiry',EnquiryApproval::class)->name('enquiry');
+
 });
+
+
 
 Route::get('/storage-link', function () {
     Artisan::call('storage:link');

@@ -38,6 +38,12 @@
                 <span class="ml-3">Reviews</span>
             </a>
 
+             <a  href="{{route('admin.enquiry')}}"
+                class="sidebar-link flex items-center px-3 lg:px-4 py-3 text-gray-700 responsive-text-base">
+                <i class="fas fa-star text-blue-500 w-5 lg:w-6 text-center"></i>
+                <span class="ml-3">Enquiry</span>
+            </a>
+
 
 
         </nav>
