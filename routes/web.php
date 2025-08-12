@@ -1,11 +1,14 @@
 <?php
 
 use App\Http\Controllers\SocialiteController;
+use App\Http\Livewire\Admin\Auth\ResetPassword;
 use App\Livewire\Admin\AdminReviewApproval;
 use App\Livewire\Admin\Appointment\Add;
 use App\Livewire\Admin\Appointment\All;
 use App\Livewire\Admin\Appointment\Update;
 use App\Livewire\Admin\Appointment\ViewDetails;
+use App\Livewire\Admin\Auth\ChangePassword;
+use App\Livewire\Admin\Auth\ForgotPassword;
 use App\Livewire\Admin\Auth\Login;
 use App\Livewire\Admin\Review\AdminReviewManagement;
 use App\Livewire\Admin\Sections\Dashboard;
@@ -120,3 +123,11 @@ Route::get('/storage-link', function () {
     Artisan::call('storage:link');
     return 'Storage link created successfully!';
 });
+
+Route::get('/forgot-password', ForgotPassword::class)
+    ->middleware('guest')
+    ->name('password.request');
+
+Route::get('/reset-password/{token}', ChangePassword::class)
+    ->middleware('guest')
+    ->name('password.reset');
