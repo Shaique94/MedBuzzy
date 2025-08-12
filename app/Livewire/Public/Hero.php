@@ -37,13 +37,33 @@ class Hero extends Component
         $this->totalPatients = Patient::count();
     }
 
+public function updatedSelectedDepartment($slug)
+{
+    if ($slug) {
+        return redirect()->to(route('our-doctors', ['department' => $slug]));
+    } else {
+        return redirect()->to(route('hero'));
+    }
+}
+
     public function search()
     {
         // Redirect to our-doctors route with search parameters
-        return redirect()->route('our-doctors', [
-            'search' => $this->searchQuery,
-            'department_id' => $this->selectedDepartment,
-        ]);
+        // return redirect()->route('our-doctors', [
+        //     'search' => $this->searchQuery,
+        //     'department_id' => $this->selectedDepartment,
+        // ]);
+$params = [];
+    
+    if ($this->searchQuery) {
+        $params['search'] = $this->searchQuery;
+    }
+    
+    if ($this->selectedDepartment) {
+        $params['department'] = $this->selectedDepartment;
+    }
+
+    return redirect()->route('our-doctors', $params);
     }
 
     #[Layout('layouts.public')]

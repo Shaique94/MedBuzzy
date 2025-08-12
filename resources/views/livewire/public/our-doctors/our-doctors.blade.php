@@ -72,7 +72,7 @@
                                 class="w-full p-2 text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-teal-500 focus:border-teal-500">
                                 <option value="">All Specialties</option>
                                 @foreach ($departments as $department)
-                                    <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                    <option value="{{ $department->slug }}">{{ $department->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -161,8 +161,9 @@
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
                         <h2 class="text-base sm:text-lg font-medium text-gray-900">
                             <span class="text-teal-600">{{ count($doctors) }}</span> doctors found
-                            @if ($department_id)
-                                in <span class="text-teal-600">{{ $departments->find($department_id)->name ?? '' }}</span>
+                            @if ($departmentSlug)
+                                {{-- in <span class="text-teal-600">{{ $departments->find($department_id)->name ?? '' }}</span> --}}
+                                 in <span class="text-teal-600">{{ $departments->firstWhere('slug', $departmentSlug)->name ?? '' }}</span>
                             @endif
                         </h2>
                         <div class="flex items-center">
@@ -181,9 +182,10 @@
                     <!-- Mobile Active Filters -->
                     @if($this->hasActiveFilters)
                     <div class="mb-4 sm:flex sm:flex-wrap gap-2 hidden sm:block">
-                        @if($department_id)
+                        @if($departmentSlug)
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-100 text-teal-800">
-                                {{ $departments->find($department_id)->name ?? '' }}
+                                {{-- {{ $departments->find($department_id)->name ?? '' }} --}}
+                                   {{ $departments->firstWhere('slug', $departmentSlug)->name ?? '' }}
                                 <button type="button" wire:click="$set('department_id', null)" class="ml-1 text-teal-600 hover:text-teal-800">
                                     <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>

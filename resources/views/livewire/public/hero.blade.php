@@ -69,13 +69,13 @@
                                                 </path>
                                             </svg>
                                         </div>
-                                        <select name="specialty" wire:model.live="selectedDepartment"
-                                            class="w-full pl-10 pr-4 py-3 border border-gray-200 bg-white rounded-lg text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ">
-                                            <option value="">All Specialties</option>
-                                            @foreach ($departments as $department)
-                                                <option value="{{ $department->id }}">{{ $department->name }}</option>
-                                            @endforeach
-                                        </select>
+                                       <select name="specialty" wire:model="selectedDepartment"
+    class="w-full pl-10 pr-4 py-3 border border-gray-200 bg-white rounded-lg text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+    <option value="">All Specialties</option>
+    @foreach ($departments as $department)
+        <option value="{{ $department->slug }}">{{ $department->name }}</option>
+    @endforeach
+</select>
                                     </div>
                                 </div>
 
