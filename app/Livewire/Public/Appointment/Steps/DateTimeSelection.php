@@ -36,8 +36,8 @@ class DateTimeSelection extends Component
             $this->doctor = Doctor::find($appointmentData['doctor_id']);
         }
 
-        // Set appointment date from appointmentData if it exists, otherwise set to today
-        $this->appointmentDate = $appointmentData['appointment_date'] ?? Carbon::today()->format('Y-m-d');
+        // Only set appointmentDate and appointmentTime if they exist (do NOT default to today/time if not set)
+        $this->appointmentDate = $appointmentData['appointment_date'] ?? null;
         $this->appointmentTime = $appointmentData['appointment_time'] ?? null;
 
         $this->prepareAvailableDates();

@@ -95,6 +95,7 @@ class DoctorSelection extends Component
         
         $doctor = Doctor::with(['user', 'department'])->find($this->doctorId);
         
+        // Only pass doctor info, NOT appointment_date or appointment_time!
         $this->dispatch('step-validated', [
             'doctor_id' => $this->doctorId,
             'selected_doctor' => $doctor,

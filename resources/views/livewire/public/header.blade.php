@@ -95,13 +95,10 @@
                 @guest
                     <div class="hidden md:flex items-center space-x-3">
                         <a wire:navigate href="/login"
-                            class="text-gray-600 hover:text-brand-blue-600 font-medium transition-colors duration-200 px-4 py-3 rounded-lg hover:bg-brand-blue-50 whitespace-nowrap">
-                            Login
+                            class="text-white bg-brand-blue-500 hover:text-white font-medium transition-colors duration-200 px-4 py-3 rounded-lg hover:bg-brand-blue-600 whitespace-nowrap">
+                            Login/Register
                         </a>
-                        {{-- <a wire:navigate href="/register"
-                            class="bg-brand-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-brand-blue-700 transition-colors duration-200 shadow-md hover:shadow-lg whitespace-nowrap">
-                            Sign Up
-                        </a> --}}
+                        
                     </div>
                 @endguest
 

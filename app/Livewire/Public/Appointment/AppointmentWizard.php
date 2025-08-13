@@ -52,6 +52,7 @@ class AppointmentWizard extends Component
     #[On('step-validated')]
     public function nextStep($data = [])
     {
+        logger('nextStep called', ['currentStep' => $this->currentStep, 'data' => $data]);
         // Merge any data passed from child components
         $this->appointmentData = array_merge($this->appointmentData, $data);
         
