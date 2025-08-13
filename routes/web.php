@@ -58,7 +58,7 @@ Route::get('/doctor/{slug}', ViewDoctorDetail::class)->name('doctor-detail');
 Route::get('/contact-us', ContactUs::class)->name('contact-us');
 Route::get('/register', Register::class)->name('register');
 Route::get('/review',Review::class)->name('review');
-Route::get('/appointment/{doctor_slug?}', AppointmentWizard::class)->name('appointment');
+Route::get('/appointment/{doctor_slug?}', ManageAppointment::class)->name('appointment');
 Route::get('/appointment/confirmation/{appointment}', AppointmentConfirmation::class)->name('appointment.confirmation');
 Route::get('/appointment/receipt/{appointment}/download', [AppointmentReceiptController::class, 'download'])->name('appointment.receipt.download');
 Route::get('/appointment/receipt/{appointment}', [AppointmentReceiptController::class, 'view'])->name('appointment.receipt');
