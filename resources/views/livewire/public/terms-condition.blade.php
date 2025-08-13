@@ -138,7 +138,7 @@
 
     <body class="bg-gray-50">
         <!-- Hero Section -->
-        <div class="bg-teal-700 text-white py-10 sm:py-12 md:py-16">
+        <div class="bg-brand-blue-700 text-white py-10 sm:py-12 md:py-16">
             <div class="container mx-auto px-4 sm:px-6 text-center">
                 <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight">
                     Medbuzzy Terms & Conditions
@@ -146,7 +146,7 @@
                 <p class="text-base sm:text-lg md:text-xl max-w-3xl mx-auto mb-6 sm:mb-8 leading-relaxed">
                     Terms of Use governing your access and use of our healthcare platform
                 </p>
-                <div class="text-xs sm:text-sm text-teal-100">
+                <div class="text-xs sm:text-sm text-brand-blue-100">
                     Last updated: August 1, 2025
                 </div>
             </div>
