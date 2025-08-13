@@ -2,7 +2,7 @@
     @if($showModal)
     <div>
         @if(session('message'))
-            <div class="alert alert-success bg-brand-teal-100 border-l-4 border-brand-teal-500 text-brand-teal-900 p-4 mb-6 rounded-r-lg">
+            <div class="alert alert-success bg-brand-blue-100 border-l-4 border-brand-blue-500 text-brand-blue-900 p-4 mb-6 rounded-r-lg">
                 {{ session('message') }}
             </div>
         @endif
@@ -15,7 +15,7 @@
 
         <form wire:submit.prevent="submitReview" class="bg-white p-6 rounded-lg shadow-md">
             <div class="mb-6">
-                <label class="block text-brand-teal-900 font-semibold mb-2">Your Rating</label>
+                <label class="block text-brand-blue-900 font-semibold mb-2">Your Rating</label>
               
                 <div class="flex items-center space-x-1">
                     @for($i = 1; $i <= 5; $i++)
@@ -34,11 +34,11 @@
             </div>
 
             <div class="mb-6">
-                <label for="comment" class="block text-brand-teal-900 font-semibold mb-2">Your Review</label>
+                <label for="comment" class="block text-brand-blue-900 font-semibold mb-2">Your Review</label>
                 <textarea 
                     wire:model="comment" 
                     id="comment" 
-                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-transparent resize-y" 
+                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-blue-500 focus:border-transparent resize-y" 
                     rows="4"
                     placeholder="Share your thoughts..."
                 ></textarea>
@@ -49,7 +49,7 @@
 
             <button 
                 type="submit" 
-                class="w-full bg-brand-teal-500 text-white font-semibold py-3 rounded-lg hover:bg-brand-teal-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                class="w-full bg-brand-blue-500 text-white font-semibold py-3 rounded-lg hover:bg-brand-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
                 Submit Review
             </button>

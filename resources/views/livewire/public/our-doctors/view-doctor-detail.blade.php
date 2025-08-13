@@ -11,7 +11,7 @@
         }
     }" 
     x-init="init()"
-    class="min-h-screen bg-gray-50">
+    class="min-h-screen bg-gray-50 mt-5">
         
         <!-- Mobile Header with Back Button -->
         <div class="md:hidden bg-white border-b border-gray-200 sticky top-0 z-50">
@@ -25,7 +25,7 @@
                     </button>
                     <div class="flex-1 min-w-0">
                         <h1 class="text-lg font-bold text-gray-900 truncate">Dr. {{ $doctor->user->name }}</h1>
-                        <p class="text-sm text-teal-600 truncate">{{ $doctor->department->name ?? 'General Medicine' }}</p>
+                        <p class="text-sm text-brand-blue-600 truncate">{{ $doctor->department->name ?? 'General Medicine' }}</p>
                     </div>
                     <button @click="showMobileStats = !showMobileStats"
                         class="p-2 hover:bg-gray-100 rounded-full transition-colors">
@@ -44,21 +44,21 @@
                      x-transition:leave-start="opacity-100 translate-y-0"
                      x-transition:leave-end="opacity-0 -translate-y-1"
                      class="grid grid-cols-2 gap-3 mt-4">
-                    <div class="bg-teal-50 rounded-xl p-3 border border-teal-200">
-                        <div class="text-xl font-bold text-teal-700">{{ number_format($averageRating, 1) }}</div>
-                        <div class="text-xs text-teal-600">Rating</div>
+                    <div class="bg-brand-blue-50 rounded-xl p-3 border border-brand-blue-200">
+                        <div class="text-xl font-bold text-brand-blue-700">{{ number_format($averageRating, 1) }}</div>
+                        <div class="text-xs text-brand-blue-600">Rating</div>
                     </div>
-                    <div class="bg-teal-50 rounded-xl p-3 border border-teal-200">
-                        <div class="text-xl font-bold text-teal-700">{{ $countFeedback }}</div>
-                        <div class="text-xs text-teal-600">Reviews</div>
+                    <div class="bg-brand-blue-50 rounded-xl p-3 border border-brand-blue-200">
+                        <div class="text-xl font-bold text-brand-blue-700">{{ $countFeedback }}</div>
+                        <div class="text-xs text-brand-blue-600">Reviews</div>
                     </div>
-                    <div class="bg-teal-50 rounded-xl p-3 border border-teal-200">
-                        <div class="text-xl font-bold text-teal-700">₹{{ $doctor->fee }}</div>
-                        <div class="text-xs text-teal-600">Consultation</div>
+                    <div class="bg-brand-blue-50 rounded-xl p-3 border border-brand-blue-200">
+                        <div class="text-xl font-bold text-brand-blue-700">₹{{ $doctor->fee }}</div>
+                        <div class="text-xs text-brand-blue-600">Consultation</div>
                     </div>
-                    <div class="bg-teal-50 rounded-xl p-3 border border-teal-200">
-                        <div class="text-xl font-bold text-teal-700">{{ $doctor->experience ?? '5+' }} yrs</div>
-                        <div class="text-xs text-teal-600">Experience</div>
+                    <div class="bg-brand-blue-50 rounded-xl p-3 border border-brand-blue-200">
+                        <div class="text-xl font-bold text-brand-blue-700">{{ $doctor->experience ?? '5+' }} yrs</div>
+                        <div class="text-xs text-brand-blue-600">Experience</div>
                     </div>
                 </div>
             </div>
@@ -67,7 +67,7 @@
         <div class="container mx-auto max-w-5xl px-4 py-6">
             <!-- Doctor Profile Header -->
             <div class="bg-white rounded-lg border border-gray-200 overflow-hidden mb-6">
-                <div class="bg-teal-50 h-24 md:h-32 relative"></div>
+                <div class="bg-brand-blue-50 h-24 md:h-32 relative"></div>
                 
                 <div class="relative px-4 md:px-6 pb-6">
                     <!-- Doctor Image and Basic Info -->
@@ -80,8 +80,8 @@
                                         alt="Dr. {{ $doctor->user->name }}"
                                         class="w-24 h-24 md:w-32 md:h-32 rounded-lg border-4 border-white object-cover">
                                 @else
-                                    <div class="w-24 h-24 md:w-32 md:h-32 rounded-lg bg-teal-100 border-4 border-white flex items-center justify-center">
-                                        <span class="text-3xl md:text-4xl font-bold text-teal-700">
+                                    <div class="w-24 h-24 md:w-32 md:h-32 rounded-lg bg-brand-blue-100 border-4 border-white flex items-center justify-center">
+                                        <span class="text-3xl md:text-4xl font-bold text-brand-blue-700">
                                             {{ substr($doctor->user->name, 0, 1) }}
                                         </span>
                                     </div>
@@ -97,9 +97,9 @@
 
                         <!-- Doctor Info -->
                         <div class="flex-grow text-center self-center md:text-left">
-                            <div class="mb-4">
+                            <div class="mb-4 pb-2">
                                 <h1 class="text-xl md:text-3xl font-bold text-gray-900 mb-1">Dr. {{ $doctor->user->name }}</h1>
-                                <p class="text-md text-teal-600 font-medium">{{ $doctor->department->name ?? 'General Medicine' }}</p>
+                                <p class="text-md text-brand-blue-600 font-medium mb-2">{{ $doctor->department->name ?? 'General Medicine' }}</p>
                                 @if($doctor->qualification)
                                     <p class="text-gray-600 text-sm mt-1">
                                         {{ is_array($doctor->qualification) ? implode(', ', $doctor->qualification) : $doctor->qualification }}
@@ -125,13 +125,13 @@
                             <!-- Key Stats - Desktop -->
                             <div class="hidden md:flex gap-4 text-sm">
                                 <div class="flex items-center">
-                                    <svg class="w-4 h-4 text-teal-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="w-4 h-4 text-brand-blue-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
                                     <span>{{ $doctor->experience ?? '5+' }} years experience</span>
                                 </div>
                                 <div class="flex items-center">
-                                    <svg class="w-4 h-4 text-teal-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="w-4 h-4 text-brand-blue-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
                                     <span>₹{{ $doctor->fee }} fee</span>
@@ -141,7 +141,7 @@
                             <!-- Appointment Button (Desktop) -->
                             <div class="hidden md:flex gap-3 mt-3">
                                 <a wire:navigate href="{{ route('appointment', ['doctor_slug' => $doctor->slug]) }}"
-                                   class="bg-teal-500 hover:bg-teal-600 text-white py-2 px-4 rounded-lg inline-flex items-center gap-2 transition-colors text-sm">
+                                   class="bg-brand-blue-500 hover:bg-brand-blue-600 text-white py-2 px-4 rounded-lg inline-flex items-center gap-2 transition-colors text-sm">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                     </svg>
@@ -157,22 +157,22 @@
             <div class="bg-white rounded-lg border border-gray-200 overflow-x-auto mb-6">
                 <div class="flex scrollbar-hide">
                     <button @click="tab = 'about'" 
-                            :class="tab === 'about' ? 'text-white bg-teal-500' : 'text-gray-600 hover:bg-gray-50'"
+                            :class="tab === 'about' ? 'text-white bg-brand-blue-500' : 'text-gray-600 hover:bg-gray-50'"
                             class="flex-shrink-0 px-4 py-3 font-medium transition-colors min-w-[90px] text-center">
                         About
                     </button>
                     <button @click="tab = 'availability'" 
-                            :class="tab === 'availability' ? 'text-white bg-teal-500' : 'text-gray-600 hover:bg-gray-50'"
+                            :class="tab === 'availability' ? 'text-white bg-brand-blue-500' : 'text-gray-600 hover:bg-gray-50'"
                             class="flex-shrink-0 px-4 py-3 font-medium transition-colors min-w-[90px] text-center">
                         Schedule
                     </button>
                     <button @click="tab = 'location'" 
-                            :class="tab === 'location' ? 'text-white bg-teal-500' : 'text-gray-600 hover:bg-gray-50'"
+                            :class="tab === 'location' ? 'text-white bg-brand-blue-500' : 'text-gray-600 hover:bg-gray-50'"
                             class="flex-shrink-0 px-4 py-3 font-medium transition-colors min-w-[90px] text-center">
                         Location
                     </button>
                     <button @click="tab = 'reviews'" 
-                            :class="tab === 'reviews' ? 'text-white bg-teal-500' : 'text-gray-600 hover:bg-gray-50'"
+                            :class="tab === 'reviews' ? 'text-white bg-brand-blue-500' : 'text-gray-600 hover:bg-gray-50'"
                             class="flex-shrink-0 px-4 py-3 font-medium transition-colors min-w-[90px] text-center">
                         Reviews
                     </button>
@@ -186,7 +186,7 @@
                     <!-- About -->
                     <div class="bg-white rounded-lg border border-gray-200 p-4 md:p-6">
                         <h2 class="text-lg md:text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                            <svg class="w-5 h-5 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-5 h-5 text-brand-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
                             About
@@ -199,7 +199,7 @@
                     <!-- Quick Stats -->
                     <div class="bg-white rounded-lg border border-gray-200 p-4 md:p-6">
                         <h2 class="text-lg md:text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                            <svg class="w-5 h-5 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-5 h-5 text-brand-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                             </svg>
                             Experience & Expertise
@@ -228,7 +228,7 @@
                     <!-- Services -->
                     <div class="bg-white rounded-lg border border-gray-200 p-4 md:p-6">
                         <h2 class="text-lg md:text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                            <svg class="w-5 h-5 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-5 h-5 text-brand-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                             </svg>
                             Services Offered
@@ -236,8 +236,8 @@
                         
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" x-data="{ showAll: false }">
                             <div class="flex items-start space-x-3 bg-gray-50 p-3 rounded-lg border border-gray-100">
-                                <div class="w-8 h-8 rounded-lg bg-teal-100 flex items-center justify-center flex-shrink-0">
-                                    <svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div class="w-8 h-8 rounded-lg bg-brand-blue-100 flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-4 h-4 text-brand-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
                                 </div>
@@ -248,8 +248,8 @@
                             </div>
                             
                             <div class="flex items-start space-x-3 bg-gray-50 p-3 rounded-lg border border-gray-100">
-                                <div class="w-8 h-8 rounded-lg bg-teal-100 flex items-center justify-center flex-shrink-0">
-                                    <svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div class="w-8 h-8 rounded-lg bg-brand-blue-100 flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-4 h-4 text-brand-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
                                 </div>
@@ -267,7 +267,7 @@
                     <!-- Weekly Schedule -->
                     <div class="bg-white rounded-lg border border-gray-200 p-4 md:p-6">
                         <h2 class="text-lg md:text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                            <svg class="w-5 h-5 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-5 h-5 text-brand-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
                             Weekly Schedule
@@ -289,22 +289,22 @@
                                     $isAvailable = in_array($day, $availableDays);
                                     $isToday = $day === $today;
                                 @endphp
-                                <div class="flex items-center justify-between p-3 rounded-lg {{ $isToday ? 'bg-teal-50 border border-teal-200' : 'bg-gray-50 border border-gray-100' }}">
+                                <div class="flex items-center justify-between p-3 rounded-lg {{ $isToday ? 'bg-brand-blue-50 border border-brand-blue-200' : 'bg-gray-50 border border-gray-100' }}">
                                     <div class="flex items-center gap-2">
-                                        <div class="w-8 h-8 rounded-full flex items-center justify-center {{ $isAvailable ? 'bg-teal-100 text-teal-600' : 'bg-gray-200 text-gray-500' }}">
+                                        <div class="w-8 h-8 rounded-full flex items-center justify-center {{ $isAvailable ? 'bg-brand-blue-100 text-brand-blue-600' : 'bg-gray-200 text-gray-500' }}">
                                             <span class="font-medium text-xs">{{ substr($day, 0, 2) }}</span>
                                         </div>
                                         <div>
                                             <div class="{{ $isAvailable ? 'text-gray-900' : 'text-gray-500' }}">
                                                 {{ $day }}
                                                 @if ($isToday)
-                                                    <span class="ml-2 bg-teal-500 text-white text-xs px-2 py-0.5 rounded-full">Today</span>
+                                                    <span class="ml-2 bg-brand-blue-500 text-white text-xs px-2 py-0.5 rounded-full">Today</span>
                                                 @endif
                                             </div>
                                         </div>
                                     </div>
                                     <div class="text-right">
-                                        <div class="{{ $isAvailable ? 'text-teal-600 font-medium' : 'text-gray-400' }}">
+                                        <div class="{{ $isAvailable ? 'text-brand-blue-600 font-medium' : 'text-gray-400' }}">
                                             {{ $isAvailable ? '9:00 AM - 6:00 PM' : 'Closed' }}
                                         </div>
                                     </div>
@@ -316,26 +316,26 @@
                     <!-- Appointment Info -->
                     <div class="bg-white rounded-lg border border-gray-200 p-4 md:p-6">
                         <h2 class="text-lg md:text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                            <svg class="w-5 h-5 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-5 h-5 text-brand-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                             Appointment Information
                         </h2>
                         <div class="space-y-2 text-gray-700">
                             <div class="flex items-center gap-2">
-                                <svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-4 h-4 text-brand-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                                 <span>30-minute consultations</span>
                             </div>
                             <div class="flex items-center gap-2">
-                                <svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-4 h-4 text-brand-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
                                 </svg>
                                 <span>₹{{ $doctor->fee }} consultation fee</span>
                             </div>
                             <div class="flex items-center gap-2">
-                                <svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-4 h-4 text-brand-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
                                 <span>For emergencies, call {{ $doctor->user->phone ?? '+91 943-080-8079' }}</span>
@@ -348,7 +348,7 @@
                 <div x-show="tab === 'location'" x-transition class="space-y-6">
                     <div class="bg-white rounded-lg border border-gray-200 p-4 md:p-6">
                         <h2 class="text-lg md:text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                            <svg class="w-5 h-5 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-5 h-5 text-brand-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
@@ -356,8 +356,8 @@
                         </h2>
 
                         <div class="flex items-start gap-3">
-                            <div class="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                                <svg class="w-5 h-5 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="w-10 h-10 bg-brand-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 text-brand-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                                 </svg>
                             </div>
@@ -392,7 +392,7 @@
                 <div x-show="tab === 'reviews'" x-transition class="space-y-6">
                     <div class="bg-white rounded-lg border border-gray-200 p-4 md:p-6">
                         <h2 class="text-lg md:text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                            <svg class="w-5 h-5 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-5 h-5 text-brand-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                         </h2>
                         
@@ -433,7 +433,7 @@
                                         <div class="flex items-center gap-2">
                                             <span class="text-sm text-gray-600 w-8">{{ $i }}★</span>
                                             <div class="flex-1 bg-gray-200 rounded-full h-2">
-                                                <div class="bg-teal-500 h-2 rounded-full" style="width: {{ $percentages[$i] }}%"></div>
+                                                <div class="bg-brand-blue-500 h-2 rounded-full" style="width: {{ $percentages[$i] }}%"></div>
                                             </div>
                                             <span class="text-sm text-gray-600 w-12">{{ $ratingCounts[$i] ?? 0 }}</span>
                                         </div>
@@ -476,7 +476,7 @@
                         <div class="mt-6 text-center">
                             @auth
                                 <button wire:click="$dispatch('openReviewModal', {doctorId: {{ $doctor->id }}})" 
-                                        class="bg-teal-500 hover:bg-teal-600 text-white py-2 px-4 rounded-lg inline-flex items-center gap-2 transition-colors">
+                                        class="bg-brand-blue-500 hover:bg-brand-blue-600 text-white py-2 px-4 rounded-lg inline-flex items-center gap-2 transition-colors">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                                     </svg>
@@ -501,7 +501,7 @@
                 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     @foreach ($relatedDoctors as $relatedDoctor)
-                        <div class="bg-white rounded-lg border border-gray-200 hover:border-teal-300 transition-colors">
+                        <div class="bg-white rounded-lg border border-gray-200 hover:border-brand-blue-300 transition-colors">
                             <div class="p-4">
                                 <div class="flex items-start gap-3">
                                     <div class="w-14 h-14 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden">
@@ -510,13 +510,13 @@
                                                  alt="Dr. {{ $relatedDoctor->user->name }}" 
                                                  class="w-full h-full object-cover">
                                         @else
-                                            <span class="text-xl font-semibold text-teal-600">{{ substr($relatedDoctor->user->name, 0, 1) }}</span>
+                                            <span class="text-xl font-semibold text-brand-blue-600">{{ substr($relatedDoctor->user->name, 0, 1) }}</span>
                                         @endif
                                     </div>
                                     
                                     <div class="flex-1">
                                         <h3 class="font-medium text-gray-900">Dr. {{ $relatedDoctor->user->name }}</h3>
-                                        <p class="text-xs text-teal-600">{{ $relatedDoctor->department->name }}</p>
+                                        <p class="text-xs text-brand-blue-600">{{ $relatedDoctor->department->name }}</p>
                                         
                                         <div class="flex items-center gap-1 mt-1">
                                             @php $rating = $relatedDoctor->reviews_avg_rating ?? 0; @endphp
@@ -541,7 +541,7 @@
                                         <span class="text-gray-600"> fee</span>
                                     </div>
                                     <a wire:navigate href="{{ route('doctor-detail', ['slug' => $relatedDoctor->slug]) }}"
-                                       class="text-teal-500 hover:text-teal-600 text-sm font-medium">
+                                       class="text-brand-blue-500 hover:text-brand-blue-600 text-sm font-medium">
                                         View Profile
                                     </a>
                                 </div>
@@ -555,7 +555,7 @@
         <!-- Floating Action Button (Mobile) -->
         <div class="fixed bottom-0 inset-x-0 z-50 md:hidden bg-white border-t border-gray-200 p-3">
             <a wire:navigate href="{{ route('appointment', ['doctor_slug' => $doctor->slug]) }}"
-                class="block w-full bg-teal-500 hover:bg-teal-600 text-white py-3 rounded-lg font-medium text-center">
+                class="block w-full bg-brand-blue-500 hover:bg-brand-blue-600 text-white py-3 rounded-lg font-medium text-center">
                 Book Appointment
             </a>
         </div>
