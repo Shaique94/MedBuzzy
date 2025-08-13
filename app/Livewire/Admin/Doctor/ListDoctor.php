@@ -62,10 +62,10 @@ class ListDoctor extends Component
             $doctor->delete();
             $user->delete();
 
-            session()->flash('message', "Doctor '{$doctorName}' has been successfully deleted.");
+            $this->dispatch('success', __("Doctor '{$doctorName}' has been successfully deleted."));
             $this->dispatch('refreshDoctorList');
         } catch (\Exception $e) {
-            session()->flash('error', 'Error deleting doctor: ' . $e->getMessage());
+            $this->dispatch('error', __('Error deleting doctor: ' . $e->getMessage()));
         }
     }
 
@@ -110,10 +110,10 @@ class ListDoctor extends Component
             $doctor->status = $doctor->status == 1 ? 0 : 1;
             $doctor->save();
 
-            session()->flash('message', 'Doctor status updated successfully.');
+            $this->dispatch('success', __('Doctor status updated successfully.'));
             $this->dispatch('refreshDoctorList');
         } catch (\Exception $e) {
-            session()->flash('error', 'Error updating doctor status: ' . $e->getMessage());
+            $this->dispatch('error', __('Error updating doctor status: ' . $e->getMessage()));
         }
     }
 

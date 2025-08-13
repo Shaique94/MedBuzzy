@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Sections;
 
 use App\Models\Department;
+use App\Models\Doctor;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
@@ -37,15 +38,24 @@ class ManageDepartment extends Component
         $department = Department::findOrFail($this->departmentId);
         $this->name = $department->name;
         $this->showModal = true;
+        $this->rules['name'] = "required|string|max:255|unique:departments,name,{$id}";
     }
 
     public function confirmDelete($id)
     {
         $department = Department::findOrFail($id);
         
+        // Check for associated doctors (one-to-many; adjust for many-to-many if needed)
+        $doctorCount = Doctor::where('department_id', $id)->count();
+        
+        if ($doctorCount > 0) {
+            $this->dispatch('error', __("Cannot delete department '{$department->name}' because it has {$doctorCount} associated doctor(s)."));
+            return;
+        }
+
         $this->dispatch('openDeleteModal', [
             'title' => 'Delete Department',
-            'message' => 'Are you sure you want to delete this department? All associated data will be permanently removed.',
+            'message' => "Are you sure you want to delete '{$department->name}'? This action cannot be undone.",
             'confirmText' => 'Delete Department',
             'cancelText' => 'Cancel',
             'itemName' => $department->name,
@@ -60,19 +70,23 @@ class ManageDepartment extends Component
         try {
             $department = Department::findOrFail($id);
             $departmentName = $department->name;
-            $department->delete();
+
+            // Double-check for associated doctors
+            $doctorCount = Doctor::where('department_id', $id)->count();
+            // For many-to-many, uncomment and adjust table name:
+            // $doctorCount = DB::table('department_doctor')->where('department_id', $id)->count();
             
-            session()->flash('message', "Department '{$departmentName}' has been successfully deleted.");
+            if ($doctorCount > 0) {
+                $this->dispatch('error', __("Cannot delete department '{$departmentName}' because it has {$doctorCount} associated doctor(s)."));
+                return;
+            }
+
+            $department->delete();
+            $this->dispatch('success', __("Department '{$departmentName}' has been successfully deleted."));
             $this->dispatch('department-deleted');
         } catch (\Exception $e) {
-            session()->flash('error', 'Error deleting department: ' . $e->getMessage());
+            $this->dispatch('error', __('An error occurred while deleting the department: ') . $e->getMessage());
         }
-    }
-
-    public function delete($id)
-    {
-        // Keep the old method for backward compatibility or redirect to confirmDelete
-        $this->confirmDelete($id);
     }
 
     public function toggleStatus($departmentId)
@@ -82,9 +96,10 @@ class ManageDepartment extends Component
             $department->status = $department->status ? 0 : 1;
             $department->save();
 
-            session()->flash('message', 'Department status updated successfully.');
+            $status = $department->status ? 'enabled' : 'disabled';
+            $this->dispatch('success', __("Department '{$department->name}' has been {$status} successfully."));
         } catch (\Exception $e) {
-            session()->flash('error', 'Error updating department status: ' . $e->getMessage());
+            $this->dispatch('error', __('An error occurred while updating department status: ') . $e->getMessage());
         }
     }
 
@@ -92,13 +107,18 @@ class ManageDepartment extends Component
     {
         $this->validate();
 
-        Department::updateOrCreate(
-            ['id' => $this->departmentId], 
-            ['name' => $this->name]        
-        );
+        try {
+            $department = Department::updateOrCreate(
+                ['id' => $this->departmentId], 
+                ['name' => $this->name]        
+            );
 
-        $this->reset(['name', 'showModal', 'departmentId']);
-        $this->dispatch('department-added');
+            $message = $this->departmentId ? __("Department '{$this->name}' updated successfully.") : __("Department '{$this->name}' added successfully.");
+            $this->reset(['name', 'showModal', 'departmentId']);
+            $this->dispatch('success', $message);
+        } catch (\Exception $e) {
+            $this->dispatch('error', __('An error occurred while saving the department: ') . $e->getMessage());
+        }
     }
 
     #[Layout('layouts.admin')]
