@@ -5,17 +5,25 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    
-    <title>{{ $title  ?? ' MedBuzzy - Healthcare Management System' }}</title>
 
+    <title>{{ $title ?? ' MedBuzzy - Healthcare Management System' }}</title>
+    <title>Book Doctors Online | MedBuzzy - Purnea, Bihar</title>
+    <meta name="description"
+        content="Book appointments with trusted doctors in Purnea, Bihar. MedBuzzy offers instant booking, expert consultations, and 24/7 support.">
+    <link rel="canonical" href="{{ url()->current() }}">
+    <meta property="og:title" content="Book Doctors Online | MedBuzzy">
+    <meta property="og:description"
+        content="Book appointments with trusted doctors in Purnea, Bihar. MedBuzzy offers instant booking, expert consultations, and 24/7 support.">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:type" content="website">
     <!-- Tailwind CSS with full config -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Alpine.js - Loading this before Tailwind -->
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset("favicon/apple-touch-icon.png") }}">
-<link rel="icon" type="image/png" sizes="32x32" href="{{ asset("favicon/favicon-32x32.png") }}">
-<link rel="icon" type="image/png" sizes="16x16" href="{{ asset("favicon/favicon-16x16.png") }}">
-<link rel="manifest" href="{{ asset("favicon/site.webmanifest") }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('favicon/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon/favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ asset('favicon/site.webmanifest') }}">
     <script>
         tailwind.config = {
             theme: {
@@ -84,42 +92,42 @@
         .search-gradient {
             background: linear-gradient(90deg, #0d4b8c 0%, #1864ac 100%);
         }
-        
+
         /* Primary brand blue from logo */
         .bg-primary {
             background-color: #00264d;
         }
-        
+
         .text-primary {
             color: #00264d;
         }
-        
+
         /* Brand yellow/gold from logo */
         .bg-secondary {
             background-color: #f59e0b;
         }
-        
+
         .text-secondary {
             color: #f59e0b;
         }
-        
+
         /* Mobile Bottom Navigation Styles */
         .mobile-bottom-nav {
             transition: all 0.3s ease;
         }
-        
+
         .mobile-bottom-nav a {
             transition: all 0.2s ease-out;
         }
-        
+
         .mobile-bottom-nav a:active {
             transform: scale(0.95);
         }
-        
+
         .mobile-bottom-nav .active-tab {
             @apply text-brand-blue-600;
         }
-        
+
         .mobile-bottom-nav .active-tab div {
             @apply bg-brand-blue-600 text-white shadow-md;
         }
@@ -153,7 +161,7 @@
 
         <!-- Footer -->
         <livewire:public.footer />
-        
+
         <!-- Mobile Bottom Navigation -->
         @include('components.mobile-bottom-nav')
     </div>
@@ -161,18 +169,21 @@
     @livewireScripts
 
     <script src="https://kit.fontawesome.com/9620ac7e85.js" crossorigin="anonymous"></script>
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/689c2cfeddd4a0192670a0f5/1j2h0vh9g';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {},
+            Tawk_LoadStart = new Date();
+        (function() {
+            var s1 = document.createElement("script"),
+                s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/689c2cfeddd4a0192670a0f5/1j2h0vh9g';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
 </body>
+
 </html>

@@ -161,8 +161,7 @@
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
                         <h2 class="text-base sm:text-lg font-medium text-gray-900">
                             <span class="text-brand-blue-600">{{ count($doctors) }}</span> doctors found
-                            @if ($department_id)
-                                in <span class="text-brand-blue-600">{{ $departments->find($department_id)->name ?? '' }}</span>
+                          
                         </h2>
                         <div class="flex items-center">
                             <span class="text-sm text-gray-600 mr-2">Sort by:</span>
@@ -235,7 +234,7 @@
                                         <div class="sm:self-start">
                                             <div class="flex items-center justify-center w-20 h-20 mx-auto sm:mx-0 rounded-full bg-brand-blue-100 overflow-hidden border border-gray-200">
                                                 @if ($doctor->image)
-                                                    <img src="{{ $doctor->image }}" 
+                                                    <img src="{{ $doctor->image }}"     
                                                          alt="Dr. {{ $doctor->user->name }}" 
                                                          class="w-full h-full object-cover">
                                                 @else

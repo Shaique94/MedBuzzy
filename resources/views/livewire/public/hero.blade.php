@@ -3,7 +3,7 @@
         <section
             class="relative overflow-hidden bg-gradient-to-br from-brand-blue-50 via-white to-brand-blue-100 pt-8 pb-16 md:pt-16 md:pb-24">
             <!-- Decorative Background Elements -->
-            <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute inset-0 overflow-hidden" aria-hidden="true">
                 <div class="absolute top-20 right-20 w-32 h-32 bg-brand-blue-200 rounded-full opacity-20 animate-pulse"></div>
                 <div class="absolute bottom-20 left-20 w-24 h-24 bg-brand-yellow-200 rounded-full opacity-30"></div>
                 <div class="absolute top-1/2 left-1/4 w-16 h-16 bg-brand-blue-200 rounded-full opacity-25"></div>
@@ -14,12 +14,11 @@
                     <!-- Hero Content -->
                     <div class="flex-1 text-center lg:text-left space-y-2 lg:space-y-4">
                         <div class="space-y-2">
-                            <h1 class="text-3xl sm:text-4xl lg:text-6xl font-bold text-gray-900 leading-tight">
+                            <h1 class="text-3xl sm:text-4xl lg:text-6xl font-semibold text-gray-900 leading-tight">
                                 Your Health,
                                 <span class="text-brand-blue-600">Simplified</span>
                             </h1>
-
-                            <p class="text-lg sm:text-xl text-gray-600 max-w-lg mx-auto lg:mx-0 leading-relaxed">
+                            <p class="text-lg sm:text-xl text-gray-600 mx-auto lg:mx-0 leading-relaxed">
                                 Connect with trusted doctors, book appointments instantly, and manage your healthcare
                                 journey all in one place.
                             </p>
@@ -27,18 +26,16 @@
 
                         <!-- Search Bar -->
                         <div class="bg-white p-4 rounded-2xl border border-gray-100 max-w-2xl mx-auto lg:mx-0">
-                            <form wire:submit.prevent="search" class="space-y-4">
+                            <form wire:submit.prevent="search" class="space-y-4" aria-label="Doctor search form">
                                 <!-- Location and Specialty Row -->
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <!-- Location -->
                                     <div class="relative">
-                                        <div
-                                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                             <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
-                                                </path>
+                                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                             </svg>
@@ -51,8 +48,7 @@
 
                                     <!-- Specialty -->
                                     <div class="relative">
-                                        <div
-                                            class="absolute inset-y-0 left-0 p-3 flex items-center pointer-events-none">
+                                        <div class="absolute inset-y-0 left-0 p-3 flex items-center pointer-events-none">
                                             <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -60,14 +56,13 @@
                                                 </path>
                                             </svg>
                                         </div>
-
-                                       <select name="specialty" wire:model="selectedDepartment"
-    class="w-full pl-10 pr-6 py-3 border border-gray-200 bg-white rounded-lg text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue-500 focus:border-brand-blue-500">
-    <option value="">All Specialties</option>
-    @foreach ($departments as $department)
-        <option value="{{ $department->slug }}">{{ $department->name }}</option>
-    @endforeach
-</select>
+                                        <select name="specialty" wire:model="selectedDepartment"
+                                            class="w-full pl-10 pr-6 py-3 border border-gray-200 bg-white rounded-lg text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue-500 focus:border-brand-blue-500">
+                                            <option value="">All Specialties</option>
+                                            @foreach ($departments as $department)
+                                                <option value="{{ $department->slug }}">{{ $department->name }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
 
@@ -80,9 +75,10 @@
                                                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                                         </svg>
                                     </div>
-                                    <input type="text" name="search" wire:model.live="searchQuery"
+                                    <input type="text" name="search" wire:model.lazy="searchQuery"
                                         placeholder="Search doctors by name or specialty..."
-                                        class="w-full pl-12 pr-32 py-4 border border-gray-200 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-blue-500 focus:border-brand-blue-500">
+                                        class="w-full pl-12 pr-32 py-4 border border-gray-200 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-blue-500 focus:border-brand-blue-500"
+                                        aria-label="Search doctors">
                                     <button type="submit"
                                         class="absolute inset-y-0 right-0 px-6 py-2 m-1 bg-brand-blue-600 text-white rounded-lg hover:bg-brand-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-blue-500">
                                         Search
@@ -102,27 +98,26 @@
                                 </svg>
                                 <span>Book Appointment</span>
                             </a>
-                           
                         </div>
 
                         <!-- Stats -->
                         <div class="grid grid-cols-3 gap-4 pt-8">
                             <div class="text-center">
-                                <div class="text-2xl sm:text-3xl font-bold text-gray-900">{{ $totalDoctors }}+</div>
+                                <div class="text-2xl sm:text-3xl font-semibold text-gray-900">{{ $totalDoctors }}+</div>
                                 <div class="text-sm text-gray-600">Expert Doctors</div>
                             </div>
                             <div class="text-center">
-                                <div class="text-2xl sm:text-3xl font-bold text-gray-900">{{ $totalPatients }}+</div>
+                                <div class="text-2xl sm:text-3xl font-semibold text-gray-900">{{ $totalPatients }}+</div>
                                 <div class="text-sm text-gray-600">Happy Patients</div>
                             </div>
                             <div class="text-center">
-                                <div class="text-2xl sm:text-3xl font-bold text-gray-900">24/7</div>
+                                <div class="text-2xl sm:text-3xl font-semibold text-gray-900">24/7</div>
                                 <div class="text-sm text-gray-600">Support</div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Hero Image -->
+                    <!-- Hero Image / Doctor Carousel -->
                     <div class="flex-1 w-full max-w-lg lg:max-w-none">
                         <div x-data="{
                             doctors: @js($doctors),
@@ -163,11 +158,12 @@
                                                 <div class="w-12 h-12 sm:w-16 sm:h-16 bg-brand-blue-100 rounded-full flex items-center justify-center overflow-hidden border-2 border-white shadow-sm">
                                                     @if ($doctor->image)
                                                         <img src="{{ $doctor->image }}"
-                                                            alt="{{ $doctor->user->name }}"
+                                                            alt="Dr. {{ $doctor->user->name }}"
+                                                            loading="lazy"
                                                             class="w-full h-full object-cover">
                                                     @else
                                                         <span
-                                                            class="text-xl sm:text-2xl font-bold text-brand-blue-600">{{ substr($doctor->user->name, 0, 1) }}</span>
+                                                            class="text-xl sm:text-2xl font-semibold text-brand-blue-600">{{ substr($doctor->user->name, 0, 1) }}</span>
                                                     @endif
                                                 </div>
                                                 <div class="flex-1 min-w-0">
@@ -182,7 +178,6 @@
                                                             $hasHalfStar = $avgRating - $fullStars >= 0.5;
                                                             $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
                                                         @endphp
-
                                                         {{-- Full Stars --}}
                                                         @for ($i = 0; $i < $fullStars; $i++)
                                                             <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor"
@@ -192,7 +187,6 @@
                                                                 </path>
                                                             </svg>
                                                         @endfor
-
                                                         {{-- Half Star --}}
                                                         @if ($hasHalfStar)
                                                             <div class="relative w-3 h-3 sm:w-4 sm:h-4">
@@ -211,7 +205,6 @@
                                                                 </svg>
                                                             </div>
                                                         @endif
-
                                                         {{-- Empty Stars --}}
                                                         @for ($i = 0; $i < $emptyStars; $i++)
                                                             <svg class="w-3 h-3 sm:w-4 sm:h-4 text-gray-300" fill="currentColor"
@@ -234,7 +227,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <div class="space-y-3">
                                                 <div class="text-xs sm:text-sm text-gray-700 font-medium">Next Available:</div>
                                                 <div class="bg-brand-blue-50 rounded-lg p-2 sm:p-3 border border-brand-blue-100">
@@ -251,51 +243,51 @@
                                                             $currentHour = date('H');
 
                                                             // Check if doctor is available today and it's before 5 PM
-    if (in_array($today, $availableDays) && $currentHour < 17) {
-        $nextSlot = ['day' => 'Today', 'time' => '2:30 PM'];
-    } else {
-        // Find next available day
-        $daysOfWeek = [
-            'Monday',
-            'Tuesday',
-            'Wednesday',
-            'Thursday',
-            'Friday',
-            'Saturday',
-            'Sunday',
-        ];
-        $todayIndex = array_search($today, $daysOfWeek);
+                                                            if (in_array($today, $availableDays) && $currentHour < 17) {
+                                                                $nextSlot = ['day' => 'Today', 'time' => '2:30 PM'];
+                                                            } else {
+                                                                // Find next available day
+                                                                $daysOfWeek = [
+                                                                    'Monday',
+                                                                    'Tuesday',
+                                                                    'Wednesday',
+                                                                    'Thursday',
+                                                                    'Friday',
+                                                                    'Saturday',
+                                                                    'Sunday',
+                                                                ];
+                                                                $todayIndex = array_search($today, $daysOfWeek);
 
-        for ($i = 1; $i <= 7; $i++) {
-            $nextDayIndex = ($todayIndex + $i) % 7;
-            $nextDay = $daysOfWeek[$nextDayIndex];
+                                                                for ($i = 1; $i <= 7; $i++) {
+                                                                    $nextDayIndex = ($todayIndex + $i) % 7;
+                                                                    $nextDay = $daysOfWeek[$nextDayIndex];
 
-            if (in_array($nextDay, $availableDays)) {
-                if ($i === 1) {
-                    $nextSlot = [
-                        'day' => 'Tomorrow',
-                        'time' => '9:00 AM',
-                    ];
-                } else {
-                    $nextDate = date(
-                        'M j',
-                        strtotime("+{$i} days"),
-                    );
-                    $nextSlot = [
-                        'day' => $nextDate,
-                        'time' => '9:00 AM',
-                    ];
-                }
-                break;
-            }
-        }
-    }
-}
+                                                                    if (in_array($nextDay, $availableDays)) {
+                                                                        if ($i === 1) {
+                                                                            $nextSlot = [
+                                                                                'day' => 'Tomorrow',
+                                                                                'time' => '9:00 AM',
+                                                                            ];
+                                                                        } else {
+                                                                            $nextDate = date(
+                                                                                'M j',
+                                                                                strtotime("+{$i} days"),
+                                                                            );
+                                                                            $nextSlot = [
+                                                                                'day' => $nextDate,
+                                                                                'time' => '9:00 AM',
+                                                                            ];
+                                                                        }
+                                                                        break;
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
 
-if (!$nextSlot) {
-    $nextSlot = [
-        'day' => 'Contact for',
-        'time' => 'availability',
+                                                        if (!$nextSlot) {
+                                                            $nextSlot = [
+                                                                'day' => 'Contact for',
+                                                                'time' => 'availability',
                                                             ];
                                                         }
                                                     @endphp
@@ -361,6 +353,7 @@ if (!$nextSlot) {
                 </div>
             </div>
         </section>
+
+
     </div>
-    </section>
 </div>

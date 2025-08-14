@@ -14,6 +14,8 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('department_id')->nullable()->constrained('departments')->onDelete('set null');
+            $table->index('department_id');
+            $table->index('slug');
             $table->json('available_days')->nullable();
             $table->bigInteger('fee')->default(500);
             $table->boolean('status')->default(0);

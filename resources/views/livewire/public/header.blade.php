@@ -17,7 +17,7 @@
     </div>
 
     <!-- Main Header -->
-    <div class="container mx-auto px-3 md:px-[10%] py-3 md:py-4 ">
+    <div class="container mx-auto px-3 lg:px-[10%] py-3 md:py-4 ">
         <div class="flex justify-between items-center">
             <!-- Logo -->
             <div class="flex items-center">
