@@ -181,7 +181,7 @@
         <livewire:public.header />
 
         <!-- Page Content -->
-        <main class="flex-1 overflow-x-hidden md:mt-20 mt-10 overflow-y-auto bg-gray-100 pb-5 lg:pb-0">
+        <main class="flex-1 overflow-x-hidden md:mt-16 mt-12 overflow-y-auto bg-gray-100 pb-5 lg:pb-0">
             <div class="container mx-auto px-0 py-4">
                 {{ $slot }}
             </div>
