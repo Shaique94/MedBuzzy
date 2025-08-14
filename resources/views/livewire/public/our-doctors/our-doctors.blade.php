@@ -13,7 +13,7 @@
                     <div class="relative flex-grow">
                         <input type="text" wire:model.live.debounce.300ms="searchQuery"
                             placeholder="Search by name, specialty"
-                            class="w-full pl-4 pr-12 py-3 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-1 focus:ring-teal-500 focus:border-teal-500">
+                            class="w-full pl-4 pr-12 py-3 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-1 focus:ring-brand-blue-500 focus:border-brand-blue-500">
                         <div class="absolute inset-y-0 right-0 flex items-center pr-3">
                             @if($searchQuery)
                             <button type="button" wire:click="$set('searchQuery', '')" class="text-gray-400 hover:text-gray-600">
@@ -25,7 +25,7 @@
                         </div>
                     </div>
                     <button type="submit"
-                        class="bg-teal-500 text-white p-3 rounded-r-lg hover:bg-teal-600 transition-colors">
+                        class="bg-brand-blue-500 text-white p-3 rounded-r-lg hover:bg-brand-blue-600 transition-colors">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -69,7 +69,7 @@
                         <div class="mb-6">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Specialty</label>
                             <select wire:model.live="department_id"
-                                class="w-full p-2 text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-teal-500 focus:border-teal-500">
+                                class="w-full p-2 text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-brand-blue-500 focus:border-brand-blue-500">
                                 <option value="">All Specialties</option>
                                 @foreach ($departments as $department)
                                     <option value="{{ $department->slug }}">{{ $department->name }}</option>
@@ -83,12 +83,12 @@
                             <div class="space-y-2">
                                 <label class="flex items-center">
                                     <input type="checkbox" wire:model.live="genderFilter" value="male" 
-                                           class="rounded text-teal-600 focus:ring-teal-500 h-4 w-4">
+                                           class="rounded text-brand-blue-600 focus:ring-brand-blue-500 h-4 w-4">
                                     <span class="ml-2 text-gray-700">Male</span>
                                 </label>
                                 <label class="flex items-center">
                                     <input type="checkbox" wire:model.live="genderFilter" value="female"
-                                           class="rounded text-teal-600 focus:ring-teal-500 h-4 w-4">
+                                           class="rounded text-brand-blue-600 focus:ring-brand-blue-500 h-4 w-4">
                                     <span class="ml-2 text-gray-700">Female</span>
                                 </label>
                             </div>
@@ -117,10 +117,10 @@
                             </label>
                             <div class="flex gap-4">
                                 <input type="number" wire:model.live="minFee" min="0" max="10000" step="100"
-                                      class="w-full p-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-teal-500 focus:border-teal-500"
+                                      class="w-full p-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-brand-blue-500 focus:border-brand-blue-500"
                                       placeholder="Min">
                                 <input type="number" wire:model.live="maxFee" min="0" max="10000" step="100"
-                                      class="w-full p-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-teal-500 focus:border-teal-500"
+                                      class="w-full p-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-brand-blue-500 focus:border-brand-blue-500"
                                       placeholder="Max">
                             </div>
                         </div>
@@ -132,12 +132,12 @@
                                 @for ($i = 1; $i <= 5; $i++)
                                     <button type="button" wire:click="$set('minRating', {{ $i }})"
                                             class="w-8 h-8 rounded-full flex items-center justify-center 
-                                                  {{ $minRating >= $i ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-400' }}">
+                                                  {{ $minRating >= $i ? 'bg-brand-blue-500 text-white' : 'bg-gray-100 text-gray-400' }}">
                                         {{ $i }}
                                     </button>
                                 @endfor
                                 <button type="button" wire:click="$set('minRating', 0)"
-                                        class="text-xs text-teal-600 ml-2">Clear</button>
+                                        class="text-xs text-brand-blue-600 ml-2">Clear</button>
                             </div>
                         </div>
 
@@ -148,7 +148,7 @@
                                 Reset
                             </button>
                             <button wire:click="loadDoctors"
-                                class="flex-1 px-3 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-colors">
+                                class="flex-1 px-3 py-2 bg-brand-blue-500 text-white rounded-lg hover:bg-brand-blue-600 transition-colors">
                                 Apply
                             </button>
                         </div>
@@ -160,16 +160,13 @@
                     <!-- Results Count + Sort By -->
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
                         <h2 class="text-base sm:text-lg font-medium text-gray-900">
-                            <span class="text-teal-600">{{ count($doctors) }}</span> doctors found
-                            @if ($departmentSlug)
-                                {{-- in <span class="text-teal-600">{{ $departments->find($department_id)->name ?? '' }}</span> --}}
-                                 in <span class="text-teal-600">{{ $departments->firstWhere('slug', $departmentSlug)->name ?? '' }}</span>
-                            @endif
+                            <span class="text-brand-blue-600">{{ count($doctors) }}</span> doctors found
+                          
                         </h2>
                         <div class="flex items-center">
                             <span class="text-sm text-gray-600 mr-2">Sort by:</span>
                             <select wire:model.live="sortBy"
-                                class="text-sm border px-2 py-1 border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500">
+                                class="text-sm border px-2 py-1 border-gray-300 rounded-md focus:ring-brand-blue-500 focus:border-brand-blue-500">
                                 <option value="name">Name</option>
                                 <option value="rating">Rating</option>
                                 <option value="experience">Experience</option>
@@ -182,11 +179,12 @@
                     <!-- Mobile Active Filters -->
                     @if($this->hasActiveFilters)
                     <div class="mb-4 sm:flex sm:flex-wrap gap-2 hidden sm:block">
+
                         @if($departmentSlug)
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-100 text-teal-800">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-brand-blue-100 text-brand-blue-800">
                                 {{-- {{ $departments->find($department_id)->name ?? '' }} --}}
                                    {{ $departments->firstWhere('slug', $departmentSlug)->name ?? '' }}
-                                <button type="button" wire:click="$set('department_id', null)" class="ml-1 text-teal-600 hover:text-teal-800">
+                                <button type="button" wire:click="$set('department_id', null)" class="ml-1 text-brand-blue-600 hover:text-brand-blue-800">
                                     <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                                     </svg>
@@ -194,9 +192,9 @@
                             </span>
                         @endif
                         @if(count($genderFilter) > 0 && count($genderFilter) < 2)
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-100 text-teal-800">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-brand-blue-100 text-brand-blue-800">
                                 {{ ucfirst($genderFilter[0]) }}
-                                <button type="button" wire:click="$set('genderFilter', [])" class="ml-1 text-teal-600 hover:text-teal-800">
+                                <button type="button" wire:click="$set('genderFilter', [])" class="ml-1 text-brand-blue-600 hover:text-brand-blue-800">
                                     <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                                     </svg>
@@ -204,9 +202,9 @@
                             </span>
                         @endif
                         @if($minExperience > 0)
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-100 text-teal-800">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-brand-blue-100 text-brand-blue-800">
                                 {{ $minExperience }}+ years experience
-                                <button type="button" wire:click="$set('minExperience', 0)" class="ml-1 text-teal-600 hover:text-teal-800">
+                                <button type="button" wire:click="$set('minExperience', 0)" class="ml-1 text-brand-blue-600 hover:text-brand-blue-800">
                                     <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                                     </svg>
@@ -214,9 +212,9 @@
                             </span>
                         @endif
                         @if($minRating > 0)
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-100 text-teal-800">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-brand-blue-100 text-brand-blue-800">
                                 {{ $minRating }}+ rating
-                                <button type="button" wire:click="$set('minRating', 0)" class="ml-1 text-teal-600 hover:text-teal-800">
+                                <button type="button" wire:click="$set('minRating', 0)" class="ml-1 text-brand-blue-600 hover:text-brand-blue-800">
                                     <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                                     </svg>
@@ -229,18 +227,18 @@
                     <!-- Doctor Cards -->
                     <div class="space-y-4">
                         @forelse ($doctors as $doctor)
-                            <div class="border border-gray-200 rounded-lg hover:border-teal-300 transition-colors">
+                            <div class="border border-gray-200 rounded-lg hover:border-brand-blue-300 transition-colors">
                                 <div class="p-4">
                                     <div class="flex flex-col sm:flex-row gap-4">
                                         <!-- Doctor Image -->
                                         <div class="sm:self-start">
-                                            <div class="flex items-center justify-center w-20 h-20 mx-auto sm:mx-0 rounded-full bg-gray-100 overflow-hidden border border-gray-200">
+                                            <div class="flex items-center justify-center w-20 h-20 mx-auto sm:mx-0 rounded-full bg-brand-blue-100 overflow-hidden border border-gray-200">
                                                 @if ($doctor->image)
-                                                    <img src="{{ $doctor->image }}" 
+                                                    <img src="{{ $doctor->image }}"     
                                                          alt="Dr. {{ $doctor->user->name }}" 
                                                          class="w-full h-full object-cover">
                                                 @else
-                                                    <span class="text-2xl font-semibold text-teal-600">{{ substr($doctor->user->name, 0, 1) }}</span>
+                                                    <span class="text-2xl font-semibold text-brand-blue-600">{{ substr($doctor->user->name, 0, 1) }}</span>
                                                 @endif
                                             </div>
                                         </div>
@@ -248,7 +246,7 @@
                                         <!-- Doctor Info -->
                                         <div class="flex-1 text-center sm:text-left">
                                             <h3 class="text-lg font-medium text-gray-900">{{ $doctor->user->name }}</h3>
-                                            <p class="text-sm text-teal-600 font-medium">{{ $doctor->department->name }}</p>
+                                            <p class="text-sm text-brand-blue-600 font-medium">{{ $doctor->department->name }}</p>
                                             
                                             <!-- Qualifications -->
                                             @if(is_array($doctor->qualification) && !empty(array_filter($doctor->qualification)))
@@ -316,7 +314,7 @@
                                         <!-- Actions -->
                                         <div class="flex flex-col sm:items-end gap-2 mt-3 sm:mt-0">
                                             <div class="hidden sm:block text-right">
-                                                <p class="text-lg font-semibold text-teal-600">₹{{ $doctor->fee }}</p>
+                                                <p class="text-lg font-semibold text-brand-blue-600">₹{{ $doctor->fee }}</p>
                                                 <p class="text-sm text-gray-500">Consultation Fee</p>
                                             </div>
                                             <div class="flex flex-col sm:items-end gap-2">
@@ -325,7 +323,7 @@
                                                     View Profile
                                                 </a>
                                                 <a wire:navigate href="{{ route('appointment', ['doctor_slug' => $doctor->slug]) }}"
-                                                   class="text-center sm:w-auto w-full px-4 py-2 bg-teal-500 rounded-lg text-white hover:bg-teal-600 transition-colors text-sm">
+                                                   class="text-center sm:w-auto w-full px-4 py-2 bg-brand-blue-500 rounded-lg text-white hover:bg-brand-blue-600 transition-colors text-sm">
                                                     Book Appointment
                                                 </a>
                                             </div>
@@ -343,7 +341,7 @@
                                 <h3 class="mt-4 text-lg font-medium text-gray-900">No doctors found</h3>
                                 <p class="mt-1 text-sm text-gray-500">Try changing your search criteria or filters</p>
                                 <button wire:click="resetFilters" 
-                                        class="mt-4 inline-flex items-center px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
+                                        class="mt-4 inline-flex items-center px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-blue-500">
                                     Reset all filters
                                 </button>
                             </div>

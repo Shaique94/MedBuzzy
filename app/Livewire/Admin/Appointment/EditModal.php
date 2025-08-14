@@ -177,7 +177,7 @@ class EditModal extends Component
                 ->first();
 
             if ($existingAppointment) {
-                session()->flash('error', 'Selected time slot is no longer available.');
+                $this->dispatch('error', __('Selected time slot is no longer available.'));
                 return;
             }
 
@@ -221,14 +221,14 @@ class EditModal extends Component
             ]);
 
             \DB::commit();
-            session()->flash('message', 'Appointment updated successfully!');
+            $this->dispatch('success', __('Appointment updated successfully!'));
             $this->closeModal();
             $this->dispatch('appointmentUpdated');
             
         } catch (\Exception $e) {
             \DB::rollBack();
             \Log::error('Appointment update failed: ' . $e->getMessage());
-            session()->flash('error', 'Failed to update appointment: ' . $e->getMessage());
+            $this->dispatch('error', __('Failed to update appointment: ' . $e->getMessage()));
         }
     }
 

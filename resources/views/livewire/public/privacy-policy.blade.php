@@ -116,7 +116,7 @@
 
     <body class="bg-gray-50">
         <!-- Hero Section -->
-        <div class="bg-teal-700 text-white py-10 sm:py-12 md:py-16">
+        <div class="bg-brand-blue-700 text-white py-10 sm:py-12 md:py-16">
             <div class="container mx-auto px-4 sm:px-6 text-center">
                 <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight">
                     Medbuzzy Privacy Policy
@@ -132,9 +132,9 @@
                 <!-- Table of Contents -->
                 <div class="lg:w-1/4">
                     <div class="bg-white rounded-xl shadow-lg p-5 sm:p-6 lg:sticky lg:top-6 max-h-[calc(100vh-8rem)] overflow-hidden">
-                        <h3 class="text-lg sm:text-xl font-bold text-brand-teal-800 mb-4 pb-2 border-b border-gray-200">
+                        <h3 class="text-lg sm:text-xl font-bold text-brand-blue-800 mb-4 pb-2 border-b border-gray-200">
                             Contents</h3>
-                        <div class="overflow-y-auto max-h-[calc(100vh-12rem)] pr-2 scrollbar-thin scrollbar-thumb-brand-teal-300 scrollbar-track-gray-100">
+                        <div class="overflow-y-auto max-h-[calc(100vh-12rem)] pr-2 scrollbar-thin scrollbar-thumb-brand-blue-300 scrollbar-track-gray-100">
                             <ul class="space-y-2 sm:space-y-3 text-sm sm:text-base">
                                 <li><a wire:navigate href="#overview"
                                         class="toc-item block text-gray-700 hover:text-brand-orange-600">1. Overview</a>
@@ -182,8 +182,8 @@
                     <!-- Overview -->
                     <div id="overview" class="section-card bg-white rounded-xl shadow-md p-5 sm:p-6 md:p-8 mb-6 sm:mb-8">
                         <div class="flex items-center mb-4 sm:mb-6">
-                            <div class="bg-brand-teal-100 p-2 sm:p-3 rounded-lg mr-3 sm:mr-4 flex-shrink-0">
-                                <i class="fas fa-shield-alt text-brand-teal-600 text-lg sm:text-2xl"></i>
+                            <div class="bg-brand-blue-100 p-2 sm:p-3 rounded-lg mr-3 sm:mr-4 flex-shrink-0">
+                                <i class="fas fa-shield-alt text-brand-blue-600 text-lg sm:text-2xl"></i>
                             </div>
                             <div>
                                 <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Privacy Overview</h2>
@@ -207,8 +207,8 @@
                     <div id="data-collection"
                         class="section-card bg-white rounded-xl shadow-md p-5 sm:p-6 md:p-8 mb-6 sm:mb-8">
                         <div class="flex items-start mb-4 sm:mb-6">
-                            <div class="bg-brand-teal-100 p-2 sm:p-3 rounded-lg mr-3 sm:mr-4 flex-shrink-0">
-                                <i class="fas fa-clipboard-list text-brand-teal-600 text-lg sm:text-2xl"></i>
+                            <div class="bg-brand-blue-100 p-2 sm:p-3 rounded-lg mr-3 sm:mr-4 flex-shrink-0">
+                                <i class="fas fa-clipboard-list text-brand-blue-600 text-lg sm:text-2xl"></i>
                             </div>
                             <div>
                                 <h2 class="text-xl sm:text-2xl font-bold text-gray-800">1. What is Personal Information</h2>
@@ -274,8 +274,8 @@
                             </p>
 
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-                                <div class="bg-brand-teal-50 rounded-lg p-4 sm:p-5">
-                                    <h3 class="font-bold text-brand-teal-700 mb-2 text-sm sm:text-base">Contact Information</h3>
+                                <div class="bg-brand-blue-50 rounded-lg p-4 sm:p-5">
+                                    <h3 class="font-bold text-brand-blue-700 mb-2 text-sm sm:text-base">Contact Information</h3>
                                     <ul class="list-disc pl-6 space-y-1 text-gray-700 text-sm sm:text-base">
                                         <li>Name</li>
                                         <li>Address</li>
@@ -358,8 +358,8 @@
                             </p>
 
                             <!-- General Users and Doctors -->
-                            <div class="bg-brand-teal-50 rounded-lg p-4 sm:p-5">
-                                <h3 class="font-bold text-brand-teal-700 mb-3 text-base sm:text-lg">4.1. General (End Users and Doctors)</h3>
+                            <div class="bg-brand-blue-50 rounded-lg p-4 sm:p-5">
+                                <h3 class="font-bold text-brand-blue-700 mb-3 text-base sm:text-lg">4.1. General (End Users and Doctors)</h3>
                                 <ul class="list-disc pl-6 space-y-2 text-gray-700 text-sm sm:text-base">
                                     <li>Your registration to receive our services, identify you, communicate with you, notify you, and fulfill the terms of use</li>
                                     <li>To provide you with tailored health insights and personalized services, including targeted advertisements for different wellness and healthcare plans</li>
@@ -624,8 +624,8 @@
                     <!-- Contact Section -->
                     <div id="contact" class="section-card bg-white rounded-xl shadow-md p-5 sm:p-6 md:p-8 mb-6 sm:mb-8">
                         <div class="flex items-start mb-4 sm:mb-6">
-                            <div class="bg-brand-teal-100 p-2 sm:p-3 rounded-lg mr-3 sm:mr-4 flex-shrink-0">
-                                <i class="fas fa-envelope text-brand-teal-600 text-lg sm:text-2xl"></i>
+                            <div class="bg-brand-blue-100 p-2 sm:p-3 rounded-lg mr-3 sm:mr-4 flex-shrink-0">
+                                <i class="fas fa-envelope text-brand-blue-600 text-lg sm:text-2xl"></i>
                             </div>
                             <div>
                                 <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Contact Us About Privacy</h2>
@@ -634,24 +634,24 @@
                         </div>
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
                             <div>
-                                <h3 class="text-lg sm:text-xl font-bold text-brand-teal-700 mb-4 sm:mb-6">Privacy Contact Information</h3>
-                                <div class="bg-brand-teal-50 rounded-xl p-4 sm:p-5">
+                                <h3 class="text-lg sm:text-xl font-bold text-brand-blue-700 mb-4 sm:mb-6">Privacy Contact Information</h3>
+                                <div class="bg-brand-blue-50 rounded-xl p-4 sm:p-5">
                                     <div class="space-y-3">
                                         <div>
-                                            <h4 class="font-semibold text-brand-teal-700 mb-2">GAURIRAM MEDBUZZY (OPC) PRIVATE LIMITED</h4>
+                                            <h4 class="font-semibold text-brand-blue-700 mb-2">GAURIRAM MEDBUZZY (OPC) PRIVATE LIMITED</h4>
                                             <p class="text-gray-700 text-sm">Registered Office</p>
                                         </div>
                                         <div class="space-y-2">
                                             <p class="text-gray-700 text-sm sm:text-base flex items-center">
-                                                <i class="fas fa-envelope text-brand-teal-600 mr-2 sm:mr-3 w-4 sm:w-5"></i>
-                                                <a wire:navigate href="mailto:helpdeskmedbuzzy@gmail.com" class="hover:text-brand-teal-700 hover:underline">helpdeskmedbuzzy@gmail.com</a>
+                                                <i class="fas fa-envelope text-brand-blue-600 mr-2 sm:mr-3 w-4 sm:w-5"></i>
+                                                <a wire:navigate href="mailto:helpdeskmedbuzzy@gmail.com" class="hover:text-brand-blue-700 hover:underline">helpdeskmedbuzzy@gmail.com</a>
                                             </p>
                                             <p class="text-gray-700 text-sm sm:text-base flex items-center">
-                                                <i class="fas fa-phone text-brand-teal-600 mr-2 sm:mr-3 w-4 sm:w-5"></i>
-                                                <a wire:navigate href="tel:+919430808079" class="hover:text-brand-teal-700 hover:underline">+91 9430808079</a>
+                                                <i class="fas fa-phone text-brand-blue-600 mr-2 sm:mr-3 w-4 sm:w-5"></i>
+                                                <a wire:navigate href="tel:+919430808079" class="hover:text-brand-blue-700 hover:underline">+91 9430808079</a>
                                             </p>
                                             <p class="text-gray-700 text-sm sm:text-base flex items-start">
-                                                <i class="fas fa-map-marker-alt text-brand-teal-600 mr-2 sm:mr-3 w-4 sm:w-5 mt-1"></i>
+                                                <i class="fas fa-map-marker-alt text-brand-blue-600 mr-2 sm:mr-3 w-4 sm:w-5 mt-1"></i>
                                                 <span>Gurudwara Road, Bhatta Bazar, Purnia-854301, Bihar, India</span>
                                             </p>
                                         </div>
@@ -659,7 +659,7 @@
                                 </div>
                             </div>
                             <div>
-                                <h3 class="text-lg sm:text-xl font-bold text-brand-teal-700 mb-4 sm:mb-6">Privacy Support</h3>
+                                <h3 class="text-lg sm:text-xl font-bold text-brand-blue-700 mb-4 sm:mb-6">Privacy Support</h3>
                                 <div class="bg-gray-50 rounded-xl p-4 sm:p-5">
                                     <ul class="space-y-3 text-gray-700 text-sm sm:text-base">
                                         <li class="flex justify-between">

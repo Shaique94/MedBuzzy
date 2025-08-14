@@ -79,13 +79,13 @@ public $showModel;
 
            
 
-            session()->flash('success', 'Appointment updated successfully!');
+            $this->dispatch('success', __('Appointment updated successfully!'));
             $this->dispatch('closeModal');
             return $this->redirect(route('admin.appointment'), navigate: true);
 
         } catch (\Exception $e) {
             \Log::error('Appointment update failed: ' . $e->getMessage());
-            session()->flash('error', 'Error updating appointment: ' . $e->getMessage());
+            $this->dispatch('error', __('Error updating appointment: ' . $e->getMessage()));
         }
     }
 

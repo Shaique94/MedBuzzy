@@ -23,6 +23,9 @@ class Appointment extends Model
         'original_appointment_id',
         'reschedule_reason',
         'rescheduled_at',
+        'user_rescheduled',
+        'user_reschedule_count',
+        'user_rescheduled_at',
         'created_at',
         'updated_at',
     ];

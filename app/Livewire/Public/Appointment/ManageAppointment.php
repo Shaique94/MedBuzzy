@@ -331,7 +331,7 @@ class ManageAppointment extends Component
 
         $now = Carbon::now('Asia/Kolkata');
         $isToday = Carbon::parse($this->appointment_date)->isToday();
-       
+
         while ($currentSlot->lt($endTime)) {
             $slotEnd = $currentSlot->copy()->addMinutes($duration);
             if ($slotEnd->gt($endTime))
@@ -540,33 +540,35 @@ class ManageAppointment extends Component
                 throw new \Exception('Payment not captured');
             }
 
-            // 3. Create/update patient
-            $patient = Patient::updateOrCreate(
+            //3. Create/update user (contact person)
+            $defaultPassword = 'patient@123'; // More secure default password
+            $user = User::firstOrCreate(
                 ['phone' => $patientInfo['phone']],
                 [
+                    'name' => $patientInfo['name'], // Use patient's name for new user (contact person assumes same as first patient)
+                    'email' => $patientInfo['email'] ?? null,
+                    'password' => Hash::make($defaultPassword),
+                    'role' => 'patient',
+                    'gender' => $patientInfo['gender'],
+                ]
+            );
+            // 4. Create/update patient (linked to user)
+            $patient = Patient::updateOrCreate(
+                [
+                    'user_id' => $user->id,
                     'name' => $patientInfo['name'],
-                    'email' => $patientInfo['email'],
                     'age' => $patientInfo['age'],
+                ],
+                [
+                    'email' => $patientInfo['email'] ?? null,
                     'gender' => $patientInfo['gender'],
                     'pincode' => $patientInfo['pincode'],
                     'address' => $patientInfo['address'],
                     'district' => $patientInfo['district'] ?? null,
                     'state' => $patientInfo['state'] ?? null,
+                    'country' => 'India',
                 ]
             );
-
-            // 4. Create user account with default password
-            $defaultPassword = 'patient@123'; // More secure default password
-            $user = User::firstOrCreate(
-                ['email' => $patientInfo['email']],
-                [
-                    'name' => $patientInfo['name'],
-                    'phone' => $patientInfo['phone'],
-                    'email' => $patientInfo['email'],
-                    'password' => Hash::make($defaultPassword),
-                ]
-            );
-
             // 5. Create appointment
             $appointment = Appointment::create([
                 'doctor_id' => $appointmentInfo['doctor_id'],

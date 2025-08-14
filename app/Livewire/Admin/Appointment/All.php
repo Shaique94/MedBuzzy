@@ -52,7 +52,7 @@ class All extends Component
             $validStatuses = ['pending', 'scheduled', 'completed', 'cancelled', 'checked_in'];
             
             if (!in_array($status, $validStatuses)) {
-                session()->flash('error', 'Invalid status selected');
+                $this->dispatch('error', __('Invalid status selected'));
                 return;
             }
 
@@ -66,11 +66,11 @@ class All extends Component
             
             $appointment->status = $status;
             $appointment->save();
-            
-            session()->flash('message', "Status updated from '{$oldStatus}' to '{$status}' successfully");
+
+            $this->dispatch('success', __("Status updated from '{$oldStatus}' to '{$status}' successfully"));
             $this->loadAppointments(); // Refresh the list
         } catch (\Exception $e) {
-            session()->flash('error', 'Failed to update appointment status. Please try again.');
+            $this->dispatch('error', __('Failed to update appointment status. Please try again.'));
         }
     }
 
@@ -92,7 +92,7 @@ class All extends Component
     public function refreshAppointments()
     {
         $this->resetPage();
-        session()->flash('message', 'Appointments refreshed successfully.');
+        $this->dispatch('success', __('Appointments refreshed successfully.'));
     }
 
     public function viewAppointment($id)
@@ -179,7 +179,7 @@ class All extends Component
     public function handleAppointmentCreated()
     {
         $this->resetPage();
-        session()->flash('success', 'New appointment has been created successfully!');
+        $this->dispatch('success', __('New appointment has been created successfully!'));
     }
 
     #[Layout('layouts.admin')]

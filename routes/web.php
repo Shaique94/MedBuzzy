@@ -1,12 +1,16 @@
 <?php
 
 use App\Http\Controllers\SocialiteController;
+use App\Http\Livewire\Admin\Auth\ResetPassword;
 use App\Livewire\Admin\AdminReviewApproval;
 use App\Livewire\Admin\Appointment\Add;
 use App\Livewire\Admin\Appointment\All;
 use App\Livewire\Admin\Appointment\Update;
 use App\Livewire\Admin\Appointment\ViewDetails;
+use App\Livewire\Admin\Auth\ChangePassword;
+use App\Livewire\Admin\Auth\ForgotPassword;
 use App\Livewire\Admin\Auth\Login;
+use App\Livewire\Admin\Enquiry\EnquiryApproval;
 use App\Livewire\Admin\Review\AdminReviewManagement;
 use App\Livewire\Admin\Sections\Dashboard;
 use App\Livewire\Admin\Sections\EditDoctor;
@@ -38,6 +42,7 @@ use App\Livewire\Manager\Sections\ManageDoctor as DoctorManage;
 use App\Livewire\Manager\Sections\PatientView;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AppointmentReceiptController;
+use App\Livewire\Public\Appointment\AppointmentWizard;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
@@ -45,7 +50,7 @@ use Illuminate\Support\Facades\Artisan;
 
 // Google Auth Routes 
 Route::get('/auth/google', [SocialiteController::class, 'redirectToGoogle'])->name('google.login');
-Route::get('/auth/google-callback', [SocialiteController::class, 'handleGoogleCallback']);
+Route::get('/auth/google/callback', [SocialiteController::class, 'handleGoogleCallback']);
 
 
 // Public Routes
@@ -115,14 +120,28 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin'])->group(
     Route::get('/appointment/view/{id}', ViewDetails::class)->name('view.appointment');
     Route::get('/review',AdminReviewManagement::class)->name('reviewapprovel');
     Route::get('/doctors/edit/{id}', EditDoctor::class)->name('editDoctor');
+        Route::get('/enquiry',EnquiryApproval::class)->name('enquiry');
+
 });
+
 
 // User Routes
 Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
     Route::get('/dashboard', \App\Livewire\User\Sections\Dashboard::class)->name('user.dashboard');
 });
 
+
+
+
 Route::get('/storage-link', function () {
     Artisan::call('storage:link');
     return 'Storage link created successfully!';
 });
+
+Route::get('/forgot-password', ForgotPassword::class)
+    ->middleware('guest')
+    ->name('password.request');
+
+Route::get('/reset-password/{token}', ChangePassword::class)
+    ->middleware('guest')
+    ->name('password.reset');
