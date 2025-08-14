@@ -1,8 +1,6 @@
 <div class="container mx-auto max-w-8xl px-2 sm:px-4 lg:px-6">
-    <!-- Include Delete Confirmation Modal -->
+  
     <livewire:components.delete-confirmation-modal />
-    
-    <!-- Enhanced Header Section -->
     <div class="bg-white rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8 mb-4 sm:mb-6 lg:mb-8">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
             <div class="flex-1">
@@ -24,8 +22,6 @@
                     </span>
                 </div>
             </div>
-            
-            <!-- Add Department Button -->
             <button wire:click="$set('showModal', true)" 
                     class="bg-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-4 py-2 sm:py-2.5 rounded-lg font-medium shadow-lg transition-all duration-300 flex items-center justify-center space-x-2 hover:shadow-xl transform hover:-translate-y-0.5 text-sm sm:text-base">
                 <i class="fas fa-plus text-sm"></i>
@@ -34,42 +30,14 @@
             </button>
         </div>
     </div>
-
-    <!-- Success/Error Messages -->
-    @if (session()->has('message'))
-    <div class="mb-4 sm:mb-6 p-3 sm:p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded-lg flex items-start">
-        <svg class="h-4 w-4 sm:h-5 sm:w-5 text-green-500 mr-2 sm:mr-3 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-        </svg>
-        <p class="text-sm sm:text-base">{{ session('message') }}</p>
-    </div>
-    @endif
-
-    @if (session()->has('error'))
-    <div class="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-lg flex items-start">
-        <svg class="h-4 w-4 sm:h-5 sm:w-5 text-red-500 mr-2 sm:mr-3 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        <p class="text-sm sm:text-base">{{ session('error') }}</p>
-    </div>
-    @endif
-
-    <!-- Enhanced Departments Table -->
     <div class="bg-white rounded-xl sm:rounded-2xl shadow-lg overflow-hidden">
-        <!-- Desktop Table -->
         <div class="overflow-x-auto hidden md:block">
             <table class="w-full table-auto">
                 <thead class="bg-gradient-to-r from-gray-50 to-gray-100">
                     <tr>
-                        <th class="px-4 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                            Department
-                        </th>
-                        <th class="px-4 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                            Status
-                        </th>
-                        <th class="px-4 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                            Actions
-                        </th>
+                        <th class="px-4 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Department</th>
+                        <th class="px-4 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
+                        <th class="px-4 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
@@ -89,7 +57,6 @@
                             </div>
                         </td>
                         <td class="px-4 py-4 whitespace-nowrap">
-                            <!-- Toggle Switch for Status -->
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" 
                                        wire:click="toggleStatus({{ $department->id }})"
@@ -132,27 +99,21 @@
                 </tbody>
             </table>
         </div>
-
-        <!-- Mobile Cards -->
         <div class="md:hidden space-y-3 p-3 sm:p-4">
             @forelse($departments as $department)
             <div class="bg-white rounded-lg p-4 shadow-md border border-gray-100 hover:shadow-lg transition-shadow duration-200">
                 <div class="flex items-start space-x-3">
-                    <!-- Department Icon -->
                     <div class="flex-shrink-0">
                         <div class="h-12 w-12 rounded-full bg-blue-600 flex items-center justify-center ring-2 ring-blue-100">
                             <i class="fas fa-building text-white text-lg"></i>
                         </div>
                     </div>
-                    
-                    <!-- Department Info -->
                     <div class="flex-1 min-w-0">
                         <div class="flex items-start justify-between mb-2">
                             <div class="flex-1">
                                 <h3 class="text-base font-semibold text-gray-900 truncate">{{ $department->name }}</h3>
                                 <p class="text-xs text-gray-500 mt-1">Updated {{ $department->updated_at->diffForHumans() }}</p>
                             </div>
-                            <!-- Status Toggle -->
                             <label class="relative inline-flex items-center cursor-pointer ml-2">
                                 <input type="checkbox" 
                                        wire:click="toggleStatus({{ $department->id }})"
@@ -161,8 +122,6 @@
                                 <div class="relative w-10 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500"></div>
                             </label>
                         </div>
-                        
-                        <!-- Status Badge -->
                         <div class="mb-3">
                             @if($department->status)
                                 <span class="px-3 py-1 inline-flex text-xs leading-4 font-semibold rounded-full bg-green-100 text-green-800">
@@ -174,8 +133,6 @@
                                 </span>
                             @endif
                         </div>
-                        
-                        <!-- Action Buttons -->
                         <div class="flex space-x-2">
                             <button wire:click="edit({{ $department->id }})" 
                                     class="flex-1 bg-green-50 text-green-600 px-3 py-2 rounded-lg text-sm font-medium hover:bg-green-100 transition-colors duration-200 min-h-[44px] flex items-center justify-center">
@@ -201,8 +158,6 @@
             </div>
             @endforelse
         </div>
-
-        <!-- Enhanced Pagination -->
         @if($departments->hasPages())
         <div class="bg-gray-100 px-3 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between border-t border-gray-200">
             <div class="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-0">
@@ -214,8 +169,6 @@
         </div>
         @endif
     </div>
-
-    <!-- Enhanced Add/Edit Department Modal -->
     @if ($showModal)
     <div class="fixed inset-0 z-50 overflow-y-auto bg-gray-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
         <div class="bg-white rounded-xl sm:rounded-2xl shadow-2xl max-w-md w-full mx-3 sm:mx-0 transform transition-all duration-300">
@@ -234,7 +187,6 @@
                         <i class="fas fa-times text-base sm:text-lg"></i>
                     </button>
                 </div>
-                
                 <form wire:submit.prevent="save" class="space-y-4">
                     <div>
                         <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Department Name</label>
@@ -243,7 +195,6 @@
                             placeholder="e.g. Cardiology, Emergency">
                         @error('name') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                     </div>
-                    
                     <div class="flex space-x-3 pt-4">
                         <button type="button" wire:click="$set('showModal', false)"
                                 class="flex-1 px-4 py-3 sm:py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 transition-colors duration-200 min-h-[44px]">
@@ -260,61 +211,46 @@
         </div>
     </div>
     @endif
-
-<style>
-    /* Touch-friendly sizing for mobile */
-    @media (max-width: 640px) {
-        button, a, input, select, textarea {
-            min-height: 44px;
+    <style>
+        @media (max-width: 640px) {
+            button, a, input, select, textarea {
+                min-height: 44px;
+            }
+            .mobile-friendly {
+                font-size: 0.875rem;
+                line-height: 1.25rem;
+            }
+            .mobile-card {
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+            }
+            .mobile-card:active {
+                transform: scale(0.98);
+            }
         }
-        
-        .mobile-friendly {
-            font-size: 0.875rem;
-            line-height: 1.25rem;
+        .peer:checked + div {
+            background-color: #10b981;
         }
-        
-        .mobile-card {
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        .peer:focus + div {
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
         }
-        
-        .mobile-card:active {
-            transform: scale(0.98);
+        .btn-action {
+            transition: all 0.2s ease;
         }
-    }
-
-    /* Custom toggle switch styles */
-    .peer:checked + div {
-        background-color: #10b981;
-    }
-    
-    .peer:focus + div {
-        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
-    }
-    
-    /* Enhanced button animations */
-    .btn-action {
-        transition: all 0.2s ease;
-    }
-    
-    .btn-action:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    
-    .btn-action:active {
-        transform: translateY(0);
-    }
-    
-    /* Loading animation */
-    .loading-dots::after {
-        content: '';
-        animation: loading-dots 1.5s infinite;
-    }
-    
-    @keyframes loading-dots {
-        0%, 20% { content: '.'; }
-        40% { content: '..'; }
-        60%, 100% { content: '...'; }
-    }
-</style>
+        .btn-action:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn-action:active {
+            transform: translateY(0);
+        }
+        .loading-dots::after {
+            content: '';
+            animation: loading-dots 1.5s infinite;
+        }
+        @keyframes loading-dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+    </style>
 </div>

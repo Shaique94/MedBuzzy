@@ -12,7 +12,7 @@
          style="display: none;">
         
         <div @click.outside="showModal = false" class="bg-white rounded-xl shadow-2xl max-w-lg w-full mx-4 overflow-hidden">
-            <div class="p-6 bg-gradient-to-r from-brand-teal-500 to-brand-teal-600 text-white">
+            <div class="p-6 bg-gradient-to-r from-brand-blue-500 to-brand-blue-600 text-white">
                 <div class="flex justify-between items-center">
                     <h3 class="text-xl font-semibold">Write Your Review</h3>
                     <button @click="showModal = false" class="text-white hover:text-gray-200">
@@ -50,7 +50,7 @@
                             id="comment"
                             wire:model="comment"
                             rows="4"
-                            class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-teal-500"
+                            class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue-500"
                             placeholder="Share your experience with this doctor..."
                         ></textarea>
                         @error('comment') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
@@ -65,7 +65,7 @@
                         </button>
                         <button
                             type="submit"
-                            class="px-4 py-2 text-white bg-brand-teal-600 rounded-lg hover:bg-brand-teal-700"
+                            class="px-4 py-2 text-white bg-brand-blue-600 rounded-lg hover:bg-brand-blue-700"
                             wire:loading.attr="disabled"
                             wire:loading.class="opacity-75">
                             <span wire:loading.remove>Submit Review</span>

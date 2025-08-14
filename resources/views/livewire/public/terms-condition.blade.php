@@ -138,7 +138,7 @@
 
     <body class="bg-gray-50">
         <!-- Hero Section -->
-        <div class="bg-teal-700 text-white py-10 sm:py-12 md:py-16">
+        <div class="bg-brand-blue-700 text-white py-10 sm:py-12 md:py-16">
             <div class="container mx-auto px-4 sm:px-6 text-center">
                 <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight">
                     Medbuzzy Terms & Conditions
@@ -146,7 +146,7 @@
                 <p class="text-base sm:text-lg md:text-xl max-w-3xl mx-auto mb-6 sm:mb-8 leading-relaxed">
                     Terms of Use governing your access and use of our healthcare platform
                 </p>
-                <div class="text-xs sm:text-sm text-teal-100">
+                <div class="text-xs sm:text-sm text-brand-blue-100">
                     Last updated: August 1, 2025
                 </div>
             </div>
@@ -157,7 +157,7 @@
                 <!-- Table of Contents - Sticky Position -->
                 <div class="toc-fixed">
                     <div class="bg-white rounded-xl shadow-lg p-5 sm:p-6">
-                        <h3 class="text-lg sm:text-xl font-bold text-brand-teal-800 mb-4 pb-2 border-b border-gray-200">
+                        <h3 class="text-lg sm:text-xl font-bold text-brand-blue-800 mb-4 pb-2 border-b border-gray-200">
                             Contents</h3>
                         <div class="pr-2">
                             <ul class="space-y-2 sm:space-y-3 text-sm sm:text-base">
@@ -192,8 +192,8 @@
                 <!-- Terms Overview -->
                     <div id="overview" class="section-card bg-white rounded-xl shadow-md p-5 sm:p-6 md:p-8 mb-6 sm:mb-8">
                         <div class="flex items-center mb-4 sm:mb-6">
-                            <div class="bg-brand-teal-100 p-2 sm:p-3 rounded-lg mr-3 sm:mr-4 flex-shrink-0">
-                                <i class="fas fa-info-circle text-brand-teal-600 text-lg sm:text-2xl"></i>
+                            <div class="bg-brand-blue-100 p-2 sm:p-3 rounded-lg mr-3 sm:mr-4 flex-shrink-0">
+                                <i class="fas fa-info-circle text-brand-blue-600 text-lg sm:text-2xl"></i>
                             </div>
                             <div>
                                 <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Terms Overview</h2>
@@ -215,8 +215,8 @@
                     <!-- 1. General Section -->
                     <div id="general" class="section-card bg-white rounded-xl shadow-md p-5 sm:p-6 md:p-8 mb-6 sm:mb-8">
                         <div class="flex items-start mb-4 sm:mb-6">
-                            <div class="bg-brand-teal-100 p-2 sm:p-3 rounded-lg mr-3 sm:mr-4 flex-shrink-0">
-                                <i class="fas fa-building text-brand-teal-600 text-lg sm:text-2xl"></i>
+                            <div class="bg-brand-blue-100 p-2 sm:p-3 rounded-lg mr-3 sm:mr-4 flex-shrink-0">
+                                <i class="fas fa-building text-brand-blue-600 text-lg sm:text-2xl"></i>
                             </div>
                             <div>
                                 <h2 class="text-xl sm:text-2xl font-bold text-gray-800">1. General</h2>
@@ -224,8 +224,8 @@
                             </div>
                         </div>
                         <div class="space-y-4 sm:space-y-6">
-                            <div class="bg-brand-teal-50 rounded-lg p-4 sm:p-5">
-                                <h3 class="font-bold text-brand-teal-700 mb-2 text-sm sm:text-base">1.1 Company Information</h3>
+                            <div class="bg-brand-blue-50 rounded-lg p-4 sm:p-5">
+                                <h3 class="font-bold text-brand-blue-700 mb-2 text-sm sm:text-base">1.1 Company Information</h3>
                                 <p class="text-gray-700 text-sm sm:text-base leading-relaxed">
                                     We, at <strong>GAURIRAM MEDBUZZY (OPC) PRIVATE LIMITED</strong> a company duly incorporated under the provisions of the Companies Act, 2013, having its registered office at Gurudwara Road, Bhatta Bazar, Purnia-854301 Bihar, India (collectively, "GM(O)Pvt. Ltd", "Medbuzzy", "We", "Us", "Our" "Company") provide services to all individuals accessing or using our app, Medbuzzy and website (www.medbuzzy.com) (collectively "Platform") for any reason ("You", "Yours", "User") subject to the notices, terms, and conditions set forth in these Terms of Use ("Terms of Use", "Agreement", "Terms"), read with the Privacy Policy, Return Policy, Payment & Refunds Policy available here https://www.medbuzzy.com. GM(O)Pvt. Ltd and User are hereinafter individually referred to as the "Party" and collectively as the "Parties".
                                 </p>
@@ -337,8 +337,8 @@
                                 Through the Platform, We provide You with the following services ("Services"):
                             </p>
 
-                            <div class="bg-brand-teal-50 rounded-lg p-4 sm:p-5">
-                                <h3 class="font-bold text-brand-teal-700 mb-3 text-base sm:text-lg">a. Creating and maintaining user accounts</h3>
+                            <div class="bg-brand-blue-50 rounded-lg p-4 sm:p-5">
+                                <h3 class="font-bold text-brand-blue-700 mb-3 text-base sm:text-lg">a. Creating and maintaining user accounts</h3>
                                 <p class="text-gray-700 text-sm sm:text-base leading-relaxed">
                                     Users need to register on the Platform in order to use the Platform or the Services provided through the Platform. In order to register, You have to provide certain personal details including but not limited to Your name, phone number, email address, birth date, gender, etc.
                                 </p>
@@ -640,7 +640,7 @@
                             <div class="bg-green-50 rounded-lg p-4 sm:p-5">
                                 <h3 class="font-bold text-green-700 mb-2 text-sm sm:text-base">9.1 Privacy Rights</h3>
                                 <p class="text-gray-700 text-sm sm:text-base leading-relaxed">
-                                    We respect your right to privacy in respect of any personal information provided to us for the purposes of availing our Services. To see how we collect and use your personal information, please see our Privacy Policy available at <a wire:navigate href=navigate href="https://www.medbuzzy.com/privacy" class="text-brand-teal-600 hover:underline">https://www.medbuzzy.com/privacy</a>.
+                                    We respect your right to privacy in respect of any personal information provided to us for the purposes of availing our Services. To see how we collect and use your personal information, please see our Privacy Policy available at <a wire:navigate href=navigate href="https://www.medbuzzy.com/privacy" class="text-brand-blue-600 hover:underline">https://www.medbuzzy.com/privacy</a>.
                                 </p>
                             </div>
 
@@ -730,7 +730,7 @@
                             <div class="bg-green-50 rounded-lg p-4 sm:p-5">
                                 <h3 class="font-bold text-green-700 mb-2 text-sm sm:text-base">11.1 Payment and Refund</h3>
                                 <p class="text-gray-700 text-sm sm:text-base leading-relaxed">
-                                    Please note that your payments are processed in accordance with applicable laws as amended from time to time and You may refer to our Payment and Refunds Policy for details, and such policy available at <a wire:navigate href=navigate href="https://www.medbuzzy.com/refund-policy" class="text-brand-teal-600 hover:underline">https://www.medbuzzy.com/refund-policy</a>
+                                    Please note that your payments are processed in accordance with applicable laws as amended from time to time and You may refer to our Payment and Refunds Policy for details, and such policy available at <a wire:navigate href=navigate href="https://www.medbuzzy.com/refund-policy" class="text-brand-blue-600 hover:underline">https://www.medbuzzy.com/refund-policy</a>
                                 </p>
                             </div>
 
@@ -922,8 +922,8 @@
                             </div>
 
                             <!-- Contact and Grievance -->
-                            <div id="grievance-contact" class="bg-brand-teal-50 rounded-lg p-4 sm:p-5">
-                                <h3 class="font-bold text-brand-teal-700 mb-2 text-sm sm:text-base">12.8 Contact Us and Grievance Redressal Mechanism</h3>
+                            <div id="grievance-contact" class="bg-brand-blue-50 rounded-lg p-4 sm:p-5">
+                                <h3 class="font-bold text-brand-blue-700 mb-2 text-sm sm:text-base">12.8 Contact Us and Grievance Redressal Mechanism</h3>
                                 <p class="text-gray-700 text-sm sm:text-base leading-relaxed">
                                     In accordance with the Consumer Protection (E-Commerce) Rules, 2020 as amended from the time to time, the Company has designated a Grievance Officer who will be responsible for the Users grievance redressal. Please refer to the Contact & Grievance Redressal section above for complete details on how to reach our designated officers.
                                 </p>
@@ -934,8 +934,8 @@
                     <!-- Contact Section moved from above -->
                     <div class="section-card bg-white rounded-xl shadow-md p-5 sm:p-6 md:p-8 mb-6 sm:mb-8">
                         <div class="flex items-start mb-4 sm:mb-6">
-                            <div class="bg-brand-teal-100 p-2 sm:p-3 rounded-lg mr-3 sm:mr-4 flex-shrink-0">
-                                <i class="fas fa-envelope text-brand-teal-600 text-lg sm:text-2xl"></i>
+                            <div class="bg-brand-blue-100 p-2 sm:p-3 rounded-lg mr-3 sm:mr-4 flex-shrink-0">
+                                <i class="fas fa-envelope text-brand-blue-600 text-lg sm:text-2xl"></i>
                             </div>
                             <div>
                                 <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Contact & Grievance Redressal</h2>
@@ -944,21 +944,21 @@
                         </div>
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
                             <div>
-                                <h3 class="text-lg sm:text-xl font-bold text-brand-teal-700 mb-4 sm:mb-6">Grievance Officer</h3>
-                                <div class="bg-brand-teal-50 rounded-xl p-4 sm:p-5">
+                                <h3 class="text-lg sm:text-xl font-bold text-brand-blue-700 mb-4 sm:mb-6">Grievance Officer</h3>
+                                <div class="bg-brand-blue-50 rounded-xl p-4 sm:p-5">
                                     <div class="space-y-3">
                                         <div>
-                                            <h4 class="font-semibold text-brand-teal-700 mb-2">Ms. Sonali Dhakre</h4>
+                                            <h4 class="font-semibold text-brand-blue-700 mb-2">Ms. Sonali Dhakre</h4>
                                             <p class="text-gray-700 text-sm">Doctor Consultation Bookings</p>
                                         </div>
                                         <div class="space-y-2">
                                             <p class="text-gray-700 text-sm sm:text-base flex items-center">
-                                                <i class="fas fa-envelope text-brand-teal-600 mr-2 sm:mr-3 w-4 sm:w-5"></i>
-                                                <a wire:navigate href=navigate href="mailto:grievance@apollo247.org" class="hover:text-brand-teal-700 hover:underline">grievance@apollo247.org</a>
+                                                <i class="fas fa-envelope text-brand-blue-600 mr-2 sm:mr-3 w-4 sm:w-5"></i>
+                                                <a wire:navigate href=navigate href="mailto:grievance@apollo247.org" class="hover:text-brand-blue-700 hover:underline">grievance@apollo247.org</a>
                                             </p>
                                             <p class="text-gray-700 text-sm sm:text-base flex items-center">
-                                                <i class="fas fa-phone text-brand-teal-600 mr-2 sm:mr-3 w-4 sm:w-5"></i>
-                                                <a wire:navigate href=navigate href="tel:+918045050412" class="hover:text-brand-teal-700 hover:underline">080-45050412</a>
+                                                <i class="fas fa-phone text-brand-blue-600 mr-2 sm:mr-3 w-4 sm:w-5"></i>
+                                                <a wire:navigate href=navigate href="tel:+918045050412" class="hover:text-brand-blue-700 hover:underline">080-45050412</a>
                                             </p>
                                         </div>
                                     </div>
@@ -966,7 +966,7 @@
                             </div>
                             
                             <div>
-                                <h3 class="text-lg sm:text-xl font-bold text-brand-teal-700 mb-4 sm:mb-6">Grievance-cum-Nodal Officer</h3>
+                                <h3 class="text-lg sm:text-xl font-bold text-brand-blue-700 mb-4 sm:mb-6">Grievance-cum-Nodal Officer</h3>
                                 <div class="bg-gray-50 rounded-xl p-4 sm:p-5">
                                     <div class="space-y-3">
                                         <div>
@@ -975,12 +975,12 @@
                                         </div>
                                         <div class="space-y-2">
                                             <p class="text-gray-700 text-sm sm:text-base flex items-center">
-                                                <i class="fas fa-envelope text-brand-teal-600 mr-2 sm:mr-3 w-4 sm:w-5"></i>
-                                                <a wire:navigate href=navigate href="mailto:grievancemedbuzzy@gmail.com" class="hover:text-brand-teal-700 hover:underline">grievancemedbuzzy@gmail.com</a>
+                                                <i class="fas fa-envelope text-brand-blue-600 mr-2 sm:mr-3 w-4 sm:w-5"></i>
+                                                <a wire:navigate href=navigate href="mailto:grievancemedbuzzy@gmail.com" class="hover:text-brand-blue-700 hover:underline">grievancemedbuzzy@gmail.com</a>
                                             </p>
                                             <p class="text-gray-700 text-sm sm:text-base flex items-center">
-                                                <i class="fas fa-phone text-brand-teal-600 mr-2 sm:mr-3 w-4 sm:w-5"></i>
-                                                <a wire:navigate href=navigate href="tel:+914041894747" class="hover:text-brand-teal-700 hover:underline">040-41894747</a>
+                                                <i class="fas fa-phone text-brand-blue-600 mr-2 sm:mr-3 w-4 sm:w-5"></i>
+                                                <a wire:navigate href=navigate href="tel:+914041894747" class="hover:text-brand-blue-700 hover:underline">040-41894747</a>
                                             </p>
                                         </div>
                                     </div>

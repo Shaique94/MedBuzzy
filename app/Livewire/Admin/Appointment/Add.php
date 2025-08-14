@@ -200,9 +200,9 @@ class Add extends Component
         if (strlen($cleanValue) === 10) {
             $existingPatient = Patient::where('phone', $cleanValue)->first();
             if ($existingPatient) {
-                session()->flash('phone_exists', 'This phone number is already registered to ' . $existingPatient->name . '. You can update the information if needed.');
+                $this->dispatch('phone_exists', __('This phone number is already registered to ' . $existingPatient->name . '. You can update the information if needed.'));
             } else {
-                session()->forget('phone_exists');
+                $this->dispatch('phone_exists', null);
             }
         }
         
@@ -608,12 +608,8 @@ class Add extends Component
 
             DB::commit();
 
-            session()->flash('success', 'Appointment booked successfully! 
-                <br><strong>Patient:</strong> ' . $patient->name . ' 
-                <br><strong>Doctor:</strong> Dr. ' . $this->selectedDoctor->user->name . ' 
-                <br><strong>Date:</strong> ' . Carbon::parse($this->appointment_date)->format('d M Y') . ' 
-                <br><strong>Time:</strong> ' . Carbon::parse($this->appointment_time)->format('h:i A') . ' 
-                <br><strong>Payment:</strong> ₹50 has been recorded.');
+           
+            $this->dispatch('success', __('Appointment booked successfully'));
             
             // Dispatch event to refresh appointment list
             $this->dispatch('appointmentCreated');
@@ -767,8 +763,8 @@ class Add extends Component
 
             DB::commit();
 
-            session()->flash('success', 'Appointment booked successfully! Payment completed via UPI.');
-            
+            $this->dispatch('success', __('Appointment booked successfully! Payment completed via UPI.'));
+
             // Dispatch event to refresh appointment list
             $this->dispatch('appointmentCreated');
             
@@ -782,7 +778,7 @@ class Add extends Component
                 'error' => $e->getTraceAsString()
             ]);
 
-            session()->flash('error', 'Payment processing failed. Please try again.');
+            $this->dispatch('error', __('Payment processing failed. Please try again.'));
             return redirect()->route('admin.appointment');
         }
     }
@@ -795,7 +791,7 @@ class Add extends Component
         }
         
         \Log::warning('Payment failed', ['data' => $data, 'user' => auth()->id()]);
-        session()->flash('error', $errorMessage);
+        $this->dispatch('error', $errorMessage);
         $this->isProcessing = false;
         
         // Reset payment state

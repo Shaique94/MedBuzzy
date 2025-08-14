@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Department extends Model
 {
-    protected $fillable = ['name', 'status'];
+    protected $fillable = ['name','slug','status'];
 
     public function doctors()
     {
@@ -17,4 +17,17 @@ class Department extends Model
     {
         return 'slug';
     }
+
+    protected static function boot()
+{
+    parent::boot();
+
+    static::creating(function ($department) {
+        $department->slug = \Illuminate\Support\Str::slug($department->name);
+    });
+
+    static::updating(function ($department) {
+        $department->slug = \Illuminate\Support\Str::slug($department->name);
+    });
+}
 }

@@ -285,7 +285,7 @@ class CreateDoctor extends Component
             \DB::commit();
 
             $this->resetForm();
-            session()->flash('message', 'Doctor created successfully.');
+            $this->dispatch('success', __('Doctor created successfully.'));
             $this->dispatch('doctorCreated');
             $this->dispatch('refreshDoctorList');
             $this->closeModal();
@@ -315,8 +315,8 @@ class CreateDoctor extends Component
             \Log::error('Error creating doctor: ' . $e->getMessage(), [
                 'trace' => $e->getTraceAsString()
             ]);
-            
-            session()->flash('error', 'Error creating doctor: ' . $e->getMessage());
+
+            $this->dispatch('error', __('Error creating doctor: ' . $e->getMessage()));
         }
     }
 

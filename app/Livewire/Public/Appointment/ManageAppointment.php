@@ -64,7 +64,7 @@ class ManageAppointment extends Component
         'newPatient.age' => 'required|integer|min:1|max:120',
         'newPatient.gender' => 'required|string|in:male,female,other',
         'newPatient.pincode' => 'required|digits:6',
-        'newPatient.address' => 'required|string|min:10|max:500',
+        'newPatient.address' => 'required|string|max:500',
         'notes' => 'nullable|string|max:1000',
     ];
 
@@ -85,7 +85,7 @@ class ManageAppointment extends Component
         'newPatient.pincode.required' => 'Pincode is required.',
         'newPatient.pincode.digits' => 'Pincode must be 6 digits.',
         'newPatient.address.required' => 'Address is required.',
-        'newPatient.address.min' => 'Address must be at least 10 characters.',
+        // 'newPatient.address.min' => 'Address must be at least 10 characters.',
     ];
 
     public function mount($doctor_slug = null)

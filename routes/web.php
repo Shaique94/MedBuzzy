@@ -1,13 +1,16 @@
 <?php
 
 use App\Http\Controllers\SocialiteController;
-use App\Jobs\SendBookingConfirmationEmail;
+use App\Http\Livewire\Admin\Auth\ResetPassword;
 use App\Livewire\Admin\AdminReviewApproval;
 use App\Livewire\Admin\Appointment\Add;
 use App\Livewire\Admin\Appointment\All;
 use App\Livewire\Admin\Appointment\Update;
 use App\Livewire\Admin\Appointment\ViewDetails;
+use App\Livewire\Admin\Auth\ChangePassword;
+use App\Livewire\Admin\Auth\ForgotPassword;
 use App\Livewire\Admin\Auth\Login;
+use App\Livewire\Admin\Enquiry\EnquiryApproval;
 use App\Livewire\Admin\Review\AdminReviewManagement;
 use App\Livewire\Admin\Sections\Dashboard;
 use App\Livewire\Admin\Sections\EditDoctor;
@@ -39,6 +42,7 @@ use App\Livewire\Manager\Sections\ManageDoctor as DoctorManage;
 use App\Livewire\Manager\Sections\PatientView;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AppointmentReceiptController;
+use App\Livewire\Public\Appointment\AppointmentWizard;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
@@ -51,7 +55,8 @@ Route::get('/auth/google/callback', [SocialiteController::class, 'handleGoogleCa
 
 // Public Routes
 Route::get('/', LandingPage::class)->name('hero');
-Route::get('/dept', OurDoctors::class)->name('our-doctors');
+// Route::get('/dept', OurDoctors::class)->name('our-doctors');
+Route::get('/doctors/{department?}', OurDoctors::class)->name('our-doctors');
 Route::get('/terms-conditions', TermsCondition::class)->name('terms-conditons');
 Route::get('/privacy-policy', PrivacyPolicy::class)->name('privacy-policy');
 Route::get('/doctor/{slug}', ViewDoctorDetail::class)->name('doctor-detail');
@@ -115,23 +120,16 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin'])->group(
     Route::get('/appointment/view/{id}', ViewDetails::class)->name('view.appointment');
     Route::get('/review',AdminReviewManagement::class)->name('reviewapprovel');
     Route::get('/doctors/edit/{id}', EditDoctor::class)->name('editDoctor');
+        Route::get('/enquiry',EnquiryApproval::class)->name('enquiry');
+
 });
+
+
 
 Route::get('/storage-link', function () {
     Artisan::call('storage:link');
     return 'Storage link created successfully!';
 });
-
-//jobs sender
-
-// Route::get('/send-mail',function(){
- 
-//     $userMail='kumarujjo149@gmail.com';
-
-//     dispatch(new SendBookingConfirmationEmail($userMail));
-
-//     dd('send mail successgully');
-// });
 
 Route::get('/test-email', function () {
     $patient = App\Models\Patient::first();
