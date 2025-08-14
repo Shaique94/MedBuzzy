@@ -49,7 +49,7 @@
     <!-- User Profile Dropdown -->
     <div class="hidden lg:flex items-center space-x-3 relative" x-data="{ open: false }">
         <button @click="open = !open" class="flex items-center space-x-2 focus:outline-none">
-            <div class="w-9 h-9 rounded-full bg-brand-teal-100 flex items-center justify-center text-brand-teal-800 font-semibold">
+            <div class="w-9 h-9 rounded-full bg-brand-blue-100 flex items-center justify-center text-brand-blue-800 font-semibold">
                 {{ substr(auth()->user()->name, 0, 1) }}
             </div>
             <span class="text-gray-700 font-medium">{{ auth()->user()->name }}</span>
@@ -62,7 +62,7 @@
         <div x-show="open" @click.away="open = false" 
              class="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-50 border border-gray-100">
             <a wire:navigate href="{{ route('user.dashboard') }}" 
-               class="block px-4 py-2 text-sm text-gray-700 hover:bg-brand-teal-50 flex items-center space-x-2">
+               class="block px-4 py-2 text-sm text-gray-700 hover:bg-brand-blue-50 flex items-center space-x-2">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                 </svg>
@@ -138,14 +138,14 @@
             <div class="pt-4 border-t space-y-3">
               @auth
     <div class="flex items-center space-x-3 px-3 py-2">
-        <div class="w-8 h-8 rounded-full bg-brand-teal-100 flex items-center justify-center text-brand-teal-800 font-semibold">
+        <div class="w-8 h-8 rounded-full bg-brand-blue-100 flex items-center justify-center text-brand-blue-800 font-semibold">
             {{ substr(auth()->user()->name, 0, 1) }}
         </div>
         <span class="text-gray-700 font-medium">{{ auth()->user()->name }}</span>
     </div>
     
     <a wire:navigate href="{{ route('user.dashboard') }}" 
-       class="block text-gray-700 hover:text-brand-teal-600 font-medium py-2 px-3 rounded-lg hover:bg-brand-teal-50 transition-colors duration-200 flex items-center space-x-2 mobile-menu-link">
+       class="block text-gray-700 hover:text-brand-blue-600 font-medium py-2 px-3 rounded-lg hover:bg-brand-blue-50 transition-colors duration-200 flex items-center space-x-2 mobile-menu-link">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
         </svg>

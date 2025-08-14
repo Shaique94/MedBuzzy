@@ -3,7 +3,7 @@
     <div class="bg-white rounded-xl shadow-sm p-6">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between">
             <div>
-                <h2 class="text-xl md:text-2xl font-bold text-brand-teal-600">Hello, {{ $user->name }}!</h2>
+                <h2 class="text-xl md:text-2xl font-bold text-brand-blue-600">Hello, {{ $user->name }}!</h2>
                 <p class="text-gray-600 mt-1">Here's your appointment summary</p>
             </div>
             <div class="mt-4 md:mt-0">
@@ -18,7 +18,7 @@
     <div class="bg-white rounded-xl shadow-sm overflow-hidden">
         <div class="p-6 border-b border-gray-200">
             <h3 class="text-lg font-semibold flex items-center">
-                <i class="fas fa-calendar-day text-brand-teal-500 mr-2"></i>
+                <i class="fas fa-calendar-day text-brand-blue-500 mr-2"></i>
                 Upcoming Appointments
             </h3>
         </div>
@@ -39,14 +39,14 @@
                                     <span class="text-sm text-gray-500 ml-2">{{ $appointment->doctor->department->name }}</span>
                                 </h4>
                                 <div class="flex items-center mt-1 text-sm">
-                                    <i class="fas fa-clock text-brand-teal-500 mr-1.5"></i>
+                                    <i class="fas fa-clock text-brand-blue-500 mr-1.5"></i>
                                     <span>{{ $appointment->appointment_date->format('D, M j, Y') }}</span>
                                     <span class="mx-2">•</span>
                                     <span>{{ $appointment->appointment_time->format('h:i A') }}</span>
                                 </div>
                             </div>
                             <div class="flex space-x-2">
-                                <a href="#" class="text-sm bg-brand-teal-50 text-brand-teal-600 px-3 py-1 rounded-lg">
+                                <a href="#" class="text-sm bg-brand-blue-50 text-brand-blue-600 px-3 py-1 rounded-lg">
                                     <i class="fas fa-eye mr-1"></i> Details
                                 </a>
                                 <button wire:click="cancelAppointment({{ $appointment->id }})" class="text-sm bg-red-50 text-red-600 px-3 py-1 rounded-lg">
@@ -85,7 +85,7 @@
                                     {{ $appointment->status }}
                                 </p>
                             </div>
-                            <a href="#" class="text-sm text-brand-teal-500 hover:underline">
+                            <a href="#" class="text-sm text-brand-blue-500 hover:underline">
                                 View Details
                             </a>
                         </div>

@@ -18,7 +18,7 @@
         <button onclick="toggleSidebar()" class="text-gray-600">
             <i class="fas fa-bars text-xl"></i>
         </button>
-        <h1 class="text-xl font-bold text-brand-teal-600">My Profile</h1>
+        <h1 class="text-xl font-bold text-brand-blue-600">My Profile</h1>
         <a href="{{ route('appointment') }}" class="bg-brand-orange-500 text-white px-3 py-1 rounded-lg text-sm">
             <i class="fas fa-plus mr-1"></i> Book
         </a>
@@ -26,7 +26,7 @@
 
     <!-- Desktop Header -->
     <header class="hidden lg:flex bg-white shadow-sm p-4 justify-between items-center sticky top-0 z-10">
-        <h1 class="text-2xl font-bold text-brand-teal-600">Welcome, {{ auth()->user()->name }}</h1>
+        <h1 class="text-2xl font-bold text-brand-blue-600">Welcome, {{ auth()->user()->name }}</h1>
         <div class="flex space-x-4">
             <a href="{{ route('appointment') }}" class="bg-brand-orange-500 hover:bg-brand-orange-600 text-white px-4 py-2 rounded-lg flex items-center">
                 <i class="fas fa-plus mr-2"></i> New Appointment
@@ -42,7 +42,7 @@
         <!-- Sidebar -->
         <aside id="sidebar" class="fixed w-64 h-full bg-white shadow-lg transform -translate-x-full lg:translate-x-0 transition-transform z-30">
             <div class="p-4 border-b border-gray-200 flex items-center space-x-3">
-                <div class="w-10 h-10 bg-brand-teal-100 rounded-full flex items-center justify-center text-brand-teal-600 font-bold">
+                <div class="w-10 h-10 bg-brand-blue-100 rounded-full flex items-center justify-center text-brand-blue-600 font-bold">
                     {{ substr(auth()->user()->name, 0, 1) }}
                 </div>
                 <div>
@@ -51,13 +51,13 @@
                 </div>
             </div>
             <nav class="p-4 space-y-2">
-                <a wire:navigate href="" class="flex items-center p-3 rounded-lg hover:bg-brand-teal-50 text-brand-teal-600 font-medium">
+                <a wire:navigate href="" class="flex items-center p-3 rounded-lg hover:bg-brand-blue-50 text-brand-blue-600 font-medium">
                     <i class="fas fa-tachometer-alt mr-3 w-5 text-center"></i> Dashboard
                 </a>
-                <a wire:navigate href="" class="flex items-center p-3 rounded-lg hover:bg-brand-teal-50 text-gray-700">
+                <a wire:navigate href="" class="flex items-center p-3 rounded-lg hover:bg-brand-blue-50 text-gray-700">
                     <i class="fas fa-calendar-check mr-3 w-5 text-center"></i> My Appointments
                 </a>
-                <a wire:navigate href="" class="flex items-center p-3 rounded-lg hover:bg-brand-teal-50 text-gray-700">
+                <a wire:navigate href="" class="flex items-center p-3 rounded-lg hover:bg-brand-blue-50 text-gray-700">
                     <i class="fas fa-user-edit mr-3 w-5 text-center"></i> Profile Settings
                 </a>
                 <form method="POST" action="{{ route('logout') }}">
