@@ -31,7 +31,7 @@
         class="py-16 bg-brand-blue-50"
     >
 
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class=" mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-3xl md:text-4xl font-semibold text-brand-blue-800 mb-4">Browse by Specialties</h2>
                 <p class="text-lg text-gray-600 max-w-2xl mx-auto">Find the right specialist for your healthcare needs</p>
@@ -99,12 +99,12 @@
 
     <!-- Top Doctors Section -->
     <section class="py-16 bg-white">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class=" mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-3xl md:text-4xl font-semibold text-gray-900 mb-4 tracking-tight">Our Expert Doctors</h2>
                 <p class="text-lg text-gray-600 max-w-2xl mx-auto">Connect with top-tier, verified healthcare professionals ready to provide exceptional care.</p>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4 sm:p-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-6 p-4 sm:p-6">
                 @forelse ($doctors as $doctor)
 
                     <div class="bg-white rounded-xl border border-brand-blue-100 shadow-sm hover:shadow-md transition-all duration-300" wire:key="doctor-{{ $doctor->id }}">
@@ -168,7 +168,7 @@
 
     <!-- How Booking Works Section -->
     <section class="bg-brand-blue-50 py-16">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class=" mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-semibold text-brand-blue-800 sm:text-4xl">How It Works</h2>
                 <p class="mt-4 max-w-2xl text-lg text-gray-600 mx-auto">
