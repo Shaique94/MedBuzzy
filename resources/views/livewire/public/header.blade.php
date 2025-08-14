@@ -17,7 +17,7 @@
     </div>
 
     <!-- Main Header -->
-    <div class="container mx-auto px-3 lg:px-[10%] py-3 md:py-4 ">
+    <div class=" mx-auto px-3 lg:px-[10%] py-3 md:py-4 ">
         <div class="flex justify-between items-center">
             <!-- Logo -->
             <div class="flex items-center">
@@ -27,20 +27,7 @@
             </div>
 
             <!-- Desktop Navigation -->
-            <nav class="hidden lg:flex items-center space-x-2">
-                <a wire:navigate href="{{ route('our-doctors') }}"
-                    class="text-gray-700 hover:text-brand-blue-600 font-medium transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-brand-blue-50">
-                    Find Doctor
-                </a>
-                <a wire:navigate href="{{ route('about-us') }}"
-                    class="text-gray-700 hover:text-brand-blue-600 font-medium transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-brand-blue-50">
-                    About MedBuzzy
-                </a>
-                <a wire:navigate href="{{ route('contact-us') }}"
-                    class="text-gray-700 hover:text-brand-blue-600 font-medium transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-brand-blue-50">
-                    Contact Us
-                </a>
-            </nav>
+           
 
             <!-- Right Side Actions -->
             <div class="flex items-center space-x-4">
@@ -82,7 +69,7 @@
 @endauth
                 
                 <!-- Book Now Button -->
-                <a wire:navigate href="{{ route('appointment') }}"
+                <a wire:navigate href="{{ route('our-doctors') }}"
                     class="bg-brand-orange-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-brand-orange-600 transition-colors duration-200 flex items-center shadow-md hover:shadow-lg whitespace-nowrap">
 
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -90,7 +77,7 @@
                             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
                         </path>
                     </svg>
-                    <span class=" text-xs md:text-sm sm:inline">Consult with a Doctor</span>
+                    <span class=" text-xs md:text-sm sm:inline">Find Doctor</span>
                 </a>
 
                 @guest
