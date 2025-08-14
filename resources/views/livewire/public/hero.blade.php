@@ -1,31 +1,22 @@
 <div>
     <div>
         <section
-            class="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-teal-50 pt-8 pb-16 md:pt-16 md:pb-24">
+            class="relative overflow-hidden bg-gradient-to-br from-brand-blue-50 via-white to-brand-blue-100 pt-8 pb-16 md:pt-16 md:pb-24">
             <!-- Decorative Background Elements -->
             <div class="absolute inset-0 overflow-hidden">
-                <div class="absolute top-20 right-20 w-32 h-32 bg-teal-200 rounded-full opacity-20 animate-pulse"></div>
-                <div class="absolute bottom-20 left-20 w-24 h-24 bg-orange-200 rounded-full opacity-30"></div>
-                <div class="absolute top-1/2 left-1/4 w-16 h-16 bg-blue-200 rounded-full opacity-25"></div>
+                <div class="absolute top-20 right-20 w-32 h-32 bg-brand-blue-200 rounded-full opacity-20 animate-pulse"></div>
+                <div class="absolute bottom-20 left-20 w-24 h-24 bg-brand-yellow-200 rounded-full opacity-30"></div>
+                <div class="absolute top-1/2 left-1/4 w-16 h-16 bg-brand-blue-200 rounded-full opacity-25"></div>
             </div>
 
             <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10">
-                <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
+                <div class="flex flex-col lg:flex-row items-center gap-8">
                     <!-- Hero Content -->
-                    <div class="flex-1 text-center lg:text-left space-y-6 lg:space-y-8">
-                        <div class="space-y-4">
-                            <div
-                                class="inline-flex items-center px-4 py-2 bg-teal-100 text-teal-700 rounded-full text-sm font-medium">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                Trusted Healthcare Platform
-                            </div>
-
+                    <div class="flex-1 text-center lg:text-left space-y-2 lg:space-y-4">
+                        <div class="space-y-2">
                             <h1 class="text-3xl sm:text-4xl lg:text-6xl font-bold text-gray-900 leading-tight">
                                 Your Health,
-                                <span class="text-teal-600">Simplified</span>
+                                <span class="text-brand-blue-600">Simplified</span>
                             </h1>
 
                             <p class="text-lg sm:text-xl text-gray-600 max-w-lg mx-auto lg:mx-0 leading-relaxed">
@@ -69,8 +60,9 @@
                                                 </path>
                                             </svg>
                                         </div>
+
                                        <select name="specialty" wire:model="selectedDepartment"
-    class="w-full pl-10 pr-4 py-3 border border-gray-200 bg-white rounded-lg text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+    class="w-full pl-10 pr-6 py-3 border border-gray-200 bg-white rounded-lg text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue-500 focus:border-brand-blue-500">
     <option value="">All Specialties</option>
     @foreach ($departments as $department)
         <option value="{{ $department->slug }}">{{ $department->name }}</option>
@@ -90,9 +82,9 @@
                                     </div>
                                     <input type="text" name="search" wire:model.live="searchQuery"
                                         placeholder="Search doctors by name or specialty..."
-                                        class="w-full pl-12 pr-32 py-4 border border-gray-200 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+                                        class="w-full pl-12 pr-32 py-4 border border-gray-200 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-blue-500 focus:border-brand-blue-500">
                                     <button type="submit"
-                                        class="absolute inset-y-0 right-0 px-6 py-2 m-1 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500">
+                                        class="absolute inset-y-0 right-0 px-6 py-2 m-1 bg-brand-blue-600 text-white rounded-lg hover:bg-brand-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-blue-500">
                                         Search
                                     </button>
                                 </div>
@@ -102,7 +94,7 @@
                         <!-- CTA Buttons -->
                         <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                             <a wire:navigate href="{{ route('appointment') }}"
-                                class="bg-gradient-to-r from-orange-500 to-red-500 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:from-orange-600 hover:to-red-600 transition-all w-full duration-200 flex items-center justify-center space-x-2">
+                                class="bg-brand-blue-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-brand-blue-700 transition-all w-full duration-200 flex items-center justify-center space-x-2">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
@@ -155,7 +147,7 @@
                                 setTimeout(() => { this.transitioning = false }, 350);
                             }
                         }" class="relative">
-                            <div class="bg-teal-100 rounded-3xl p-8 lg:p-12">
+                            <div class="bg-brand-blue-100 rounded-3xl p-8 lg:p-8">
                                 <div class="relative h-[340px]">
                                     @foreach ($doctors as $index => $doctor)
                                         <div x-show="current === {{ $index }}"
@@ -168,19 +160,19 @@
                                             class="absolute inset-0 bg-white rounded-2xl p-4 sm:p-6 space-y-3 sm:space-y-4"
                                             style="will-change: opacity, transform;">
                                             <div class="flex items-center gap-2 sm:gap-3">
-                                                <div class="w-12 h-12 sm:w-16 sm:h-16 bg-teal-100 rounded-full flex items-center justify-center overflow-hidden border-2 border-white shadow-sm">
+                                                <div class="w-12 h-12 sm:w-16 sm:h-16 bg-brand-blue-100 rounded-full flex items-center justify-center overflow-hidden border-2 border-white shadow-sm">
                                                     @if ($doctor->image)
                                                         <img src="{{ $doctor->image }}"
                                                             alt="{{ $doctor->user->name }}"
                                                             class="w-full h-full object-cover">
                                                     @else
                                                         <span
-                                                            class="text-xl sm:text-2xl font-bold text-teal-600">{{ substr($doctor->user->name, 0, 1) }}</span>
+                                                            class="text-xl sm:text-2xl font-bold text-brand-blue-600">{{ substr($doctor->user->name, 0, 1) }}</span>
                                                     @endif
                                                 </div>
                                                 <div class="flex-1 min-w-0">
                                                     <div class="font-semibold text-gray-900 text-base sm:text-lg truncate">{{ $doctor->user->name }}</div>
-                                                    <div class="text-xs sm:text-sm text-teal-600 font-medium truncate">{{ $doctor->department->name ?? 'General Medicine' }}</div>
+                                                    <div class="text-xs sm:text-sm text-brand-blue-600 font-medium truncate">{{ $doctor->department->name ?? 'General Medicine' }}</div>
                                                 </div>
                                                 <div class="text-right">
                                                     <div class="flex text-yellow-400 justify-end mb-1">
@@ -245,7 +237,7 @@
 
                                             <div class="space-y-3">
                                                 <div class="text-xs sm:text-sm text-gray-700 font-medium">Next Available:</div>
-                                                <div class="bg-teal-50 rounded-lg p-2 sm:p-3 border border-teal-100">
+                                                <div class="bg-brand-blue-50 rounded-lg p-2 sm:p-3 border border-brand-blue-100">
                                                     @php
                                                         $availableDays = is_array($doctor->available_days)
                                                             ? $doctor->available_days
@@ -308,8 +300,8 @@ if (!$nextSlot) {
                                                         }
                                                     @endphp
 
-                                                    <div class="font-medium text-xs sm:text-sm text-teal-800">{{ $nextSlot['day'] }}, {{ $nextSlot['time'] }}</div>
-                                                    <div class="text-[10px] sm:text-xs text-teal-600">₹{{ $doctor->fee ?? 500 }} consultation</div>
+                                                    <div class="font-medium text-xs sm:text-sm text-brand-blue-800">{{ $nextSlot['day'] }}, {{ $nextSlot['time'] }}</div>
+                                                    <div class="text-[10px] sm:text-xs text-brand-blue-600">₹{{ $doctor->fee ?? 500 }} consultation</div>
                                                 </div>
 
                                                 <div class="grid grid-cols-2 gap-2 text-sm">
@@ -330,7 +322,7 @@ if (!$nextSlot) {
                                                 </div>
 
                                                 <a wire:navigate href="{{ route('appointment', ['doctor_slug' => $doctor->slug]) }}"
-                                                    class="w-full block bg-teal-600 text-white py-2 sm:py-3 rounded-lg font-medium hover:bg-teal-700 transition-colors text-center text-sm sm:text-base">
+                                                    class="w-full block bg-brand-blue-600 text-white py-2 sm:py-3 rounded-lg font-medium hover:bg-brand-blue-700 transition-colors text-center text-sm sm:text-base">
                                                     Book Appointment
                                                 </a>
                                             </div>
@@ -340,16 +332,16 @@ if (!$nextSlot) {
                             </div>
                             <!-- Carousel Controls -->
                             <button @click="prev" :disabled="transitioning"
-                                class="absolute left-0 top-1/2 -translate-y-1/2 bg-white border border-teal-200 rounded-full p-1 sm:p-2 shadow hover:bg-teal-50 transition -translate-x-1/2 disabled:opacity-50 disabled:cursor-not-allowed">
-                                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-teal-600" fill="none" stroke="currentColor"
+                                class="absolute left-0 top-1/2 -translate-y-1/2 bg-white border border-brand-blue-200 rounded-full p-1 sm:p-2 shadow hover:bg-brand-blue-50 transition -translate-x-1/2 disabled:opacity-50 disabled:cursor-not-allowed">
+                                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-brand-blue-600" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M15 19l-7-7 7-7"></path>
                                 </svg>
                             </button>
                             <button @click="next" :disabled="transitioning"
-                                class="absolute right-0 top-1/2 -translate-y-1/2 bg-white border border-teal-200 rounded-full p-1 sm:p-2 shadow hover:bg-teal-50 transition translate-x-1/2 disabled:opacity-50 disabled:cursor-not-allowed">
-                                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-teal-600" fill="none" stroke="currentColor"
+                                class="absolute right-0 top-1/2 -translate-y-1/2 bg-white border border-brand-blue-200 rounded-full p-1 sm:p-2 shadow hover:bg-brand-blue-50 transition translate-x-1/2 disabled:opacity-50 disabled:cursor-not-allowed">
+                                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-brand-blue-600" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9 5l7 7-7 7"></path>
@@ -359,7 +351,7 @@ if (!$nextSlot) {
                             <div class="flex justify-center gap-2 mt-4">
                                 @foreach ($doctors as $index => $doctor)
                                     <button @click="goTo({{ $index }})"
-                                        :class="current === {{ $index }} ? 'bg-teal-600' : 'bg-teal-200'"
+                                        :class="current === {{ $index }} ? 'bg-brand-blue-600' : 'bg-brand-blue-200'"
                                         :disabled="transitioning"
                                         class="w-3 h-3 rounded-full transition-all duration-200"></button>
                                 @endforeach
@@ -371,6 +363,4 @@ if (!$nextSlot) {
         </section>
     </div>
     </section>
-</div>
-
 </div>

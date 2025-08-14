@@ -42,6 +42,7 @@ use App\Livewire\Manager\Sections\ManageDoctor as DoctorManage;
 use App\Livewire\Manager\Sections\PatientView;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AppointmentReceiptController;
+use App\Livewire\Public\Appointment\AppointmentWizard;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
