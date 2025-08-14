@@ -12,9 +12,11 @@
             <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10">
                 <div class="flex flex-col lg:flex-row items-center gap-8">
                     <!-- Hero Content -->
+
                     <div class="flex-1 text-center lg:text-left space-y-2 lg:space-y-4">
                         <div class="space-y-2">
                             <h1 class="text-3xl sm:text-4xl lg:text-6xl font-semibold text-gray-900 leading-tight">
+
                                 Your Health,
                                 <span class="text-brand-blue-600">Simplified</span>
                             </h1>
@@ -31,7 +33,9 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <!-- Location -->
                                     <div class="relative">
+
                                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+
                                             <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -40,7 +44,7 @@
                                                     d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                             </svg>
                                         </div>
-                                        <select name="location" wire:model="location" disabled
+                                        <select name="location" wire:model="location" disabled  aria-label="Current location: Purnea, Bihar"
                                             class="w-full pl-10 pr-6 py-3 border border-gray-200 bg-gray-50 rounded-lg text-gray-600 text-sm">
                                             <option value="purnea">📍 Purnea, Bihar</option>
                                         </select>
@@ -48,7 +52,9 @@
 
                                     <!-- Specialty -->
                                     <div class="relative">
+
                                         <div class="absolute inset-y-0 left-0 p-3 flex items-center pointer-events-none">
+
                                             <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -56,6 +62,7 @@
                                                 </path>
                                             </svg>
                                         </div>
+
                                         <select name="specialty" wire:model="selectedDepartment"
                                             class="w-full pl-10 pr-6 py-3 border border-gray-200 bg-white rounded-lg text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue-500 focus:border-brand-blue-500">
                                             <option value="">All Specialties</option>
@@ -63,6 +70,7 @@
                                                 <option value="{{ $department->slug }}">{{ $department->name }}</option>
                                             @endforeach
                                         </select>
+
                                     </div>
                                 </div>
 
@@ -80,7 +88,9 @@
                                         class="w-full pl-12 pr-32 py-4 border border-gray-200 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-blue-500 focus:border-brand-blue-500"
                                         aria-label="Search doctors">
                                     <button type="submit"
+
                                         class="absolute inset-y-0 right-0 px-6 py-2 m-1 bg-brand-blue-600 text-white rounded-lg hover:bg-brand-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-blue-500">
+
                                         Search
                                     </button>
                                 </div>
@@ -90,8 +100,10 @@
                         <!-- CTA Buttons -->
                         <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                             <a wire:navigate href="{{ route('appointment') }}"
+
                                 class="bg-brand-blue-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-brand-blue-700 transition-all w-full duration-200 flex items-center justify-center space-x-2">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
                                     </path>
@@ -103,8 +115,10 @@
                         <!-- Stats -->
                         <div class="grid grid-cols-3 gap-4 pt-8">
                             <div class="text-center">
+
                                 <div class="text-2xl sm:text-3xl font-semibold text-gray-900">{{ $totalDoctors }}+</div>
                                 <div class="text-sm text-gray-600">Expert Doctors</div>
+
                             </div>
                             <div class="text-center">
                                 <div class="text-2xl sm:text-3xl font-semibold text-gray-900">{{ $totalPatients }}+</div>
@@ -142,10 +156,12 @@
                                 setTimeout(() => { this.transitioning = false }, 350);
                             }
                         }" class="relative">
+
                             <div class="bg-brand-blue-100 rounded-3xl p-8 lg:p-8">
+
                                 <div class="relative h-[340px]">
                                     @foreach ($doctors as $index => $doctor)
-                                        <div x-show="current === {{ $index }}"
+                                        <div x-show="current === {{ $index }}" aria-live="polite"
                                             x-transition:enter="transition-opacity duration-300"
                                             x-transition:enter-start="opacity-0 scale-95"
                                             x-transition:enter-end="opacity-100 scale-100"
@@ -168,10 +184,12 @@
                                                 </div>
                                                 <div class="flex-1 min-w-0">
                                                     <div class="font-semibold text-gray-900 text-base sm:text-lg truncate">{{ $doctor->user->name }}</div>
+
                                                     <div class="text-xs sm:text-sm text-brand-blue-600 font-medium truncate">{{ $doctor->department->name ?? 'General Medicine' }}</div>
+
                                                 </div>
                                                 <div class="text-right">
-                                                    <div class="flex text-yellow-400 justify-end mb-1">
+                                                    <div class="flex text-yellow-400 justify-end mb-1" aria-hidden="true">
                                                         @php
                                                             $avgRating = $doctor->reviews_avg_rating ?? 0;
                                                             $fullStars = floor($avgRating);
@@ -215,7 +233,7 @@
                                                             </svg>
                                                         @endfor
                                                     </div>
-                                                    <div class="text-[10px] sm:text-xs text-gray-500">
+                                                    <div class="text-[10px] sm:text-xs text-gray-600">
                                                         @if ($avgRating > 0)
                                                             {{ number_format($avgRating, 1) }}
                                                             @if ($doctor->reviews_count > 0)
@@ -292,14 +310,16 @@
                                                         }
                                                     @endphp
 
+
                                                     <div class="font-medium text-xs sm:text-sm text-brand-blue-800">{{ $nextSlot['day'] }}, {{ $nextSlot['time'] }}</div>
                                                     <div class="text-[10px] sm:text-xs text-brand-blue-600">₹{{ $doctor->fee ?? 500 }} consultation</div>
+
                                                 </div>
 
                                                 <div class="grid grid-cols-2 gap-2 text-sm">
-                                                    <div class="bg-gray-50 rounded p-1 sm:p-2 text-center">
-                                                        <div class="font-medium text-gray-800 text-xs sm:text-sm">{{ $doctor->experience ?? '5+' }} yrs</div>
-                                                        <div class="text-[9px] sm:text-xs text-gray-500">Experience</div>
+                                                    <div class="bg-gray-50 rounded p-1 sm:p-2 text-center  border border-gray-200">
+                                                        <div class="font-medium text-gray-900 text-xs sm:text-sm">{{ $doctor->experience ?? '5+' }} yrs</div>
+                                                        <div class="text-[9px] sm:text-xs text-gray-700">Experience</div>
                                                     </div>
                                                     <div class="bg-gray-50 rounded p-1 sm:p-2 text-center">
                                                         <div class="font-medium text-gray-800 text-xs sm:text-sm">
@@ -314,7 +334,9 @@
                                                 </div>
 
                                                 <a wire:navigate href="{{ route('appointment', ['doctor_slug' => $doctor->slug]) }}"
+
                                                     class="w-full block bg-brand-blue-600 text-white py-2 sm:py-3 rounded-lg font-medium hover:bg-brand-blue-700 transition-colors text-center text-sm sm:text-base">
+
                                                     Book Appointment
                                                 </a>
                                             </div>
@@ -324,28 +346,40 @@
                             </div>
                             <!-- Carousel Controls -->
                             <button @click="prev" :disabled="transitioning"
+
                                 class="absolute left-0 top-1/2 -translate-y-1/2 bg-white border border-brand-blue-200 rounded-full p-1 sm:p-2 shadow hover:bg-brand-blue-50 transition -translate-x-1/2 disabled:opacity-50 disabled:cursor-not-allowed">
                                 <svg class="w-5 h-5 sm:w-6 sm:h-6 text-brand-blue-600" fill="none" stroke="currentColor"
+
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M15 19l-7-7 7-7"></path>
                                 </svg>
                             </button>
                             <button @click="next" :disabled="transitioning"
+
                                 class="absolute right-0 top-1/2 -translate-y-1/2 bg-white border border-brand-blue-200 rounded-full p-1 sm:p-2 shadow hover:bg-brand-blue-50 transition translate-x-1/2 disabled:opacity-50 disabled:cursor-not-allowed">
                                 <svg class="w-5 h-5 sm:w-6 sm:h-6 text-brand-blue-600" fill="none" stroke="currentColor"
+
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9 5l7 7-7 7"></path>
                                 </svg>
                             </button>
                             <!-- Dots -->
-                            <div class="flex justify-center gap-2 mt-4">
+                            <div class="flex justify-center gap-2 mt-4" role="tablist" aria-label="Doctor carousel navigation dots">
                                 @foreach ($doctors as $index => $doctor)
                                     <button @click="goTo({{ $index }})"
+
                                         :class="current === {{ $index }} ? 'bg-brand-blue-600' : 'bg-brand-blue-200'"
+
                                         :disabled="transitioning"
-                                        class="w-3 h-3 rounded-full transition-all duration-200"></button>
+                                        class="w-3 h-3 rounded-full transition-all duration-200"
+                                         role="tab"
+                                           :aria-selected="current === {{ $index }} ? 'true' : 'false'"
+              aria-label="View doctor {{ $index + 1 }}"
+           :aria-controls="'doctor-slide-' + {{ $index }}"
+             :tabindex="current === {{ $index }} ? '0' : '-1'"
+            ></button>
                                 @endforeach
                             </div>
                         </div>

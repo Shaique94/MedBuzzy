@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+
     <title>{{ $title ?? ' MedBuzzy - Healthcare Management System' }}</title>
     <title>Book Doctors Online | MedBuzzy - Purnea, Bihar</title>
     <meta name="description"
@@ -81,7 +82,7 @@
                 }
             }
         }
-    </script>
+    </script> --}}
 
     <!-- Custom CSS for gradients and mobile nav -->
     <style>
@@ -141,8 +142,18 @@
     <meta property="og:url" content="{{ url()->current() }}">
     <link rel="canonical" href="{{ url()->current() }}">
 
+
+      <!-- Preload critical CSS -->
+    <style>
+        /* Critical CSS for above-the-fold content */
+        body { @apply bg-gray-50 font-sans min-h-screen flex flex-col }
+        .container { @apply mx-auto px-0 py-4 }
+        /* Add other critical styles */
+    </style>
+
+  
     <!-- Scripts -->
-    {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
 

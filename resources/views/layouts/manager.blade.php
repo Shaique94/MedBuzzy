@@ -5,13 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $title ?? ' Manager Panel - MedBuzzy' }}</title>
+    {{-- <title>{{ $title ? $title . ' | Manager Panel - MedBuzzy' : 'Manager Panel - MedBuzzy' }}</title> --}}
+    
+    {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
 
-    <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Open Graph & canonical tags (optional) -->
     <meta property="og:url" content="{{ url()->current() }}">
     <link rel="canonical" href="{{ url()->current() }}">
+
+    
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
 </head>
 
 <body class="bg-gray-100 font-sans antialiased">

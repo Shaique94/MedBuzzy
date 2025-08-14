@@ -3,6 +3,7 @@
     <livewire:public.hero />
 
     <!-- Featured Specialties Section -->
+
     <section 
         x-data="{
             scroll: 0,
@@ -29,6 +30,7 @@
         "
         class="py-16 bg-brand-blue-50"
     >
+
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-3xl md:text-4xl font-semibold text-brand-blue-800 mb-4">Browse by Specialties</h2>
@@ -38,20 +40,24 @@
             <div class="relative">
                 <!-- Prev Button -->
                 <button @click="scrollPrev"
+
                     class="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 lg:-translate-x-8 z-10 bg-white rounded-full p-2 shadow-lg hover:shadow-xl transition-all duration-200 focus:outline-none"
                     :class="scroll <= 0 ? 'opacity-50 cursor-not-allowed' : 'opacity-100'" :disabled="scroll <= 0">
                     <svg class="w-6 h-6 text-brand-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+
                     </svg>
                 </button>
 
                 <!-- Next Button -->
                 <button @click="scrollNext"
-                    class="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 lg:translate-x-8 z-10 bg-white rounded-full p-2 shadow-lg hover:shadow-xl transition-all duration-200 focus:outline-none"
+                    class="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 lg:translate-x-8 z-10 bg-white rounded-full p-2 shadow-lg hover:shadow-xl transition-all duration-200 "
                     :class="scroll >= scrollMax ? 'opacity-50 cursor-not-allowed' : 'opacity-100'"
+
                     :disabled="scroll >= scrollMax">
                     <svg class="w-6 h-6 text-brand-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+
                     </svg>
                 </button>
 
@@ -59,6 +65,7 @@
                 <div x-ref="container"
                     class="grid grid-flow-col auto-cols-max md:auto-cols-min gap-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory scroll-smooth">
                     @foreach ($departments as $department)
+
                         <a wire:navigate href="{{ route('our-doctors', ['department_id' => $department->id]) }}"
                            wire:key="dept-{{ $department->id }}"
                            class="flex flex-col items-center bg-white rounded-xl shadow hover:shadow-md border border-brand-blue-100 px-6 py-5 min-w-[180px] snap-center transition-all duration-200">
@@ -70,6 +77,7 @@
                             </div>
                             <div class="font-semibold text-brand-blue-800 text-base mb-1">{{ $department->name }}</div>
                             <div class="text-xs text-gray-500">{{ $department->doctors->count() ?? 0 }} doctors</div>
+
                         </a>
                     @endforeach
                 </div>
@@ -77,7 +85,9 @@
 
             <div class="text-center mt-12">
                 <a wire:navigate href="{{ route('our-doctors') }}"
+
                     class="inline-flex items-center px-6 py-3 bg-brand-blue-600 text-white rounded-lg font-medium hover:bg-brand-blue-700 transition-colors">
+
                     View All Specialties
                     <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -96,6 +106,7 @@
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4 sm:p-6">
                 @forelse ($doctors as $doctor)
+
                     <div class="bg-white rounded-xl border border-brand-blue-100 shadow-sm hover:shadow-md transition-all duration-300" wire:key="doctor-{{ $doctor->id }}">
                         <div class="relative bg-brand-blue-50 rounded-t-xl p-4 flex items-center">
                             <img src="{{ $doctor->image ?? 'https://ui-avatars.com/api/?name=' . urlencode($doctor->user->name) . '&background=random&rounded=true' }}"
@@ -115,6 +126,7 @@
                                         ({{ $doctor->reviews_count ?? 0 }})
                                     </span>
                                 </div>
+
                             </div>
                         </div>
                         <div class="p-4">
@@ -122,9 +134,11 @@
                                 <span class="font-medium text-brand-blue-800">{{ $doctor->experience ?? '5+' }} yrs exp.</span>
                                 <span class="font-medium text-brand-blue-800">₹{{ $doctor->fee }}</span>
                             </div>
+
                             <a wire:navigate href="{{ route('doctor-detail', ['slug' => $doctor->slug]) }}"
                                class="block mt-4 w-full bg-brand-blue-600 text-white py-2 rounded-lg font-medium text-center hover:bg-brand-blue-700 transition-colors">
                                 View Profile
+
                             </a>
                         </div>
                     </div>
@@ -140,7 +154,9 @@
             </div>
             <div class="text-center mt-12">
                 <a wire:navigate href="{{ route('our-doctors') }}"
+
                     class="inline-flex items-center px-6 py-3 bg-brand-blue-500 text-white rounded-lg font-medium hover:bg-brand-blue-600 transition-colors duration-200">
+
                     View All Doctors
                     <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -166,6 +182,7 @@
                     <div class="h-32 flex items-center justify-center">
                         <svg class="size-32" viewBox="-40 -40 480.00 480.00" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M222 76C210.988 106.84 171.627 128.31 147 132" stroke="#003066" stroke-opacity="0.9" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M236 44.053C123.346 20.1218 96.7679 144.026 136.104 167" stroke="#003066" stroke-opacity="0.9" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M256 54C302.745 75.4047 288.975 108.654 272.736 144" stroke="#003066" stroke-opacity="0.9" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M260.902 122C295.577 228.082 142 250.963 142 156.601" stroke="#003066" stroke-opacity="0.9" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M218.892 153C219.298 150.031 218.46 147.754 218 145" stroke="#003066" stroke-opacity="0.9" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M191 154C191 151.332 191 148.668 191 146" stroke="#003066" stroke-opacity="0.9" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M60 345.501C60 309.522 83.3747 224.325 163.582 228.248C185.925 229.341 191.24 351.835 206.062 345.501C232 334.416 223.446 254.231 243.571 224.158C340.019 219.027 341 340.572 341 359" stroke="#003066" stroke-opacity="0.9" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M296 271C288.365 253.665 267.103 230.409 247 228" stroke="#003066" stroke-opacity="0.9" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M163 232C139.27 246.396 128.966 267.837 120 292" stroke="#003066" stroke-opacity="0.9" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M93.0228 347.996C90.4525 330.039 91.6852 307.132 109.075 296.665C157.969 267.237 151.718 362.878 128.138 345.983" stroke="#003066" stroke-opacity="0.9" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M293.07 271.039C321.891 269.785 283.781 299.392 290.907 273.038" stroke="#003066" stroke-opacity="0.9" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M304 324.289C291.859 322.728 282.476 327.953 271 329" stroke="#003066" stroke-opacity="0.9" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
                     </div>
+
                     <h3 class="text-xl font-semibold text-brand-blue-900 mt-4">Find a Doctor</h3>
                     <p class="mt-2 text-gray-600">Search for specialists by location, specialty or condition</p>
                 </div>
@@ -174,6 +191,7 @@
                     <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-brand-yellow-500 text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-semibold shadow-md">2</div>
                     <div class="h-32 flex items-center justify-center">
                        <svg class="size-28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M13 17H21M17 21V13M10 11H4M20 9V7C20 5.89543 19.1046 5 18 5H6C4.89543 5 4 5.89543 4 7V19C4 20.1046 4.89543 21 6 21H10M15 3V7M9 3V7" stroke="#003066" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+
                     </div>
                     <h3 class="text-xl font-semibold text-brand-blue-900 mt-4">Book Appointment</h3>
                     <p class="mt-2 text-gray-600">Select a convenient time slot and book instantly</p>
@@ -204,4 +222,6 @@
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
     </style>
+
 </div>
+

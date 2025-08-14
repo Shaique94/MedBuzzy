@@ -9,7 +9,8 @@
           <title>{{ $title ?? ' Doctor Panel - MedBuzzy' }}</title>
     
     <!-- Tailwind (optional, if not already included in app.css) -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
+
 
     <!-- Canonical & OpenGraph -->
     <meta property="og:url" content="{{ url()->current() }}">
@@ -17,7 +18,6 @@
 
     <!-- App styles and scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
     @livewireStyles
 </head>
 
@@ -32,6 +32,9 @@
             <livewire:doctor.sidebar />
         </div>
 
+ <!-- Sidebar Overlay (for mobile) -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-20 md:hidden hidden" onclick="toggleSidebar()"></div>
+
         <!-- Main Content -->
         <div class="flex-1 flex flex-col md:ml-64 transition-all duration-300">
 
@@ -40,7 +43,7 @@
 
             <!-- Page Content -->
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
-                <div class="container mx-auto px-6 py-8">
+                <div class="container mx-auto px-4 sm:px-6 py-6 ">
                     {{ $slot }}
                 </div>
             </main>
@@ -52,18 +55,36 @@
 
     <!-- Sidebar Toggle Script -->
     <script>
-        function toggleSidebar() {
+        // function toggleSidebar() {
+        //     const sidebar = document.getElementById('sidebar');
+        //     sidebar.classList.toggle('-translate-x-full');
+        // }
+
+         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            
             sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+            
+            // Toggle body scroll
+            document.body.classList.toggle('overflow-hidden', !sidebar.classList.contains('-translate-x-full'));
         }
+
+        // Close sidebar when clicking outside (mobile)
+        document.addEventListener('click', (e) => {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            
+            if (!sidebar.contains(e.target) && !e.target.closest('[data-sidebar-toggle]') && !overlay.classList.contains('hidden')) {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            }
+        });
     </script>
 
     @livewireScripts
-</body>
-</html>
-
-
-
 
 <script>
     document.addEventListener('livewire:initialized', () => {
@@ -78,3 +99,10 @@
         });
     });
 </script>
+
+</body>
+</html>
+
+
+
+

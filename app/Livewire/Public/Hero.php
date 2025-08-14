@@ -10,6 +10,7 @@ use Livewire\Component;
 
 class Hero extends Component
 {
+    public $location = ''; 
     public $selectedDepartment = '';
     public $searchQuery = '';
     public $departments;
