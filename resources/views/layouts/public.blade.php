@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-
     <title>{{ $title ?? ' MedBuzzy - Healthcare Management System' }}</title>
     <title>Book Doctors Online | MedBuzzy - Purnea, Bihar</title>
     <meta name="description"
@@ -17,6 +16,7 @@
         content="Book appointments with trusted doctors in Purnea, Bihar. MedBuzzy offers instant booking, expert consultations, and 24/7 support.">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:type" content="website">
+    
     <!-- Tailwind CSS with full config -->
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -25,6 +25,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon/favicon-16x16.png') }}">
     <link rel="manifest" href="{{ asset('favicon/site.webmanifest') }}">
+    
     <script>
         tailwind.config = {
             theme: {
@@ -82,9 +83,9 @@
                 }
             }
         }
-    </script> --}}
+    </script> 
 
-    <!-- Custom CSS for gradients and mobile nav -->
+    <!-- Custom CSS -->
     <style>
         .hero-gradient {
             background: linear-gradient(135deg, #e6f0f9 0%, #ffffff 70%, #fffbeb 100%);
@@ -126,32 +127,48 @@
         }
 
         .mobile-bottom-nav .active-tab {
-            @apply text-brand-blue-600;
+            color: #0d4b8c;
         }
 
         .mobile-bottom-nav .active-tab div {
-            @apply bg-brand-blue-600 text-white shadow-md;
+            background-color: #0d4b8c;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
 
         /* Add x-cloak directive support */
         [x-cloak] {
             display: none !important;
         }
+
+        /* Hide Tawk.to widget on mobile */
+        @media (max-width: 768px) {
+            .tawk-chat-container {
+                display: none !important;
+            }
+        }
     </style>
 
-    <meta property="og:url" content="{{ url()->current() }}">
-    <link rel="canonical" href="{{ url()->current() }}">
-
-
-      <!-- Preload critical CSS -->
+    <!-- Preload critical CSS -->
     <style>
         /* Critical CSS for above-the-fold content */
-        body { @apply bg-gray-50 font-sans min-h-screen flex flex-col }
-        .container { @apply mx-auto px-0 py-4 }
-        /* Add other critical styles */
+        body { 
+            background-color: #f9fafb;
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .container { 
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 0;
+            padding-right: 0;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
     </style>
 
-  
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
@@ -164,7 +181,7 @@
         <livewire:public.header />
 
         <!-- Page Content -->
-        <main class="flex-1 overflow-x-hidden md:mt-20 mt-10  overflow-y-auto bg-gray-100 pb-5 lg:pb-0">
+        <main class="flex-1 overflow-x-hidden md:mt-20 mt-10 overflow-y-auto bg-gray-100 pb-5 lg:pb-0">
             <div class="container mx-auto px-0 py-4">
                 {{ $slot }}
             </div>
@@ -180,21 +197,39 @@
     @livewireScripts
 
     <script src="https://kit.fontawesome.com/9620ac7e85.js" crossorigin="anonymous"></script>
-    <!--Start of Tawk.to Script-->
-    <script type="text/javascript">
-        var Tawk_API = Tawk_API || {},
-            Tawk_LoadStart = new Date();
-        (function() {
-            var s1 = document.createElement("script"),
-                s0 = document.getElementsByTagName("script")[0];
-            s1.async = true;
-            s1.src = 'https://embed.tawk.to/689c2cfeddd4a0192670a0f5/1j2h0vh9g';
-            s1.charset = 'UTF-8';
-            s1.setAttribute('crossorigin', '*');
-            s0.parentNode.insertBefore(s1, s0);
-        })();
+    
+    <!-- Tawk.to Chat - Desktop Only -->
+    <script>
+        // Only load Tawk.to on desktop devices
+        if (window.innerWidth > 768) {
+            var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+            (function(){
+                var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+                s1.async = true;
+                s1.src = 'https://embed.tawk.to/689c2cfeddd4a0192670a0f5/1j2h0vh9g';
+                s1.charset = 'UTF-8';
+                s1.setAttribute('crossorigin', '*');
+                s0.parentNode.insertBefore(s1, s0);
+            })();
+        }
+
+        // Optional: Load if screen size changes to desktop
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768 && typeof Tawk_API === 'undefined') {
+                var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+                (function(){
+                    var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+                    s1.async = true;
+                    s1.src = 'https://embed.tawk.to/689c2cfeddd4a0192670a0f5/1j2h0vh9g';
+                    s1.charset = 'UTF-8';
+                    s1.setAttribute('crossorigin', '*');
+                    s0.parentNode.insertBefore(s1, s0);
+                })();
+            } else if (window.innerWidth <= 768 && typeof Tawk_API !== 'undefined') {
+                Tawk_API.hideWidget();
+            }
+        });
     </script>
-    <!--End of Tawk.to Script-->
 </body>
 
 </html>
