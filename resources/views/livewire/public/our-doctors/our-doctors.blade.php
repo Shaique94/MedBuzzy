@@ -1,8 +1,12 @@
-<div class="min-h-screen bg-gray-50" x-data="{ scrolled: false }" x-init="window.addEventListener('scroll', () => { scrolled = window.scrollY > 300 })">
+<div class="min-h-screen bg-gray-50 mt-10" 
+     x-data="{ scrolled: false }" 
+     x-init="window.addEventListener('scroll', () => { 
+         scrolled = window.pageYOffset > 300;
+     })">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <!-- Page Header -->
         <div class="mb-6 sm:mb-8">
-            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Find a Doctor</h1>
+            <h1 class="text-2xl sm:text-3xl font-semibold text-gray-900">Find a Doctor</h1>
             <p class="text-gray-600 mt-1">Search for skilled healthcare providers in your area</p>
         </div>
 
@@ -171,16 +175,16 @@
             </form>
         </div>
 
-        <!-- Sticky Filter Bar - Shows on scroll -->
+        <!-- Sticky Filter Bar - Fixed positioning with higher z-index -->
         <div x-show="scrolled" 
+             x-cloak
              x-transition:enter="transition ease-out duration-300"
              x-transition:enter-start="opacity-0 transform -translate-y-5"
              x-transition:enter-end="opacity-100 transform translate-y-0"
              x-transition:leave="transition ease-in duration-200"
              x-transition:leave-start="opacity-100 transform translate-y-0"
              x-transition:leave-end="opacity-0 transform -translate-y-5"
-             class="fixed top-0 left-0 right-0 bg-white shadow-md border-b border-gray-200 z-40 py-2 px-4 transform transition-all duration-300"
-             style="display: none;">
+             class="fixed top-0 left-0 right-0 bg-white shadow-md border-b border-gray-200 z-50 py-2 px-4">
             <div class="max-w-7xl mx-auto flex items-center justify-between">
                 <!-- Left: Condensed Filter Controls -->
                 <div class="flex items-center space-x-2">
@@ -532,10 +536,26 @@
          style="display: none;">
     </div>
     
+    <style>
+        /* Make sure x-cloak works properly */
+        [x-cloak] { display: none !important; }
+        
+        /* Ensure the sticky header appears above other elements */
+        .fixed { 
+            position: fixed !important;
+        }
+    </style>
+
     <script>
+        // Make sure Alpine.js is detecting scroll properly
         document.addEventListener('alpine:init', () => {
             Alpine.store('filterDrawer', {
                 open: false
+            });
+            
+            // Add this to debug the scroll functionality
+            window.addEventListener('scroll', function() {
+                console.log('Window scrolled: ' + window.pageYOffset);
             });
         });
     </script>
