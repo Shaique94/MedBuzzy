@@ -34,6 +34,7 @@
                             <div class="flex-shrink-0 bg-brand-blue-100 rounded-md p-3">
                                 <svg class="h-6 w-6 text-brand-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+
                                 </svg>
                             </div>
                             <div class="ml-4">
@@ -46,15 +47,12 @@
                         <div class="flex items-start p-4 bg-brand-blue-50 rounded-lg">
                             <div class="flex-shrink-0 bg-brand-blue-100 rounded-md p-3">
                                 <svg class="h-6 w-6 text-brand-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />                              
                                 </svg>
                             </div>
                             <div class="ml-4">
-                                <h3 class="text-lg font-medium text-gray-900">Email Us</h3>
-
-                                
+                                <h3 class="text-lg font-medium text-gray-900">Email Us</h3>                                
                                 <p class="mt-1 text-gray-600"><a href="mailto:{{ $contactDetails['email'] }}" class="hover:text-brand-blue-600 transition-colors">{{ $contactDetails['email'] }}</a></p>
-
                                 <p class="mt-2 text-sm text-gray-500">Response time: Typically within 24 hours</p>
                             </div>
                         </div>
@@ -64,6 +62,7 @@
                                 <svg class="h-6 w-6 text-brand-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      
                                 </svg>
                             </div>
                             <div class="ml-4">
@@ -72,6 +71,7 @@
                                 <p class="mt-2 text-sm text-brand-blue-600 flex items-start">
                                     <svg class="flex-shrink-0 h-4 w-4 mt-0.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+
                                     </svg>
                                     <span>Located in the MedBuzzy Healthcare Center</span>
                                 </p>
@@ -85,14 +85,10 @@
                         <div class="rounded-lg overflow-hidden shadow-lg border border-gray-200">
                             <!-- Google Maps Embed -->
                             <div class="aspect-w-16 aspect-h-9">
-                                <iframe 
-    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d203.21872341888738!2d87.4748357133329!3d25.769771128101407!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eff9d8714e0611%3A0x61d781772546423d!2sTax%20Litigator!5e1!3m2!1sen!2sin!4v1754892957625!5m2!1sen!2sin"
-    width="100%" 
-    height="400" 
-    style="border:0;" 
-    allowfullscreen="" 
-    loading="lazy"
-></iframe>
+                                <iframe
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d203.21872341888738!2d87.4748357133329!3d25.769771128101407!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eff9d8714e0611%3A0x61d781772546423d!2sTax%20Litigator!5e1!3m2!1sen!2sin!4v1754892957625!5m2!1sen!2sin"
+                                    width="100%" height="400" style="border:0;" allowfullscreen=""
+                                    loading="lazy"></iframe>
                             </div>
                         </div>
                     </div>
@@ -100,6 +96,20 @@
 
                 <!-- Contact Form -->
                 <div>
+                    <!-- Success Message -->
+                    @if (session()->has('success'))
+                        <div class="mb-6 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <p>{{ session('success') }}</p>
+                            </div>
+                        </div>
+                    @endif
+
                     <div class="bg-white shadow-lg rounded-lg overflow-hidden">
                         <div class="p-6 sm:p-8">
                             <h2 class="text-2xl font-bold text-brand-blue-800 mb-6">Send us a message</h2>
@@ -120,8 +130,11 @@
                                     </div>
                                 </div>
 
+
+                            <form class="space-y-6" wire:submit.prevent="submit">
                                 <div>
-                                    <label for="email" class="block text-sm font-medium text-gray-700">Email <span class="text-red-500">*</span></label>
+                                    <label for="name" class="block text-sm font-medium text-gray-700">Full Name
+                                        <span class="text-red-500">*</span></label>
                                     <div class="mt-1">
                                         <input 
                                             type="email" 
@@ -132,11 +145,16 @@
                                             class="py-3 px-4 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-brand-blue-500 focus:border-brand-blue-500 transition duration-150"
                                             placeholder="your.email@example.com"
                                         >
+
                                     </div>
+                                    @error('name')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
                                 </div>
 
                                 <div>
-                                    <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                                    <label for="email" class="block text-sm font-medium text-gray-700">Email
+                                        <span class="text-red-500">*</span></label>
                                     <div class="mt-1">
                                         <input 
                                             type="tel" 
@@ -146,11 +164,16 @@
                                             class="py-3 px-4 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-brand-blue-500 focus:border-brand-blue-500 transition duration-150"
                                             placeholder="+91 98765 43210"
                                         >
+
                                     </div>
+                                    @error('email')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
                                 </div>
 
                                 <div>
-                                    <label for="subject" class="block text-sm font-medium text-gray-700">Subject <span class="text-red-500">*</span></label>
+                                    <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number
+                                        <span class="text-red-500">*</span></label>
                                     <div class="mt-1">
                                         <select 
                                             id="subject" 
@@ -167,11 +190,16 @@
                                             <option value="Feedback">Feedback</option>
                                             <option value="Other">Other</option>
                                         </select>
+
                                     </div>
+                                    @error('phone')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
                                 </div>
 
                                 <div>
-                                    <label for="message" class="block text-sm font-medium text-gray-700">Message <span class="text-red-500">*</span></label>
+                                    <label for="message"
+                                        class="block text-sm font-medium text-gray-700">Message</label>
                                     <div class="mt-1">
                                         <textarea 
                                             id="message" 
@@ -182,7 +210,11 @@
                                             class="py-3 px-4 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-brand-blue-500 focus:border-brand-blue-500 transition duration-150"
                                             placeholder="How can we help you?"
                                         ></textarea>
+
                                     </div>
+                                    @error('message')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
                                 </div>
 
                                 <div>
@@ -193,9 +225,14 @@
                                     >
                                         <span wire:loading.remove>Send Message</span>
                                         <span wire:loading>
-                                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10"
+                                                    stroke="currentColor" stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor"
+                                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                                </path>
                                             </svg>
                                             Sending...
                                         </span>
@@ -205,6 +242,17 @@
                         </div>
                     </div>
                 </div>
+
+                @script
+                    <script>
+                        Livewire.on('scroll-to-top', () => {
+                            window.scrollTo({
+                                top: 0,
+                                behavior: 'smooth'
+                            });
+                        });
+                    </script>
+                @endscript
             </div>
         </div>
     </div>
@@ -226,7 +274,8 @@
                 <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
                     <h3 class="text-lg font-medium text-brand-blue-800">How do I book an appointment?</h3>
                     <p class="mt-2 text-gray-600">
-                        You can book appointments directly through our website by selecting a doctor and available time slot, or call our support team for assistance.
+                        You can book appointments directly through our website by selecting a doctor and available time
+                        slot, or call our support team for assistance.
                     </p>
                 </div>
 
@@ -234,7 +283,8 @@
                 <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
                     <h3 class="text-lg font-medium text-brand-blue-800">What are your working hours?</h3>
                     <p class="mt-2 text-gray-600">
-                        Our support team is available {{ $contactDetails['working_hours'] }}. Doctors have varying schedules you can view when booking.
+                        Our support team is available {{ $contactDetails['working_hours'] }}. Doctors have varying
+                        schedules you can view when booking.
                     </p>
                 </div>
 
@@ -242,7 +292,8 @@
                 <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
                     <h3 class="text-lg font-medium text-brand-blue-800">Do you offer emergency services?</h3>
                     <p class="mt-2 text-gray-600">
-                        For medical emergencies, please visit your nearest hospital. We provide non-emergency consultation services by appointment.
+                        For medical emergencies, please visit your nearest hospital. We provide non-emergency
+                        consultation services by appointment.
                     </p>
                 </div>
             </div>

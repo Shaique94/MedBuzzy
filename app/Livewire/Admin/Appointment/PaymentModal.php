@@ -59,11 +59,11 @@ class PaymentModal extends Component
                 ]);
             }
 
-            session()->flash('message', 'Payment settled successfully!');
+            $this->dispatch('success', __('Payment settled successfully!'));
             $this->closeModal();
             $this->dispatch('paymentUpdated');
         } catch (\Exception $e) {
-            session()->flash('error', 'Failed to settle payment: ' . $e->getMessage());
+            $this->dispatch('error', __('Failed to settle payment: ' . $e->getMessage()));
         }
     }
 
@@ -112,7 +112,7 @@ class PaymentModal extends Component
                 ]
             ]);
         } catch (\Exception $e) {
-            session()->flash('error', 'Failed to initiate online payment: ' . $e->getMessage());
+            $this->dispatch('error', __('Failed to initiate online payment: ' . $e->getMessage()));
         }
     }
 
@@ -146,12 +146,12 @@ class PaymentModal extends Component
                     ]);
                 }
 
-                session()->flash('message', 'Online payment successful!');
+                $this->dispatch('success', __('Online payment successful!'));
                 $this->closeModal();
                 $this->dispatch('paymentUpdated');
             }
         } catch (\Exception $e) {
-            session()->flash('error', 'Payment verification failed: ' . $e->getMessage());
+            $this->dispatch('error', __('Payment verification failed: ' . $e->getMessage()));
         }
     }
 

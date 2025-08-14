@@ -110,7 +110,7 @@ class ViewDoctor extends Component
 
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             \Log::warning('Doctor not found', ['doctor_id' => $doctorId]);
-            session()->flash('error', 'Doctor not found.');
+            $this->dispatch('error', __('Doctor not found.'));
             $this->showModal = false;
             $this->doctor = null;
         } catch (\Exception $e) {
@@ -118,7 +118,7 @@ class ViewDoctor extends Component
                 'doctor_id' => $doctorId,
                 'trace' => $e->getTraceAsString()
             ]);
-            session()->flash('error', 'An error occurred while loading doctor details. Please try again.');
+            $this->dispatch('error', __('An error occurred while loading doctor details. Please try again.'));
             $this->showModal = false;
             $this->doctor = null;
         }

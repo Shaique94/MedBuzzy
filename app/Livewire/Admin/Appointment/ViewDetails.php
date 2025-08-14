@@ -24,8 +24,6 @@ class ViewDetails extends Component
     public function closeModal()
     {
         $this->showModal = false;
-        // Optional: clear the appointment data when closing
-        // $this->appointment = null;
     }
 
     public function render()

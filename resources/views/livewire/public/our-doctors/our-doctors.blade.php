@@ -72,7 +72,7 @@
                                 class="w-full p-2 text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-brand-blue-500 focus:border-brand-blue-500">
                                 <option value="">All Specialties</option>
                                 @foreach ($departments as $department)
-                                    <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                    <option value="{{ $department->slug }}">{{ $department->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -163,7 +163,6 @@
                             <span class="text-brand-blue-600">{{ count($doctors) }}</span> doctors found
                             @if ($department_id)
                                 in <span class="text-brand-blue-600">{{ $departments->find($department_id)->name ?? '' }}</span>
-                            @endif
                         </h2>
                         <div class="flex items-center">
                             <span class="text-sm text-gray-600 mr-2">Sort by:</span>
@@ -181,9 +180,11 @@
                     <!-- Mobile Active Filters -->
                     @if($this->hasActiveFilters)
                     <div class="mb-4 sm:flex sm:flex-wrap gap-2 hidden sm:block">
-                        @if($department_id)
+
+                        @if($departmentSlug)
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-brand-blue-100 text-brand-blue-800">
-                                {{ $departments->find($department_id)->name ?? '' }}
+                                {{-- {{ $departments->find($department_id)->name ?? '' }} --}}
+                                   {{ $departments->firstWhere('slug', $departmentSlug)->name ?? '' }}
                                 <button type="button" wire:click="$set('department_id', null)" class="ml-1 text-brand-blue-600 hover:text-brand-blue-800">
                                     <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>

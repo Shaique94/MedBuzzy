@@ -1,12 +1,16 @@
 <?php
 
 use App\Http\Controllers\SocialiteController;
+use App\Http\Livewire\Admin\Auth\ResetPassword;
 use App\Livewire\Admin\AdminReviewApproval;
 use App\Livewire\Admin\Appointment\Add;
 use App\Livewire\Admin\Appointment\All;
 use App\Livewire\Admin\Appointment\Update;
 use App\Livewire\Admin\Appointment\ViewDetails;
+use App\Livewire\Admin\Auth\ChangePassword;
+use App\Livewire\Admin\Auth\ForgotPassword;
 use App\Livewire\Admin\Auth\Login;
+use App\Livewire\Admin\Enquiry\EnquiryApproval;
 use App\Livewire\Admin\Review\AdminReviewManagement;
 use App\Livewire\Admin\Sections\Dashboard;
 use App\Livewire\Admin\Sections\EditDoctor;
@@ -51,7 +55,8 @@ Route::get('/auth/google/callback', [SocialiteController::class, 'handleGoogleCa
 
 // Public Routes
 Route::get('/', LandingPage::class)->name('hero');
-Route::get('/dept', OurDoctors::class)->name('our-doctors');
+// Route::get('/dept', OurDoctors::class)->name('our-doctors');
+Route::get('/doctors/{department?}', OurDoctors::class)->name('our-doctors');
 Route::get('/terms-conditions', TermsCondition::class)->name('terms-conditons');
 Route::get('/privacy-policy', PrivacyPolicy::class)->name('privacy-policy');
 Route::get('/doctor/{slug}', ViewDoctorDetail::class)->name('doctor-detail');
@@ -115,9 +120,21 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin'])->group(
     Route::get('/appointment/view/{id}', ViewDetails::class)->name('view.appointment');
     Route::get('/review',AdminReviewManagement::class)->name('reviewapprovel');
     Route::get('/doctors/edit/{id}', EditDoctor::class)->name('editDoctor');
+        Route::get('/enquiry',EnquiryApproval::class)->name('enquiry');
+
 });
+
+
 
 Route::get('/storage-link', function () {
     Artisan::call('storage:link');
     return 'Storage link created successfully!';
 });
+
+Route::get('/forgot-password', ForgotPassword::class)
+    ->middleware('guest')
+    ->name('password.request');
+
+Route::get('/reset-password/{token}', ChangePassword::class)
+    ->middleware('guest')
+    ->name('password.reset');
