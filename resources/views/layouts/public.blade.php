@@ -8,12 +8,15 @@
     
     <title>{{ $title ? $title . ' | MedBuzzy - Healthcare Management System' : 'MedBuzzy - Healthcare Management System' }}</title>
     
+ <!-- Add this meta description -->
+    <meta name="description" content="{{ $description ?? 'MedBuzzy is a comprehensive healthcare management system providing innovative solutions for medical professionals and patients.' }}">
+
     <!-- Tailwind CSS with full config -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
+    {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
+   
     <!-- Alpine.js - Loading this before Tailwind -->
     
-    <script>
+    {{-- <script>
         tailwind.config = {
             theme: {
                 extend: {
@@ -46,7 +49,7 @@
                 }
             }
         }
-    </script>
+    </script> --}}
 
     <!-- Custom CSS for gradients and mobile nav -->
     <style>
@@ -88,8 +91,18 @@
     <meta property="og:url" content="{{ url()->current() }}">
     <link rel="canonical" href="{{ url()->current() }}">
 
+
+      <!-- Preload critical CSS -->
+    <style>
+        /* Critical CSS for above-the-fold content */
+        body { @apply bg-gray-50 font-sans min-h-screen flex flex-col }
+        .container { @apply mx-auto px-0 py-4 }
+        /* Add other critical styles */
+    </style>
+
+  
     <!-- Scripts -->
-    {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
 

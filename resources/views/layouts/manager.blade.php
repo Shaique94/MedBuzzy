@@ -7,11 +7,15 @@
 
     {{-- <title>{{ $title ? $title . ' | Manager Panel - MedBuzzy' : 'Manager Panel - MedBuzzy' }}</title> --}}
     
-    <script src="https://cdn.tailwindcss.com"></script>
+    {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
     
     <!-- Open Graph & canonical tags (optional) -->
     <meta property="og:url" content="{{ url()->current() }}">
     <link rel="canonical" href="{{ url()->current() }}">
+
+    
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
 </head>
 
 <body class="bg-gray-100 font-sans antialiased">

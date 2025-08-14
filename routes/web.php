@@ -117,6 +117,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin'])->group(
     Route::get('/doctors/edit/{id}', EditDoctor::class)->name('editDoctor');
 });
 
+// User Routes
+Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
+    Route::get('/dashboard', \App\Livewire\User\Sections\Dashboard::class)->name('user.dashboard');
+});
+
 Route::get('/storage-link', function () {
     Artisan::call('storage:link');
     return 'Storage link created successfully!';

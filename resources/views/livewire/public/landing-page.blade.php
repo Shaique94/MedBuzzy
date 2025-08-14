@@ -4,28 +4,32 @@
     <livewire:public.hero />
 
     <!-- Featured Specialties Section -->
-    <section x-data="{
-        scroll: 0,
-        scrollMax: 0,
-        itemWidth: 0,
-        containerWidth: 0,
-        calculateWidths() {
-            this.$nextTick(() => {
-                this.containerWidth = this.$refs.container.clientWidth;
-                this.itemWidth = this.$refs.container.children[0].offsetWidth + 24; // width + gap
-                this.scrollMax = this.$refs.container.scrollWidth - this.containerWidth;
-            });
-        },
-        scrollNext() {
-            this.scroll = Math.min(this.scroll + this.containerWidth, this.scrollMax);
-            this.$refs.container.scrollTo({ left: this.scroll, behavior: 'smooth' });
-        },
-        scrollPrev() {
-            this.scroll = Math.max(this.scroll - this.containerWidth, 0);
-            this.$refs.container.scrollTo({ left: this.scroll, behavior: 'smooth' });
-        }
-    }" x-init="calculateWidths();
-    window.addEventListener('resize', calculateWidths)" class="py-16 bg-gray-50">
+   <section x-data="{
+    scroll: 0,
+    scrollMax: 0,
+    itemWidth: 0,
+    containerWidth: 0,
+    calculateWidths() {
+        // Use $nextTick equivalent in Alpine
+        setTimeout(() => {
+            this.containerWidth = this.$refs.container.clientWidth;
+            this.itemWidth = this.$refs.container.children[0]?.offsetWidth + 24 || 0;
+            this.scrollMax = Math.max(this.$refs.container.scrollWidth - this.containerWidth, 0);
+        }, 50); // Small delay to ensure DOM is ready
+    },
+    scrollNext() {
+        this.scroll = Math.min(this.scroll + this.containerWidth, this.scrollMax);
+        this.$refs.container.scrollTo({ left: this.scroll, behavior: 'smooth' });
+    },
+    scrollPrev() {
+        this.scroll = Math.max(this.scroll - this.containerWidth, 0);
+        this.$refs.container.scrollTo({ left: this.scroll, behavior: 'smooth' });
+    }
+}" 
+x-init="calculateWidths(); 
+        $watch('scroll', () => console.log('Scroll position:', scroll));
+        window.addEventListener('resize', () => calculateWidths())" 
+class="py-16 bg-gray-50">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Browse by Specialties</h2>
@@ -36,9 +40,11 @@
             <div class="relative">
                 <!-- Prev Button -->
                 <button @click="scrollPrev"
-                    class="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 lg:-translate-x-8 z-10 bg-white rounded-full p-2 shadow-lg hover:shadow-xl transition-all duration-200 focus:outline-none"
-                    :class="scroll <= 0 ? 'opacity-50 cursor-not-allowed' : 'opacity-100'" :disabled="scroll <= 0">
-                    <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 lg:-translate-x-8 z-10 bg-white rounded-full p-2 shadow-lg hover:shadow-xl transition-all duration-200 "
+                    :class="scroll <= 0 ? 'opacity-50 cursor-not-allowed' : 'opacity-100'" :disabled="scroll <= 0"
+                   aria-label="Previous slide"
+    :aria-disabled="scroll <= 0">
+                    <svg class="w-6 h-6 text-teal-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
                         </path>
                     </svg>
@@ -46,10 +52,12 @@
 
                 <!-- Next Button -->
                 <button @click="scrollNext"
-                    class="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 lg:translate-x-8 z-10 bg-white rounded-full p-2 shadow-lg hover:shadow-xl transition-all duration-200 focus:outline-none"
+                    class="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 lg:translate-x-8 z-10 bg-white rounded-full p-2 shadow-lg hover:shadow-xl transition-all duration-200 "
                     :class="scroll >= scrollMax ? 'opacity-50 cursor-not-allowed' : 'opacity-100'"
-                    :disabled="scroll >= scrollMax">
-                    <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    :disabled="scroll >= scrollMax"
+                    aria-label="Next slide"
+    :aria-disabled="scroll >= scrollMax">
+                    <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"  aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
                         </path>
                     </svg>
@@ -104,19 +112,19 @@
                             $icon = $icons[$name] ?? array_values($icons)[random_int(0, count($icons) - 1)];
                             $doctorCount = count($department->doctors) ?? random_int(10, 50);
                         @endphp
-                        <a wire:navigate href="{{ route('our-doctors', ['department_id' => $department->id]) }}"
+                            <a wire:navigate href="{{ route('our-doctors', ['department' => $department->slug]) }}"
                             class="group text-center p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 w-40 md:w-48 snap-start">
                             <div
                                 class="w-16 h-16 mx-auto mb-4 bg-{{ $color }}-100 rounded-full flex items-center justify-center group-hover:bg-{{ $color }}-200 transition-colors">
-                                <svg class="w-8 h-8 text-{{ $color }}-600" fill="none"
+                                <svg class="w-8 h-8 text-{{ $color }}-700" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
                                     {!! $icon !!}
                                 </svg>
                             </div>
                             <h3
-                                class="font-semibold text-gray-800 group-hover:text-{{ $color }}-600 transition-colors">
+                                class="font-semibold text-gray-900 group-hover:text-{{ $color }}-800 transition-colors">
                                 {{ $name }}</h3>
-                            <p class="text-sm text-gray-500 mt-1">{{ $doctorCount }} @if ($doctorCount > 1)
+                            <p class="text-sm text-gray-700 mt-1">{{ $doctorCount }} @if ($doctorCount > 1)
                                     Doctors
                                 @else
                                     Doctor
@@ -130,7 +138,7 @@
 
             <div class="text-center mt-12">
                 <a wire:navigate href="{{ route('our-doctors') }}"
-                    class="inline-flex items-center px-6 py-3 bg-teal-600 text-white rounded-lg font-medium hover:bg-teal-700 transition-colors">
+                    class="inline-flex items-center px-6 py-3  bg-teal-700 text-white rounded-lg font-medium hover:bg-teal-700 transition-colors">
                     View All Specialties
                     <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
@@ -170,7 +178,7 @@
                             <!-- Doctor Name & Specialty -->
                             <div class="flex-1 min-w-0">
                                 <h3 class="font-bold text-gray-800 text-base truncate">{{ $doctor->user->name }}</h3>
-                                <p class="text-brand-teal-600 text-xs font-medium truncate">{{ $doctor->department->name }}</p>
+                                <p class="text-brand-teal-800 text-xs font-medium truncate">{{ $doctor->department->name }}</p>
                             </div>
                             
                             <!-- Rating Badge -->
@@ -206,7 +214,7 @@
 
                             <!-- Book Button -->
                             <a wire:navigate href="{{ route('appointment', ['doctor_slug' => $doctor->slug]) }}"
-                               class="w-full block bg-brand-teal-500 text-white py-2.5 rounded-lg text-sm font-medium hover:bg-brand-teal-600 transition-colors text-center">
+                               class="w-full block bg-teal-800 text-white py-2.5 rounded-lg text-sm font-medium hover:bg-brand-teal-600 transition-colors text-center">
                                 Book Appointment
                             </a>
                         </div>
@@ -224,7 +232,7 @@
             <!-- View All Doctors Button -->
             <div class="text-center mt-12">
                 <a wire:navigate href="{{ route('our-doctors') }}"
-                    class="inline-flex items-center px-6 py-3 bg-brand-teal-500 text-white rounded-lg font-medium hover:bg-brand-teal-600 transition-colors duration-200">
+                    class="inline-flex items-center px-6 py-3 bg-brand-teal-700 text-white rounded-lg font-medium hover:bg-brand-teal-800 transition-colors duration-200">
                     View All Doctors
                     <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -369,7 +377,7 @@
                     <!-- CTA Button -->
                     <div class="text-center lg:text-left mt-12">
                         <a wire:navigate href="{{ route('appointment') }}"
-                            class="inline-flex items-center px-8 py-4 bg-teal-500 text-white font-bold rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 group">
+                            class="inline-flex items-center px-8 py-4 bg-teal-700 text-white font-bold rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 group">
                             <svg class="w-6 h-6 mr-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                             </svg>
