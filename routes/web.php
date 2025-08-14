@@ -144,3 +144,13 @@ Route::get('/test-email', function () {
     Mail::to($patient->email)->send(new App\Mail\BookingConfirmationMail($patient, $appointment));
     return 'Email sent!';
 });
+
+//reset password work 
+
+Route::get('/forgot-password', ForgotPassword::class)
+    ->middleware('guest')
+    ->name('password.request');
+
+Route::get('/reset-password/{token}', ChangePassword::class)
+    ->middleware('guest')
+    ->name('password.reset');
