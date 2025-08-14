@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\SocialiteController;
+use App\Jobs\SendBookingConfirmationEmail;
 use App\Livewire\Admin\AdminReviewApproval;
 use App\Livewire\Admin\Appointment\Add;
 use App\Livewire\Admin\Appointment\All;
@@ -119,4 +120,22 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin'])->group(
 Route::get('/storage-link', function () {
     Artisan::call('storage:link');
     return 'Storage link created successfully!';
+});
+
+//jobs sender
+
+// Route::get('/send-mail',function(){
+ 
+//     $userMail='kumarujjo149@gmail.com';
+
+//     dispatch(new SendBookingConfirmationEmail($userMail));
+
+//     dd('send mail successgully');
+// });
+
+Route::get('/test-email', function () {
+    $patient = App\Models\Patient::first();
+    $appointment = App\Models\Appointment::first();
+    Mail::to($patient->email)->send(new App\Mail\BookingConfirmationMail($patient, $appointment));
+    return 'Email sent!';
 });
