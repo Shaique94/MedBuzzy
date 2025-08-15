@@ -32,7 +32,6 @@ class ManageAppointment extends Component
     public $appointment_date;
     public $appointment_time;
     public $availableSlots = [];
-    public $pincode;
     public $amount = 5000; // Fixed ₹50 (5000 paise)
     public $orderId;
     public $appointmentId;
@@ -40,13 +39,12 @@ class ManageAppointment extends Component
         'name' => '',
         'email' => '',
         'phone' => '',
-        'age' => '',
         'gender' => '',
-        'pincode' => '',
-        'address' => '',
-        'district' => '',
-        'state' => '',
     ];
+
+    // Add booking_for: 'self' | 'other'
+    public $booking_for = 'self';
+
     public $notes;
     public $slot_enabled = true;
     public $currentMonth;
@@ -61,10 +59,7 @@ class ManageAppointment extends Component
         'newPatient.name' => 'required|string|min:3|max:255',
         'newPatient.email' => 'nullable|email|max:255',
         'newPatient.phone' => 'required|string|digits:10|regex:/^[6-9]\d{9}$/',
-        'newPatient.age' => 'required|integer|min:1|max:120',
         'newPatient.gender' => 'required|string|in:male,female,other',
-        'newPatient.pincode' => 'required|digits:6',
-        'newPatient.address' => 'required|string|max:500',
         'notes' => 'nullable|string|max:1000',
     ];
 
@@ -78,14 +73,8 @@ class ManageAppointment extends Component
         'newPatient.phone.required' => 'Phone number is required.',
         'newPatient.phone.digits' => 'Phone number must be exactly 10 digits',
         'newPatient.phone.regex' => 'Phone number must start with 6,7,8 or 9',
-        'newPatient.age.required' => 'Age is required.',
-        'newPatient.age.min' => 'Age must be at least 1 year.',
-        'newPatient.age.max' => 'Age must be less than 120 years.',
         'newPatient.gender.required' => 'Gender is required.',
-        'newPatient.pincode.required' => 'Pincode is required.',
-        'newPatient.pincode.digits' => 'Pincode must be 6 digits.',
-        'newPatient.address.required' => 'Address is required.',
-        // 'newPatient.address.min' => 'Address must be at least 10 characters.',
+        'newPatient.email.email' => 'Please enter a valid email address.',
     ];
 
     public function mount($doctor_slug = null)
@@ -121,6 +110,11 @@ class ManageAppointment extends Component
         if ($this->selectedDoctor) {
             $this->prepareAvailableDates();
         }
+
+        // If user wants "self" and is authenticated, pre-fill
+        if ($this->booking_for === 'self' && Auth::check()) {
+            $this->fillPatientFromAuth();
+        }
     }
     public function updatedSelectedDepartment()
     {
@@ -154,55 +148,11 @@ class ManageAppointment extends Component
     }
     public function updated($propertyName)
     {
-        if (in_array($propertyName, ['pincode', 'selectedDepartment', 'doctor_id', 'appointment_date'])) {
+        if (in_array($propertyName, ['selectedDepartment', 'doctor_id', 'appointment_date'])) {
             return;
         }
 
         $this->validateOnly($propertyName);
-    }
-
-    public function updatedPincode($value)
-    {
-        $this->newPatient['pincode'] = $value;
-        $this->validateOnly('newPatient.pincode');
-        if (empty($value) || !preg_match('/^\d{6}$/', $value)) {
-            if (!empty($value)) {
-                $this->addError('newPatient.pincode', 'Please enter a valid 6-digit PIN code');
-            }
-            return;
-        }
-
-        $this->isProcessing = true;
-        try {
-            $url = "https://api.postalpincode.in/pincode/{$value}";
-            $context = stream_context_create([
-                'http' => [
-                    'timeout' => 5,
-                ]
-            ]);
-            $response = file_get_contents($url, false, $context);
-
-            if ($response === false) {
-                $this->addError('newPatient.pincode', 'Failed to connect to the API');
-                $this->isProcessing = false;
-                return;
-            }
-
-            $data = json_decode($response, true);
-            if (isset($data[0]['Status']) && $data[0]['Status'] === 'Success' && !empty($data[0]['PostOffice'])) {
-                $postOffice = $data[0]['PostOffice'][0];
-                $this->newPatient['district'] = $postOffice['District'] ?? '';
-                $this->newPatient['state'] = $postOffice['State'] ?? '';
-                $this->resetErrorBag('newPatient.pincode');
-            } else {
-                $this->addError('newPatient.pincode', 'Invalid PIN code or no data found');
-            }
-        } catch (\Exception $e) {
-            $this->addError('newPatient.pincode', 'Unable to verify PIN code: ' . $e->getMessage());
-        }
-
-        $this->isProcessing = false;
-
     }
 
     // Generate the available dates for the selected doctor
@@ -450,11 +400,8 @@ class ManageAppointment extends Component
             $this->validate([
                 'newPatient.name' => $this->rules['newPatient.name'],
                 'newPatient.phone' => $this->rules['newPatient.phone'],
-                'newPatient.age' => $this->rules['newPatient.age'],
                 'newPatient.gender' => $this->rules['newPatient.gender'],
-                'newPatient.address' => $this->rules['newPatient.address'],
                 'newPatient.email' => $this->rules['newPatient.email'],
-                'newPatient.pincode' => $this->rules['newPatient.pincode'],
             ]);
         } elseif ($step === 4) {
             $this->validate([
@@ -627,6 +574,57 @@ class ManageAppointment extends Component
     public function handlePaymentFailed($data)
     {
         session()->flash('error', 'Payment failed: ' . $data['error']);
+    }
+
+    // Called when booking_for value changes by Livewire (naming convention)
+    public function updatedBookingFor($value)
+    {
+        if ($value === 'self') {
+            $this->fillPatientFromAuth();
+        } else {
+            // keep any existing typed values but clear validation errors related to patient
+            $this->resetErrorBag(['newPatient.*']);
+        }
+    }
+
+    // Public action to manually trigger autofill (wire:click from blade)
+    public function useMyProfile()
+    {
+        if (!Auth::check()) {
+            $this->dispatchBrowserEvent('notify', ['type' => 'error', 'message' => 'Please login to autofill your profile.']);
+            return;
+        }
+
+        $this->booking_for = 'self';
+        $this->fillPatientFromAuth();
+    }
+
+    // Helper to copy user / patient info into newPatient
+    protected function fillPatientFromAuth()
+    {
+        if (!Auth::check()) {
+            return;
+        }
+
+        $user = Auth::user();
+
+        // Basic fields from user model
+        $this->newPatient['name'] = $user->name ?? $this->newPatient['name'];
+        $this->newPatient['email'] = $user->email ?? $this->newPatient['email'];
+        $this->newPatient['phone'] = $user->phone ?? $this->newPatient['phone'];
+        $this->newPatient['gender'] = $user->gender ?? $this->newPatient['gender'];
+
+        // If you store patient records, prefer patient's stored details (non-destructive)
+        $patient = Patient::where('user_id', $user->id)->first();
+        if ($patient) {
+            $this->newPatient['name'] = $patient->name ?? $this->newPatient['name'];
+            $this->newPatient['email'] = $patient->email ?? $this->newPatient['email'];
+            $this->newPatient['phone'] = $patient->phone ?? $this->newPatient['phone'] ?? $patient->mobile ?? $this->newPatient['phone'];
+            $this->newPatient['gender'] = $patient->gender ?? $this->newPatient['gender'];
+        }
+
+        // Clear validation errors for patient fields
+        $this->resetErrorBag(['newPatient.*']);
     }
 
     #[Layout('layouts.public')]
