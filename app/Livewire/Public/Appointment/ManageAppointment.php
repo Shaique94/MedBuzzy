@@ -365,10 +365,13 @@ class ManageAppointment extends Component
     public function nextStep()
     {
         $this->validateStep($this->step);
-        $this->step++;
+        // Only allow up to step 3 (Doctor -> Date/Time -> Patient+Payment)
+        if ($this->step < 3) {
+            $this->step++;
+        }
 
+        // When arriving to date selection (step 2) ensure date/slots are prepared
         if ($this->step === 2) {
-            // Default to today's date when reaching the date selection step
             if (empty($this->appointment_date)) {
                 $today = Carbon::today()->format('Y-m-d');
                 $this->setAppointmentDate($today);
@@ -397,14 +400,12 @@ class ManageAppointment extends Component
                 'appointment_time' => $this->rules['appointment_time'],
             ]);
         } elseif ($step === 3) {
+            // Patient info + notes validated before payment
             $this->validate([
                 'newPatient.name' => $this->rules['newPatient.name'],
                 'newPatient.phone' => $this->rules['newPatient.phone'],
                 'newPatient.gender' => $this->rules['newPatient.gender'],
                 'newPatient.email' => $this->rules['newPatient.email'],
-            ]);
-        } elseif ($step === 4) {
-            $this->validate([
                 'notes' => $this->rules['notes'],
             ]);
         }
