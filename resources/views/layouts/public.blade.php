@@ -147,6 +147,22 @@
                 display: none !important;
             }
         }
+
+        /* In your app.css or public CSS file */
+.modal-enter {
+    opacity: 0;
+}
+.modal-enter-active {
+    opacity: 1;
+    transition: opacity 100ms;
+}
+.modal-exit {
+    opacity: 1;
+}
+.modal-exit-active {
+    opacity: 0;
+    transition: opacity 100ms;
+}
     </style>
 
     <!-- Preload critical CSS -->
@@ -181,7 +197,7 @@
         <livewire:public.header />
 
         <!-- Page Content -->
-        <main class="flex-1 overflow-x-hidden md:mt-20 mt-10 overflow-y-auto bg-gray-100 pb-5 lg:pb-0">
+        <main class="flex-1 overflow-x-hidden md:mt-28 mt-10 overflow-y-auto bg-gray-100 pb-5 lg:pb-0">
             <div class="container mx-auto px-0 py-4">
                 {{ $slot }}
             </div>
