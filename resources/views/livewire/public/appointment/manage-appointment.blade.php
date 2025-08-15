@@ -14,12 +14,16 @@
                     <div class="flex items-center justify-between max-w-5xl mx-auto
                     flex-nowrap overflow-x-auto scrollbar-hide gap-0 sm:gap-0 px-2 sm:px-0"
                         style="min-width:0;">
-                        @foreach ([
-                            1 => ['label' => 'Doctor (selected)', 'icon' => 'user-md'], {{-- changed label --}}
-                            2 => ['label' => 'Date & Time', 'icon' => 'calendar-alt'],
-                            3 => ['label' => 'Details', 'icon' => 'user-circle'],
-                            4 => ['label' => 'Confirm', 'icon' => 'check-circle'],
-                        ] as $stepNumber => $stepInfo)
+                        @php
+                            $steps = [
+                                1 => ['label' => 'Doctor', 'icon' => 'user-md'],
+                                2 => ['label' => 'Date & Time', 'icon' => 'calendar-alt'],
+                                3 => ['label' => 'Patient Details', 'icon' => 'user-circle'],
+                            ];
+                            $maxStep = count($steps);
+                        @endphp
+
+                        @foreach ($steps as $stepNumber => $stepInfo)
                             <div class="flex flex-col items-center relative flex-1 min-w-[90px] sm:min-w-0 px-1">
                                 <div
                                     class="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full
@@ -47,13 +51,6 @@
                                                 d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
                                                 clip-rule="evenodd"></path>
                                         </svg>
-                                    @elseif($stepInfo['icon'] === 'check-circle')
-                                        <svg class="h-4 w-4 sm:h-5 sm:w-5" fill="currentColor" viewBox="0 0 20 20"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd"
-                                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                                clip-rule="evenodd"></path>
-                                        </svg>
                                     @endif
                                     @if ($step === $stepNumber)
                                         <div
@@ -69,7 +66,7 @@
                                     class="mt-1 text-[10px] font-medium {{ $step >= $stepNumber ? 'text-brand-blue-800' : 'text-gray-500' }} sm:hidden text-center leading-tight break-words w-full">
                                     {{ $stepInfo['label'] }}
                                 </span>
-                                @if ($stepNumber < 4)
+                                @if ($stepNumber < $maxStep)
                                     <div
                                         class="hidden sm:block absolute top-4 left-2/3 w-full h-1 {{ $step > $stepNumber ? 'bg-brand-blue-600' : 'bg-gray-300' }}">
                                     </div>
@@ -83,6 +80,8 @@
                 </div>
 
                 <!-- Step Content -->
+                {{-- Replaced inline doctor card with Livewire 3 component --}}
+
                 <div class="p-0 sm:p-0 w-full px-2 md:px-[5%] mx-auto mt-5">
                     <!-- Step 2: Date & Time (1/3 doctor card, 2/3 selector) -->
                     @if ($step === 2)
@@ -90,92 +89,7 @@
                             @if ($selectedDoctor)
                                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                     <!-- Left: Doctor Summary (1/3) -->
-                                    <div class="lg:col-span-1 bg-gradient-to-r from-brand-blue-50 to-brand-blue-100 p-4 sm:p-5 rounded-xl border border-brand-blue-200">
-                                        <div class="flex items-start gap-4">
-                                            <div class="w-20 h-20 rounded-full overflow-hidden bg-white border-4 border-white flex-shrink-0">
-                                                <img src="{{ $selectedDoctor->image ?? 'https://ui-avatars.com/api/?name=' . urlencode($selectedDoctor->user->name) . '&background=random&rounded=true' }}"
-                                                    alt="Dr. {{ $selectedDoctor->user->name }}" class="w-full h-full object-cover">
-                                            </div>
-                                            <div class="flex-1">
-                                                <h3 class="text-lg font-bold text-brand-blue-900">Dr. {{ $selectedDoctor->user->name }}</h3>
-                                                <p class="text-sm font-medium text-brand-blue-700">{{ $selectedDoctor->department->name ?? 'General' }}</p>
-                                                <p class="text-sm text-gray-600 mt-2">₹{{ $selectedDoctor->fee }} consultation</p>
-                                                @if($selectedDoctor->experience)
-                                                    <p class="text-sm text-gray-700 mt-1">{{ $selectedDoctor->experience }} yrs experience</p>
-                                                @endif
-                                            </div>
-                                        </div>
-
-                                        <div class="mt-4 text-sm text-gray-700 space-y-2">
-                                            @if(!empty($selectedDoctor->clinic_hospital_name))
-                                                <div><strong class="text-gray-600">Clinic:</strong> {{ $selectedDoctor->clinic_hospital_name }}</div>
-                                            @endif
-                                            @if(!empty($selectedDoctor->registration_number))
-                                                <div><strong class="text-gray-600">Reg. No:</strong> {{ $selectedDoctor->registration_number }}</div>
-                                            @endif
-                                            <div><strong class="text-gray-600">Hours:</strong>
-                                                {{ $selectedDoctor->start_time ? \Carbon\Carbon::parse($selectedDoctor->start_time)->format('h:i A') : 'N/A' }}
-                                                -
-                                                {{ $selectedDoctor->end_time ? \Carbon\Carbon::parse($selectedDoctor->end_time)->format('h:i A') : 'N/A' }}
-                                            </div>
-                                            <div><strong class="text-gray-600">Slot:</strong> {{ $selectedDoctor->slot_duration_minutes ?? 30 }} min • {{ $selectedDoctor->patients_per_slot ?? 1 }} per slot</div>
-                                            <div><strong class="text-gray-600">Max booking:</strong> {{ $selectedDoctor->max_booking_days ?? 'N/A' }} days</div>
-
-                                            @php
-                                                $availableDays = is_array($selectedDoctor->available_days) ? $selectedDoctor->available_days : (is_string($selectedDoctor->available_days) ? json_decode($selectedDoctor->available_days, true) : []);
-                                            @endphp
-                                            @if(!empty($availableDays))
-                                                <div>
-                                                    <strong class="text-gray-600">Days:</strong>
-                                                    <span class="text-sm text-gray-700">{{ implode(', ', $availableDays) }}</span>
-                                                </div>
-                                            @endif
-
-                                            @if(!empty($selectedDoctor->unavailable_from) || !empty($selectedDoctor->unavailable_to))
-                                                <div><strong class="text-gray-600">On leave:</strong>
-                                                    {{ $selectedDoctor->unavailable_from ? \Carbon\Carbon::parse($selectedDoctor->unavailable_from)->format('M j, Y') : '-' }}
-                                                    -
-                                                    {{ $selectedDoctor->unavailable_to ? \Carbon\Carbon::parse($selectedDoctor->unavailable_to)->format('M j, Y') : '-' }}
-                                                </div>
-                                            @endif
-
-                                            @if(!empty($selectedDoctor->languages_spoken))
-                                                @php
-                                                    $langs = is_array($selectedDoctor->languages_spoken) ? $selectedDoctor->languages_spoken : (is_string($selectedDoctor->languages_spoken) ? json_decode($selectedDoctor->languages_spoken, true) : []);
-                                                @endphp
-                                                @if(!empty($langs))
-                                                    <div><strong class="text-gray-600">Languages:</strong> {{ implode(', ', $langs) }}</div>
-                                                @endif
-                                            @endif
-
-                                            @if($selectedDoctor->city || $selectedDoctor->state || $selectedDoctor->pincode)
-                                                <div class="mt-1 text-sm text-gray-700">
-                                                    <strong class="text-gray-600">Location:</strong>
-                                                    {{ $selectedDoctor->city ? $selectedDoctor->city . ', ' : '' }}{{ $selectedDoctor->state ?? '' }}{{ $selectedDoctor->pincode ? ' • ' . $selectedDoctor->pincode : '' }}
-                                                </div>
-                                            @endif
-
-                                            @if(!empty($selectedDoctor->achievements_awards))
-                                                @php
-                                                    $ach = is_array($selectedDoctor->achievements_awards) ? $selectedDoctor->achievements_awards : (is_string($selectedDoctor->achievements_awards) ? json_decode($selectedDoctor->achievements_awards, true) : []);
-                                                @endphp
-                                                <div><strong class="text-gray-600">Awards:</strong> {{ is_array($ach) ? implode(', ', $ach) : $selectedDoctor->achievements_awards }}</div>
-                                            @endif
-
-                                            @if(!empty($selectedDoctor->social_media_links))
-                                                @php
-                                                    $social = is_array($selectedDoctor->social_media_links) ? $selectedDoctor->social_media_links : (is_string($selectedDoctor->social_media_links) ? json_decode($selectedDoctor->social_media_links, true) : []);
-                                                @endphp
-                                                @if(!empty($social))
-                                                    <div class="mt-2">
-                                                        @foreach($social as $platform => $url)
-                                                            <a href="{{ $url }}" target="_blank" class="text-xs text-brand-blue-700 hover:underline mr-2">{{ ucfirst($platform) }}</a>
-                                                        @endforeach
-                                                    </div>
-                                                @endif
-                                            @endif
-                                        </div>
-                                    </div>
+                                    <livewire:public.appointment.components.doctor-card :doctor="$selectedDoctor" :appointment-date="$appointment_date" :appointment-time="$appointment_time" />
 
                                     <!-- Right: Date selection & Time slots (2/3) -->
                                     <div class="lg:col-span-2 bg-white p-4 rounded-xl border border-gray-200">
@@ -491,22 +405,7 @@
                         <div class="space-y-6">
                             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                 <!-- Left: Doctor Summary (1/3) -->
-                                <div class="lg:col-span-1 bg-gradient-to-r from-brand-blue-50 to-brand-blue-100 p-5 rounded-xl border border-brand-blue-200">
-                                    <div class="flex items-start gap-4">
-                                        <div class="w-20 h-20 rounded-full overflow-hidden bg-white border-4 border-white flex-shrink-0">
-                                            <img src="{{ $selectedDoctor->image ?? 'https://ui-avatars.com/api/?name=' . urlencode($selectedDoctor->user->name) . '&background=random&rounded=true' }}" alt="Dr. {{ $selectedDoctor->user->name }}" class="w-full h-full object-cover">
-                                        </div>
-                                        <div class="flex-1">
-                                            <h3 class="text-lg font-bold text-brand-blue-900">Dr. {{ $selectedDoctor->user->name }}</h3>
-                                            <p class="text-sm font-medium text-brand-blue-700">{{ $selectedDoctor->department->name ?? 'General' }}</p>
-                                            <p class="text-sm text-gray-600 mt-1">{{ \Carbon\Carbon::parse($appointment_date)->format('l, F j, Y') }} • {{ \Carbon\Carbon::createFromFormat('H:i', $appointment_time)->format('h:i A') }}</p>
-                                            <p class="text-sm text-gray-700 mt-2">₹{{ $selectedDoctor->fee }} consultation</p>
-                                        </div>
-                                    </div>
-                                    <div class="mt-4 text-sm text-gray-700">
-                                        {{ $selectedDoctor->qualification ? (is_array($selectedDoctor->qualification) ? implode(', ', $selectedDoctor->qualification) : $selectedDoctor->qualification) : '' }}
-                                    </div>
-                                </div>
+                                <livewire:public.appointment.components.doctor-card :doctor="$selectedDoctor" :appointment-date="$appointment_date" :appointment-time="$appointment_time" />
 
                                 <!-- Right: Patient Form (2/3) -->
                                 <div class="lg:col-span-2 space-y-4">
