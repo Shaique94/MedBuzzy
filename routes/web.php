@@ -46,7 +46,8 @@ use App\Livewire\Public\Appointment\AppointmentWizard;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
-
+//NEw route 
+use App\Livewire\Public\Appointments\BookAppointment;
 
 // Google Auth Routes 
 Route::get('/auth/google', [SocialiteController::class, 'redirectToGoogle'])->name('google.login');
@@ -63,7 +64,7 @@ Route::get('/doctor/{slug}', ViewDoctorDetail::class)->name('doctor-detail');
 Route::get('/contact-us', ContactUs::class)->name('contact-us');
 Route::get('/register', Register::class)->name('register');
 Route::get('/review',Review::class)->name('review');
-Route::get('/appointment/{doctor_slug?}', ManageAppointment::class)->name('appointment');
+Route::get('/appointmentss/{doctor_slug?}', ManageAppointment::class)->name('appointment');
 Route::get('/appointment/confirmation/{appointment}', AppointmentConfirmation::class)->name('appointment.confirmation');
 Route::get('/appointment/receipt/{appointment}/download', [AppointmentReceiptController::class, 'download'])->name('appointment.receipt.download');
 Route::get('/appointment/receipt/{appointment}', [AppointmentReceiptController::class, 'view'])->name('appointment.receipt');
@@ -125,6 +126,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin'])->group(
 });
 
 
+// New Route for Booking Appointment
+Route::get('/appointment/book/{doctor_slug}', BookAppointment::class)->name('appointment.book');
+
+
 // User Routes
 Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
     Route::get('/dashboard', \App\Livewire\User\Sections\Dashboard::class)->name('user.dashboard');
@@ -154,3 +159,5 @@ Route::get('/forgot-password', ForgotPassword::class)
 Route::get('/reset-password/{token}', ChangePassword::class)
     ->middleware('guest')
     ->name('password.reset');
+
+    

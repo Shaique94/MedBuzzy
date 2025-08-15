@@ -6,8 +6,9 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Illuminate\Support\Facades\Session;
 
-#[Title('Admin Login')]
+#[Title('Login')]
 class Login extends Component
 { 
     public $email;
@@ -40,6 +41,12 @@ class Login extends Component
                 $user = Auth::user();
 
                 session()->flash('success', 'Login successful! Welcome back, ' . $user->name . '.');
+                // Check if there's a stored doctor_slug to redirect to appointment
+                $doctorSlug = Session::get('doctor_slug');
+                if ($doctorSlug) {
+                    Session::forget('doctor_slug'); // Clear after use
+                    return $this->redirect(route('appointment', ['doctor_slug' => $doctorSlug]), navigate: true);
+                }
 
                 return $this->redirectBasedOnRole($user);
             }

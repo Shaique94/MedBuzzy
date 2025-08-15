@@ -336,7 +336,7 @@
                                                 class="text-center w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors text-sm">
                                                 View Profile
                                             </a>
-                                            <a wire:navigate href="{{ route('appointment', ['doctor_slug' => $doctor->slug]) }}"
+                                            <a wire:navigate href="{{ route('appointment.book', ['doctor_slug' => $doctor->slug]) }}"
                                                 class="text-center w-full sm:w-auto px-4 py-2 bg-brand-blue-600 rounded-lg text-white hover:bg-brand-blue-700 transition-colors text-sm">
                                                 Book Appointment
                                             </a>

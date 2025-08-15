@@ -8,6 +8,7 @@ use Livewire\Attributes\Rule;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
+use Illuminate\Support\Facades\Session;
 
 #[Title('Create Account')]
 class Register extends Component
@@ -30,6 +31,12 @@ class Register extends Component
     #[Rule('nullable|string|in:male,female,other')]
     public $gender = '';
 
+
+    public function mount()
+    {
+        // Retrieve doctor_slug from session or query parameter if available
+        $this->doctor_slug = Session::get('doctor_slug');
+    }
     public function register()
     {
         $validated = $this->validate();
@@ -50,7 +57,10 @@ class Register extends Component
 
             // Reset form fields
             $this->reset(['name', 'email', 'phone', 'gender', 'password']);
-
+            // Redirect to appointment page if doctor_slug is available, otherwise to hero
+            if ($this->doctor_slug) {
+                return $this->redirect(route('appointment', ['doctor_slug' => $this->doctor_slug]), navigate: true);
+            }
             $this->redirect(
                 route('hero'),
                 navigate:true

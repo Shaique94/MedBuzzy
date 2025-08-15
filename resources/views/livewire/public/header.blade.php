@@ -148,10 +148,7 @@
         </button>
     </form>
 @endauth
-                <a wire:navigate href="{{ route('appointment') }}"
-                    class="block text-center bg-brand-orange-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-brand-orange-600 transition-colors duration-200 shadow-md hover:shadow-lg mobile-menu-link">
-                    Book Appointment
-                </a>
+               
             </div>
         </nav>
     </div>
