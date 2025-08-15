@@ -83,11 +83,20 @@
         </div>
     @endif
     
-    <!-- Expandable "More Information" Section -->
-    <div x-data="{ expanded: false }" class="mt-3">
+    <!-- More Information Section - Desktop: Always visible, Mobile: Collapsible -->
+    <div x-data="{ 
+        expanded: false,
+        isMobile: window.innerWidth < 1024,
+        init() {
+            window.addEventListener('resize', () => {
+                this.isMobile = window.innerWidth < 1024;
+            });
+        }
+    }" class="mt-3">
+        <!-- Mobile only: Toggle button -->
         <button 
             @click="expanded = !expanded" 
-            class="w-full text-sm text-left flex items-center justify-between py-1.5 text-brand-blue-700 hover:text-brand-blue-900 transition-colors"
+            class="w-full text-sm text-left flex items-center justify-between py-1.5 text-brand-blue-700 hover:text-brand-blue-900 transition-colors lg:hidden"
         >
             <span class="font-medium">More information</span>
             <svg 
@@ -101,7 +110,22 @@
             </svg>
         </button>
         
-        <div x-show="expanded" x-collapse class="text-xs space-y-2 mt-2 text-gray-700 bg-white bg-opacity-50 p-3 rounded-lg">
+        <!-- Desktop: Section heading (always visible) -->
+        <div class="hidden lg:block">
+            <h4 class="font-medium text-sm text-brand-blue-700 mb-2">More Information</h4>
+        </div>
+        
+        <!-- Content: Mobile (collapsible) & Desktop (always visible) -->
+        <div 
+            x-show="expanded || !isMobile" 
+            x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0 transform -translate-y-2"
+            x-transition:enter-end="opacity-100 transform translate-y-0"
+            x-transition:leave="transition ease-in duration-150"
+            x-transition:leave-start="opacity-100 transform translate-y-0"
+            x-transition:leave-end="opacity-0 transform -translate-y-2"
+            class="text-xs space-y-2 mt-2 text-gray-700 bg-white bg-opacity-50 p-3 rounded-lg"
+        >
             <!-- Available Days -->
             @if(isset($doctor->available_days) && !empty($doctor->available_days))
                 <div class="flex items-start">
