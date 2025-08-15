@@ -4,26 +4,32 @@
 
     <!-- Featured Specialties Section -->
 
-    <section x-data="{
-        scroll: 0,
-        scrollMax: 0,
-        itemWidth: 0,
-        containerWidth: 0,
-        calculateWidths() {
-            this.containerWidth = this.$refs.container.clientWidth;
-            this.itemWidth = this.$refs.container.children[0]?.offsetWidth + 24 || 0;
-            this.scrollMax = this.$refs.container.scrollWidth - this.containerWidth;
-        },
-        scrollNext() {
-            this.scroll = Math.min(this.scroll + this.containerWidth, this.scrollMax);
-            this.$refs.container.scrollTo({ left: this.scroll, behavior: 'smooth' });
-        },
-        scrollPrev() {
-            this.scroll = Math.max(this.scroll - this.containerWidth, 0);
-            this.$refs.container.scrollTo({ left: this.scroll, behavior: 'smooth' });
-        }
-    }" x-init="Alpine.nextTick(() => { calculateWidths() });
-    window.addEventListener('resize', () => Alpine.nextTick(() => { calculateWidths() }));" class="py-16 bg-brand-blue-50">
+    <section 
+        x-data="{
+            scroll: 0,
+            scrollMax: 0,
+            itemWidth: 0,
+            containerWidth: 0,
+            calculateWidths() {
+                this.containerWidth = this.$refs.container.clientWidth;
+                this.itemWidth = this.$refs.container.children[0]?.offsetWidth + 24 || 0;
+                this.scrollMax = this.$refs.container.scrollWidth - this.containerWidth;
+            },
+            scrollNext() {
+                this.scroll = Math.min(this.scroll + this.containerWidth, this.scrollMax);
+                this.$refs.container.scrollTo({ left: this.scroll, behavior: 'smooth' });
+            },
+            scrollPrev() {
+                this.scroll = Math.max(this.scroll - this.containerWidth, 0);
+                this.$refs.container.scrollTo({ left: this.scroll, behavior: 'smooth' });
+            }
+        }"
+        x-init="
+            Alpine.nextTick(() => { calculateWidths() });
+            window.addEventListener('resize', () => Alpine.nextTick(() => { calculateWidths() }));
+        "
+        class="py-8 bg-brand-blue-50"
+    >
 
         <div class=" mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
@@ -92,14 +98,13 @@
     </section>
 
     <!-- Top Doctors Section -->
-    <section class="py-16 bg-white">
+    <section class="py-8 bg-white">
         <div class=" mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
+            <div class="text-center">
                 <h2 class="text-3xl md:text-4xl font-semibold text-gray-900 mb-4 tracking-tight">Our Expert Doctors</h2>
-                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Connect with top-tier, verified healthcare
-                    professionals ready to provide exceptional care.</p>
+                <p class="text-lg text-gray-600  mx-auto">Connect with top-tier, verified healthcare professionals ready to provide exceptional care.</p>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-6 p-4 sm:p-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  gap-6 p-4 sm:p-6">
                 @forelse ($doctors as $doctor)
 
                     <div class="bg-white rounded-xl border border-brand-blue-100 shadow-sm hover:shadow-md transition-all duration-300"
@@ -143,9 +148,8 @@
                         </div>
                     </div>
                 @empty
-                    <div class="col-span-full text-center py-12">
-                        <svg class="w-16 h-16 mx-auto mb-4 text-brand-blue-400" fill="none" stroke="currentColor"
-                            viewBox="0 0 24 24">
+                    <div class="col-span-full text-center py-4">
+                        <svg class="w-16 h-16 mx-auto mb-4 text-brand-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <circle cx="12" cy="12" r="10" stroke-width="2"></circle>
                         </svg>
                         <p class="text-xl text-gray-600 font-medium">No doctors found</p>
@@ -153,7 +157,7 @@
                     </div>
                 @endforelse
             </div>
-            <div class="text-center mt-12">
+            <div class="text-center mt-4">
                 <a wire:navigate href="{{ route('our-doctors') }}"
                     class="inline-flex items-center px-6 py-3 bg-brand-blue-500 text-white rounded-lg font-medium hover:bg-brand-blue-600 transition-colors duration-200">
 
@@ -168,7 +172,7 @@
     </section>
 
     <!-- How Booking Works Section -->
-    <section class="bg-brand-blue-50 py-16">
+    <section class="bg-brand-blue-50 py-8">
         <div class=" mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-semibold text-brand-blue-800 sm:text-4xl">How It Works</h2>
