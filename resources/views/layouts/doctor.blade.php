@@ -8,8 +8,6 @@
     
           <title>{{ $title ?? ' Doctor Panel - MedBuzzy' }}</title>
     
-    <!-- Tailwind (optional, if not already included in app.css) -->
-    {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
 
 
     <!-- Canonical & OpenGraph -->
@@ -18,7 +16,7 @@
 
     <!-- App styles and scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @livewireStyles
+        @livewireStyles
 </head>
 
 <body class="bg-gray-100 font-sans antialiased">

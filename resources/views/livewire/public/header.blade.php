@@ -1,17 +1,17 @@
 <header class="bg-white fixed w-full top-0 z-50 shadow-sm">
     <!-- Top Bar -->
-    <div class="bg-brand-blue-900 p-2 text-white hidden md:block">
+    <div class="bg-brand-blue-950 p-2 text-white hidden md:block">
         <div class="container mx-auto px-4 flex justify-between items-center text-sm">
            
             <div class="flex items-center space-x-4">
-              <a href="mailto:{{ $contactDetails['email'] }}" class="flex items-center space-x-2 hover:text-brand-blue-100 transition-colors">
+              <a href="mailto:{{ $contactDetails['email'] }}" class="flex items-center space-x-2 hover:text-white transition-colors">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
                         <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
                     </svg>
                     {{ $contactDetails['email'] }}
                 </a>
-                <a href="tel:{{ $contactDetails['phone'] }}" class="font-semibold hover:text-brand-blue-100 transition-colors">{{ $contactDetails['phone'] }}</a>
+                <a href="tel:{{ $contactDetails['phone'] }}" class="font-semibold hover:text-white transition-colors">{{ $contactDetails['phone'] }}</a>
             </div>
         </div>
     </div>
@@ -22,7 +22,7 @@
             <!-- Logo -->
             <div class="flex items-center">
                 <a wire:navigate href="/" class="flex items-center">
-                    <img src="/logo/logo.png" alt="MedBuzzy Logo" class="h-10 md:h-12">
+                    <img src="/logo/logo.png" alt="MedBuzzy Logo"    class="h-10 md:h-12  object-contain">
                 </a>
             </div>
 
@@ -83,14 +83,14 @@
                 
                 <!-- Book Now Button -->
                 <a wire:navigate href="{{ route('appointment') }}"
-                    class="bg-brand-orange-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-brand-orange-600 transition-colors duration-200 flex items-center shadow-md hover:shadow-lg whitespace-nowrap">
+                    class="bg-brand-orange-700 text-white px-4 py-2 rounded-lg font-semibold hover:bg-brand-orange-600 transition-colors duration-200 flex items-center shadow-md hover:shadow-lg whitespace-nowrap">
 
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
                         </path>
                     </svg>
-                    <span class=" text-xs md:text-sm sm:inline">Consult with a Doctor</span>
+                    <span class=" text-xs md:text-sm sm:inline  text-white">Consult with a Doctor</span>
                 </a>
 
                 @guest

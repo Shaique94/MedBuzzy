@@ -82,7 +82,7 @@
                 }
             }
         }
-    </script> --}}
+    </script> 
 
     <!-- Custom CSS for gradients and mobile nav -->
     <style>

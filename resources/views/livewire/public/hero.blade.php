@@ -20,7 +20,7 @@
                                 Your Health,
                                 <span class="text-brand-blue-600">Simplified</span>
                             </h1>
-                            <p class="text-lg sm:text-xl text-gray-600 mx-auto lg:mx-0 leading-relaxed">
+                            <p class="text-lg sm:text-xl text-gray-700 mx-auto lg:mx-0 leading-relaxed">
                                 Connect with trusted doctors, book appointments instantly, and manage your healthcare
                                 journey all in one place.
                             </p>
@@ -52,7 +52,7 @@
 
                                     <!-- Specialty -->
                                     <div class="relative">
-
+                                   <label for="specialty-select" class="sr-only">Select Specialty</label>
                                         <div class="absolute inset-y-0 left-0 p-3 flex items-center pointer-events-none">
 
                                             <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor"
@@ -63,7 +63,7 @@
                                             </svg>
                                         </div>
 
-                                        <select name="specialty" wire:model="selectedDepartment"
+                                        <select name="specialty" id="specialty-select" wire:model="selectedDepartment"
                                             class="w-full pl-10 pr-6 py-3 border border-gray-200 bg-white rounded-lg text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue-500 focus:border-brand-blue-500">
                                             <option value="">All Specialties</option>
                                             @foreach ($departments as $department)
@@ -347,7 +347,7 @@
                             <!-- Carousel Controls -->
                             <button @click="prev" :disabled="transitioning"
 
-                                class="absolute left-0 top-1/2 -translate-y-1/2 bg-white border border-brand-blue-200 rounded-full p-1 sm:p-2 shadow hover:bg-brand-blue-50 transition -translate-x-1/2 disabled:opacity-50 disabled:cursor-not-allowed">
+                                class="absolute left-0 top-1/2 -translate-y-1/2 bg-white border border-brand-blue-200 rounded-full p-1 sm:p-2 shadow hover:bg-brand-blue-50 transition -translate-x-1/2 disabled:opacity-50 disabled:cursor-not-allowed"  aria-label="Previous doctor">
                                 <svg class="w-5 h-5 sm:w-6 sm:h-6 text-brand-blue-600" fill="none" stroke="currentColor"
 
                                     viewBox="0 0 24 24">
@@ -357,7 +357,7 @@
                             </button>
                             <button @click="next" :disabled="transitioning"
 
-                                class="absolute right-0 top-1/2 -translate-y-1/2 bg-white border border-brand-blue-200 rounded-full p-1 sm:p-2 shadow hover:bg-brand-blue-50 transition translate-x-1/2 disabled:opacity-50 disabled:cursor-not-allowed">
+                                class="absolute right-0 top-1/2 -translate-y-1/2 bg-white border border-brand-blue-200 rounded-full p-1 sm:p-2 shadow hover:bg-brand-blue-50 transition translate-x-1/2 disabled:opacity-50 disabled:cursor-not-allowed"  aria-label="Next doctor">
                                 <svg class="w-5 h-5 sm:w-6 sm:h-6 text-brand-blue-600" fill="none" stroke="currentColor"
 
                                     viewBox="0 0 24 24">
