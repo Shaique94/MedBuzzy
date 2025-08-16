@@ -549,25 +549,34 @@ class ManageAppointment extends Component
 }
 
     // Handle successful payment (signature verified, update payment + appointment)
-    public function handlePaymentSuccess($payload = null, $meta = null)
+    #[On('payment-success')]
+    public function handlePaymentSuccess(...$args)
     {
-        dd("success");
-        // Normalize payload to support:
-        // 1) Livewire.dispatch('payment-success', { paymentId, orderId, signature, ... })
-        // 2) Livewire.dispatch('payment-success', paymentId, { orderId, signature, ... })
-        // 3) Livewire.dispatch('payment-success', { response: { razorpay_payment_id, razorpay_order_id, razorpay_signature }, ... })
-        // 4) Livewire.dispatch('payment-success', { razorpay_payment_id, razorpay_order_id, razorpay_signature, ... })
+        // Capture whatever Livewire gave us (variadic) and log for debugging
+        $payload = $args[0] ?? null;
+        $meta = $args[1] ?? null;
+        \Log::info('handlePaymentSuccess called', [
+            'arg_count' => count($args),
+            'raw_args_sample' => is_array($args) ? array_map(fn($a) => is_scalar($a) ? $a : (is_array($a) ? array_slice($a,0,8) : gettype($a)), $args) : gettype($args)
+        ]);
+
+        // If objects were passed, convert to arrays
+        if (is_object($payload)) $payload = json_decode(json_encode($payload), true);
+        if (is_object($meta)) $meta = json_decode(json_encode($meta), true);
+
+        // If dispatched as CustomEvent, unwrap detail
+        if (is_array($payload) && isset($payload['detail']) && is_array($payload['detail'])) {
+            $payload = $payload['detail'];
+        }
+        if (is_array($meta) && isset($meta['detail']) && is_array($meta['detail'])) {
+            $meta = $meta['detail'];
+        }
+
         $paymentId = $orderId = $signature = null;
         $eventData = $appointmentInfo = [];
         $incomingApptId = null;
 
-        if (is_object($payload)) {
-            $payload = json_decode(json_encode($payload), true);
-        }
-        if (is_object($meta)) {
-            $meta = json_decode(json_encode($meta), true);
-        }
-
+        // Normalize common shapes from different integrations / dispatch styles
         if (is_array($payload) && isset($payload['paymentId'])) {
             $paymentId       = $payload['paymentId'] ?? null;
             $orderId         = $payload['orderId'] ?? null;
@@ -605,13 +614,27 @@ class ManageAppointment extends Component
             $paymentId = null;
         }
 
+        // Extra attempts to extract ids from common nested positions
+        if (!$paymentId && is_array($payload)) {
+            $paymentId = $payload['razorpay_payment_id'] ?? $payload['payment_id'] ?? $payload['paymentId'] ?? null;
+        }
+        if (!$orderId && is_array($payload)) {
+            $orderId = $payload['razorpay_order_id'] ?? $payload['order_id'] ?? $payload['orderId'] ?? null;
+        }
+        if (!$signature && is_array($payload)) {
+            $signature = $payload['razorpay_signature'] ?? $payload['signature'] ?? null;
+        }
+
         // If still missing IDs, log and bail gracefully (don’t throw)
         if (!$paymentId) {
             \Log::warning('payment-success received without IDs', [
-                'payload_keys' => is_array($payload) ? array_keys($payload) : gettype($payload),
-                'meta_keys'    => is_array($meta) ? array_keys($meta) : gettype($meta),
+                'payload_sample' => is_array($payload) ? array_slice($payload, 0, 20) : (is_object($payload) ? 'object' : gettype($payload)),
+                'meta_sample'    => is_array($meta) ? array_slice($meta, 0, 20) : (is_object($meta) ? 'object' : gettype($meta)),
             ]);
-            session()->flash('error', 'Payment could not be verified. Please try again.');
+            session()->flash('error', 'Payment could not be verified. Please try again or contact support.');
+            $this->dispatch('payment-verify-failed', [
+                'message' => 'Payment verification data missing. Please try again.'
+            ]);
             return;
         }
 
@@ -703,13 +726,12 @@ class ManageAppointment extends Component
              // Navigate to a failure page (home with marker)
              $this->redirectRoute('hero', params: ['payment' => 'failed'], navigate: true);
          }
-    }
+     }
 
+    #[On('payment-failed')]
     public function handlePaymentFailed($data)
     {
 
-
-        dd("failed");
 
         // Mark pending payment/appointment as failed/cancelled
         $orderId = $data['orderId'] ?? null; // ensure scope outside try
@@ -738,16 +760,17 @@ class ManageAppointment extends Component
         $this->redirectRoute('hero', params: ['payment' => 'failed'], navigate: true);
     }
 
-    // Retry creating a payment/order using current component state
-    public function retryPayment()
-    {
-        // Basic guards to avoid retry without context
-        if (!$this->doctor_id || !$this->appointment_date || !$this->appointment_time || empty($this->newPatient['name']) || empty($this->newPatient['phone'])) {
-            session()->flash('error', 'Missing details to retry payment. Please review your selections.');
-            return;
-        }
-        $this->createOrder();
-    }
+    #[On('retry-payment')]
+     // Retry creating a payment/order using current component state
+     public function retryPayment()
+     {
+         // Basic guards to avoid retry without context
+         if (!$this->doctor_id || !$this->appointment_date || !$this->appointment_time || empty($this->newPatient['name']) || empty($this->newPatient['phone'])) {
+             session()->flash('error', 'Missing details to retry payment. Please review your selections.');
+             return;
+         }
+         $this->createOrder();
+     }
 
     // Called when booking_for value changes by Livewire (naming convention)
     public function updatedBookingFor($value)

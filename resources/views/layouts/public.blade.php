@@ -285,14 +285,27 @@
                             order_id: data.orderId,
                             handler: function (response) {
                                 console.log('Payment success:', response);
+                                // Dispatch for Livewire and also emit a plain CustomEvent so handlers receive the same shape
                                 Livewire.dispatch('payment-success', {
-                                    paymentId: response.razorpay_payment_id,
-                                    orderId: response.razorpay_order_id,
-                                    signature: response.razorpay_signature,
-                                    allData: data,
-                                    appointmentData: data.appointmentData,
-                                    appointmentId: data.appointmentId
+                                     paymentId: response.razorpay_payment_id,
+                                     orderId: response.razorpay_order_id,
+                                     signature: response.razorpay_signature,
+                                     allData: data,
+                                     appointmentData: data.appointmentData,
+                                     appointmentId: data.appointmentId
                                 });
+                                try {
+                                    window.dispatchEvent(new CustomEvent('payment-success', {
+                                        detail: {
+                                            paymentId: response.razorpay_payment_id,
+                                            orderId: response.razorpay_order_id,
+                                            signature: response.razorpay_signature,
+                                            allData: data,
+                                            appointmentData: data.appointmentData,
+                                            appointmentId: data.appointmentId
+                                        }
+                                    }));
+                                } catch (e) { console.debug('CustomEvent dispatch failed', e); }
                                 document.body.style.overflow = '';
                             },
                             prefill: {
@@ -305,11 +318,8 @@
                                 ondismiss: function () {
                                     console.log('Razorpay modal dismissed');
                                     document.body.style.overflow = '';
-                                    Livewire.dispatch('payment-failed', {
-                                        error: 'Payment modal closed by user',
-                                        orderId: data.orderId,
-                                        appointmentId: data.appointmentId
-                                    });
+                                    Livewire.dispatch('payment-failed', { appointmentId: data.appointmentId });
+                                    try { window.dispatchEvent(new CustomEvent('payment-failed', { detail: { appointmentId: data.appointmentId } })); } catch(e){}
                                     showPaymentFailedOverlay('Payment was cancelled. Please try again.', () => {
                                         Livewire.dispatch('retry-payment');
                                     });
@@ -322,11 +332,8 @@
                             rzp.on('payment.failed', function (resp) {
                                 console.error('Payment failed:', resp);
                                 document.body.style.overflow = '';
-                                Livewire.dispatch('payment-failed', {
-                                    error: resp?.error?.description || 'Payment failed',
-                                    orderId: resp?.error?.metadata?.order_id || data.orderId,
-                                    appointmentId: data.appointmentId
-                                });
+                                Livewire.dispatch('payment-failed', { appointmentId: data.appointmentId, error: resp?.error?.description });
+                                try { window.dispatchEvent(new CustomEvent('payment-failed', { detail: { appointmentId: data.appointmentId, error: resp?.error?.description } })); } catch(e){}
                                 showPaymentFailedOverlay(resp?.error?.description || 'Payment failed', () => {
                                     Livewire.dispatch('retry-payment');
                                 });
