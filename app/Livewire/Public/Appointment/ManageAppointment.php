@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Public\Appointment;
 
+use App\Jobs\SendBookingConfirmationEmail;
 use App\Models\Appointment;
 use App\Models\Department;
 use App\Models\Doctor;
@@ -582,6 +583,12 @@ class ManageAppointment extends Component
                 'original_appointment_id' => null,
                 'rescheduled_at' => null,
             ]);
+
+
+            // Dispatch the email job
+           $testing= SendBookingConfirmationEmail::dispatch($patient, $appointment);
+
+
 
             // 6. Record payment
             $payment = Payment::create([

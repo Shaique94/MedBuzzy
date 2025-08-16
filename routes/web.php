@@ -138,6 +138,15 @@ Route::get('/storage-link', function () {
     return 'Storage link created successfully!';
 });
 
+Route::get('/test-email', function () {
+    $patient = App\Models\Patient::first();
+    $appointment = App\Models\Appointment::first();
+    Mail::to($patient->email)->send(new App\Mail\BookingConfirmationMail($patient, $appointment));
+    return 'Email sent!';
+});
+
+//reset password work 
+
 Route::get('/forgot-password', ForgotPassword::class)
     ->middleware('guest')
     ->name('password.request');

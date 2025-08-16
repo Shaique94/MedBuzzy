@@ -1,10 +1,8 @@
-<div>
-    <div>
-        <section
-            class="relative overflow-hidden bg-gradient-to-br from-brand-blue-50 via-white to-brand-blue-100 pt-8 pb-16 md:pt-16 md:pb-24">
+        <section class="relative overflow-hidden bg-gradient-to-br from-brand-blue-50 via-white to-brand-blue-100 py-5 md:pt-10">
             <!-- Decorative Background Elements -->
             <div class="absolute inset-0 overflow-hidden" aria-hidden="true">
-                <div class="absolute top-20 right-20 w-32 h-32 bg-brand-blue-200 rounded-full opacity-20 animate-pulse"></div>
+                <div class="absolute top-20 right-20 w-32 h-32 bg-brand-blue-200 rounded-full opacity-20 animate-pulse">
+                </div>
                 <div class="absolute bottom-20 left-20 w-24 h-24 bg-brand-yellow-200 rounded-full opacity-30"></div>
                 <div class="absolute top-1/2 left-1/4 w-16 h-16 bg-brand-blue-200 rounded-full opacity-25"></div>
             </div>
@@ -34,17 +32,20 @@
                                     <!-- Location -->
                                     <div class="relative">
 
-                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <div
+                                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
 
                                             <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
+                                                </path>
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                             </svg>
                                         </div>
-                                        <select name="location" wire:model="location" disabled  aria-label="Current location: Purnea, Bihar"
+                                        <select name="location" wire:model="location" disabled
+                                            aria-label="Current location: Purnea, Bihar"
                                             class="w-full pl-10 pr-6 py-3 border border-gray-200 bg-gray-50 rounded-lg text-gray-600 text-sm">
                                             <option value="purnea">📍 Purnea, Bihar</option>
                                         </select>
@@ -87,48 +88,60 @@
                                         placeholder="Search doctors by name or specialty..."
                                         class="w-full pl-12 pr-32 py-4 border border-gray-200 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-blue-500 focus:border-brand-blue-500"
                                         aria-label="Search doctors">
-                                    <button type="submit"
 
-                                        class="absolute inset-y-0 right-0 px-6 py-2 m-1 bg-brand-blue-600 text-white rounded-lg hover:bg-brand-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-blue-500">
-
-                                        Search
-                                    </button>
                                 </div>
+                                <button type="submit"
+                                    class="w-full px-6 py-3 m-1 bg-brand-orange-500 text-white rounded-lg hover:bg-brand-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-blue-500 text-lg">
+
+                                    Find Doctor Nearby
+                                </button>
                             </form>
                         </div>
 
                         <!-- CTA Buttons -->
-                        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                            <a wire:navigate href="{{ route('appointment') }}"
-
-                                class="bg-brand-blue-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-brand-blue-700 transition-all w-full duration-200 flex items-center justify-center space-x-2">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
-                                    </path>
-                                </svg>
-                                <span>Book Appointment</span>
-                            </a>
-                        </div>
 
                         <!-- Stats -->
-                        <div class="grid grid-cols-3 gap-4 pt-8">
-                            <div class="text-center">
+                        {{-- <div class="">
+                            <div
+                                class="flex flex-col md:flex-row items-center justify-between gap-6 bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                                <div class="flex items-center gap-4 w-full md:w-auto text-center md:text-left">
+                                    <div
+                                        class="hidden md:flex h-12 w-12 rounded-full bg-brand-blue-100 text-brand-blue-600 items-center justify-center">
+                                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div class="text-2xl md:text-3xl font-bold text-brand-blue-700">
+                                            {{ $totalDoctors }}+</div>
+                                        <div class="text-sm text-gray-600 font-medium">Expert Doctors</div>
+                                    </div>
+                                </div>
 
-                                <div class="text-2xl sm:text-3xl font-semibold text-gray-900">{{ $totalDoctors }}+</div>
-                                <div class="text-sm text-gray-600">Expert Doctors</div>
+                                <div class="h-px w-full md:h-12 md:w-px bg-gray-200"></div>
+
+                                <div class="flex items-center gap-4 w-full md:w-auto text-center md:text-left">
+                                    <div
+                                        class="hidden md:flex h-12 w-12 rounded-full bg-brand-blue-100 text-brand-blue-600 items-center justify-center">
+                                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 4.5c-2.003 0-3.857.6-5.4 1.65m10.8 0A10.856 10.856 0 0012 4.5m5.4 1.65a11 11 0 11-10.8 0">
+                                                </path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M9 10h.01M15 10h.01M9.5 15a2.5 2.5 0 005 0">
+                                                </path>
+                                            </svg>    </div>
+                                    <div>
+                                        <div class="text-2xl md:text-3xl font-bold text-brand-blue-700">
+                                            {{ $totalPatients }}+</div>
+                                        <div class="text-sm text-gray-600 font-medium">Happy Patients</div>
+                                    </div>
+                                </div>
 
                             </div>
-                            <div class="text-center">
-                                <div class="text-2xl sm:text-3xl font-semibold text-gray-900">{{ $totalPatients }}+</div>
-                                <div class="text-sm text-gray-600">Happy Patients</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-2xl sm:text-3xl font-semibold text-gray-900">24/7</div>
-                                <div class="text-sm text-gray-600">Support</div>
-                            </div>
-                        </div>
+                        </div> --}}
                     </div>
 
                     <!-- Hero Image / Doctor Carousel -->
@@ -171,11 +184,11 @@
                                             class="absolute inset-0 bg-white rounded-2xl p-4 sm:p-6 space-y-3 sm:space-y-4"
                                             style="will-change: opacity, transform;">
                                             <div class="flex items-center gap-2 sm:gap-3">
-                                                <div class="w-12 h-12 sm:w-16 sm:h-16 bg-brand-blue-100 rounded-full flex items-center justify-center overflow-hidden border-2 border-white shadow-sm">
+                                                <div
+                                                    class="w-12 h-12 sm:w-16 sm:h-16 bg-brand-blue-100 rounded-full flex items-center justify-center overflow-hidden border-2 border-white shadow-sm">
                                                     @if ($doctor->image)
                                                         <img src="{{ $doctor->image }}"
-                                                            alt="Dr. {{ $doctor->user->name }}"
-                                                            loading="lazy"
+                                                            alt="Dr. {{ $doctor->user->name }}" loading="lazy"
                                                             class="w-full h-full object-cover">
                                                     @else
                                                         <span
@@ -183,13 +196,18 @@
                                                     @endif
                                                 </div>
                                                 <div class="flex-1 min-w-0">
-                                                    <div class="font-semibold text-gray-900 text-base sm:text-lg truncate">{{ $doctor->user->name }}</div>
+                                                    <div
+                                                        class="font-semibold text-gray-900 text-base sm:text-lg truncate">
+                                                        {{ $doctor->user->name }}</div>
 
-                                                    <div class="text-xs sm:text-sm text-brand-blue-600 font-medium truncate">{{ $doctor->department->name ?? 'General Medicine' }}</div>
+                                                    <div
+                                                        class="text-xs sm:text-sm text-brand-blue-600 font-medium truncate">
+                                                        {{ $doctor->department->name ?? 'General Medicine' }}</div>
 
                                                 </div>
                                                 <div class="text-right">
-                                                    <div class="flex text-yellow-400 justify-end mb-1" aria-hidden="true">
+                                                    <div class="flex text-yellow-400 justify-end mb-1"
+                                                        aria-hidden="true">
                                                         @php
                                                             $avgRating = $doctor->reviews_avg_rating ?? 0;
                                                             $fullStars = floor($avgRating);
@@ -208,8 +226,8 @@
                                                         {{-- Half Star --}}
                                                         @if ($hasHalfStar)
                                                             <div class="relative w-3 h-3 sm:w-4 sm:h-4">
-                                                                <svg class="w-3 h-3 sm:w-4 sm:h-4 text-gray-300" fill="currentColor"
-                                                                    viewBox="0 0 20 20">
+                                                                <svg class="w-3 h-3 sm:w-4 sm:h-4 text-gray-300"
+                                                                    fill="currentColor" viewBox="0 0 20 20">
                                                                     <path
                                                                         d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
                                                                     </path>
@@ -225,8 +243,8 @@
                                                         @endif
                                                         {{-- Empty Stars --}}
                                                         @for ($i = 0; $i < $emptyStars; $i++)
-                                                            <svg class="w-3 h-3 sm:w-4 sm:h-4 text-gray-300" fill="currentColor"
-                                                                viewBox="0 0 20 20">
+                                                            <svg class="w-3 h-3 sm:w-4 sm:h-4 text-gray-300"
+                                                                fill="currentColor" viewBox="0 0 20 20">
                                                                 <path
                                                                     d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
                                                                 </path>
@@ -246,8 +264,10 @@
                                                 </div>
                                             </div>
                                             <div class="space-y-3">
-                                                <div class="text-xs sm:text-sm text-gray-700 font-medium">Next Available:</div>
-                                                <div class="bg-brand-blue-50 rounded-lg p-2 sm:p-3 border border-brand-blue-100">
+                                                <div class="text-xs sm:text-sm text-gray-700 font-medium">Next
+                                                    Available:</div>
+                                                <div
+                                                    class="bg-brand-blue-50 rounded-lg p-2 sm:p-3 border border-brand-blue-100">
                                                     @php
                                                         $availableDays = is_array($doctor->available_days)
                                                             ? $doctor->available_days
@@ -261,65 +281,70 @@
                                                             $currentHour = date('H');
 
                                                             // Check if doctor is available today and it's before 5 PM
-                                                            if (in_array($today, $availableDays) && $currentHour < 17) {
-                                                                $nextSlot = ['day' => 'Today', 'time' => '2:30 PM'];
-                                                            } else {
-                                                                // Find next available day
-                                                                $daysOfWeek = [
-                                                                    'Monday',
-                                                                    'Tuesday',
-                                                                    'Wednesday',
-                                                                    'Thursday',
-                                                                    'Friday',
-                                                                    'Saturday',
-                                                                    'Sunday',
-                                                                ];
-                                                                $todayIndex = array_search($today, $daysOfWeek);
+    if (in_array($today, $availableDays) && $currentHour < 17) {
+        $nextSlot = ['day' => 'Today', 'time' => '2:30 PM'];
+    } else {
+        // Find next available day
+        $daysOfWeek = [
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+            'Saturday',
+            'Sunday',
+        ];
+        $todayIndex = array_search($today, $daysOfWeek);
 
-                                                                for ($i = 1; $i <= 7; $i++) {
-                                                                    $nextDayIndex = ($todayIndex + $i) % 7;
-                                                                    $nextDay = $daysOfWeek[$nextDayIndex];
+        for ($i = 1; $i <= 7; $i++) {
+            $nextDayIndex = ($todayIndex + $i) % 7;
+            $nextDay = $daysOfWeek[$nextDayIndex];
 
-                                                                    if (in_array($nextDay, $availableDays)) {
-                                                                        if ($i === 1) {
-                                                                            $nextSlot = [
-                                                                                'day' => 'Tomorrow',
-                                                                                'time' => '9:00 AM',
-                                                                            ];
-                                                                        } else {
-                                                                            $nextDate = date(
-                                                                                'M j',
-                                                                                strtotime("+{$i} days"),
-                                                                            );
-                                                                            $nextSlot = [
-                                                                                'day' => $nextDate,
-                                                                                'time' => '9:00 AM',
-                                                                            ];
-                                                                        }
-                                                                        break;
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
+            if (in_array($nextDay, $availableDays)) {
+                if ($i === 1) {
+                    $nextSlot = [
+                        'day' => 'Tomorrow',
+                        'time' => '9:00 AM',
+                    ];
+                } else {
+                    $nextDate = date(
+                        'M j',
+                        strtotime("+{$i} days"),
+                    );
+                    $nextSlot = [
+                        'day' => $nextDate,
+                        'time' => '9:00 AM',
+                    ];
+                }
+                break;
+            }
+        }
+    }
+}
 
-                                                        if (!$nextSlot) {
-                                                            $nextSlot = [
-                                                                'day' => 'Contact for',
-                                                                'time' => 'availability',
+if (!$nextSlot) {
+    $nextSlot = [
+        'day' => 'Contact for',
+        'time' => 'availability',
                                                             ];
                                                         }
                                                     @endphp
 
 
-                                                    <div class="font-medium text-xs sm:text-sm text-brand-blue-800">{{ $nextSlot['day'] }}, {{ $nextSlot['time'] }}</div>
-                                                    <div class="text-[10px] sm:text-xs text-brand-blue-600">₹{{ $doctor->fee ?? 500 }} consultation</div>
+                                                    <div class="font-medium text-xs sm:text-sm text-brand-blue-800">
+                                                        {{ $nextSlot['day'] }}, {{ $nextSlot['time'] }}</div>
+                                                    <div class="text-[10px] sm:text-xs text-brand-blue-600">
+                                                        ₹{{ $doctor->fee ?? 500 }} consultation</div>
 
                                                 </div>
 
                                                 <div class="grid grid-cols-2 gap-2 text-sm">
-                                                    <div class="bg-gray-50 rounded p-1 sm:p-2 text-center  border border-gray-200">
-                                                        <div class="font-medium text-gray-900 text-xs sm:text-sm">{{ $doctor->experience ?? '5+' }} yrs</div>
-                                                        <div class="text-[9px] sm:text-xs text-gray-700">Experience</div>
+                                                    <div
+                                                        class="bg-gray-50 rounded p-1 sm:p-2 text-center  border border-gray-200">
+                                                        <div class="font-medium text-gray-900 text-xs sm:text-sm">
+                                                            {{ $doctor->experience ?? '5+' }} yrs</div>
+                                                        <div class="text-[9px] sm:text-xs text-gray-700">Experience
+                                                        </div>
                                                     </div>
                                                     <div class="bg-gray-50 rounded p-1 sm:p-2 text-center">
                                                         <div class="font-medium text-gray-800 text-xs sm:text-sm">
@@ -329,12 +354,13 @@
                                                                 By Appt
                                                             @endif
                                                         </div>
-                                                        <div class="text-[9px] sm:text-xs text-gray-500">Available</div>
+                                                        <div class="text-[9px] sm:text-xs text-gray-500">Available
+                                                        </div>
                                                     </div>
                                                 </div>
 
-                                                <a wire:navigate href="{{ route('appointment', ['doctor_slug' => $doctor->slug]) }}"
-
+                                                <a wire:navigate
+                                                    href="{{ route('appointment', ['doctor_slug' => $doctor->slug]) }}"
                                                     class="w-full block bg-brand-blue-600 text-white py-2 sm:py-3 rounded-lg font-medium hover:bg-brand-blue-700 transition-colors text-center text-sm sm:text-base">
 
                                                     Book Appointment
@@ -366,20 +392,17 @@
                                 </svg>
                             </button>
                             <!-- Dots -->
-                            <div class="flex justify-center gap-2 mt-4" role="tablist" aria-label="Doctor carousel navigation dots">
+                            <div class="flex justify-center gap-2 mt-4" role="tablist"
+                                aria-label="Doctor carousel navigation dots">
                                 @foreach ($doctors as $index => $doctor)
                                     <button @click="goTo({{ $index }})"
-
                                         :class="current === {{ $index }} ? 'bg-brand-blue-600' : 'bg-brand-blue-200'"
-
                                         :disabled="transitioning"
-                                        class="w-3 h-3 rounded-full transition-all duration-200"
-                                         role="tab"
-                                           :aria-selected="current === {{ $index }} ? 'true' : 'false'"
-              aria-label="View doctor {{ $index + 1 }}"
-           :aria-controls="'doctor-slide-' + {{ $index }}"
-             :tabindex="current === {{ $index }} ? '0' : '-1'"
-            ></button>
+                                        class="w-3 h-3 rounded-full transition-all duration-200" role="tab"
+                                        :aria-selected="current === {{ $index }} ? 'true' : 'false'"
+                                        aria-label="View doctor {{ $index + 1 }}"
+                                        :aria-controls="'doctor-slide-' + {{ $index }}"
+                                        :tabindex="current === {{ $index }} ? '0' : '-1'"></button>
                                 @endforeach
                             </div>
                         </div>
@@ -387,7 +410,3 @@
                 </div>
             </div>
         </section>
-
-
-    </div>
-</div>

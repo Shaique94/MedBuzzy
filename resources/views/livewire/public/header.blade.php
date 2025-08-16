@@ -1,6 +1,6 @@
 <header class="bg-white fixed w-full top-0 z-50 shadow-sm">
-    <!-- Top Bar -->
-    <div class="bg-brand-blue-950 p-2 text-white hidden md:block">
+    {{-- <!-- Top Bar -->
+    <div class="bg-brand-blue-900 p-2 text-white hidden md:block">
         <div class="container mx-auto px-4 flex justify-between items-center text-sm">
            
             <div class="flex items-center space-x-4">
@@ -14,42 +14,29 @@
                 <a href="tel:{{ $contactDetails['phone'] }}" class="font-semibold hover:text-white transition-colors">{{ $contactDetails['phone'] }}</a>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <!-- Main Header -->
-    <div class="container mx-auto px-3 lg:px-[10%] py-3 md:py-4 ">
+    <div class=" mx-auto px-3 lg:px-[10%] py-3 md:py-4 ">
         <div class="flex justify-between items-center">
             <!-- Logo -->
             <div class="flex items-center">
                 <a wire:navigate href="/" class="flex items-center">
-                    <img src="/logo/logo.png" alt="MedBuzzy Logo"    class="h-10 md:h-12  object-contain">
+                    <img src="/logo/logo.png" alt="MedBuzzy Logo" class="h-9 md:h-12">
                 </a>
             </div>
 
             <!-- Desktop Navigation -->
-            <nav class="hidden lg:flex items-center space-x-2">
-                <a wire:navigate href="{{ route('our-doctors') }}"
-                    class="text-gray-700 hover:text-brand-blue-600 font-medium transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-brand-blue-50">
-                    Find Doctor
-                </a>
-                <a wire:navigate href="{{ route('about-us') }}"
-                    class="text-gray-700 hover:text-brand-blue-600 font-medium transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-brand-blue-50">
-                    About MedBuzzy
-                </a>
-                <a wire:navigate href="{{ route('contact-us') }}"
-                    class="text-gray-700 hover:text-brand-blue-600 font-medium transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-brand-blue-50">
-                    Contact Us
-                </a>
-            </nav>
+           
 
             <!-- Right Side Actions -->
-            <div class="flex items-center space-x-4">
+            <div class="flex items-center space-x-1 md:space-x-4">
              <!-- Replace the existing User Profile section with this: -->
 @auth
     <!-- User Profile Dropdown -->
     <div class="hidden lg:flex items-center space-x-3 relative" x-data="{ open: false }">
         <button @click="open = !open" class="flex items-center space-x-2 focus:outline-none">
-            <div class="w-9 h-9 rounded-full bg-brand-teal-100 flex items-center justify-center text-brand-teal-800 font-semibold">
+            <div class="w-9 h-9 rounded-full bg-brand-blue-100 flex items-center justify-center text-brand-blue-800 font-semibold">
                 {{ substr(auth()->user()->name, 0, 1) }}
             </div>
             <span class="text-gray-700 font-medium">{{ auth()->user()->name }}</span>
@@ -62,7 +49,7 @@
         <div x-show="open" @click.away="open = false" 
              class="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-50 border border-gray-100">
             <a wire:navigate href="{{ route('user.dashboard') }}" 
-               class="block px-4 py-2 text-sm text-gray-700 hover:bg-brand-teal-50 flex items-center space-x-2">
+               class="block px-4 py-2 text-sm text-gray-700 hover:bg-brand-blue-50 flex items-center space-x-2">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                 </svg>
@@ -82,22 +69,25 @@
 @endauth
                 
                 <!-- Book Now Button -->
-                <a wire:navigate href="{{ route('appointment') }}"
-                    class="bg-brand-orange-700 text-white px-4 py-2 rounded-lg font-semibold hover:bg-brand-orange-600 transition-colors duration-200 flex items-center shadow-md hover:shadow-lg whitespace-nowrap">
+                <a wire:navigate href="{{ route('our-doctors') }}"
+                    class="bg-brand-orange-600 text-white px-3 md:px-4 py-2 rounded-lg font-semibold hover:bg-brand-orange-600 transition-colors duration-200 flex items-center shadow-md hover:shadow-lg whitespace-nowrap">
 
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
+                        </path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 14h6m-3-3v6">
                         </path>
                     </svg>
-                    <span class=" text-xs md:text-sm sm:inline  text-white">Consult with a Doctor</span>
+                    <span class=" text-xs md:text-sm sm:inline">Find Doctor</span>
                 </a>
 
                 @guest
-                    <div class="hidden md:flex items-center space-x-3">
+                    <div class="hidden md:flex items-center">
                         <a wire:navigate href="/login"
-                            class="text-white bg-brand-blue-500 hover:text-white font-medium transition-colors duration-200 px-4 py-3 rounded-lg hover:bg-brand-blue-600 whitespace-nowrap">
-                            Login/Register
+                            class="bg-brand-blue-600 text-white px-3 md:px-4 py-2 rounded-lg font-semibold hover:bg-brand-blue-600 transition-colors duration-200 flex items-center shadow-md hover:shadow-lg whitespace-nowrap">
+                            <span class=" text-xs md:text-sm sm:inline">Login/Register</span>
                         </a>
                         
                     </div>
@@ -138,14 +128,14 @@
             <div class="pt-4 border-t space-y-3">
               @auth
     <div class="flex items-center space-x-3 px-3 py-2">
-        <div class="w-8 h-8 rounded-full bg-brand-teal-100 flex items-center justify-center text-brand-teal-800 font-semibold">
+        <div class="w-8 h-8 rounded-full bg-brand-blue-100 flex items-center justify-center text-brand-blue-800 font-semibold">
             {{ substr(auth()->user()->name, 0, 1) }}
         </div>
         <span class="text-gray-700 font-medium">{{ auth()->user()->name }}</span>
     </div>
     
     <a wire:navigate href="{{ route('user.dashboard') }}" 
-       class="block text-gray-700 hover:text-brand-teal-600 font-medium py-2 px-3 rounded-lg hover:bg-brand-teal-50 transition-colors duration-200 flex items-center space-x-2 mobile-menu-link">
+       class="block text-gray-700 hover:text-brand-blue-600 font-medium py-2 px-3 rounded-lg hover:bg-brand-blue-50 transition-colors duration-200 flex items-center space-x-2 mobile-menu-link">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
         </svg>
@@ -161,10 +151,6 @@
         </button>
     </form>
 @endauth
-                <a wire:navigate href="{{ route('appointment') }}"
-                    class="block text-center bg-brand-orange-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-brand-orange-600 transition-colors duration-200 shadow-md hover:shadow-lg mobile-menu-link">
-                    Book Appointment
-                </a>
             </div>
         </nav>
     </div>

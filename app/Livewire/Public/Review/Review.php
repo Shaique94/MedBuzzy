@@ -2,9 +2,6 @@
 
 namespace App\Livewire\Public\Review;
 
-
-
-
 use App\Models\Doctor;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
@@ -14,8 +11,8 @@ use Illuminate\Support\Facades\Auth;
 
 #[Title('Write Review')]
 class Review extends Component
-{ public $doctor;
-
+{
+    public $doctor;
     public $doctor_id;
     public $rating = 5;
     public $comment;
@@ -25,20 +22,28 @@ class Review extends Component
     public function mount($doctor_id = null)
     {
         if ($doctor_id) {
-            $this->doctor = Doctor::findOrFail($doctor_id);
+            $this->doctor = Doctor::find($doctor_id);
         }
     }
 
-    #[On('reviewModal')] 
-    public function reviewDetails($doctor_id)
-    {
-        $this->doctor = Doctor::findOrFail($doctor_id);
+    #[On('openReviewModal')] 
+public function openReviewModal($doctorId)
+{
+    // Handle both array and direct ID cases
+    $id = is_array($doctorId) ? $doctorId['doctorId'] : $doctorId;
+    
+    $this->doctor = Doctor::find($id);
+    
+    if ($this->doctor) {
         $this->showModal = true;
+    } else {
+        session()->flash('error', 'Doctor not found.');
     }
+}
 
     protected $rules = [
         'rating' => 'required|integer|min:1|max:5',
-        'comment' => 'nullable|string|min:10',
+        'comment' => 'nullable|string',
     ];
 
     public function setRating($rating)
@@ -55,7 +60,7 @@ class Review extends Component
 
         $this->validate();
 
-         \App\Models\Review::create([
+        \App\Models\Review::create([
             'doctor_id' => $this->doctor->id,
             'user_id' => Auth::id(),
             'rating' => $this->rating,
@@ -63,9 +68,13 @@ class Review extends Component
             'approved' => false // Needs admin approval
         ]);
 
-        $this->reset(['rating', 'comment']);
+        $this->reset(['rating', 'comment', 'showModal']);
         session()->flash('message', 'Review submitted for admin approval!');
-        $this->showModal = false;
+    }
+
+    public function closeModal()
+    {
+        $this->reset(['showModal', 'showLoginMessage']);
     }
 
     #[Layout('layouts.public')]

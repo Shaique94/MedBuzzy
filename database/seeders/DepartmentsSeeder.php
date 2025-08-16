@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Str;
 
 class DepartmentsSeeder extends Seeder
 {
@@ -24,7 +25,7 @@ class DepartmentsSeeder extends Seeder
 
         foreach ($departments as $name) {
             DB::table('departments')->updateOrInsert(
-                ['name' => $name],
+                ['name' => $name, "slug" => \Illuminate\Support\Str::slug($name)],
                 ['status' => true, 'created_at' => now(), 'updated_at' => now()]
             );
         }
