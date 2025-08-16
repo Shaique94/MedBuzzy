@@ -46,7 +46,7 @@
         </button>
         
         <!-- Dropdown Menu -->
-        <div x-show="open" @click.away="open = false" 
+        <div x-show="open" @click.outside="open = false" 
              class="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-50 border border-gray-100">
             <a wire:navigate href="{{ route('user.dashboard') }}" 
                class="block px-4 py-2 text-sm text-gray-700 hover:bg-brand-blue-50 flex items-center space-x-2">

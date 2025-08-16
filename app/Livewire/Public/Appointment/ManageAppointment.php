@@ -19,6 +19,7 @@ use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 use Razorpay\Api\Api;
+use Razorpay\Api\Utility;
 
 #[Title('Book Appointment')]
 class ManageAppointment extends Component
@@ -412,169 +413,340 @@ class ManageAppointment extends Component
     }
 
     protected $listeners = [
+        // Keep for backward compatibility; primary binding is via #[On(...)]
         'payment-failed' => 'handlePaymentFailed',
+        'payment-success' => 'handlePaymentSuccess',
+        'retry-payment' => 'retryPayment',
     ];
 
-    public function createOrder()
-    {
-        $this->validate();
+   public function createOrder()
+{
+    $this->validate();
 
-        try {
-            // Check slot availability
-            $bookedCount = Appointment::where([
+    try {
+        // Check slot availability
+        $bookedCount = Appointment::where([
+            'doctor_id' => $this->doctor_id,
+            'appointment_date' => $this->appointment_date,
+            'appointment_time' => $this->appointment_time,
+        ])->count();
+
+        $maxPatientsPerSlot = $this->selectedDoctor->patients_per_slot ?? 1;
+        if ($bookedCount >= $maxPatientsPerSlot) {
+            throw new \Exception('Selected time slot is no longer available.');
+        }
+
+        DB::beginTransaction();
+
+        // Ensure User exists
+        $email = $this->newPatient['email'] ?? 'guest+' . ($this->newPatient['phone'] ?? time()) . '@medbuzzy.local';
+        $user = User::firstOrCreate(
+            ['phone' => $this->newPatient['phone']],
+            [
+                'name' => $this->newPatient['name'] ?? 'Patient',
+                'email' => $email,
+                'password' => Hash::make('patient@123'),
+                'role' => 'patient',
+                'gender' => $this->newPatient['gender'] ?? null,
+            ]
+        );
+
+
+        // Ensure Patient exists
+        $patient = Patient::updateOrCreate(
+            [
+                'user_id' => $user->id,
+                'name' => $this->newPatient['name'] ?? $user->name,
+            ],
+            [
+                'email' => $this->newPatient['email'] ?? $user->email,
+                'gender' => $this->newPatient['gender'] ?? $user->gender,
+                'pincode' => $this->newPatient['pincode'] ?? null,
+                'address' => $this->newPatient['address'] ?? null,
+                'district' => $this->newPatient['district'] ?? null,
+                'state' => $this->newPatient['state'] ?? null,
+                'country' => 'India',
+            ]
+        );
+
+
+
+        // Pre-create Appointment
+        $appointment = Appointment::create([
+            'doctor_id' => $this->doctor_id,
+            'patient_id' => $patient->id,
+            'appointment_date' => $this->appointment_date,
+            'appointment_time' => $this->appointment_time,
+            'notes' => $this->notes ?? null,
+            'status' => 'pending',
+            'rescheduled' => false,
+            'is_rescheduled' => false,
+        ]);
+
+        $this->appointmentId = $appointment->id;
+
+        // Create Razorpay Order
+        $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret'));
+        if (!config('services.razorpay.key') || !config('services.razorpay.secret')) {
+            throw new \Exception('Razorpay API keys are not configured');
+        }
+        $order = $api->order->create([
+            'receipt' => 'appointment_' . $this->appointmentId,
+            'amount' => $this->amount,
+            'currency' => 'INR',
+            'payment_capture' => 1,
+        ]);
+
+        $this->orderId = $order['id'];
+        \Log::info('Razorpay order created', ['orderId' => $this->orderId]);
+
+        // Pre-create Payment
+        Payment::create([
+            'appointment_id' => $appointment->id,
+            'patient_id' => $patient->id,
+            'created_by' => Auth::id() ?? $user->id,
+            'amount' => round($this->amount / 100, 2),
+            'method' => 'upi',
+            'status' => 'pending',
+            'razorpay_order_id' => $this->orderId,
+        ]);
+
+        DB::commit();
+
+        // Dispatch Razorpay event
+        $eventData = [
+            'key' => config('services.razorpay.key'),
+            'orderId' => $this->orderId,
+            'amount' => $this->amount,
+            'appointmentId' => $this->appointmentId,
+            'patientData' => $this->newPatient,
+            'appointmentData' => [
                 'doctor_id' => $this->doctor_id,
                 'appointment_date' => $this->appointment_date,
                 'appointment_time' => $this->appointment_time,
-            ])->count();
-
-            $maxPatientsPerSlot = $this->selectedDoctor->patients_per_slot ?? 1;
-            if ($bookedCount >= $maxPatientsPerSlot) {
-                throw new \Exception('Selected time slot is no longer available.');
-            }
-
-            // Create Razorpay Order
-            $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret'));
-
-            $order = $api->order->create([
-                'receipt' => 'temp_appointment_' . now()->timestamp,
-                'amount' => $this->amount,
-                'currency' => 'INR',
-                'payment_capture' => 1,
-            ]);
-
-            $this->orderId = $order['id'];
-
-            // Dispatch with all data
-            $this->dispatch('razorpay:open', [
-                'key' => config('services.razorpay.key'),
-                'orderId' => $this->orderId,
-                'amount' => $this->amount,
-                'patientData' => $this->newPatient,
-                'appointmentData' => [
-                    'doctor_id' => $this->doctor_id,
-                    'appointment_date' => $this->appointment_date,
-                    'appointment_time' => $this->appointment_time,
-                    'notes' => $this->notes,
-                ]
-            ]);
-        } catch (\Exception $e) {
-            \Log::error('Order creation failed: ' . $e->getMessage());
-            $this->addError('payment_error', 'Failed to create appointment: ' . $e->getMessage());
-            $this->isProcessing = false;
-        }
+                'notes' => $this->notes,
+            ],
+        ];
+        \Log::info('Dispatching razorpay:open event', $eventData);
+        $this->dispatch('razorpay:open', $eventData);
+        // If a retry is needed, handle it in JS via setTimeout. Livewire events cannot be delayed server-side.
+    } catch (\Razorpay\Api\Errors\Error $e) {
+        DB::rollBack();
+        \Log::error('Razorpay error: ' . $e->getMessage(), [
+            'code' => $e->getCode(),
+            'trace' => $e->getTraceAsString(),
+        ]);
+        $this->addError('payment_error', 'Payment initiation failed: ' . $e->getMessage());
+        $this->isProcessing = false;
+    } catch (\Exception $e) {
+        DB::rollBack();
+        \Log::error('Order creation failed: ' . $e->getMessage(), [
+            'trace' => $e->getTraceAsString(),
+        ]);
+        $this->addError('payment_error', 'Failed to start payment: ' . $e->getMessage());
+        $this->isProcessing = false;
     }
+}
 
-    #[On('payment-success')]
-    // Add this method to handle successful payment
-    public function handlePaymentSuccess($paymentId, $allData)
+    // Handle successful payment (signature verified, update payment + appointment)
+    public function handlePaymentSuccess($payload = null, $meta = null)
     {
-        DB::beginTransaction();
+        dd("success");
+        // Normalize payload to support:
+        // 1) Livewire.dispatch('payment-success', { paymentId, orderId, signature, ... })
+        // 2) Livewire.dispatch('payment-success', paymentId, { orderId, signature, ... })
+        // 3) Livewire.dispatch('payment-success', { response: { razorpay_payment_id, razorpay_order_id, razorpay_signature }, ... })
+        // 4) Livewire.dispatch('payment-success', { razorpay_payment_id, razorpay_order_id, razorpay_signature, ... })
+        $paymentId = $orderId = $signature = null;
+        $eventData = $appointmentInfo = [];
+        $incomingApptId = null;
 
-        try {
-            // 1. Extract and prepare data
-            $paymentDetails = [
-                'key' => $allData[0]['key'],
-                'orderId' => $allData[0]['orderId'],
-                'amount' => $allData[0]['amount'] / 100, // Convert from paise to rupees
-            ];
+        if (is_object($payload)) {
+            $payload = json_decode(json_encode($payload), true);
+        }
+        if (is_object($meta)) {
+            $meta = json_decode(json_encode($meta), true);
+        }
 
-            $patientInfo = $allData[0]['patientData'];
-            $appointmentInfo = $allData[0]['appointmentData'];
+        if (is_array($payload) && isset($payload['paymentId'])) {
+            $paymentId       = $payload['paymentId'] ?? null;
+            $orderId         = $payload['orderId'] ?? null;
+            $signature       = $payload['signature'] ?? null;
+            $eventData       = $payload['allData'] ?? [];
+            $appointmentInfo = $payload['appointmentData'] ?? ($payload['appointment'] ?? []);
+            $incomingApptId  = $payload['appointmentId'] ?? null;
+        } elseif (is_array($payload) && isset($payload['response'])) {
+            // Nested response object (some integrations)
+            $resp            = is_array($payload['response']) ? $payload['response'] : [];
+            $paymentId       = $resp['razorpay_payment_id'] ?? null;
+            $orderId         = $resp['razorpay_order_id'] ?? null;
+            $signature       = $resp['razorpay_signature'] ?? null;
+            $eventData       = $payload['allData'] ?? [];
+            $appointmentInfo = $payload['appointmentData'] ?? ($payload['appointment'] ?? []);
+            $incomingApptId  = $payload['appointmentId'] ?? null;
+        } elseif (is_array($payload) && (isset($payload['razorpay_payment_id']) || isset($payload['razorpay_order_id']))) {
+            // Flat Razorpay keys at top-level
+            $paymentId       = $payload['razorpay_payment_id'] ?? null;
+            $orderId         = $payload['razorpay_order_id'] ?? null;
+            $signature       = $payload['razorpay_signature'] ?? null;
+            $eventData       = $payload['allData'] ?? [];
+            $appointmentInfo = $payload['appointmentData'] ?? ($payload['appointment'] ?? []);
+            $incomingApptId  = $payload['appointmentId'] ?? null;
+        } elseif (is_string($payload) && is_array($meta)) {
+            // Two-arg style
+            $paymentId       = $payload;
+            $orderId         = $meta['orderId'] ?? null;
+            $signature       = $meta['signature'] ?? null;
+            $eventData       = $meta['allData'] ?? [];
+            $appointmentInfo = $meta['appointmentData'] ?? ($meta['appointment'] ?? []);
+            $incomingApptId  = $meta['appointmentId'] ?? null;
+        } else {
+            // Unknown format
+            $paymentId = null;
+        }
 
-            // 2. Verify payment with Razorpay
-            $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret'));
-            $payment = $api->payment->fetch($paymentId);
+        // If still missing IDs, log and bail gracefully (don’t throw)
+        if (!$paymentId) {
+            \Log::warning('payment-success received without IDs', [
+                'payload_keys' => is_array($payload) ? array_keys($payload) : gettype($payload),
+                'meta_keys'    => is_array($meta) ? array_keys($meta) : gettype($meta),
+            ]);
+            session()->flash('error', 'Payment could not be verified. Please try again.');
+            return;
+        }
 
-            if ($payment->status !== 'authorized') {
-                throw new \Exception('Payment not captured');
+         DB::beginTransaction();
+
+         try {
+            // Verify Razorpay signature if present
+            if ($orderId && $signature) {
+                Utility::verifyPaymentSignature([
+                    'razorpay_order_id'   => $orderId,
+                    'razorpay_payment_id' => $paymentId,
+                    'razorpay_signature'  => $signature,
+                ]);
+            } else {
+                \Log::warning('Razorpay signature/orderId missing in success payload, proceeding with API status check.', [
+                    'paymentId' => $paymentId, 'orderId' => $orderId, 'hasSignature' => (bool) $signature
+                ]);
             }
 
-            //3. Create/update user (contact person)
-            $defaultPassword = 'patient@123'; // More secure default password
-            $user = User::firstOrCreate(
-                ['phone' => $patientInfo['phone']],
-                [
-                    'name' => $patientInfo['name'], // Use patient's name for new user (contact person assumes same as first patient)
-                    'email' => $patientInfo['email'] ?? null,
-                    'password' => Hash::make($defaultPassword),
-                    'role' => 'patient',
-                    'gender' => $patientInfo['gender'],
-                ]
-            );
-            // 4. Create/update patient (linked to user)
-            $patient = Patient::updateOrCreate(
-                [
-                    'user_id' => $user->id,
-                    'name' => $patientInfo['name'],
-                    'age' => $patientInfo['age'],
-                ],
-                [
-                    'email' => $patientInfo['email'] ?? null,
-                    'gender' => $patientInfo['gender'],
-                    'pincode' => $patientInfo['pincode'],
-                    'address' => $patientInfo['address'],
-                    'district' => $patientInfo['district'] ?? null,
-                    'state' => $patientInfo['state'] ?? null,
-                    'country' => 'India',
-                ]
-            );
-            // 5. Create appointment
-            $appointment = Appointment::create([
-                'doctor_id' => $appointmentInfo['doctor_id'],
-                'patient_id' => $patient->id,
-                'appointment_date' => $appointmentInfo['appointment_date'],
-                'appointment_time' => $appointmentInfo['appointment_time'],
-                'notes' => $appointmentInfo['notes'] ?? null,
-                'status' => 'scheduled',
-                'rescheduled' => false,
-                'is_rescheduled' => false,
-                'original_appointment_id' => null,
-                'rescheduled_at' => null,
-            ]);
+             // Optional: fetch payment and accept captured/authorized
+             $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret'));
+             $rzpPayment = $api->payment->fetch($paymentId);
+             if (!in_array($rzpPayment->status, ['captured', 'authorized'])) {
+                 throw new \Exception('Payment not captured');
+             }
 
+             // Find pre-created payment record
+             $paymentRecord = $orderId
+                 ? Payment::where('razorpay_order_id', $orderId)->first()
+                 : Payment::where('status', 'pending')->latest('id')->first();
+             if (!$paymentRecord) {
+                 throw new \Exception('Payment record not found for order.');
+             }
 
-            // Dispatch the email job
-           $testing= SendBookingConfirmationEmail::dispatch($patient, $appointment);
+             // Update payment with success details
+             $paymentRecord->update([
+                 'status'               => 'paid',
+                 'transaction_id'       => $paymentId,
+                 'razorpay_payment_id'  => $paymentId,
+                 'razorpay_signature'   => $signature,
+                 'method'               => 'upi',
+             ]);
 
+             // Update appointment to scheduled
+             $appointment = Appointment::find($paymentRecord->appointment_id ?? $incomingApptId);
+             if ($appointment) {
+                 $appointment->update(['status' => 'scheduled']);
+             }
 
+             // Send booking email
+             if ($appointment) {
+                 $patient = Patient::find($paymentRecord->patient_id);
+                 if ($patient) {
+                     SendBookingConfirmationEmail::dispatch($patient, $appointment);
+                 }
+             }
 
-            // 6. Record payment
-            $payment = Payment::create([
-                'appointment_id' => $appointment->id,
-                'patient_id' => $patient->id,
-                'amount' => $paymentDetails['amount'],
-                'transaction_id' => $paymentId,
-                'status' => 'paid',
-                'method' => 'upi',
-            ]);
+             DB::commit();
 
-            DB::commit();
+             // Auto-login and redirect
+             if ($paymentRecord->created_by) {
+                 $user = User::find($paymentRecord->created_by);
+                 if ($user) {
+                     Auth::login($user);
+                 }
+             }
 
-            // 7. Log in the user automatically
-            Auth::login($user);
+             $this->dispatch('redirect-to-confirmation', route('appointment.confirmation', $appointment->id));
+             return redirect()->route('appointment.confirmation', $appointment->id);
+         } catch (\Exception $e) {
+             DB::rollBack();
+             \Log::error("Payment success handling failed: {$e->getMessage()}", [
+                 'paymentId' => $paymentId ?? null,
+                 'orderId'   => $orderId ?? null,
+             ]);
 
-            // 8. Send confirmation (uncomment to implement)
-            // $patient->notify(new AppointmentConfirmed($appointment));
-            // $user->notify(new AccountCreated($user, $defaultPassword));
+             // Try to mark payment/appointment failed
+             if (!empty($orderId)) {
+                 $paymentRecord = Payment::where('razorpay_order_id', $orderId)->first();
+                 if ($paymentRecord) {
+                     $paymentRecord->update(['status' => 'failed']);
+                     if ($paymentRecord->appointment_id) {
+                         Appointment::where('id', $paymentRecord->appointment_id)->update(['status' => 'cancelled']);
+                     }
+                 }
+             }
 
-            return redirect()->route('appointment.confirmation', $appointment->id)
-                ->with('success', 'Appointment booked successfully! You have been automatically logged in.');
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            \Log::error("Payment failed: {$e->getMessage()}", [
-                'paymentId' => $paymentId,
-                'error' => $e->getTraceAsString()
-            ]);
-
-            return redirect()->back()
-                ->with('error', 'Payment processing failed. Please try again.');
-        }
+             session()->flash('error', 'Payment verification failed. Please contact support.');
+             // Navigate to a failure page (home with marker)
+             $this->redirectRoute('hero', params: ['payment' => 'failed'], navigate: true);
+         }
     }
 
     public function handlePaymentFailed($data)
     {
-        session()->flash('error', 'Payment failed: ' . $data['error']);
+
+
+        dd("failed");
+
+        // Mark pending payment/appointment as failed/cancelled
+        $orderId = $data['orderId'] ?? null; // ensure scope outside try
+        try {
+            if ($orderId) {
+                $paymentRecord = Payment::where('razorpay_order_id', $orderId)->first();
+                if ($paymentRecord) {
+                    $paymentRecord->update(['status' => 'failed']);
+                    if ($paymentRecord->appointment_id) {
+                        Appointment::where('id', $paymentRecord->appointment_id)->update(['status' => 'cancelled']);
+                    }
+                }
+            }
+        } catch (\Throwable $th) {
+            \Log::warning('Failed to mark payment/appointment as failed: ' . $th->getMessage());
+        }
+
+        $message = 'Payment failed: ' . ($data['error'] ?? 'Unknown error');
+        session()->flash('error', $message);
+        // Ask frontend to show a retry overlay
+        $this->dispatch('show-payment-failed', [
+            'message' => $message,
+            'orderId' => $orderId,
+        ]);
+        // Navigate to a failure page (home with marker)
+        $this->redirectRoute('hero', params: ['payment' => 'failed'], navigate: true);
+    }
+
+    // Retry creating a payment/order using current component state
+    public function retryPayment()
+    {
+        // Basic guards to avoid retry without context
+        if (!$this->doctor_id || !$this->appointment_date || !$this->appointment_time || empty($this->newPatient['name']) || empty($this->newPatient['phone'])) {
+            session()->flash('error', 'Missing details to retry payment. Please review your selections.');
+            return;
+        }
+        $this->createOrder();
     }
 
     // Called when booking_for value changes by Livewire (naming convention)

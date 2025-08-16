@@ -603,52 +603,39 @@
         </div>
     </div>
 
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    @script
-        <script>
-            Livewire.on('razorpay:open', (data) => {
-                console.log("Full data from Livewire:", data);
-                console.log("orderId:", data.orderId);
-
-                var options = {
-                    "key": "{{ config('services.razorpay.key') }}",
-                    "amount": "{{ $amount }}",
-                    "currency": "INR",
-                    "name": "Medbuzzy",
-                    "description": "Appointment Booking",
-                    "image": "{{ asset('logo.png') }}",
-                    "order_id": data.orderId,
-                    handler: function(response) {
-                        console.log("Patient Data:", data);
-                        console.log("Appointment Data:", data.orderId);
-
-                        Livewire.dispatch('payment-success', {
-                            paymentId: response.razorpay_payment_id,
-                            allData: data,
-                            appointmentData: data.appointmentData
-                        });
-                    },
-                    "prefill": {
-                        "name": "{{ $newPatient['name'] ?? 'Customer' }}",
-                        "email": "{{ $newPatient['email'] ?? 'customer@example.com' }}",
-                        "contact": "{{ $newPatient['phone'] ?? '9999999999' }}"
-                    },
-                    "theme": {
-                        "color": "#3399cc"
-                    }
-                };
-                console.log('options', options);
-
-                var rzp1 = new Razorpay(options);
-                rzp1.open();
-
-                rzp1.on('payment.failed', function(response) {
-                    Livewire.dispatch('payment-failed', {
-                        error: response.error.description,
-                        appointmentId: data.appointmentId
-                    });
-                });
-            });
-        </script>
-    @endscript
 </div>
+
+<script>
+    // Fix invalid SVG attributes like width/height="auto" to avoid console errors
+    (function () {
+        if (window.__svgAutoFixInstalled) return;
+        window.__svgAutoFixInstalled = true;
+        function fixSvgAutoAttributes(root = document) {
+            try {
+                const svgs = root.querySelectorAll ? root.querySelectorAll('svg') : [];
+                svgs.forEach(svg => {
+                    const w = svg.getAttribute('width');
+                    const h = svg.getAttribute('height');
+                    if (w && String(w).toLowerCase() === 'auto') svg.removeAttribute('width');
+                    if (h && String(h).toLowerCase() === 'auto') svg.removeAttribute('height');
+                });
+            } catch (e) {
+                console.debug('SVG auto-attr fix skipped:', e);
+            }
+        }
+        const observer = new MutationObserver(mutations => {
+            for (const m of mutations) {
+                m.addedNodes.forEach(node => {
+                    if (node && node.nodeType === 1) fixSvgAutoAttributes(node);
+                });
+            }
+        });
+        function initSvgFix() {
+            fixSvgAutoAttributes();
+            try { observer.observe(document.documentElement, { childList: true, subtree: true }); } catch (_) {}
+        }
+        document.addEventListener('DOMContentLoaded', initSvgFix);
+        document.addEventListener('livewire:init', fixSvgAutoAttributes);
+        document.addEventListener('livewire:navigated', fixSvgAutoAttributes);
+    })();
+</script>
