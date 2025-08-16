@@ -147,6 +147,22 @@
                 display: none !important;
             }
         }
+
+        /* In your app.css or public CSS file */
+.modal-enter {
+    opacity: 0;
+}
+.modal-enter-active {
+    opacity: 1;
+    transition: opacity 100ms;
+}
+.modal-exit {
+    opacity: 1;
+}
+.modal-exit-active {
+    opacity: 0;
+    transition: opacity 100ms;
+}
     </style>
 
     <!-- Preload critical CSS -->
