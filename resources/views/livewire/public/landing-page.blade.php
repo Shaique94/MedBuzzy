@@ -4,30 +4,9 @@
 
     <!-- Featured Specialties Section -->
 
-    <section 
-        x-data="{
-            scroll: 0,
-            scrollMax: 0,
-            itemWidth: 0,
-            containerWidth: 0,
-            calculateWidths() {
-                this.containerWidth = this.$refs.container.clientWidth;
-                this.itemWidth = this.$refs.container.children[0]?.offsetWidth + 24 || 0;
-                this.scrollMax = this.$refs.container.scrollWidth - this.containerWidth;
-            },
-            scrollNext() {
-                this.scroll = Math.min(this.scroll + this.containerWidth, this.scrollMax);
-                this.$refs.container.scrollTo({ left: this.scroll, behavior: 'smooth' });
-            },
-            scrollPrev() {
-                this.scroll = Math.max(this.scroll - this.containerWidth, 0);
-                this.$refs.container.scrollTo({ left: this.scroll, behavior: 'smooth' });
-            }
-        }"
-        x-init="
-            Alpine.nextTick(() => { calculateWidths() });
-            window.addEventListener('resize', () => Alpine.nextTick(() => { calculateWidths() }));
-        "
+    <section
+        x-data="departmentsScroller()"
+        x-init="init()"
         class="py-8 bg-brand-blue-50"
     >
 
@@ -372,5 +351,36 @@
             display: none;
         }
     </style>
-
 </div>
+
+<script>
+// Define Alpine factory once
+window.departmentsScroller = window.departmentsScroller || function () {
+    return {
+        scroll: 0,
+        scrollMax: 0,
+        itemWidth: 0,
+        containerWidth: 0,
+        init() {
+            queueMicrotask(() => this.calculateWidths());
+            window.addEventListener('resize', () => queueMicrotask(() => this.calculateWidths()));
+        },
+        calculateWidths() {
+            if (!this.$refs.container) return;
+            this.containerWidth = this.$refs.container.clientWidth;
+            const first = this.$refs.container.children[0];
+            this.itemWidth = (first ? first.offsetWidth : 0) + 24;
+            this.scrollMax = Math.max(0, this.$refs.container.scrollWidth - this.containerWidth);
+        },
+        scrollNext() {
+            this.scroll = Math.min(this.scroll + this.containerWidth, this.scrollMax);
+            this.$refs.container.scrollTo({ left: this.scroll, behavior: 'smooth' });
+        },
+        scrollPrev() {
+            this.scroll = Math.max(this.scroll - this.containerWidth, 0);
+            this.$refs.container.scrollTo({ left: this.scroll, behavior: 'smooth' });
+        },
+    };
+};
+</script>
+

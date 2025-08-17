@@ -31,6 +31,7 @@
 
             <!-- Right Side Actions -->
             <div class="flex items-center space-x-1 md:space-x-4">
+
                 <!-- Replace the existing User Profile section with this: -->
                 @auth
                     <!-- User Profile Dropdown -->
