@@ -555,34 +555,6 @@
                             </div>
 
 
-                            <!-- Notes & Payment Button -->
-                            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-5">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Additional Notes
-                                    (Optional)</label>
-                                <textarea wire:model.debounce.500ms="notes" rows="3"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-blue-500 focus:border-brand-blue-500 transition text-sm"
-                                    placeholder="Any symptoms, concerns, or special requests..."></textarea>
-                            </div>
-
-                            <button wire:click="createOrder" wire:loading.attr="disabled"
-                                wire:loading.target="createOrder"
-                                class="w-full bg-brand-blue-600 hover:bg-brand-blue-900 text-white font-semibold py-3 px-4 rounded-lg shadow-md transition-all duration-300 flex items-center justify-center">
-                                <span wire:loading.remove wire:target="createOrder">
-                                    Confirm & Pay ₹50 Booking Fee
-                                </span>
-                                <span wire:loading wire:target="createOrder" class="flex items-center">
-                                    <div class="flex">
-                                    <span>Processing Payment...</span>
-                                    <svg class="animate-spin h-5 w-5 text-white mr-2"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <circle class="opacity-25" cx="12" cy="12" r="10"
-                                            stroke="currentColor" stroke-width="4"></circle>
-                                        <path class="opacity-75" fill="currentColor"
-                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                        </path>
-                                    </svg>
-                                </span>
-                            </button>
 
                             <!-- Payment Disclaimer -->
                             <div class="text-center px-2 py-2">
@@ -599,49 +571,6 @@
                             </div>
                         </div>
                     @endif
-
-                    <!-- Navigation Buttons -->
-                     <div class="px-0 py-4 border-t border-gray-200 bg-gray-50 w-full">
-                         <div class="flex flex-col-reverse sm:flex-row justify-between gap-4 max-w-5xl mx-auto">
-                             @if ($step > 1)
-                                 <button wire:click="previousStep"
-                                     class="px-6 py-3 bg-white border border-brand-yellow-400 text-brand-yellow-600 rounded-lg hover:bg-brand-yellow-50 transition flex items-center justify-center shadow-sm">
-                                     <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20"
-                                         xmlns="http://www.w3.org/2000/svg">
-                                         <path fill-rule="evenodd"
-                                             d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                                             clip-rule="evenodd"></path>
-                                 </svg>
-                                 Back
-                             </button>
-                             @else
-                                 <div></div>
-                             @endif
-
-                             @if ($step < 3)
-                                 <button wire:click="nextStep" wire:loading.attr="disabled"
-                                     class="px-6 py-3 bg-brand-blue-600 text-white rounded-lg hover:bg-brand-blue-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shadow-md transition-all duration-300">
-                                     <span>Continue</span>
-                                     <svg class="h-5 w-5 ml-2" fill="currentColor" viewBox="0 0 20 20"
-                                         xmlns="http://www.w3.org/2000/svg">
-                                         <path fill-rule="evenodd"
-                                             d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                             clip-rule="evenodd"></path>
-                                     </svg>
-                                     <span wire:loading wire:target="nextStep" class="ml-2">
-                                         <svg class="animate-spin h-5 w-5 text-white" fill="none"
-                                             viewBox="0 0 24 24">
-                                             <circle class="opacity-25" cx="12" cy="12" r="10"
-                                                 stroke="currentColor" stroke-width="4"></circle>
-                                             <path class="opacity-75" fill="currentColor"
-                                                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                             </path>
-                                         </svg>
-                                     </span>
-                                 </button>
-                             @endif
-                         </div>
-                     </div>
                 </div>
             </div>
         </div>

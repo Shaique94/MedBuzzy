@@ -1,4 +1,4 @@
-<div class="">
+<div x-data @phone-modal-opened.window="$nextTick(()=>{ if($refs.phoneModal){ $refs.phoneModal.focus?.(); } })">
     <!-- Hero with Search (existing component) -->
     <livewire:public.hero />
 
@@ -259,22 +259,40 @@
                 </div>
             </div>
             <div class="text-center mt-12">
-                <button wire:click="showPhoneModal"
-                    class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-brand-blue-600 hover:bg-brand-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-blue-500">
-                    Find a Doctor
-                    <svg class="ml-2 -mr-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                </button>
+                @auth
+                    <a href="{{ route('our-doctors') }}"
+                        class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-brand-blue-600 hover:bg-brand-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-blue-500">
+                        Find a Doctor
+                        <svg class="ml-2 -mr-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </a>
+                @else
+                    <button
+                        @click="$wire.call('showPhoneModal')"
+                        class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-brand-blue-600 hover:bg-brand-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-blue-500">
+                        Find a Doctor
+                        <svg class="ml-2 -mr-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </button>
+                @endauth
             </div>
+        </div>
+    </section>
 
-            <!-- Phone Verification Modal -->
-            @if ($showModal)
-                <div
-                    class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50 transition-opacity duration-300">
-                    <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6 mx-4 transform transition-all duration-300"
+    <!-- Fullscreen loader shown while showPhoneModal request is in-flight -->
+    <x-fullscreen-loader message="Preparing verification…" wire:loading.flex wire:target="showPhoneModal" />
+
+    <!-- Phone Modal: add x-ref so Alpine can focus after open -->
+    @if ($showModal)
+        <div x-ref="phoneModal" tabindex="-1"
+             class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50 transition-opacity duration-300">
+            <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6 mx-4 transform transition-all duration-300"
                         @click.away="showModal = false">
                         @if (!$showVerification)
                             <div>
@@ -336,10 +354,7 @@
                         @endif
                     </div>
                 </div>
-            @endif
-        </div>
-    </section>
-
+    @endif
 
     <style>
         .scrollbar-hide {
@@ -384,3 +399,18 @@ window.departmentsScroller = window.departmentsScroller || function () {
 };
 </script>
 
+<!-- Bridge Livewire server dispatch to a DOM CustomEvent so Alpine listeners (e.g. @phone-modal-opened.window) work -->
+<script>
+    if (typeof Livewire !== 'undefined') {
+        Livewire.on('phone-modal-opened', () => {
+            try {
+                window.dispatchEvent(new CustomEvent('phone-modal-opened'));
+            } catch (e) {
+                // fallback for older browsers
+                var ev = document.createEvent('Event');
+                ev.initEvent('phone-modal-opened', true, true);
+                window.dispatchEvent(ev);
+            }
+        });
+    }
+</script>

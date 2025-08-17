@@ -552,6 +552,10 @@ class ManageAppointment extends Component
     #[On('payment-success')]
     public function handlePaymentSuccess(...$args)
     {
+        // Mark processing state and notify frontend (Livewire event)
+        $this->isProcessing = true;
+        $this->dispatch('payment-processing-started');
+
         // Capture whatever Livewire gave us (variadic) and log for debugging
         $payload = $args[0] ?? null;
         $meta = $args[1] ?? null;
