@@ -1,4 +1,5 @@
-<div class="min-h-screen bg-gray-50">
+<div>
+    <div class="min-h-screen bg-gray-50">
     <!-- Main Content -->
     <div class=" p-2  pt-0 md:p-8">
         <!-- Header -->
@@ -306,3 +307,4 @@
     </div>
 </div>
 <livewire:doctor.section.view-detail />
+</div>
