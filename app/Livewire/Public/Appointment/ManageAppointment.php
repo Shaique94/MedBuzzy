@@ -40,7 +40,7 @@ class ManageAppointment extends Component
         'name' => '',
         'email' => '',
         'phone' => '',
-        'gender' => '',
+        'gender' => 'male',
     ];
 
     // Add booking_for: 'self' | 'other'
@@ -790,24 +790,21 @@ class ManageAppointment extends Component
         if ($value === 'self') {
             $this->fillPatientFromAuth();
         } else {
-            // keep any existing typed values but clear validation errors related to patient
+            // Clear the patient form so "Someone else" shows an empty form,
+            // and clear related validation errors.
+            $this->newPatient = [
+                'name' => '',
+                'email' => '',
+                'phone' => '',
+                'gender' => 'male',
+            ];
             $this->resetErrorBag(['newPatient.*']);
         }
     }
- 
-    // Public action to manually trigger autofill (wire:click from blade)
-    public function useMyProfile()
-    {
-        if (!Auth::check()) {
-            $this->dispatchBrowserEvent('notify', ['type' => 'error', 'message' => 'Please login to autofill your profile.']);
-            return;
-        }
 
-        $this->booking_for = 'self';
-        $this->fillPatientFromAuth();
-    }
- 
-    // Helper to copy user / patient info into newPatient
+    // Explicit action callable from Blade to clear patient form immediately
+    
+   
     protected function fillPatientFromAuth()
     {
         if (!Auth::check()) {
