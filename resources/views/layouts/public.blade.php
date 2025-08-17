@@ -101,6 +101,75 @@
         @media (max-width: 768px) { .tawk-chat-container { display: none !important; } }
         /* Ensure scroll is not locked by modals */
         body.razorpay-checkout-open { overflow: auto !important; }
+
+        /* Primary brand blue from logo */
+        .bg-primary {
+            background-color: #00264d;
+        }
+
+        .text-primary {
+            color: #00264d;
+        }
+
+        /* Brand yellow/gold from logo */
+        .bg-secondary {
+            background-color: #f59e0b;
+        }
+
+        .text-secondary {
+            color: #f59e0b;
+        }
+
+        /* Mobile Bottom Navigation Styles */
+        .mobile-bottom-nav {
+            transition: all 0.3s ease;
+        }
+
+        .mobile-bottom-nav a {
+            transition: all 0.2s ease-out;
+        }
+
+        .mobile-bottom-nav a:active {
+            transform: scale(0.95);
+        }
+
+        .mobile-bottom-nav .active-tab {
+            color: #0d4b8c;
+        }
+
+        .mobile-bottom-nav .active-tab div {
+            background-color: #0d4b8c;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Add x-cloak directive support */
+        [x-cloak] {
+            display: none !important;
+        }
+
+        /* Hide Tawk.to widget on mobile */
+        @media (max-width: 768px) {
+            .tawk-chat-container {
+                display: none !important;
+            }
+        }
+
+        /* In your app.css or public CSS file */
+.modal-enter {
+    opacity: 0;
+}
+.modal-enter-active {
+    opacity: 1;
+    transition: opacity 100ms;
+}
+.modal-exit {
+    opacity: 1;
+}
+.modal-exit-active {
+    opacity: 0;
+    transition: opacity 100ms;
+}
     </style>
 
     <!-- Critical CSS -->
