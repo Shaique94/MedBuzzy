@@ -1,4 +1,5 @@
-<div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
+<div class="m-5">
+    <div class="max-w-md mx-auto  bg-white p-6 m-10 rounded-lg shadow-md">
     @if (!$emailSent)
         <div class="mb-6 text-sm text-gray-600">
             <h2 class="text-2xl font-bold text-gray-800 mb-2">Forgot your password?</h2>
@@ -74,4 +75,5 @@
             </div>
         </div>
     @endif
+</div>
 </div>

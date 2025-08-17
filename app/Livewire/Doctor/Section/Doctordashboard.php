@@ -108,11 +108,12 @@ public $selectedPatient = null;
     }
 
 
-public function showPatientDetails($patientId)
-{
-    logger("Opening modal for patient: $patientId");
-    $this->selectedPatient = \App\Models\Patient::find($patientId);
-    $this->showPatientModal = true;
-}
+// public function showPatientDetails($patientId)
+// {
+//     logger("Opening modal for patient: $patientId");
+//     $this->selectedPatient = \App\Models\Patient::find($patientId);
+//     $this->showPatientModal = true;
+// }
+
 
 }

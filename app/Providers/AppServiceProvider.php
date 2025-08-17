@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Services\ContactService;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Livewire\Livewire; 
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,7 +20,7 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
+      public function boot(): void
     {
         // Register Blade directive for contact details
         Blade::directive('contact', function ($expression) {
@@ -28,5 +29,8 @@ class AppServiceProvider extends ServiceProvider
 
         // Share contact details globally with all views
         view()->share('contact', ContactService::getContactDetails());
+        
+        // Register Livewire components
+      Livewire::component('doctor.section.view-detail', \App\Livewire\Doctor\Section\ViewDetail::class);
     }
 }

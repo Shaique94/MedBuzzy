@@ -7,8 +7,6 @@
 
     {{-- <title>{{ $title ? $title . ' | Manager Panel - MedBuzzy' : 'Manager Panel - MedBuzzy' }}</title> --}}
     
-    {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
-
     
     <!-- Open Graph & canonical tags (optional) -->
     <meta property="og:url" content="{{ url()->current() }}">

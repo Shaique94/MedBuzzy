@@ -205,10 +205,11 @@
                             <button disabled
                                 class="flex-1 bg-gray-200 text-gray-500 px-3 py-1.5 rounded text-sm font-medium cursor-not-allowed">Complete</button>
                         @endif
-                        <button wire:click="showPatientDetails({{ $appointment->patient->id ?? '1' }})"
-                            class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded text-sm font-medium">
-                            View
-                        </button>
+             <button 
+    wire:click="$dispatch('show-patient-details', { patientId: {{ $appointment->patient->id }} })"
+    class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded text-sm font-medium">
+    View
+</button>
                     </div>
                 </div>
                 @endforeach
@@ -280,10 +281,11 @@
                                         <button disabled
                                             class="text-gray-400 cursor-not-allowed text-sm font-medium">Complete</button>
                                     @endif
-                                    <button wire:click="showPatientDetails({{ $appointment->patient->id ?? '1' }})"
-                                        class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                                        View
-                                    </button>
+                          <button 
+    wire:click="$dispatch('show-patient-details', { patientId: {{ $appointment->patient->id }} })"
+    class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+    View
+</button>
                                 </div>
                             </td>
                         </tr>
@@ -301,6 +303,6 @@
         <div class="p-3 bg-red-100 text-red-800 rounded-lg mb-4">{{ session('error') ?? 'An error occurred!' }}</div>
         @endif
 
-        @include('livewire.doctor.section.view-detail')
     </div>
 </div>
+<livewire:doctor.section.view-detail />
