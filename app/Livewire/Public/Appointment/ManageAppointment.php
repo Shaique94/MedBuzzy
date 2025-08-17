@@ -724,17 +724,25 @@ class ManageAppointment extends Component
 
              session()->flash('error', 'Payment verification failed. Please contact support.');
              // Navigate to a failure page (home with marker)
-             $this->redirectRoute('hero', params: ['payment' => 'failed'], navigate: true);
+             $this->redirectRoute('hero', ['payment' => 'failed']);
          }
      }
 
     #[On('payment-failed')]
-    public function handlePaymentFailed($data)
+    public function handlePaymentFailed(...$args)
     {
 
 
+        // Accept variadic args (some dispatches send none / different shapes)
+        $data = $args[0] ?? ($args[1] ?? []);
+        if (is_object($data)) $data = json_decode(json_encode($data), true);
+        \Log::info('handlePaymentFailed called', [
+            'arg_count' => count($args),
+            'raw_args_sample' => is_array($args) ? array_map(fn($a) => is_scalar($a) ? $a : (is_array($a) ? array_slice($a,0,8) : gettype($a)), $args) : gettype($args)
+        ]);
+
         // Mark pending payment/appointment as failed/cancelled
-        $orderId = $data['orderId'] ?? null; // ensure scope outside try
+        $orderId = is_array($data) ? ($data['orderId'] ?? $data['order_id'] ?? $data['order'] ?? null) : null;
         try {
             if ($orderId) {
                 $paymentRecord = Payment::where('razorpay_order_id', $orderId)->first();
@@ -757,9 +765,9 @@ class ManageAppointment extends Component
             'orderId' => $orderId,
         ]);
         // Navigate to a failure page (home with marker)
-        $this->redirectRoute('hero', params: ['payment' => 'failed'], navigate: true);
+        $this->redirectRoute('hero', ['payment' => 'failed']);
     }
-
+ 
     #[On('retry-payment')]
      // Retry creating a payment/order using current component state
      public function retryPayment()
@@ -771,7 +779,7 @@ class ManageAppointment extends Component
          }
          $this->createOrder();
      }
-
+ 
     // Called when booking_for value changes by Livewire (naming convention)
     public function updatedBookingFor($value)
     {
@@ -782,7 +790,7 @@ class ManageAppointment extends Component
             $this->resetErrorBag(['newPatient.*']);
         }
     }
-
+ 
     // Public action to manually trigger autofill (wire:click from blade)
     public function useMyProfile()
     {
@@ -794,7 +802,7 @@ class ManageAppointment extends Component
         $this->booking_for = 'self';
         $this->fillPatientFromAuth();
     }
-
+ 
     // Helper to copy user / patient info into newPatient
     protected function fillPatientFromAuth()
     {

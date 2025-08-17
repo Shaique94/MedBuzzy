@@ -281,7 +281,7 @@
                             currency: "INR",
                             name: "Medbuzzy",
                             description: "Appointment Booking",
-                            image: "{{ asset('logo.png') }}",
+                            image: "{{ asset('logo/logo.png') }}",
                             order_id: data.orderId,
                             handler: function (response) {
                                 console.log('Payment success:', response);
@@ -332,7 +332,7 @@
                             rzp.on('payment.failed', function (resp) {
                                 console.error('Payment failed:', resp);
                                 document.body.style.overflow = '';
-                                Livewire.dispatch('payment-failed', { appointmentId: data.appointmentId, error: resp?.error?.description });
+                                Livewire.dispatch('payment-failed', { appointmentId: data.appointmentId, orderId: data.orderId ?? data.order_id ?? null, error: resp?.error?.description });
                                 try { window.dispatchEvent(new CustomEvent('payment-failed', { detail: { appointmentId: data.appointmentId, error: resp?.error?.description } })); } catch(e){}
                                 showPaymentFailedOverlay(resp?.error?.description || 'Payment failed', () => {
                                     Livewire.dispatch('retry-payment');
