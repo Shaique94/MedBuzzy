@@ -46,6 +46,7 @@ use App\Livewire\Public\Appointment\AppointmentWizard;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
+use App\Livewire\User\Sections\Profile as UserProfile;
 
 
 // Google Auth Routes 
@@ -128,8 +129,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin'])->group(
 // User Routes
 Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
     Route::get('/dashboard', \App\Livewire\User\Sections\Dashboard::class)->name('user.dashboard');
+        Route::get('/profile', UserProfile::class)->name('user.profile');
 });
-
 
 
 
