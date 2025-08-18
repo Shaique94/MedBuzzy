@@ -90,7 +90,7 @@
                         <div class="relative h-48 overflow-hidden">
                             <img src="{{ $doctor->image ?? 'https://ui-avatars.com/api/?name=' . urlencode($doctor->user->name) . '&background=random&rounded=true' }}"
                                 alt="Dr. {{ $doctor->user->name ?? '' }}"
-                                class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                                class="w-full  object-contain transition-transform duration-500 hover:scale-105"
                                 loading="lazy">
 
 
