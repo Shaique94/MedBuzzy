@@ -7,7 +7,7 @@
                 <p class="text-gray-600 mt-1">Here's your appointment summary</p>
             </div>
             <div class="mt-4 md:mt-0">
-                <a href="{{ route('appointment') }}" class="bg-brand-orange-500 hover:bg-brand-orange-600 text-white px-4 py-2 rounded-lg inline-flex items-center">
+                <a href="{{ route("our-doctors") }}" class="bg-brand-orange-500 hover:bg-brand-orange-600 text-white px-4 py-2 rounded-lg inline-flex items-center">
                     <i class="fas fa-plus mr-2"></i> Book New
                 </a>
             </div>
