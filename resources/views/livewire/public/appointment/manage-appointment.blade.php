@@ -233,8 +233,8 @@
                                                 }
                                             @endphp
 
-                                            <!-- Time Slots Tabs -->
-                                            <div x-data="{ activeTab: 'morning' }" class="mb-5">
+                                            <!-- Time Slots Tabs (activeTab synced to Livewire activeTimeTab) -->
+                                            <div x-data="{ activeTab: @entangle('activeTimeTab') }" class="mb-5">
                                                 <div class="border-b border-gray-200">
                                                     <nav class="-mb-px flex space-x-6 overflow-auto" aria-label="Tabs">
                                                         <button @click="activeTab = 'morning'"
@@ -624,6 +624,15 @@
                                         </div>
                                         
                                         <div class="p-5">
+                                            {{-- Selected slot summary (from previous step) --}}
+                                            @if(!empty($selectedDate) || !empty($selectedTime))
+                                                <div class="mb-4 p-3 bg-brand-blue-50 rounded-lg border border-brand-blue-100 text-sm text-brand-blue-800">
+                                                    <strong>Selected Slot:</strong>
+                                                    @if($selectedDate) {{ $selectedDate }} @endif
+                                                    @if($selectedTime) at {{ $selectedTime }} @endif
+                                                </div>
+                                            @endif
+
                                             <!-- Doctor's Fee -->
                                             <div class="flex justify-between items-center py-3 border-b border-gray-200">
                                                 <div>
@@ -659,6 +668,7 @@
                                             </div>
                                         </div>
                                     </div>
+
 
                                     <!-- Action Buttons -->
                                     <div class="flex flex-wrap justify-between items-center gap-4">
@@ -709,7 +719,7 @@
         </div>
     </div>
 
-</div>
+
 
 <script>
     // Fix invalid SVG attributes like width/height="auto" to avoid console errors
@@ -752,3 +762,6 @@
         document.addEventListener('livewire:navigated', fixSvgAutoAttributes);
     })();
 </script>
+
+</div>
+

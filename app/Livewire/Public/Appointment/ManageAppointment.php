@@ -61,7 +61,6 @@ class ManageAppointment extends Component
         'newPatient.email' => 'nullable|email|max:255',
         'newPatient.phone' => 'required|string|digits:10|regex:/^[6-9]\d{9}$/',
         'newPatient.gender' => 'required|string|in:male,female,other',
-        'notes' => 'nullable|string|max:1000',
     ];
 
     protected $messages = [
@@ -83,12 +82,8 @@ class ManageAppointment extends Component
         date_default_timezone_set('Asia/Kolkata');
         Carbon::setLocale('en');
         config(['app.timezone' => 'Asia/Kolkata']);
-        $this->departments = cache()->remember('departments', now()->addHours(24), fn() => Department::where('status', 1)->orderBy('name', 'desc')->get());
-        // $this->doctors = cache()->remember('doctors', now()->addHours(24), fn() => Doctor::with(['user', 'department'])->get());
-        $this->doctors = $this->getFilteredDoctors();
         $this->currentMonth = now()->startOfMonth()->format('Y-m-d');
 
-        // Handle slug parameter from route
         if ($doctor_slug) {
             $this->selectedDoctor = Doctor::with(['user', 'department'])->where('slug', $doctor_slug)->first();
             if ($this->selectedDoctor) {
@@ -110,6 +105,12 @@ class ManageAppointment extends Component
         // When mounting with a selected doctor, prepare the available dates
         if ($this->selectedDoctor) {
             $this->prepareAvailableDates();
+
+            // Default to today's date and a morning slot when arriving from a doctor link
+            if (empty($this->appointment_date)) {
+                $today = Carbon::today()->format('Y-m-d');
+                $this->setAppointmentDate($today, true);
+            }
         }
 
         // If user wants "self" and is authenticated, pre-fill
@@ -117,39 +118,10 @@ class ManageAppointment extends Component
             $this->fillPatientFromAuth();
         }
     }
-    public function updatedSelectedDepartment()
-    {
-        // Reset doctor and appointment-related fields when department changes
-        $this->doctor_id = null;
-        $this->selectedDoctor = null;
-        $this->appointment_date = null;
-        $this->appointment_time = null;
-        $this->availableSlots = [];
-        // Refresh doctor list based on new department filter
-        $this->doctors = $this->getFilteredDoctors();
-    }
-    protected function getFilteredDoctors()
-    {
-        // Cache doctors based on department filter for 24 hours
-        return cache()->remember(
-            "doctors_department_{$this->selectedDepartment}",
-            now()->addHours(24),
-            fn() =>
-            Doctor::when($this->selectedDepartment, function ($query) {
-                // Apply department filter if selectedDepartment is set
-                return $query->where('department_id', $this->selectedDepartment);
-            })
-                ->whereHas('department', function ($query) {
-                    $query->where('status', 1);
-                })
-                ->where('status', '1')
-                ->with(['user', 'department'])
-                ->get()
-        );
-    }
+   
     public function updated($propertyName)
     {
-        if (in_array($propertyName, ['selectedDepartment', 'doctor_id', 'appointment_date'])) {
+        if (in_array($propertyName, ['appointment_date'])) {
             return;
         }
 
@@ -226,46 +198,87 @@ class ManageAppointment extends Component
         }
     }
 
-    public function setAppointmentDate($date)
+    /**
+     * Set appointment date. $forceMorning will prefer morning tab & auto-select first morning slot.
+     */
+    public function setAppointmentDate($date, $forceMorning = false)
     {
         $this->appointment_date = $date;
         $this->appointment_time = null;
         $this->validate(['appointment_date' => $this->rules['appointment_date']]);
         $this->generateTimeSlots();
 
-        // Set active time tab based on current time of day when selecting a date
-        if ($this->appointment_date === Carbon::today()->format('Y-m-d')) {
-            $now = Carbon::now('Asia/Kolkata');
-            $hour = (int) $now->format('H');
-
-            if ($hour < 12) {
-                $this->activeTimeTab = 'morning';
-            } elseif ($hour < 16) {
-                $this->activeTimeTab = 'afternoon';
-            } else {
-                $this->activeTimeTab = 'evening';
-            }
-        } else {
-            // Default to morning tab for other days
+        // If caller requested a morning default, force morning tab. Otherwise keep existing heuristic.
+        if ($forceMorning) {
             $this->activeTimeTab = 'morning';
+        } else {
+            if ($this->appointment_date === Carbon::today()->format('Y-m-d')) {
+                $now = Carbon::now('Asia/Kolkata');
+                $hour = (int) $now->format('H');
+                if ($hour < 12) {
+                    $this->activeTimeTab = 'morning';
+                } elseif ($hour < 16) {
+                    $this->activeTimeTab = 'afternoon';
+                } else {
+                    $this->activeTimeTab = 'evening';
+                }
+            } else {
+                $this->activeTimeTab = 'morning';
+            }
+        }
+
+        // If no appointment_time selected, try to auto-select a morning slot (or first available)
+        if (empty($this->appointment_time)) {
+            $first = $this->pickFirstAvailableSlot($forceMorning ? 'morning' : null);
+            if ($first) {
+                $this->appointment_time = $first;
+            }
         }
     }
+
+    /**
+     * Pick first available slot. $preferredTab: 'morning'|'afternoon'|'evening' or null.
+     * Returns slot key (H:i) or null.
+     */
+    protected function pickFirstAvailableSlot($preferredTab = null)
+    {
+        if (empty($this->availableSlots)) return null;
+
+        // Helper to determine tab for hour
+        $tabForHour = fn(int $hour) => ($hour < 12) ? 'morning' : (($hour < 16) ? 'afternoon' : 'evening');
+
+        // If preferred tab given, try to find in that tab first
+        if ($preferredTab) {
+            foreach ($this->availableSlots as $key => $slot) {
+                // key is 'H:i'
+                $hour = (int) date('H', strtotime($key));
+                if ($tabForHour($hour) === $preferredTab && !$slot['disabled']) {
+                    return $key;
+                }
+            }
+        }
+
+        // Otherwise search in order: morning, afternoon, evening
+        $order = ['morning', 'afternoon', 'evening'];
+        foreach ($order as $tab) {
+            foreach ($this->availableSlots as $key => $slot) {
+                $hour = (int) date('H', strtotime($key));
+                if ($tabForHour($hour) === $tab && !$slot['disabled']) {
+                    return $key;
+                }
+            }
+        }
+
+        return null;
+    }
+  
 
     public function setActiveTimeTab($tab)
     {
         $this->activeTimeTab = $tab;
     }
 
-    public function updatedDoctorId($value)
-    {
-        $this->selectedDoctor = Doctor::with(['user', 'department'])->find($value);
-        $this->validate(['doctor_id' => $this->rules['doctor_id']]);
-        $this->appointment_date = null;
-        $this->appointment_time = null;
-        $this->availableSlots = [];
-        $this->currentMonth = now()->startOfMonth()->format('Y-m-d');
-        $this->prepareAvailableDates(); // Prepare available dates when doctor changes
-    }
+  
 
     public function generateTimeSlots()
     {
@@ -375,9 +388,15 @@ class ManageAppointment extends Component
         if ($this->step === 2) {
             if (empty($this->appointment_date)) {
                 $today = Carbon::today()->format('Y-m-d');
-                $this->setAppointmentDate($today);
+                // prefer morning when entering the date/time step
+                $this->setAppointmentDate($today, true);
             } else {
                 $this->generateTimeSlots();
+                // if still no time selected, attempt to auto-select morning
+                if (empty($this->appointment_time)) {
+                    $first = $this->pickFirstAvailableSlot('morning');
+                    if ($first) $this->appointment_time = $first;
+                }
             }
         }
     }
@@ -412,12 +431,7 @@ class ManageAppointment extends Component
         }
     }
 
-    protected $listeners = [
-        // Keep for backward compatibility; primary binding is via #[On(...)]
-        'payment-failed' => 'handlePaymentFailed',
-        'payment-success' => 'handlePaymentSuccess',
-        'retry-payment' => 'retryPayment',
-    ];
+    
 
    public function createOrder()
 {
@@ -494,7 +508,7 @@ class ManageAppointment extends Component
             'receipt' => 'appointment_' . $this->appointmentId,
             'amount' => $this->amount,
             'currency' => 'INR',
-            'payment_capture' => 1,
+            'payment_capture' => $this->amount > 0 ? 1 : 0,
         ]);
 
         $this->orderId = $order['id'];
@@ -504,7 +518,7 @@ class ManageAppointment extends Component
         Payment::create([
             'appointment_id' => $appointment->id,
             'patient_id' => $patient->id,
-            'created_by' => Auth::id() ?? $user->id,
+            'created_by' => $user->id, // Always use the user ID, not Auth::id()
             'amount' => round($this->amount / 100, 2),
             'method' => 'upi',
             'status' => 'pending',
@@ -550,90 +564,96 @@ class ManageAppointment extends Component
 
     // Handle successful payment (signature verified, update payment + appointment)
     #[On('payment-success')]
-    public function handlePaymentSuccess(...$args)
+    public function handlePaymentSuccess($paymentId = null, $eventData = null)
     {
-        // Mark processing state and notify frontend (Livewire event)
+        // Prevent duplicate processing
+        if ($this->isProcessing) {
+            \Log::info('Payment success already being processed, ignoring duplicate call');
+            return;
+        }
+        
         $this->isProcessing = true;
-        $this->dispatch('payment-processing-started');
+        
+        // Log what we received for debugging
 
-        // Capture whatever Livewire gave us (variadic) and log for debugging
-        $payload = $args[0] ?? null;
-        $meta = $args[1] ?? null;
         \Log::info('handlePaymentSuccess called', [
-            'arg_count' => count($args),
-            'raw_args_sample' => is_array($args) ? array_map(fn($a) => is_scalar($a) ? $a : (is_array($a) ? array_slice($a,0,8) : gettype($a)), $args) : gettype($args)
+            'paymentId' => $paymentId,
+            'eventData_type' => gettype($eventData),
+            'eventData' => is_array($eventData) ? $eventData : (is_object($eventData) ? json_decode(json_encode($eventData), true) : $eventData),
         ]);
 
-        // If objects were passed, convert to arrays
-        if (is_object($payload)) $payload = json_decode(json_encode($payload), true);
-        if (is_object($meta)) $meta = json_decode(json_encode($meta), true);
+        // Convert object to array if needed
+        if (is_object($eventData)) {
+            try {
+                $eventData = json_decode(json_encode($eventData), true);
+            } catch (\Exception $e) {
+                \Log::error('Failed to convert eventData object to array', ['error' => $e->getMessage()]);
+                $eventData = [];
+            }
+        }
+        
+        // Ensure we have an array to work with
+        if (!is_array($eventData)) {
+            $eventData = [];
+        }
 
         // If dispatched as CustomEvent, unwrap detail
-        if (is_array($payload) && isset($payload['detail']) && is_array($payload['detail'])) {
-            $payload = $payload['detail'];
-        }
-        if (is_array($meta) && isset($meta['detail']) && is_array($meta['detail'])) {
-            $meta = $meta['detail'];
+        if (is_array($eventData) && isset($eventData['detail']) && is_array($eventData['detail'])) {
+            $eventData = $eventData['detail'];
         }
 
-        $paymentId = $orderId = $signature = null;
-        $eventData = $appointmentInfo = [];
+        $orderId = $signature = null;
+        $appointmentInfo = [];
         $incomingApptId = null;
 
-        // Normalize common shapes from different integrations / dispatch styles
-        if (is_array($payload) && isset($payload['paymentId'])) {
-            $paymentId       = $payload['paymentId'] ?? null;
-            $orderId         = $payload['orderId'] ?? null;
-            $signature       = $payload['signature'] ?? null;
-            $eventData       = $payload['allData'] ?? [];
-            $appointmentInfo = $payload['appointmentData'] ?? ($payload['appointment'] ?? []);
-            $incomingApptId  = $payload['appointmentId'] ?? null;
-        } elseif (is_array($payload) && isset($payload['response'])) {
-            // Nested response object (some integrations)
-            $resp            = is_array($payload['response']) ? $payload['response'] : [];
-            $paymentId       = $resp['razorpay_payment_id'] ?? null;
-            $orderId         = $resp['razorpay_order_id'] ?? null;
-            $signature       = $resp['razorpay_signature'] ?? null;
-            $eventData       = $payload['allData'] ?? [];
-            $appointmentInfo = $payload['appointmentData'] ?? ($payload['appointment'] ?? []);
-            $incomingApptId  = $payload['appointmentId'] ?? null;
-        } elseif (is_array($payload) && (isset($payload['razorpay_payment_id']) || isset($payload['razorpay_order_id']))) {
-            // Flat Razorpay keys at top-level
-            $paymentId       = $payload['razorpay_payment_id'] ?? null;
-            $orderId         = $payload['razorpay_order_id'] ?? null;
-            $signature       = $payload['razorpay_signature'] ?? null;
-            $eventData       = $payload['allData'] ?? [];
-            $appointmentInfo = $payload['appointmentData'] ?? ($payload['appointment'] ?? []);
-            $incomingApptId  = $payload['appointmentId'] ?? null;
-        } elseif (is_string($payload) && is_array($meta)) {
-            // Two-arg style
-            $paymentId       = $payload;
-            $orderId         = $meta['orderId'] ?? null;
-            $signature       = $meta['signature'] ?? null;
-            $eventData       = $meta['allData'] ?? [];
-            $appointmentInfo = $meta['appointmentData'] ?? ($meta['appointment'] ?? []);
-            $incomingApptId  = $meta['appointmentId'] ?? null;
-        } else {
-            // Unknown format
-            $paymentId = null;
+        // Extract data from the eventData
+        if (is_array($eventData)) {
+            $orderId = $eventData['orderId'] ?? $eventData['razorpay_order_id'] ?? $eventData['order_id'] ?? null;
+            $signature = $eventData['signature'] ?? $eventData['razorpay_signature'] ?? null;
+            $appointmentInfo = $eventData['appointmentData'] ?? ($eventData['appointment'] ?? []);
+            $incomingApptId = $eventData['appointmentId'] ?? null;
         }
+        
+        \Log::info('Extracted payment data', [
+            'paymentId' => $paymentId,
+            'orderId' => $orderId,
+            'signature' => $signature,
+            'appointmentId' => $incomingApptId,
+            'eventData_keys' => is_array($eventData) ? array_keys($eventData) : 'not_array'
+        ]);
 
-        // Extra attempts to extract ids from common nested positions
-        if (!$paymentId && is_array($payload)) {
-            $paymentId = $payload['razorpay_payment_id'] ?? $payload['payment_id'] ?? $payload['paymentId'] ?? null;
+        // Fallback: try different payload structures if extraction failed
+        // Note: Commented out as method signature has changed to explicit parameters
+        /*
+        if (!$paymentId || !$orderId) {
+            // Normalize common shapes from different integrations / dispatch styles
+            if (is_array($payload) && isset($payload['response'])) {
+                // Nested response object (some integrations)
+                $resp            = is_array($payload['response']) ? $payload['response'] : [];
+                $paymentId       = $paymentId ?: ($resp['razorpay_payment_id'] ?? null);
+                $orderId         = $orderId ?: ($resp['razorpay_order_id'] ?? null);
+                $signature       = $signature ?: ($resp['razorpay_signature'] ?? null);
+                $eventData       = $eventData ?: ($payload['allData'] ?? []);
+                $appointmentInfo = $appointmentInfo ?: ($payload['appointmentData'] ?? ($payload['appointment'] ?? []));
+                $incomingApptId  = $incomingApptId ?: ($payload['appointmentId'] ?? null);
+            } elseif (is_string($payload) && is_array($meta)) {
+                // Two-arg style
+                $paymentId       = $paymentId ?: $payload;
+                $orderId         = $orderId ?: ($meta['orderId'] ?? null);
+                $signature       = $signature ?: ($meta['signature'] ?? null);
+                $eventData       = $eventData ?: ($meta['allData'] ?? []);
+                $appointmentInfo = $appointmentInfo ?: ($meta['appointmentData'] ?? ($meta['appointment'] ?? []));
+                $incomingApptId  = $incomingApptId ?: ($meta['appointmentId'] ?? null);
+            }
         }
-        if (!$orderId && is_array($payload)) {
-            $orderId = $payload['razorpay_order_id'] ?? $payload['order_id'] ?? $payload['orderId'] ?? null;
-        }
-        if (!$signature && is_array($payload)) {
-            $signature = $payload['razorpay_signature'] ?? $payload['signature'] ?? null;
-        }
+        */
 
         // If still missing IDs, log and bail gracefully (don’t throw)
         if (!$paymentId) {
-            \Log::warning('payment-success received without IDs', [
-                'payload_sample' => is_array($payload) ? array_slice($payload, 0, 20) : (is_object($payload) ? 'object' : gettype($payload)),
-                'meta_sample'    => is_array($meta) ? array_slice($meta, 0, 20) : (is_object($meta) ? 'object' : gettype($meta)),
+            \Log::warning('payment-success received without payment ID', [
+                'paymentId' => $paymentId,
+                'orderId' => $orderId,
+                'eventData_keys' => is_array($eventData) ? array_keys($eventData) : 'not_array',
             ]);
             session()->flash('error', 'Payment could not be verified. Please try again or contact support.');
             $this->dispatch('payment-verify-failed', [
@@ -665,12 +685,77 @@ class ManageAppointment extends Component
                  throw new \Exception('Payment not captured');
              }
 
-             // Find pre-created payment record
-             $paymentRecord = $orderId
-                 ? Payment::where('razorpay_order_id', $orderId)->first()
-                 : Payment::where('status', 'pending')->latest('id')->first();
+             // Find pre-created payment record with better logging
+             \Log::info('Looking for payment record', [
+                 'orderId' => $orderId,
+                 'appointmentId' => $incomingApptId
+             ]);
+
+             $paymentRecord = null;
+             if ($orderId) {
+                 $paymentRecord = Payment::where('razorpay_order_id', $orderId)->first();
+                 \Log::info('Payment record lookup by orderId', [
+                     'orderId' => $orderId,
+                     'found' => $paymentRecord ? true : false,
+                     'payment_id' => $paymentRecord?->id,
+                     'current_status' => $paymentRecord?->status
+                 ]);
+             }
+             
+             // Fallback: try to find by appointment ID if we have it and no payment found yet
+             if (!$paymentRecord && $incomingApptId) {
+                 $paymentRecord = Payment::where('appointment_id', $incomingApptId)
+                     ->whereIn('status', ['pending', 'paid']) // Include paid status for duplicate calls
+                     ->latest('id')
+                     ->first();
+                 \Log::info('Payment record lookup by appointmentId fallback', [
+                     'appointmentId' => $incomingApptId,
+                     'found' => $paymentRecord ? true : false,
+                     'payment_id' => $paymentRecord?->id,
+                     'current_status' => $paymentRecord?->status
+                 ]);
+             }
+             
+             // Last fallback: get the latest payment if we have component appointmentId
+             if (!$paymentRecord && $this->appointmentId) {
+                 $paymentRecord = Payment::where('appointment_id', $this->appointmentId)
+                     ->whereIn('status', ['pending', 'paid']) // Include paid status for duplicate calls
+                     ->latest('id')
+                     ->first();
+                 \Log::info('Payment record lookup by component appointmentId fallback', [
+                     'componentAppointmentId' => $this->appointmentId,
+                     'found' => $paymentRecord ? true : false,
+                     'payment_id' => $paymentRecord?->id,
+                     'current_status' => $paymentRecord?->status
+                 ]);
+             }
+
              if (!$paymentRecord) {
+                 $this->isProcessing = false; // Reset processing flag
+                 \Log::error('No payment record found - debugging info', [
+                     'orderId' => $orderId,
+                     'incomingApptId' => $incomingApptId,
+                     'componentApptId' => $this->appointmentId,
+                     'recent_payments' => Payment::latest('id')->take(5)->get(['id', 'appointment_id', 'razorpay_order_id', 'status'])->toArray()
+                 ]);
                  throw new \Exception('Payment record not found for order.');
+             }
+             
+             // If payment is already processed, just redirect to confirmation
+             if ($paymentRecord->status === 'paid') {
+                 $this->isProcessing = false; // Reset processing flag
+                 \Log::info('Payment already processed, redirecting to confirmation', [
+                     'paymentId' => $paymentRecord->id,
+                     'appointmentId' => $paymentRecord->appointment_id
+                 ]);
+                 
+                 $appointment = Appointment::find($paymentRecord->appointment_id);
+                 if ($appointment) {
+                     $confirmationRoute = route('appointment.confirmation', ['id' => $appointment->id]);
+                     $this->dispatch('redirect-to-confirmation', $confirmationRoute);
+                     return $this->redirectRoute('appointment.confirmation', ['id' => $appointment->id]);
+                 }
+                 return;
              }
 
              // Update payment with success details
@@ -684,92 +769,251 @@ class ManageAppointment extends Component
 
              // Update appointment to scheduled
              $appointment = Appointment::find($paymentRecord->appointment_id ?? $incomingApptId);
-             if ($appointment) {
-                 $appointment->update(['status' => 'scheduled']);
+             if (!$appointment) {
+                 throw new \Exception('Appointment not found for payment record');
              }
+             $appointment->update(['status' => 'scheduled']);
 
              // Send booking email
-             if ($appointment) {
-                 $patient = Patient::find($paymentRecord->patient_id);
-                 if ($patient) {
-                     SendBookingConfirmationEmail::dispatch($patient, $appointment);
-                 }
+             $patient = Patient::find($paymentRecord->patient_id);
+             if ($patient) {
+                 SendBookingConfirmationEmail::dispatch($patient, $appointment);
              }
 
              DB::commit();
 
+             \Log::info('Payment success - appointment scheduled', [
+                 'appointmentId' => $appointment->id,
+                 'paymentId' => $paymentRecord->id,
+                 'status' => $appointment->status
+             ]);
+
              // Auto-login and redirect
-             if ($paymentRecord->created_by) {
+             if ($paymentRecord->created_by && !Auth::check()) {
                  $user = User::find($paymentRecord->created_by);
-                 if ($user) {
-                     Auth::login($user);
-                 }
+                    if (!$user) {
+                        \Log::warning('User not found for auto-login', ['userId' => $paymentRecord->created_by]);
+                    } else {
+                        \Log::info('Auto-logging in user', ['userId' => $user->id, 'name' => $user->name]);
+                        
+                        // Regenerate session before login to prevent session fixation
+                        session()->regenerate();
+                        
+                        // Login the user with remember me
+                        Auth::login($user, true);
+                        
+                        // Explicitly save the session
+                        session()->save();
+                        
+                        \Log::info('Auto-login completed', [
+                            'logged_in_user_id' => Auth::id(),
+                            'session_id' => session()->getId(),
+                            'auth_check' => Auth::check()
+                        ]);
+                    }
+             } else if (Auth::check()) {
+                 \Log::info('User already logged in', ['user_id' => Auth::id()]);
+             } else {
+                 \Log::info('No created_by user for auto-login', ['payment_id' => $paymentRecord->id]);
              }
 
-             $this->dispatch('redirect-to-confirmation', route('appointment.confirmation', $appointment->id));
-             return redirect()->route('appointment.confirmation', $appointment->id);
+             // Clear any processing state
+             $this->isProcessing = false;
+             
+             // Ensure session is saved before redirect
+             session()->save();
+             
+             // Small delay to ensure session persistence
+             usleep(100000); // 100ms delay
+             
+             // Redirect to confirmation page
+             \Log::info('Redirecting to confirmation page', [
+                 'appointmentId' => $appointment->id,
+                 'auth_check' => Auth::check(),
+                 'user_id' => Auth::id()
+             ]);
+             $confirmationRoute = route('appointment.confirmation', ['id' => $appointment->id]);
+             
+             // Dispatch event for JavaScript handling
+             $this->dispatch('redirect-to-confirmation', $confirmationRoute);
+             
+             // Also use Livewire redirect as backup
+             return $this->redirectRoute('appointment.confirmation', ['id' => $appointment->id]);
          } catch (\Exception $e) {
              DB::rollBack();
+             $this->isProcessing = false; // Reset processing flag
+             
              \Log::error("Payment success handling failed: {$e->getMessage()}", [
                  'paymentId' => $paymentId ?? null,
                  'orderId'   => $orderId ?? null,
+                 'appointmentId' => $incomingApptId ?? $this->appointmentId,
              ]);
 
-             // Try to mark payment/appointment failed
+             // Try to mark payment failed (leave appointment as pending for retry)
+             $appointmentIdForFailed = null;
              if (!empty($orderId)) {
                  $paymentRecord = Payment::where('razorpay_order_id', $orderId)->first();
                  if ($paymentRecord) {
                      $paymentRecord->update(['status' => 'failed']);
-                     if ($paymentRecord->appointment_id) {
-                         Appointment::where('id', $paymentRecord->appointment_id)->update(['status' => 'cancelled']);
-                     }
+                     $appointmentIdForFailed = $paymentRecord->appointment_id;
                  }
+             }
+             
+             // Fallback: use incoming or component appointment ID
+             if (!$appointmentIdForFailed) {
+                 $appointmentIdForFailed = $incomingApptId ?? $this->appointmentId;
              }
 
              session()->flash('error', 'Payment verification failed. Please contact support.');
-             // Navigate to a failure page (home with marker)
-             $this->redirectRoute('hero', ['payment' => 'failed']);
+             
+             // Redirect to failed appointment page if we have appointment ID
+             if ($appointmentIdForFailed) {
+                 \Log::info('Redirecting to failed appointment page', ['appointmentId' => $appointmentIdForFailed]);
+                 return $this->redirectRoute('appointment.failed', ['id' => $appointmentIdForFailed]);
+             }
+             
+             // Last resort: Navigate to home with failure marker
+             \Log::info('No appointment ID available, redirecting to home with failure marker');
+             return $this->redirectRoute('hero', ['payment' => 'failed']);
          }
-     }
+    }
 
     #[On('payment-failed')]
     public function handlePaymentFailed(...$args)
     {
-
-
         // Accept variadic args (some dispatches send none / different shapes)
         $data = $args[0] ?? ($args[1] ?? []);
+        
         if (is_object($data)) $data = json_decode(json_encode($data), true);
-        \Log::info('handlePaymentFailed called', [
+        
+        // Enhanced logging for debugging
+        \Log::info('handlePaymentFailed called - DEBUG', [
             'arg_count' => count($args),
-            'raw_args_sample' => is_array($args) ? array_map(fn($a) => is_scalar($a) ? $a : (is_array($a) ? array_slice($a,0,8) : gettype($a)), $args) : gettype($args)
+            'raw_args_sample' => is_array($args) ? array_map(fn($a) => is_scalar($a) ? $a : (is_array($a) ? array_slice($a,0,8) : gettype($a)), $args) : gettype($args),
+            'processed_data' => $data,
+            'current_component_state' => [
+                'appointmentId' => $this->appointmentId ?? null,
+                'orderId' => $this->orderId ?? null,
+                'doctor_id' => $this->doctor_id ?? null,
+            ]
         ]);
 
-        // Mark pending payment/appointment as failed/cancelled
+        // Mark pending payment/appointment as failed
         $orderId = is_array($data) ? ($data['orderId'] ?? $data['order_id'] ?? $data['order'] ?? null) : null;
+        $paymentRecord = null;
+        $appointmentId = null;
+        
+        // If no orderId from data, try to use component's orderId
+        if (!$orderId && $this->orderId) {
+            $orderId = $this->orderId;
+            \Log::info('Using component orderId as fallback', ['orderId' => $orderId]);
+        }
+        
         try {
             if ($orderId) {
                 $paymentRecord = Payment::where('razorpay_order_id', $orderId)->first();
+                \Log::info('Payment record lookup result', [
+                    'orderId' => $orderId,
+                    'payment_found' => !is_null($paymentRecord),
+                    'payment_id' => $paymentRecord->id ?? null,
+                    'appointment_id' => $paymentRecord->appointment_id ?? null,
+                    'current_payment_status' => $paymentRecord->status ?? null,
+                    'current_appointment_status' => $paymentRecord ? optional(Appointment::find($paymentRecord->appointment_id))->status : null
+                ]);
+                
                 if ($paymentRecord) {
                     $paymentRecord->update(['status' => 'failed']);
-                    if ($paymentRecord->appointment_id) {
-                        Appointment::where('id', $paymentRecord->appointment_id)->update(['status' => 'cancelled']);
+                    $appointmentId = $paymentRecord->appointment_id;
+                    
+                    \Log::info('Updated payment status to failed, appointment remains pending', [
+                        'payment_id' => $paymentRecord->id,
+                        'appointment_id' => $appointmentId,
+                        'payment_status' => 'failed'
+                    ]);
+                }
+            } else {
+                \Log::warning('No orderId found in payment-failed data', [
+                    'data_keys' => is_array($data) ? array_keys($data) : 'not_array',
+                    'component_orderId' => $this->orderId ?? null,
+                    'component_appointmentId' => $this->appointmentId ?? null
+                ]);
+                
+                // Try to find appointment using component's appointmentId if available
+                if ($this->appointmentId) {
+                    $appointment = Appointment::find($this->appointmentId);
+                    if ($appointment && $appointment->status === 'pending') {
+                        $appointmentId = $appointment->id;
+                        
+                        // Only update related payment if exists, leave appointment as pending
+                        $payment = Payment::where('appointment_id', $appointment->id)->first();
+                        if ($payment && $payment->status === 'pending') {
+                            $payment->update(['status' => 'failed']);
+                        }
+                        
+                        \Log::info('Updated payment via component appointmentId, appointment remains pending', [
+                            'appointment_id' => $appointment->id,
+                            'payment_updated' => !is_null($payment)
+                        ]);
                     }
                 }
             }
         } catch (\Throwable $th) {
-            \Log::warning('Failed to mark payment/appointment as failed: ' . $th->getMessage());
+            \Log::error('Failed to mark payment/appointment as failed', [
+                'error' => $th->getMessage(),
+                'trace' => $th->getTraceAsString(),
+                'orderId' => $orderId
+            ]);
         }
 
         $message = 'Payment failed: ' . ($data['error'] ?? 'Unknown error');
         session()->flash('error', $message);
-        // Ask frontend to show a retry overlay
-        $this->dispatch('show-payment-failed', [
-            'message' => $message,
-            'orderId' => $orderId,
+        
+        // Debug: Check for appointments with pending status and pending payment
+        $this->checkAndRedirectPendingAppointments($appointmentId);
+        
+        // Try to redirect to failed appointment page (no modal, direct redirect)
+        if ($paymentRecord && $paymentRecord->appointment_id) {
+            \Log::info('REDIRECT ATTEMPT 1 - Using payment record appointment ID', [
+                'appointment_id' => $paymentRecord->appointment_id,
+                'order_id' => $orderId,
+                'route_exists' => \Route::has('appointment.failed')
+            ]);
+            
+            return $this->redirectRoute('appointment.failed', ['id' => $paymentRecord->appointment_id]);
+        }
+        
+        // If no payment record found but we have orderId, try one more time
+        if ($orderId && !$paymentRecord) {
+            $paymentRecord = Payment::where('razorpay_order_id', $orderId)->first();
+            if ($paymentRecord && $paymentRecord->appointment_id) {
+                \Log::info('REDIRECT ATTEMPT 2 - Second payment record lookup', [
+                    'appointment_id' => $paymentRecord->appointment_id,
+                    'order_id' => $orderId
+                ]);
+                
+                return $this->redirectRoute('appointment.failed', ['id' => $paymentRecord->appointment_id]);
+            }
+        }
+        
+        // Try using component's appointmentId as fallback
+        if ($appointmentId || $this->appointmentId) {
+            $finalAppointmentId = $appointmentId ?? $this->appointmentId;
+            \Log::info('REDIRECT ATTEMPT 3 - Using component appointmentId', [
+                'appointment_id' => $finalAppointmentId
+            ]);
+            
+            return $this->redirectRoute('appointment.failed', ['id' => $finalAppointmentId]);
+        }
+        
+        // Last fallback: Navigate to home with failure marker
+        \Log::error('REDIRECT FAILED - Going to home page', [
+            'order_id' => $orderId,
+            'has_payment_record' => !is_null($paymentRecord),
+            'component_appointmentId' => $this->appointmentId ?? null,
+            'final_appointmentId' => $appointmentId
         ]);
-        // Navigate to a failure page (home with marker)
-        $this->redirectRoute('hero', ['payment' => 'failed']);
+        
+        return $this->redirectRoute('hero', ['payment' => 'failed']);
     }
  
     #[On('retry-payment')]
@@ -835,6 +1079,27 @@ class ManageAppointment extends Component
     #[Layout('layouts.public')]
     public function render()
     {
+        // Provide formatted date/time for the view
+        $selectedDate = $this->appointment_date ? Carbon::parse($this->appointment_date)->format('l, F j, Y') : null;
+        $selectedTime = null;
+        if ($this->appointment_time) {
+            try {
+                // appointment_time usually 'H:i' (e.g. 14:30)
+                $selectedTime = Carbon::createFromFormat('H:i', $this->appointment_time, 'Asia/Kolkata')->format('h:i A');
+            } catch (\Exception $e) {
+                try {
+                    $selectedTime = Carbon::createFromFormat('H:i:s', $this->appointment_time, 'Asia/Kolkata')->format('h:i A');
+                } catch (\Exception $e) {
+                    // fallback to parsing as generic time string
+                    try {
+                        $selectedTime = Carbon::parse($this->appointment_time, 'Asia/Kolkata')->format('h:i A');
+                    } catch (\Exception $e) {
+                        $selectedTime = $this->appointment_time;
+                    }
+                }
+            }
+        }
+
         return view('livewire.public.appointment.manage-appointment', [
             'selectedDepartment' => $this->selectedDepartment,
             'departments' => $this->departments,
@@ -843,6 +1108,63 @@ class ManageAppointment extends Component
             'onLeaveDates' => $onLeaveDates ?? [],
             'availableDates' => $this->availableDates,
             'activeTimeTab' => $this->activeTimeTab,
+            'selectedDate' => $selectedDate,
+            'selectedTime' => $selectedTime,
         ]);
+    }
+    
+    /**
+     * Check for appointments with pending status and pending payment status
+     * and redirect them to failed page for debugging
+     */
+    private function checkAndRedirectPendingAppointments($currentAppointmentId = null)
+    {
+        try {
+            // Find appointments with pending status and pending payments
+            $pendingAppointments = Appointment::whereHas('payments', function ($query) {
+                $query->where('status', 'pending');
+            })->where('status', 'pending')->get();
+            
+            \Log::info('Checking pending appointments', [
+                'total_pending_appointments' => $pendingAppointments->count(),
+                'current_appointment_id' => $currentAppointmentId,
+                'appointments' => $pendingAppointments->map(function ($appointment) {
+                    return [
+                        'id' => $appointment->id,
+                        'status' => $appointment->status,
+                        'payment_status' => optional($appointment->payments()->first())->status,
+                        'created_at' => $appointment->created_at,
+                        'updated_at' => $appointment->updated_at
+                    ];
+                })->toArray()
+            ]);
+            
+            // Update old pending payments to failed (older than 30 minutes), but leave appointments as pending
+            $oldPendingAppointments = Appointment::whereHas('payments', function ($query) {
+                $query->where('status', 'pending');
+            })->where('status', 'pending')
+            ->where('created_at', '<', now()->subMinutes(30))
+            ->get();
+            
+            foreach ($oldPendingAppointments as $appointment) {
+                // Only update payment status, leave appointment as pending
+                $payment = $appointment->payments()->first();
+                if ($payment && $payment->status === 'pending') {
+                    $payment->update(['status' => 'failed']);
+                }
+                
+                \Log::info('Auto-failed old pending payment, appointment remains pending', [
+                    'appointment_id' => $appointment->id,
+                    'age_minutes' => now()->diffInMinutes($appointment->created_at),
+                    'payment_updated' => !is_null($payment)
+                ]);
+            }
+            
+        } catch (\Throwable $th) {
+            \Log::error('Error checking pending appointments', [
+                'error' => $th->getMessage(),
+                'trace' => $th->getTraceAsString()
+            ]);
+        }
     }
 }
