@@ -131,7 +131,7 @@
                         <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                             {{ $upcomingAppointments->count() }} Scheduled
                         </span>
-                        <a href="{{ route('appointment') }}" class="ml-3 text-sm text-brand-blue-600 hover:text-brand-blue-800">
+                        <a href="{{ route('our-doctors') }}" class="ml-3 text-sm text-brand-blue-600 hover:text-brand-blue-800">
                             <i class="fas fa-plus mr-1"></i> New
                         </a>
                     </div>
@@ -144,7 +144,7 @@
                         </div>
                         <h4 class="text-lg font-medium text-gray-700">No upcoming appointments</h4>
                         <p class="text-gray-500 mb-4">You don't have any scheduled visits yet</p>
-                        <a href="{{ route('appointment') }}" class="inline-flex items-center px-4 py-2 bg-brand-orange-500 text-white rounded-lg hover:bg-brand-orange-600 transition-colors">
+                        <a href="{{ route('our-doctors') }}" class="inline-flex items-center px-4 py-2 bg-brand-orange-500 text-white rounded-lg hover:bg-brand-orange-600 transition-colors">
                             <i class="fas fa-plus mr-2"></i> Book Appointment
                         </a>
                     </div>
