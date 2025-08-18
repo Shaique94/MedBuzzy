@@ -208,4 +208,13 @@ public function isDoctorAvailable(): bool
             \Log::error("Failed to send reschedule notification: " . $e->getMessage());
         }
     }
+
+
+    protected static function booted()
+{
+    static::addGlobalScope('valid', function ($builder) {
+        $builder->whereNotNull('patient_id')
+                ->whereNotNull('doctor_id');
+    });
+}
 }
