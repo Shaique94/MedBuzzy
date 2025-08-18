@@ -46,8 +46,12 @@ use App\Livewire\Public\Appointment\AppointmentWizard;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
+
+use App\Livewire\User\Sections\Profile as UserProfile;
+
 use App\Livewire\Public\Appointment\ConfirmAppointment;
 use App\Livewire\Public\Appointment\FailedAppointment;
+
 // Google Auth Routes 
 Route::get('/auth/google', [SocialiteController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('/auth/google/callback', [SocialiteController::class, 'handleGoogleCallback']);
@@ -131,8 +135,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin'])->group(
 // User Routes
 Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
     Route::get('/dashboard', \App\Livewire\User\Sections\Dashboard::class)->name('user.dashboard');
+        Route::get('/profile', UserProfile::class)->name('user.profile');
 });
-
 
 
 

@@ -202,7 +202,7 @@
         <livewire:public.header />
 
         <!-- Page Content -->
-        <main class="flex-1 overflow-x-hidden md:mt-16 mt-12 overflow-y-auto bg-gray-100 pb-5 lg:pb-0">
+        <main class="flex-1 overflow-x-hidden md:mt-15 mt-12 overflow-y-auto bg-gray-100 pb-5 lg:pb-0">
             <div class="mx-auto px-0">
                 {{ $slot }}
             </div>
@@ -533,6 +533,53 @@
                 if (Tawk_API.hideWidget) Tawk_API.hideWidget();
             }
         });
+    </script>
+
+    <!-- Global payment processing loader (hidden by default) -->
+    <div id="global-processing-loader" class="hidden fixed inset-0 z-50 items-center justify-center bg-brand-blue-600 bg-opacity-95">
+        <div class="text-center">
+            <div class="inline-block w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin mb-4" aria-hidden="true"></div>
+            <div class="text-white font-semibold text-lg">Processing payment…</div>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const loader = document.getElementById('global-processing-loader');
+            function showLoader() {
+                if (!loader) return;
+                loader.classList.remove('hidden');
+                loader.classList.add('flex');
+            }
+            function hideLoader() {
+                if (!loader) return;
+                loader.classList.remove('flex');
+                loader.classList.add('hidden');
+            }
+
+            // Show loader immediately when Razorpay returns success (client-side CustomEvent)
+            window.addEventListener('payment-success', () => {
+                showLoader();
+            });
+
+            // Also react to Livewire event emitted from server when payment handling starts
+            if (typeof Livewire !== 'undefined') {
+                Livewire.on('payment-processing-started', () => {
+                    showLoader();
+                });
+                // Hide if payment failed
+                Livewire.on('payment-failed', () => {
+                    hideLoader();
+                });
+                // Hide on redirect-to-confirmation (server will redirect; hide as fallback)
+                Livewire.on('redirect-to-confirmation', () => {
+                    hideLoader();
+                });
+            }
+
+            // Safety: hide loader if navigation occurs (prevent it from sticking)
+            window.addEventListener('beforeunload', () => hideLoader());
+        })();
     </script>
 </body>
 </html>

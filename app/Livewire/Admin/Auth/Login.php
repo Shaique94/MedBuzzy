@@ -3,14 +3,16 @@
 namespace App\Livewire\Admin\Auth;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 use Illuminate\Support\Carbon;
+use GuzzleHttp\Client;
 
 #[Title('Admin Login')]
 class Login extends Component
-{ 
+{
     public $phone;
     public $password;
     public $otp;
@@ -83,18 +85,18 @@ class Login extends Component
 
                 // OTP is valid, log in the user
                 Auth::login($user, $this->remember);
-                
+
                 // Clear OTP after successful login
                 $user->update([
                     'otp' => null,
                     'otp_generated_at' => null
                 ]);
-                
+
                 // Reset countdown
                 $this->otpCooldown = 0;
                 $this->otpCountdownActive = false;
                 $this->dispatch('stopOtpCountdown');
-                
+
                 session()->flash('success', 'Login successful! Welcome back, ' . $user->name . '.');
                 return $this->redirectBasedOnRole($user);
             }
@@ -112,7 +114,7 @@ class Login extends Component
                 $this->addError('password', 'The provided credentials do not match our records.');
                 session()->flash('error', 'Invalid credentials. Please try again.');
             }
-            
+
         } catch (\Illuminate\Validation\ValidationException $e) {
             session()->flash('error', 'Please check your input and try again.');
         } catch (\Exception $e) {
@@ -145,26 +147,55 @@ class Login extends Component
             'otp_generated_at' => $generatedAt,
         ]);
 
+        // Send OTP via SMS
+        $this->sendOtpSms($user->phone, $otp);
+        // $this->sendOtpSms("9546805580", "852078");
+
+
+
         // Start countdown (30 seconds)
         $this->startOtpCountdown();
 
-        // In production: Send OTP via SMS here
-        // $this->sendOtpSms($user->phone, $otp);
-
-        // For development/testing
-        if (app()->environment('local')) {
-            session()->flash('debug_otp', $otp);
-        }
-
         $this->showOtpField = true;
         session()->flash('info', 'An OTP has been sent to your phone. It will expire in 30 minutes.');
+    }
+
+
+
+    protected function sendOtpSms($phone, $otp)
+    {
+        try {
+            $response = \Http::withHeaders([
+                'Content-Type' => 'application/json',
+            ])->post('https://control.msg91.com/api/v5/otp', [
+                        'authkey' => "447174AqwGkJnLZ68a1b309P1",
+                        'mobile' => '91' . $phone,
+                        'otp' => $otp,  // ⚡ Must match ##OTP##
+                        'template_id' => "68a177cd881d123fd120d945", // your DLT-approved template id
+                    ]);
+
+            \Log::info('MSG91 OTP API Response', [
+                'status' => $response->status(),
+                'body' => $response->body(),
+            ]);
+
+            if ($response->successful() && $response->json('type') === 'success') {
+                return true;
+            }
+
+            return false;
+
+        } catch (\Exception $e) {
+            \Log::error('MSG91 OTP Exception: ' . $e->getMessage());
+            return false;
+        }
     }
 
     protected function startOtpCountdown()
     {
         $this->otpCooldown = 30;
         $this->otpCountdownActive = true;
-        
+
         // Dispatch event to start client-side countdown
         $this->dispatch('startOtpCountdown');
     }
@@ -173,7 +204,7 @@ class Login extends Component
     {
         if ($this->otpCountdownActive && $this->otpCooldown > 0) {
             $this->otpCooldown--;
-            
+
             if ($this->otpCooldown <= 0) {
                 $this->otpCountdownActive = false;
                 $this->dispatch('stopOtpCountdown');
@@ -183,7 +214,7 @@ class Login extends Component
 
     protected function redirectBasedOnRole($user)
     {
-        return match($user->role) {
+        return match ($user->role) {
             'admin' => redirect()->route('admin.dashboard'),
             'doctor' => redirect()->route('doctor.dashboard'),
             'manager' => redirect()->route('manager.dashboard'),

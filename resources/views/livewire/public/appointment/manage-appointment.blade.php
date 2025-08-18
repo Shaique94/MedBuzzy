@@ -89,20 +89,25 @@
                             @if ($selectedDoctor)
                                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                     <!-- Left: Doctor Summary (1/3) -->
-                                    <livewire:public.appointment.components.doctor-card :doctor="$selectedDoctor" :appointment-date="$appointment_date" :appointment-time="$appointment_time" />
+                                    <livewire:public.appointment.components.doctor-card :doctor="$selectedDoctor"
+                                        :appointment-date="$appointment_date" :appointment-time="$appointment_time" />
 
                                     <!-- Right: Date selection & Time slots (2/3) -->
                                     <div class="lg:col-span-2 bg-white p-4 rounded-xl border border-gray-200">
-                                        <h2 class="text-lg sm:text-xl font-semibold text-brand-blue-900 mb-4 flex items-center">
-                                            <svg class="h-5 w-5 inline-block mr-2 text-brand-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        <h2
+                                            class="text-lg sm:text-xl font-semibold text-brand-blue-900 mb-4 flex items-center">
+                                            <svg class="h-5 w-5 inline-block mr-2 text-brand-blue-700" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                             </svg>
                                             Select Appointment Date & Time
                                         </h2>
 
                                         <!-- Date Navigation Tabs -->
                                         <div class="mb-4">
-                                            <div class="flex border-b border-gray-200 overflow-x-auto pb-1 scrollbar-hide">
+                                            <div
+                                                class="flex border-b border-gray-200 overflow-x-auto pb-1 scrollbar-hide">
                                                 @php
                                                     // Generate the next 7 available days
                                                     $maxBookingDays = $selectedDoctor->max_booking_days ?? 7;
@@ -192,210 +197,213 @@
                                         </div>
 
                                         <!-- Time Slots Section -->
-                                            <div class="pt-4">
-                                                <div class="flex justify-between items-center mb-4">
-                                                    <h3 class="text-base font-semibold text-gray-800 flex items-center">
-                                                        <svg class="h-5 w-5 mr-2 text-brand-blue-600" fill="currentColor"
-                                                            viewBox="0 0 20 20">
-                                                            <path fill-rule="evenodd"
-                                                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.414-1.414L11 9.586V6z"
-                                                                clip-rule="evenodd"></path>
-                                                        </svg>
-                                                        Available Time Slots for
-                                                        {{ \Carbon\Carbon::parse($appointment_date)->format('l, M j') }}
-                                                    </h3>
-                                                </div>
+                                        <div class="pt-4">
+                                            <div class="flex justify-between items-center mb-4">
+                                                <h3 class="text-base font-semibold text-gray-800 flex items-center">
+                                                    <svg class="h-5 w-5 mr-2 text-brand-blue-600" fill="currentColor"
+                                                        viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd"
+                                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.414-1.414L11 9.586V6z"
+                                                            clip-rule="evenodd"></path>
+                                                    </svg>
+                                                    Available Time Slots for
+                                                    {{ \Carbon\Carbon::parse($appointment_date)->format('l, M j') }}
+                                                </h3>
+                                            </div>
 
-                                                @php
-                                                    $maxSlots = $selectedDoctor->patients_per_slot ?? 4;
-                                                    $fillingUpThreshold = max(2, ceil($maxSlots * 0.5));
+                                            @php
+                                                $maxSlots = $selectedDoctor->patients_per_slot ?? 4;
+                                                $fillingUpThreshold = max(2, ceil($maxSlots * 0.5));
 
-                                                    // Group slots by time of day
-                                                    $morningSlots = [];
-                                                    $afternoonSlots = [];
-                                                    $eveningSlots = [];
+                                                // Group slots by time of day
+                                                $morningSlots = [];
+                                                $afternoonSlots = [];
+                                                $eveningSlots = [];
 
-                                                    foreach ($this->availableSlots as $time => $slot) {
-                                                        $hour = (int) date('H', strtotime($slot['start']));
+                                                foreach ($this->availableSlots as $time => $slot) {
+                                                    $hour = (int) date('H', strtotime($slot['start']));
 
-                                                        if ($hour < 12) {
-                                                            $morningSlots[$time] = $slot;
-                                                        } elseif ($hour < 16) {
-                                                            $afternoonSlots[$time] = $slot;
-                                                        } else {
-                                                            $eveningSlots[$time] = $slot;
-                                                        }
+                                                    if ($hour < 12) {
+                                                        $morningSlots[$time] = $slot;
+                                                    } elseif ($hour < 16) {
+                                                        $afternoonSlots[$time] = $slot;
+                                                    } else {
+                                                        $eveningSlots[$time] = $slot;
                                                     }
-                                                @endphp
+                                                }
+                                            @endphp
 
-                                                <!-- Time Slots Tabs -->
-                                                <div x-data="{ activeTab: 'morning' }" class="mb-5">
-                                                    <div class="border-b border-gray-200">
-                                                        <nav class="-mb-px flex space-x-6 overflow-auto"
-                                                            aria-label="Tabs">
-                                                            <button @click="activeTab = 'morning'"
-                                                                :class="activeTab === 'morning' ?
+                                            <!-- Time Slots Tabs -->
+                                            <div x-data="{ activeTab: 'morning' }" class="mb-5">
+                                                <div class="border-b border-gray-200">
+                                                    <nav class="-mb-px flex space-x-6 overflow-auto" aria-label="Tabs">
+                                                        <button @click="activeTab = 'morning'"
+                                                            :class="activeTab === 'morning' ?
                                                                 'border-brand-blue-800 text-brand-blue-800' :
                                                                 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
-                                                                class="py-2 px-1 border-b-2 font-medium text-sm">
-                                                                <div class="flex items-center">
-                                                                    <svg class="w-4 h-4 mr-2" fill="currentColor"
-                                                                        viewBox="0 0 20 20">
-                                                                        <path fill-rule="evenodd"
-                                                                            d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                                                                            clip-rule="evenodd" />
-                                                                    </svg>
-                                                                    Morning <span
-                                                                        class="ml-1 text-xs text-gray-500">({{ count($morningSlots) }})</span>
-                                                                </div>
-                                                            </button>
-                                                            <button @click="activeTab = 'afternoon'"
-                                                                :class="activeTab === 'afternoon' ?
+                                                            class="py-2 px-1 border-b-2 font-medium text-sm">
+                                                            <div class="flex items-center">
+                                                                <svg class="w-4 h-4 mr-2" fill="currentColor"
+                                                                    viewBox="0 0 20 20">
+                                                                    <path fill-rule="evenodd"
+                                                                        d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                                                                        clip-rule="evenodd" />
+                                                                </svg>
+                                                                Morning <span
+                                                                    class="ml-1 text-xs text-gray-500">({{ count($morningSlots) }})</span>
+                                                            </div>
+                                                        </button>
+                                                        <button @click="activeTab = 'afternoon'"
+                                                            :class="activeTab === 'afternoon' ?
                                                                 'border-brand-blue-800 text-brand-blue-800' :
                                                                 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
-                                                                class="py-2 px-1 border-b-2 font-medium text-sm">
-                                                                <div class="flex items-center">
-                                                                    <svg class="w-4 h-4 mr-2" fill="currentColor"
-                                                                        viewBox="0 0 20 20">
-                                                                        <path fill-rule="evenodd"
-                                                                            d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                                                                            clip-rule="evenodd" />
-                                                                    </svg>
-                                                                    Afternoon <span
-                                                                        class="ml-1 text-xs text-gray-500">({{ count($afternoonSlots) }})</span>
-                                                                </div>
-                                                            </button>
-                                                            <button @click="activeTab = 'evening'"
-                                                                :class="activeTab === 'evening' ?
+                                                            class="py-2 px-1 border-b-2 font-medium text-sm">
+                                                            <div class="flex items-center">
+                                                                <svg class="w-4 h-4 mr-2" fill="currentColor"
+                                                                    viewBox="0 0 20 20">
+                                                                    <path fill-rule="evenodd"
+                                                                        d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                                                                        clip-rule="evenodd" />
+                                                                </svg>
+                                                                Afternoon <span
+                                                                    class="ml-1 text-xs text-gray-500">({{ count($afternoonSlots) }})</span>
+                                                            </div>
+                                                        </button>
+                                                        <button @click="activeTab = 'evening'"
+                                                            :class="activeTab === 'evening' ?
                                                                 'border-brand-blue-800 text-brand-blue-800' :
                                                                 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
-                                                                class="py-2 px-1 border-b-2 font-medium text-sm">
-                                                                <div class="flex items-center">
-                                                                    <svg class="w-4 h-4 mr-2" fill="currentColor"
-                                                                        viewBox="0 0 20 20">
-                                                                        <path fill-rule="evenodd"
-                                                                            d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"
-                                                                            clip-rule="evenodd" />
-                                                                    </svg>
-                                                                    Evening <span
-                                                                        class="ml-1 text-xs text-gray-500">({{ count($eveningSlots) }})</span>
-                                                                </div>
-                                                            </button>
-                                                        </nav>
-                                                    </div>
+                                                            class="py-2 px-1 border-b-2 font-medium text-sm">
+                                                            <div class="flex items-center">
+                                                                <svg class="w-4 h-4 mr-2" fill="currentColor"
+                                                                    viewBox="0 0 20 20">
+                                                                    <path fill-rule="evenodd"
+                                                                        d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"
+                                                                        clip-rule="evenodd" />
+                                                                </svg>
+                                                                Evening <span
+                                                                    class="ml-1 text-xs text-gray-500">({{ count($eveningSlots) }})</span>
+                                                            </div>
+                                                        </button>
+                                                    </nav>
+                                                </div>
 
-                                                    <!-- Morning Tab -->
-                                                    <div x-show="activeTab === 'morning'" class="py-4">
-                                                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                                                            @forelse ($morningSlots as $time => $slot)
-                                                                <button wire:click="selectTimeSlot('{{ $time }}')"
-                                                                    @if ($slot['disabled']) disabled @endif
-                                                                    class="p-3 border rounded-lg text-center transition-all duration-200
+                                                <!-- Morning Tab -->
+                                                <div x-show="activeTab === 'morning'" class="py-4">
+                                                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                                                        @forelse ($morningSlots as $time => $slot)
+                                                            <button wire:click="selectTimeSlot('{{ $time }}')"
+                                                                @if ($slot['disabled']) disabled @endif
+                                                                class="p-3 border rounded-lg text-center transition-all duration-200
                                                                     {{ $appointment_time === $time ? 'bg-brand-blue-100 text-brand-blue-800 border-brand-blue-800 ring-2 ring-brand-blue-800' : '' }}
                                                                     {{ $slot['disabled'] ? 'bg-gray-100 text-gray-400 cursor-not-allowed border-gray-200' : '' }}
                                                                     {{ !$slot['disabled'] && $appointment_time !== $time ? 'bg-brand-blue-50 border-brand-blue-200 hover:bg-brand-blue-100 text-brand-blue-800' : '' }}">
-                                                                    <div class="text-sm font-medium">
-                                                                        {{ date('h:i A', strtotime($slot['start'])) }}
-                                                                    </div>
-                                                                    <div class="text-xs mt-1">
-                                                                        {{ $slot['remaining_capacity'] }} spots left
-                                                                    </div>
-                                                                </button>
-                                                            @empty
-                                                                <div
-                                                                    class="col-span-full py-6 text-center bg-gray-50 rounded-lg border border-dashed border-gray-300">
-                                                                    <p class="text-sm text-gray-500">No morning slots available</p>
+                                                                <div class="text-sm font-medium">
+                                                                    {{ date('h:i A', strtotime($slot['start'])) }}
                                                                 </div>
-                                                            @endforelse
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Afternoon Tab -->
-                                                    <div x-show="activeTab === 'afternoon'" class="py-4">
-                                                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                                                            @forelse ($afternoonSlots as $time => $slot)
-                                                                <button wire:click="selectTimeSlot('{{ $time }}')"
-                                                                    @if ($slot['disabled']) disabled @endif
-                                                                    class="p-3 border rounded-lg text-center transition-all duration-200
-                                                                    {{ $appointment_time === $time ? 'bg-brand-blue-100 text-brand-blue-800 border-brand-blue-800 ring-2 ring-brand-blue-800' : '' }}
-                                                                    {{ $slot['disabled'] ? 'bg-gray-100 text-gray-400 cursor-not-allowed border-gray-200' : '' }}
-                                                                    {{ !$slot['disabled'] && $appointment_time !== $time ? 'bg-brand-blue-50 border-brand-blue-200 hover:bg-brand-blue-100 text-brand-blue-800' : '' }}">
-                                                                    <div class="text-sm font-medium">
-                                                                        {{ date('h:i A', strtotime($slot['start'])) }}
-                                                                    </div>
-                                                                    <div class="text-xs mt-1">
-                                                                        {{ $slot['remaining_capacity'] }} spots left
-                                                                    </div>
-                                                                </button>
-                                                            @empty
-                                                                <div
-                                                                    class="col-span-full py-6 text-center bg-gray-50 rounded-lg border border-dashed border-gray-300">
-                                                                    <p class="text-sm text-gray-500">No afternoon slots available</p>
+                                                                <div class="text-xs mt-1">
+                                                                    {{ $slot['remaining_capacity'] }} spots left
                                                                 </div>
-                                                            @endforelse
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Evening Tab -->
-                                                    <div x-show="activeTab === 'evening'" class="py-4">
-                                                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                                                            @forelse ($eveningSlots as $time => $slot)
-                                                                <button wire:click="selectTimeSlot('{{ $time }}')"
-                                                                    @if ($slot['disabled']) disabled @endif
-                                                                    class="p-3 border rounded-lg text-center transition-all duration-200
-                                                                    {{ $appointment_time === $time ? 'bg-brand-blue-100 text-brand-blue-800 border-brand-blue-800 ring-2 ring-brand-blue-800' : '' }}
-                                                                    {{ $slot['disabled'] ? 'bg-gray-100 text-gray-400 cursor-not-allowed border-gray-200' : '' }}
-                                                                    {{ !$slot['disabled'] && $appointment_time !== $time ? 'bg-brand-blue-50 border-brand-blue-200 hover:bg-brand-blue-100 text-brand-blue-800' : '' }}">
-                                                                    <div class="text-sm font-medium">
-                                                                        {{ date('h:i A', strtotime($slot['start'])) }}
-                                                                    </div>
-                                                                    <div class="text-xs mt-1">
-                                                                        {{ $slot['remaining_capacity'] }} spots left
-                                                                    </div>
-                                                                </button>
-                                                            @empty
-                                                                <div
-                                                                    class="col-span-full py-6 text-center bg-gray-50 rounded-lg border border-dashed border-gray-300">
-                                                                    <p class="text-sm text-gray-500">No evening slots available</p>
-                                                                </div>
-                                                            @endforelse
-                                                        </div>
+                                                            </button>
+                                                        @empty
+                                                            <div
+                                                                class="col-span-full py-6 text-center bg-gray-50 rounded-lg border border-dashed border-gray-300">
+                                                                <p class="text-sm text-gray-500">No morning slots
+                                                                    available</p>
+                                                            </div>
+                                                        @endforelse
                                                     </div>
                                                 </div>
 
-                                                <!-- Slot Legend -->
-                                                <div
-                                                    class="flex flex-wrap justify-end gap-2 border-t pt-3 text-xs text-gray-600">
-                                                    <div class="flex items-center">
-                                                        <div
-                                                            class="w-3 h-3 bg-brand-blue-50 border border-brand-blue-200 rounded-full mr-1">
-                                                        </div>
-                                                        <span>Available</span>
+                                                <!-- Afternoon Tab -->
+                                                <div x-show="activeTab === 'afternoon'" class="py-4">
+                                                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                                                        @forelse ($afternoonSlots as $time => $slot)
+                                                            <button wire:click="selectTimeSlot('{{ $time }}')"
+                                                                @if ($slot['disabled']) disabled @endif
+                                                                class="p-3 border rounded-lg text-center transition-all duration-200
+                                                                    {{ $appointment_time === $time ? 'bg-brand-blue-100 text-brand-blue-800 border-brand-blue-800 ring-2 ring-brand-blue-800' : '' }}
+                                                                    {{ $slot['disabled'] ? 'bg-gray-100 text-gray-400 cursor-not-allowed border-gray-200' : '' }}
+                                                                    {{ !$slot['disabled'] && $appointment_time !== $time ? 'bg-brand-blue-50 border-brand-blue-200 hover:bg-brand-blue-100 text-brand-blue-800' : '' }}">
+                                                                <div class="text-sm font-medium">
+                                                                    {{ date('h:i A', strtotime($slot['start'])) }}
+                                                                </div>
+                                                                <div class="text-xs mt-1">
+                                                                    {{ $slot['remaining_capacity'] }} spots left
+                                                                </div>
+                                                            </button>
+                                                        @empty
+                                                            <div
+                                                                class="col-span-full py-6 text-center bg-gray-50 rounded-lg border border-dashed border-gray-300">
+                                                                <p class="text-sm text-gray-500">No afternoon slots
+                                                                    available</p>
+                                                            </div>
+                                                        @endforelse
                                                     </div>
-                                                    <div class="flex items-center">
-                                                        <div
-                                                            class="w-3 h-3 bg-gray-100 border border-gray-200 rounded-full mr-1">
-                                                        </div>
-                                                        <span>Full</span>
+                                                </div>
+
+                                                <!-- Evening Tab -->
+                                                <div x-show="activeTab === 'evening'" class="py-4">
+                                                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                                                        @forelse ($eveningSlots as $time => $slot)
+                                                            <button wire:click="selectTimeSlot('{{ $time }}')"
+                                                                @if ($slot['disabled']) disabled @endif
+                                                                class="p-3 border rounded-lg text-center transition-all duration-200
+                                                                    {{ $appointment_time === $time ? 'bg-brand-blue-100 text-brand-blue-800 border-brand-blue-800 ring-2 ring-brand-blue-800' : '' }}
+                                                                    {{ $slot['disabled'] ? 'bg-gray-100 text-gray-400 cursor-not-allowed border-gray-200' : '' }}
+                                                                    {{ !$slot['disabled'] && $appointment_time !== $time ? 'bg-brand-blue-50 border-brand-blue-200 hover:bg-brand-blue-100 text-brand-blue-800' : '' }}">
+                                                                <div class="text-sm font-medium">
+                                                                    {{ date('h:i A', strtotime($slot['start'])) }}
+                                                                </div>
+                                                                <div class="text-xs mt-1">
+                                                                    {{ $slot['remaining_capacity'] }} spots left
+                                                                </div>
+                                                            </button>
+                                                        @empty
+                                                            <div
+                                                                class="col-span-full py-6 text-center bg-gray-50 rounded-lg border border-dashed border-gray-300">
+                                                                <p class="text-sm text-gray-500">No evening slots
+                                                                    available</p>
+                                                            </div>
+                                                        @endforelse
                                                     </div>
                                                 </div>
                                             </div>
-                            @else
-                                <div class="text-center py-12 bg-blue-50 rounded-xl border border-blue-200">
-                                    <svg class="h-12 w-12 mx-auto text-blue-500 mb-4" fill="currentColor"
-                                        viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd"
-                                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
-                                    <h3 class="text-xl font-medium text-blue-700">Select a Doctor First</h3>
-                                    <p class="text-sm text-blue-600 mt-2">Please choose a doctor to view available
-                                        dates</p>
-                                    <button wire:click="$set('step', 1)"
-                                        class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-                                        Back to Doctors
-                                    </button>
-                                </div>
+
+                                            <!-- Slot Legend -->
+                                            <div
+                                                class="flex flex-wrap justify-end gap-2 border-t pt-3 text-xs text-gray-600">
+                                                <div class="flex items-center">
+                                                    <div
+                                                        class="w-3 h-3 bg-brand-blue-50 border border-brand-blue-200 rounded-full mr-1">
+                                                    </div>
+                                                    <span>Available</span>
+                                                </div>
+                                                <div class="flex items-center">
+                                                    <div
+                                                        class="w-3 h-3 bg-gray-100 border border-gray-200 rounded-full mr-1">
+                                                    </div>
+                                                    <span>Full</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <div class="text-center py-12 bg-blue-50 rounded-xl border border-blue-200">
+                                            <svg class="h-12 w-12 mx-auto text-blue-500 mb-4" fill="currentColor"
+                                                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd"
+                                                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9z"
+                                                    clip-rule="evenodd"></path>
+                                            </svg>
+                                            <h3 class="text-xl font-medium text-blue-700">Select a Doctor First</h3>
+                                            <p class="text-sm text-blue-600 mt-2">Please choose a doctor to view
+                                                available
+                                                dates</p>
+                                            <button wire:click="$set('step', 1)"
+                                                class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                                                Back to Doctors
+                                            </button>
+                                        </div>
                             @endif
                         </div>
                     @endif
@@ -405,172 +413,282 @@
                         <div class="space-y-6">
                             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                 <!-- Left: Doctor Summary (1/3) -->
-                                <livewire:public.appointment.components.doctor-card :doctor="$selectedDoctor" :appointment-date="$appointment_date" :appointment-time="$appointment_time" />
+                                <livewire:public.appointment.components.doctor-card :doctor="$selectedDoctor" :appointment-date="$appointment_date"
+                                    :appointment-time="$appointment_time" />
 
                                 <!-- Right: Patient Form (2/3) -->
-                                <div class="lg:col-span-2 space-y-4">
-                                    <div class="bg-white p-5 rounded-xl border border-gray-100">
-                                        <!-- Booking for: improved segmented radios -->
-                                        <div class="mb-4">
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">Booking for</label>
-                                            <div class="flex items-center gap-3">
-                                                <div class="grid grid-cols-2 sm:inline-flex gap-3">
-                                                    <label class="cursor-pointer">
-                                                        <input type="radio" wire:model="booking_for" value="self" class="peer sr-only" />
-                                                        <div class="px-4 py-2 rounded-lg border border-gray-300 text-sm text-gray-700 bg-white
-                                                                    hover:bg-gray-50 hover:border-brand-blue-300 transition
-                                                                    peer-checked:bg-brand-blue-600 peer-checked:text-white peer-checked:border-brand-blue-600 peer-checked:shadow">
-                                                            Self
-                                                        </div>
-                                                    </label>
-                                                    <label class="cursor-pointer">
-                                                        <input type="radio" wire:model="booking_for" value="other" class="peer sr-only" />
-                                                        <div class="px-4 py-2 rounded-lg border border-gray-300 text-sm text-gray-700 bg-white
-                                                                    hover:bg-gray-50 hover:border-brand-blue-300 transition
-                                                                    peer-checked:bg-brand-blue-600 peer-checked:text-white peer-checked:border-brand-blue-600 peer-checked:shadow">
-                                                            Someone else
-                                                        </div>
-                                                    </label>
-                                                </div>
-                                                @auth
-                                                    <button type="button" wire:click="useMyProfile"
-                                                        class="ml-auto inline-flex items-center px-3 py-2 bg-brand-blue-600 text-white rounded-md text-sm hover:bg-brand-blue-700 transition">
-                                                        Use my profile
-                                                    </button>
-                                                @endauth
-                                            </div>
-                                            <div class="text-xs text-gray-500 mt-2">If you choose "Self" and are logged in, click "Use my profile" to autofill.</div>
+                                <div class="lg:col-span-2 space-y-5">
+                                    <!-- Patient Information Form -->
+                                    <div class="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
+                                        <div class="bg-gradient-to-r from-brand-blue-50 to-brand-blue-100 px-5 py-4 border-b border-brand-blue-200">
+                                            <h3 class="text-lg font-semibold text-brand-blue-900">Patient Information</h3>
+                                            <p class="text-sm text-brand-blue-700 mt-1">Please provide accurate details for your appointment</p>
                                         </div>
-
-                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
-                                            <div>
-                                                <label class="block text-sm font-medium text-gray-700">Full name <span class="text-red-500">*</span></label>
-                                                <input type="text" wire:model.defer="newPatient.name" class="w-full px-3 py-2 border rounded-md" />
-                                                @error('newPatient.name') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
-                                            </div>
-
-                                            <div>
-                                                <label class="block text-sm font-medium text-gray-700">Email</label>
-                                                <input type="email" wire:model.defer="newPatient.email" class="w-full px-3 py-2 border rounded-md" />
-                                                @error('newPatient.email') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
-                                            </div>
-
-                                            <div>
-                                                <label class="block text-sm font-medium text-gray-700">Phone <span class="text-red-500">*</span></label>
-                                                <input type="tel" wire:model.defer="newPatient.phone" maxlength="10"
-                                                       oninput="this.value = this.value.replace(/[^0-9]/g,'').slice(0,10);"
-                                                       class="w-full px-3 py-2 border rounded-md" />
-                                                @error('newPatient.phone') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
-                                            </div>
-
-                                            <!-- Gender: pill radios with icons -->
-                                            <div>
-                                                <label class="block text-sm font-medium text-gray-700">Gender <span class="text-red-500">*</span></label>
-                                                <div class="flex flex-wrap gap-3 mt-2">
-                                                    <label class="cursor-pointer">
-                                                        <input type="radio" wire:model.defer="newPatient.gender" value="male" class="peer sr-only" />
-                                                        <div class="inline-flex items-center px-4 py-2 rounded-full border border-gray-300 text-sm text-gray-700 bg-white
-                                                                    hover:bg-gray-50 hover:border-brand-blue-300 transition
-                                                                    peer-checked:bg-brand-blue-600 peer-checked:text-white peer-checked:border-brand-blue-600 peer-checked:shadow">
-                                                            <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h6m0 0v6m0-6l-7 7M8 21a5 5 0 100-10 5 5 0 000 10z" />
+                                        
+                                        <div class="p-5">
+                                            <!-- Booking for selector -->
+                                            <div class="mb-5">
+                                                <label class="block text-sm font-medium text-gray-700 mb-2">Who is this appointment for?</label>
+                                                <div class="flex flex-wrap gap-3">
+                                                    <label class="relative cursor-pointer flex-1 min-w-[140px]">
+                                                        <input type="radio" wire:model.live="booking_for" value="self" class="peer sr-only" />
+                                                        <div class="p-3 rounded-lg border-2 border-gray-300 bg-white transition-all duration-200
+                                                            flex items-center justify-center gap-2
+                                                            peer-checked:bg-brand-blue-50 peer-checked:border-brand-blue-600 peer-checked:ring-2 peer-checked:ring-brand-blue-200
+                                                            hover:border-brand-blue-300">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-brand-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                                             </svg>
-                                                            Male
+                                                            <div class="text-left">
+                                                                <span class="font-medium block">
+                                                                    @auth
+                                                                        Self ({{ auth()->user()->name }})
+                                                                    @else
+                                                                        Myself
+                                                                    @endauth
+                                                                </span>
+                                                            </div>
+                                                            <div class="absolute top-2 right-2 opacity-0 peer-checked:opacity-100 transition-opacity">
+                                                                <svg class="w-5 h-5 text-brand-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                                                </svg>
+                                                            </div>
                                                         </div>
                                                     </label>
-                                                    <label class="cursor-pointer">
-                                                        <input type="radio" wire:model.defer="newPatient.gender" value="female" class="peer sr-only" />
-                                                        <div class="inline-flex items-center px-4 py-2 rounded-full border border-gray-300 text-sm text-gray-700 bg-white
-                                                                    hover:bg-gray-50 hover:border-brand-blue-300 transition
-                                                                    peer-checked:bg-brand-blue-600 peer-checked:text-white peer-checked:border-brand-blue-600 peer-checked:shadow">
-                                                            <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14v7m0-7a5 5 0 100-10 5 5 0 000 10z" />
+                                                    <label class="relative cursor-pointer flex-1 min-w-[140px]">
+                                                        <input type="radio" wire:model.live="booking_for" value="other" class="peer sr-only" />
+                                                        <div class="p-3 rounded-lg border-2 border-gray-300 bg-white transition-all duration-200
+                                                            flex items-center justify-center gap-2
+                                                            peer-checked:bg-brand-blue-50 peer-checked:border-brand-blue-600 peer-checked:ring-2 peer-checked:ring-brand-blue-200
+                                                            hover:border-brand-blue-300">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-brand-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                                                             </svg>
-                                                            Female
-                                                        </div>
-                                                    </label>
-                                                    <label class="cursor-pointer">
-                                                        <input type="radio" wire:model.defer="newPatient.gender" value="other" class="peer sr-only" />
-                                                        <div class="inline-flex items-center px-4 py-2 rounded-full border border-gray-300 text-sm text-gray-700 bg-white
-                                                                    hover:bg-gray-50 hover:border-brand-blue-300 transition
-                                                                    peer-checked:bg-brand-blue-600 peer-checked:text-white peer-checked:border-brand-blue-600 peer-checked:shadow">
-                                                            <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6" />
-                                                            </svg>
-                                                            Other
+                                                            <div class="text-left">
+                                                                <span class="font-medium block">Someone else</span>
+                                                            </div>
+                                                            <div class="absolute top-2 right-2 opacity-0 peer-checked:opacity-100 transition-opacity">
+                                                                <svg class="w-5 h-5 text-brand-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                                                </svg>
+                                                            </div>
                                                         </div>
                                                     </label>
                                                 </div>
-                                                @error('newPatient.gender') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                                            </div>
+
+                                            <!-- Personal Information -->
+                                            <div class="space-y-5">
+                                                <h4 class="text-sm font-semibold text-gray-700 border-b pb-2">Personal Details</h4>
+                                                
+                                                <!-- Name Field -->
+                                                <div class="relative">
+                                                    <label for="patient-name" class="block text-sm font-medium text-gray-700 mb-1">
+                                                        Full Name <span class="text-red-500">*</span>
+                                                    </label>
+                                                    <div class="mt-1 relative rounded-md">
+                                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                                            </svg>
+                                                        </div>
+                                                        <input type="text" id="patient-name" wire:model.defer="newPatient.name" 
+                                                            class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-brand-blue-500 focus:border-brand-blue-500" 
+                                                            placeholder="Enter full name as per ID" />
+                                                    </div>
+                                                    @error('newPatient.name')
+                                                        <p class="mt-1 text-sm text-red-600 flex items-center">
+                                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                                            </svg>
+                                                            {{ $message }}
+                                                        </p>
+                                                    @enderror
+                                                </div>
+
+                                                <!-- Contact Info: Grid for email and phone -->
+                                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    <!-- Email Field -->
+                                                    <div class="relative">
+                                                        <label for="patient-email" class="block text-sm font-medium text-gray-700 mb-1">
+                                                            Email Address
+                                                            <span class="text-xs text-gray-500 ml-1">(for appointment details)</span>
+                                                        </label>
+                                                        <div class="mt-1 relative rounded-md">
+                                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                                                </svg>
+                                                            </div>
+                                                            <input type="email" id="patient-email" wire:model.defer="newPatient.email" 
+                                                                class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-brand-blue-500 focus:border-brand-blue-500"
+                                                                placeholder="example@email.com" />
+                                                        </div>
+                                                        @error('newPatient.email')
+                                                            <p class="mt-1 text-sm text-red-600 flex items-center">
+                                                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                                                </svg>
+                                                                {{ $message }}
+                                                            </p>
+                                                        @enderror
+                                                    </div>
+
+                                                    <!-- Phone Field -->
+                                                    <div class="relative">
+                                                        <label for="patient-phone" class="block text-sm font-medium text-gray-700 mb-1">
+                                                            Phone Number <span class="text-red-500">*</span>
+                                                        </label>
+                                                        <div class="mt-1 relative rounded-md">
+                                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                                                </svg>
+                                                            </div>
+                                                            <input type="tel" id="patient-phone" wire:model.defer="newPatient.phone" 
+                                                                maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g,'').slice(0,10);"
+                                                                class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-brand-blue-500 focus:border-brand-blue-500"
+                                                                placeholder="10-digit mobile number" />
+                                                        </div>
+                                                        @error('newPatient.phone')
+                                                            <p class="mt-1 text-sm text-red-600 flex items-center">
+                                                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                                                </svg>
+                                                                {{ $message }}
+                                                            </p>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+
+                                                <!-- Gender Selection - Enhanced version -->
+                                                <div>
+                                                    <label class="block text-sm font-medium text-gray-700 mb-2">Gender <span class="text-red-500">*</span></label>
+                                                    <div class="flex flex-wrap gap-3">
+                                                        <label class="relative cursor-pointer">
+                                                            <input type="radio" wire:model.defer="newPatient.gender" value="male" class="peer sr-only" />
+                                                            <div class="flex items-center gap-2 px-5 py-2.5 rounded-full border-2 border-gray-300 bg-white
+                                                                    hover:bg-gray-50 transition-all duration-200
+                                                                    peer-checked:bg-brand-blue-50 peer-checked:border-brand-blue-600 peer-checked:text-brand-blue-700">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                                                </svg>
+                                                                <span class="font-medium">Male</span>
+                                                            </div>
+                                                        </label>
+                                                        <label class="relative cursor-pointer">
+                                                            <input type="radio" wire:model.defer="newPatient.gender" value="female" class="peer sr-only" />
+                                                            <div class="flex items-center gap-2 px-5 py-2.5 rounded-full border-2 border-gray-300 bg-white
+                                                                    hover:bg-gray-50 transition-all duration-200
+                                                                    peer-checked:bg-brand-blue-50 peer-checked:border-brand-blue-600 peer-checked:text-brand-blue-700">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                                                </svg>
+                                                                <span class="font-medium">Female</span>
+                                                            </div>
+                                                        </label>
+                                                        <label class="relative cursor-pointer">
+                                                            <input type="radio" wire:model.defer="newPatient.gender" value="other" class="peer sr-only" />
+                                                            <div class="flex items-center gap-2 px-5 py-2.5 rounded-full border-2 border-gray-300 bg-white
+                                                                    hover:bg-gray-50 transition-all duration-200
+                                                                    peer-checked:bg-brand-blue-50 peer-checked:border-brand-blue-600 peer-checked:text-brand-blue-700">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292m-6 0a9 9 0 1118 0 9 9 0 01-18 0z" />
+                                                                </svg>
+                                                                <span class="font-medium">Other</span>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                    @error('newPatient.gender')
+                                                        <p class="mt-1 text-sm text-red-600 flex items-center">
+                                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                                            </svg>
+                                                            {{ $message }}
+                                                        </p>
+                                                    @enderror
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <!-- Payment Summary and final action (no notes textarea) -->
+                                    <!-- Payment Summary Card -->
                                     <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                                        <div class="bg-brand-blue-100 px-4 py-3">
-                                            <h3 class="text-base sm:text-lg font-semibold text-brand-blue-900">Payment Summary</h3>
+                                        <div class="bg-gradient-to-r from-brand-blue-600 to-brand-blue-700 px-5 py-4">
+                                            <h3 class="text-lg font-semibold text-white flex items-center">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z" />
+                                                </svg>
+                                                Payment Summary
+                                            </h3>
                                         </div>
-                                        <div class="p-4 sm:p-5">
+                                        
+                                        <div class="p-5">
                                             <!-- Doctor's Fee -->
                                             <div class="flex justify-between items-center py-3 border-b border-gray-200">
                                                 <div>
-                                                    <h4 class="text-sm font-medium text-gray-800">Doctor's Consultation Fee</h4>
-                                                    <p class="text-xs text-gray-500 mt-1">Payable directly to doctor during visit</p>
+                                                    <h4 class="text-sm font-medium text-gray-800 flex items-center">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5 text-brand-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                                        </svg>
+                                                        Doctor's Consultation Fee
+                                                    </h4>
+                                                    <p class="text-xs text-gray-500 mt-1 ml-5.5">Payable directly to doctor during visit</p>
                                                 </div>
-                                                <span class="text-sm font-semibold">₹{{ $selectedDoctor->fee }}</span>
+                                                <span class="text-sm font-semibold bg-gray-100 px-3 py-1 rounded-md">₹{{ $selectedDoctor->fee }}</span>
                                             </div>
 
                                             <!-- Booking Fee -->
                                             <div class="flex justify-between items-center py-3 border-b border-gray-200">
                                                 <div>
-                                                    <h4 class="text-sm font-medium text-gray-800">Booking Fee</h4>
-                                                    <p class="text-xs text-gray-500 mt-1">Secures your appointment (non-refundable)</p>
+                                                    <h4 class="text-sm font-medium text-gray-800 flex items-center">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5 text-brand-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                        </svg>
+                                                        Booking Fee
+                                                    </h4>
+                                                    <p class="text-xs text-gray-500 mt-1 ml-5.5">Secures your appointment (non-refundable)</p>
                                                 </div>
-                                                <span class="text-sm font-semibold">₹50.00</span>
+                                                <span class="text-sm font-semibold bg-gray-100 px-3 py-1 rounded-md">₹50.00</span>
                                             </div>
 
                                             <!-- Total -->
-                                            <div class="flex justify-between items-center pt-4">
+                                            <div class="flex justify-between items-center mt-4 p-3 bg-brand-blue-50 rounded-lg border border-brand-blue-100">
                                                 <span class="text-base font-bold text-gray-800">Total Amount Due Now</span>
-                                                <span class="text-lg font-bold text-brand-blue-600">₹50.00</span>
+                                                <span class="text-lg font-bold text-brand-blue-700 bg-white px-3 py-1 rounded-md border border-brand-blue-200 shadow-sm">₹50.00</span>
                                             </div>
                                         </div>
                                     </div>
 
-                                    
+
+                                    <!-- Action Buttons -->
+                                    <div class="flex flex-wrap justify-between items-center gap-4">
+                                        <button wire:click="$set('step', 2)" class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-all duration-300 flex items-center gap-2">
+                                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                                            </svg>
+                                            Back to Date & Time
+                                        </button>
+                                        <button wire:click="createOrder" 
+                                            wire:loading.attr="disabled" 
+                                            wire:loading.class="opacity-75"
+                                            wire:target="createOrder"
+                                            class="px-6 py-3 bg-gradient-to-r from-brand-blue-600 to-brand-blue-700 hover:from-brand-blue-700 hover:to-brand-blue-800 text-white font-semibold rounded-lg shadow-md transition-all duration-300 flex items-center gap-3">
+                                            <svg wire:loading.remove wire:target="createOrder" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                            </svg>
+                                            <svg wire:loading wire:target="createOrder" class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                                            </svg>
+                                            <span wire:loading.remove wire:target="createOrder">Confirm & Pay ₹50 Booking Fee</span>
+                                            <span wire:loading wire:target="createOrder">Processing Payment...</span>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
 
 
-                            <!-- Notes & Payment Button -->
-                            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-5">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Additional Notes
-                                    (Optional)</label>
-                                <textarea wire:model.debounce.500ms="notes" rows="3"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-blue-500 focus:border-brand-blue-500 transition text-sm"
-                                    placeholder="Any symptoms, concerns, or special requests..."></textarea>
-                            </div>
-
-                            <button wire:click="createOrder" wire:loading.attr="disabled"
-                                wire:loading.target="createOrder"
-                                class="w-full bg-brand-blue-600 hover:bg-brand-blue-900 text-white font-semibold py-3 px-4 rounded-lg shadow-md transition-all duration-300 flex items-center justify-center">
-                                <span wire:loading.remove wire:target="createOrder">
-                                    Confirm & Pay ₹50 Booking Fee
-                                </span>
-                                <span wire:loading wire:target="createOrder" class="flex items-center">
-                                    <div class="flex">
-                                    <span>Processing Payment...</span>
-                                    <svg class="animate-spin h-5 w-5 text-white mr-2"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <circle class="opacity-25" cx="12" cy="12" r="10"
-                                            stroke="currentColor" stroke-width="4"></circle>
-                                        <path class="opacity-75" fill="currentColor"
-                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                        </path>
-                                    </svg>
-                                </span>
-                            </button>
 
                             <!-- Payment Disclaimer -->
                             <div class="text-center px-2 py-2">
@@ -587,49 +705,6 @@
                             </div>
                         </div>
                     @endif
-
-                    <!-- Navigation Buttons -->
-                     <div class="px-0 py-4 border-t border-gray-200 bg-gray-50 w-full">
-                         <div class="flex flex-col-reverse sm:flex-row justify-between gap-4 max-w-5xl mx-auto">
-                             @if ($step > 1)
-                                 <button wire:click="previousStep"
-                                     class="px-6 py-3 bg-white border border-brand-yellow-400 text-brand-yellow-600 rounded-lg hover:bg-brand-yellow-50 transition flex items-center justify-center shadow-sm">
-                                     <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20"
-                                         xmlns="http://www.w3.org/2000/svg">
-                                         <path fill-rule="evenodd"
-                                             d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                                             clip-rule="evenodd"></path>
-                                 </svg>
-                                 Back
-                             </button>
-                             @else
-                                 <div></div>
-                             @endif
-
-                             @if ($step < 3)
-                                 <button wire:click="nextStep" wire:loading.attr="disabled"
-                                     class="px-6 py-3 bg-brand-blue-600 text-white rounded-lg hover:bg-brand-blue-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shadow-md transition-all duration-300">
-                                     <span>Continue</span>
-                                     <svg class="h-5 w-5 ml-2" fill="currentColor" viewBox="0 0 20 20"
-                                         xmlns="http://www.w3.org/2000/svg">
-                                         <path fill-rule="evenodd"
-                                             d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                             clip-rule="evenodd"></path>
-                                     </svg>
-                                     <span wire:loading wire:target="nextStep" class="ml-2">
-                                         <svg class="animate-spin h-5 w-5 text-white" fill="none"
-                                             viewBox="0 0 24 24">
-                                             <circle class="opacity-25" cx="12" cy="12" r="10"
-                                                 stroke="currentColor" stroke-width="4"></circle>
-                                             <path class="opacity-75" fill="currentColor"
-                                                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                             </path>
-                                         </svg>
-                                     </span>
-                                 </button>
-                             @endif
-                         </div>
-                     </div>
                 </div>
             </div>
         </div>
@@ -639,9 +714,10 @@
 
 <script>
     // Fix invalid SVG attributes like width/height="auto" to avoid console errors
-    (function () {
+    (function() {
         if (window.__svgAutoFixInstalled) return;
         window.__svgAutoFixInstalled = true;
+
         function fixSvgAutoAttributes(root = document) {
             try {
                 const svgs = root.querySelectorAll ? root.querySelectorAll('svg') : [];
@@ -662,9 +738,15 @@
                 });
             }
         });
+
         function initSvgFix() {
             fixSvgAutoAttributes();
-            try { observer.observe(document.documentElement, { childList: true, subtree: true }); } catch (_) {}
+            try {
+                observer.observe(document.documentElement, {
+                    childList: true,
+                    subtree: true
+                });
+            } catch (_) {}
         }
         document.addEventListener('DOMContentLoaded', initSvgFix);
         document.addEventListener('livewire:init', fixSvgAutoAttributes);
@@ -673,3 +755,4 @@
 </script>
 
 </div>
+

@@ -1,4 +1,4 @@
-<div class="">
+<div x-data @phone-modal-opened.window="$nextTick(()=>{ if($refs.phoneModal){ $refs.phoneModal.focus?.(); } })">
     <!-- Hero with Search (existing component) -->
     <livewire:public.hero />
 
@@ -77,73 +77,126 @@
     </section>
 
     <!-- Top Doctors Section -->
-    <section class="py-8 bg-white">
-        <div class=" mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <h2 class="text-3xl md:text-4xl font-semibold text-gray-900 mb-4 tracking-tight">Our Expert Doctors</h2>
-                <p class="text-lg text-gray-600  mx-auto">Connect with top-tier, verified healthcare professionals ready to provide exceptional care.</p>
+    <section class="py-12 bg-white">
+        <div class="mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-semibold text-brand-blue-800 mb-4">Our Top Specialists</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">Connect with our highly qualified and verified healthcare specialists dedicated to providing exceptional personalized care.</p>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  gap-6 p-4 sm:p-6">
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 @forelse ($doctors as $doctor)
-
-                    <div class="bg-white rounded-xl border border-brand-blue-100 shadow-sm hover:shadow-md transition-all duration-300"
+                    <div class="bg-white rounded-xl border border-brand-blue-100 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden"
                         wire:key="doctor-{{ $doctor->id }}">
-                        <div class="relative bg-brand-blue-50 rounded-t-xl p-4 flex items-center">
-                            <img src="{{ $doctor->image ?? 'https://ui-avatars.com/api/?name=' . urlencode($doctor->user->name) . '&background=random&rounded=true' }}"
+                        <!-- Doctor Image Section -->
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="{{ $doctor->image ? asset('storage/' . $doctor->image) : 'https://ui-avatars.com/api/?name=' . urlencode($doctor->user->name) . '&background=0D8ABC&color=fff&size=400&bold=true' }}"
                                 alt="Dr. {{ $doctor->user->name }}"
-                                class="w-16 h-16 rounded-full border-4 border-white object-cover shadow" loading="lazy">
-                            <div class="ml-4">
-                                <h3 class="text-lg font-semibold text-gray-900">Dr. {{ $doctor->user->name }}</h3>
-                                <p class="text-brand-blue-600 text-xs font-medium">
-                                    {{ $doctor->department->name ?? 'General' }}</p>
-                                <div class="flex items-center mt-1">
-                                    <div class="flex text-yellow-400">
-                                        @for ($i = 1; $i <= 5; $i++)
-                                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                                                <path
-                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.719c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                            </svg>
-                                        @endfor
-                                    </div>
-                                    <span class="ml-1 text-xs text-gray-600">
-                                        ({{ $doctor->reviews_count ?? 0 }})
+                                class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                                loading="lazy">
+                            
+                            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-brand-blue-900/80 to-transparent p-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="inline-flex items-center px-2 py-1 bg-brand-blue-600 bg-opacity-90 rounded-md text-xs text-white">
+                                        {{ $doctor->department->name ?? 'Specialist' }}
                                     </span>
+                                    <div class="flex items-center text-white text-xs">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.719c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        </svg>
+                                        <span class="ml-1">{{ $doctor->reviews_avg_rating ? number_format($doctor->reviews_avg_rating, 1) : '5.0' }} ({{ $doctor->reviews_count ?? 0 }})</span>
+                                    </div>
                                 </div>
-
                             </div>
                         </div>
+
+                        <!-- Doctor Info Section -->
                         <div class="p-4">
-                            <div class="flex items-center justify-between text-sm">
-                                <span class="font-medium text-brand-blue-800">{{ $doctor->experience ?? '5+' }} yrs
-                                    exp.</span>
-                                <span class="font-medium text-brand-blue-800">₹{{ $doctor->fee }}</span>
+                            <h3 class="text-lg font-semibold text-brand-blue-800">Dr. {{ $doctor->user->name }}</h3>
+                            
+                            <div class="mt-2 space-y-2 text-sm">
+                                @if($doctor->qualification)
+                                    <div class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-brand-blue-600 mr-2 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                        </svg>
+                                        <span class="text-gray-700">{{ is_array($doctor->qualification) ? $doctor->qualification[0] : (json_decode($doctor->qualification, true)[0] ?? 'Specialist') }}</span>
+                                    </div>
+                                @endif
+                                
+                                @if($doctor->experience)
+                                    <div class="flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-brand-blue-600 mr-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                        <span class="text-gray-700">{{ $doctor->experience }} Experience</span>
+                                    </div>
+                                @endif
+                                
+                                @if($doctor->city)
+                                    <div class="flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-brand-blue-600 mr-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                        <span class="text-gray-700 truncate">{{ $doctor->city }}</span>
+                                    </div>
+                                @endif
+                                
+                                @if($doctor->clinic_hospital_name)
+                                    <div class="flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-brand-blue-600 mr-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                        </svg>
+                                        <span class="text-gray-700 truncate">{{ $doctor->clinic_hospital_name }}</span>
+                                    </div>
+                                @endif
                             </div>
-
-                            <a wire:navigate href="{{ route('doctor-detail', ['slug' => $doctor->slug]) }}"
-                                class="block mt-4 w-full bg-brand-blue-600 text-white py-2 rounded-lg font-medium text-center hover:bg-brand-blue-700 transition-colors">
-                                View Profile
-
-                            </a>
+                            
+                            <div class="mt-4 flex items-center justify-between">
+                                <span class="flex items-center text-brand-blue-800 font-medium">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-brand-yellow-500 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    ₹{{ $doctor->fee }}
+                                </span>
+                                
+                                @if($doctor->languages_spoken)
+                                    <span class="text-xs text-gray-500">
+                                        Speaks: {{ implode(', ', array_slice(is_array($doctor->languages_spoken) ? $doctor->languages_spoken : (json_decode($doctor->languages_spoken, true) ?? ['English']), 0, 2)) }}
+                                    </span>
+                                @endif
+                            </div>
+                            
+                            <div class="mt-4 grid grid-cols-2 gap-3">
+                                <a wire:navigate href="{{ route('doctor-detail', ['slug' => $doctor->slug]) }}"
+                                    class="text-center py-2 px-3 bg-white border border-brand-blue-600 text-brand-blue-600 rounded-lg text-sm font-medium hover:bg-brand-blue-50 transition-colors">
+                                    View Profile
+                                </a>
+                                <a wire:navigate href="{{ route('appointment', ['doctor_slug' => $doctor->slug]) }}" 
+                                    class="text-center py-2 px-3 bg-brand-blue-600 text-white rounded-lg text-sm font-medium hover:bg-brand-blue-700 transition-colors">
+                                    Book Now
+                                </a>
+                            </div>
                         </div>
                     </div>
                 @empty
-                    <div class="col-span-full text-center py-4">
-                        <svg class="w-16 h-16 mx-auto mb-4 text-brand-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="10" stroke-width="2"></circle>
+                    <div class="col-span-full text-center py-12">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-brand-blue-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        <p class="text-xl text-gray-600 font-medium">No doctors found</p>
-                        <p class="text-sm text-gray-500 mt-2">Try adjusting your search criteria</p>
+                        <h3 class="text-xl font-medium text-gray-700">No doctors available</h3>
+                        <p class="text-gray-500 mt-2 max-w-sm mx-auto">We're currently updating our list of specialists. Please check back soon.</p>
                     </div>
                 @endforelse
             </div>
-            <div class="text-center mt-4">
+            
+            <div class="text-center mt-10">
                 <a wire:navigate href="{{ route('our-doctors') }}"
-                    class="inline-flex items-center px-6 py-3 bg-brand-blue-500 text-white rounded-lg font-medium hover:bg-brand-blue-600 transition-colors duration-200">
-
-                    View All Doctors
-                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
-                        </path>
+                    class="inline-flex items-center px-6 py-3 bg-brand-blue-600 text-white rounded-lg font-medium hover:bg-brand-blue-700 transition-colors shadow-md hover:shadow-lg">
+                    Explore All Specialists
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
                     </svg>
                 </a>
             </div>
@@ -259,22 +312,40 @@
                 </div>
             </div>
             <div class="text-center mt-12">
-                <button wire:click="showPhoneModal"
-                    class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-brand-blue-600 hover:bg-brand-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-blue-500">
-                    Find a Doctor
-                    <svg class="ml-2 -mr-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                </button>
+                @auth
+                    <a href="{{ route('our-doctors') }}"
+                        class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-brand-blue-600 hover:bg-brand-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-blue-500">
+                        Find a Doctor
+                        <svg class="ml-2 -mr-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </a>
+                @else
+                    <button
+                        @click="$wire.call('showPhoneModal')"
+                        class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-brand-blue-600 hover:bg-brand-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-blue-500">
+                        Find a Doctor
+                        <svg class="ml-2 -mr-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </button>
+                @endauth
             </div>
+        </div>
+    </section>
 
-            <!-- Phone Verification Modal -->
-            @if ($showModal)
-                <div
-                    class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50 transition-opacity duration-300">
-                    <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6 mx-4 transform transition-all duration-300"
+    <!-- Fullscreen loader shown while showPhoneModal request is in-flight -->
+    <x-fullscreen-loader message="Preparing verification…" wire:loading.flex wire:target="showPhoneModal" />
+
+    <!-- Phone Modal: add x-ref so Alpine can focus after open -->
+    @if ($showModal)
+        <div x-ref="phoneModal" tabindex="-1"
+             class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50 transition-opacity duration-300">
+            <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6 mx-4 transform transition-all duration-300"
                         @click.away="showModal = false">
                         @if (!$showVerification)
                             <div>
@@ -336,10 +407,7 @@
                         @endif
                     </div>
                 </div>
-            @endif
-        </div>
-    </section>
-
+    @endif
 
     <style>
         .scrollbar-hide {
@@ -384,3 +452,18 @@ window.departmentsScroller = window.departmentsScroller || function () {
 };
 </script>
 
+<!-- Bridge Livewire server dispatch to a DOM CustomEvent so Alpine listeners (e.g. @phone-modal-opened.window) work -->
+<script>
+    if (typeof Livewire !== 'undefined') {
+        Livewire.on('phone-modal-opened', () => {
+            try {
+                window.dispatchEvent(new CustomEvent('phone-modal-opened'));
+            } catch (e) {
+                // fallback for older browsers
+                var ev = document.createEvent('Event');
+                ev.initEvent('phone-modal-opened', true, true);
+                window.dispatchEvent(ev);
+            }
+        });
+    }
+</script>
