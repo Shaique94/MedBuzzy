@@ -8,16 +8,7 @@
              scrolled = window.pageYOffset > 300;
          });
      ">
-    <!-- Global loading overlay -->
-    <div wire:loading.flex wire:target="loadDoctors, department_id, sortBy, searchQuery, minExperience, genderFilter, minRating, minFee, maxFee, resetFilters"
-         class="fixed inset-0 bg-white bg-opacity-70 z-50 items-center justify-center">
-        <div class="bg-white p-5 rounded-lg shadow-lg flex flex-col items-center">
-            <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4 border-t-brand-blue-600 animate-spin"></div>
-            <h2 class="text-center text-gray-700 text-xl font-semibold">Loading...</h2>
-            <p class="text-center text-gray-500">Please wait while we find the best doctors for you</p>
-        </div>
-    </div>
-
+  
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <!-- Page Header -->
         <div class="mb-6 sm:mb-8">
@@ -210,7 +201,7 @@
              x-transition:leave="transition ease-in duration-200"
              x-transition:leave-start="opacity-100 transform translate-y-0"
              x-transition:leave-end="opacity-0 transform -translate-y-5"
-             class="fixed top-0 left-0 right-0 bg-brand-blue-600 shadow-md border-b border-brand-blue-200 z-50 py-2 px-4">
+             class="fixed top-0 left-0 right-0 bg-brand-blue-600 shadow-md border-b border-brand-blue-800 z-50 py-4 px-6">
             <div class="max-w-7xl mx-auto flex items-center justify-between">
                 <!-- Left: Condensed Filter Controls -->
                 <div class="flex items-center space-x-2">
@@ -261,16 +252,7 @@
                     <h2 class="text-lg font-medium text-gray-900">
                         <span class="text-brand-blue-600">{{ count($doctors) }}</span> doctors found
                     </h2>
-                    
-                    <!-- Loading indicator for sorting/filtering -->
-                    <div wire:loading wire:target="sortBy, departmentSlug, minExperience, genderFilter, minRating, minFee, maxFee" 
-                         class="text-sm text-brand-blue-600 flex items-center">
-                        <svg class="animate-spin mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Updating results...
-                    </div>
+                                    
                 </div>
                 
                 <!-- Doctor Cards -->
@@ -470,7 +452,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Advanced Filter Drawer (slides in from right) -->
     <div x-show="filterDrawerOpen" 
          x-transition:enter="transition ease-out duration-300"
@@ -596,7 +578,18 @@
          @click="filterDrawerOpen = false"
          class="fixed inset-0 bg-gray-900/30 backdrop-blur-sm z-40">
     </div>
-    
+    <!-- Fullscreen loader: hidden by default, becomes flex (centered) while loading -->
+    <div
+        wire:target="sortBy, departmentSlug, minExperience, genderFilter, minRating, minFee, maxFee"
+        wire:loading.class.remove="hidden"
+        wire:loading.class="flex"
+        class="hidden fixed inset-0 z-50 items-center justify-center bg-brand-blue-600 bg-opacity-95">
+        <div class="text-center">
+            <div class="inline-block w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin mb-4" aria-hidden="true"></div>
+            <div class="text-white font-semibold text-lg">Updating results...</div>
+        </div>
+    </div>
+
     <style>
         /* Make sure x-cloak works properly */
         [x-cloak] { display: none !important; }
