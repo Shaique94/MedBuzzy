@@ -13,11 +13,11 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         //Example user
-        User::factory()->create([
-            'name' => 'Admin ',
-            'email' => 'admin@example.com',
-            'password' => bcrypt('password'), // password
-        ]);
+        // User::factory()->create([
+        //     'name' => ' user',
+        //     'email' => 'user@example.com',
+        //     'password' => bcrypt('password'), // password
+        // ]);
 
         // Call PatientSeeder
         // $this->call(PatientSeeder::class);
@@ -25,8 +25,12 @@ class DatabaseSeeder extends Seeder
         // $this->call(AppointmentSeeder::class);
 
         $this->call([
+
             DepartmentsSeeder::class,
+            AdminSeeder::class,
+            
             DoctorsSeeder::class,
+            
         ]);
     }
 }
