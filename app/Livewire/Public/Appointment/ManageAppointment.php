@@ -61,7 +61,6 @@ class ManageAppointment extends Component
         'newPatient.email' => 'nullable|email|max:255',
         'newPatient.phone' => 'required|string|digits:10|regex:/^[6-9]\d{9}$/',
         'newPatient.gender' => 'required|string|in:male,female,other',
-        'notes' => 'nullable|string|max:1000',
     ];
 
     protected $messages = [
@@ -83,12 +82,8 @@ class ManageAppointment extends Component
         date_default_timezone_set('Asia/Kolkata');
         Carbon::setLocale('en');
         config(['app.timezone' => 'Asia/Kolkata']);
-        $this->departments = cache()->remember('departments', now()->addHours(24), fn() => Department::where('status', 1)->orderBy('name', 'desc')->get());
-        // $this->doctors = cache()->remember('doctors', now()->addHours(24), fn() => Doctor::with(['user', 'department'])->get());
-        $this->doctors = $this->getFilteredDoctors();
         $this->currentMonth = now()->startOfMonth()->format('Y-m-d');
 
-        // Handle slug parameter from route
         if ($doctor_slug) {
             $this->selectedDoctor = Doctor::with(['user', 'department'])->where('slug', $doctor_slug)->first();
             if ($this->selectedDoctor) {
@@ -117,39 +112,10 @@ class ManageAppointment extends Component
             $this->fillPatientFromAuth();
         }
     }
-    public function updatedSelectedDepartment()
-    {
-        // Reset doctor and appointment-related fields when department changes
-        $this->doctor_id = null;
-        $this->selectedDoctor = null;
-        $this->appointment_date = null;
-        $this->appointment_time = null;
-        $this->availableSlots = [];
-        // Refresh doctor list based on new department filter
-        $this->doctors = $this->getFilteredDoctors();
-    }
-    protected function getFilteredDoctors()
-    {
-        // Cache doctors based on department filter for 24 hours
-        return cache()->remember(
-            "doctors_department_{$this->selectedDepartment}",
-            now()->addHours(24),
-            fn() =>
-            Doctor::when($this->selectedDepartment, function ($query) {
-                // Apply department filter if selectedDepartment is set
-                return $query->where('department_id', $this->selectedDepartment);
-            })
-                ->whereHas('department', function ($query) {
-                    $query->where('status', 1);
-                })
-                ->where('status', '1')
-                ->with(['user', 'department'])
-                ->get()
-        );
-    }
+   
     public function updated($propertyName)
     {
-        if (in_array($propertyName, ['selectedDepartment', 'doctor_id', 'appointment_date'])) {
+        if (in_array($propertyName, ['appointment_date'])) {
             return;
         }
 
@@ -256,16 +222,7 @@ class ManageAppointment extends Component
         $this->activeTimeTab = $tab;
     }
 
-    public function updatedDoctorId($value)
-    {
-        $this->selectedDoctor = Doctor::with(['user', 'department'])->find($value);
-        $this->validate(['doctor_id' => $this->rules['doctor_id']]);
-        $this->appointment_date = null;
-        $this->appointment_time = null;
-        $this->availableSlots = [];
-        $this->currentMonth = now()->startOfMonth()->format('Y-m-d');
-        $this->prepareAvailableDates(); // Prepare available dates when doctor changes
-    }
+  
 
     public function generateTimeSlots()
     {
@@ -412,12 +369,7 @@ class ManageAppointment extends Component
         }
     }
 
-    protected $listeners = [
-        // Keep for backward compatibility; primary binding is via #[On(...)]
-        'payment-failed' => 'handlePaymentFailed',
-        'payment-success' => 'handlePaymentSuccess',
-        'retry-payment' => 'retryPayment',
-    ];
+    
 
    public function createOrder()
 {
@@ -494,7 +446,7 @@ class ManageAppointment extends Component
             'receipt' => 'appointment_' . $this->appointmentId,
             'amount' => $this->amount,
             'currency' => 'INR',
-            'payment_capture' => 1,
+            'payment_capture' => $this->amount > 0 ? 1 : 0,
         ]);
 
         $this->orderId = $order['id'];
