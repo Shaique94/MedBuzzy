@@ -151,7 +151,7 @@ class Login extends Component
         $this->sendOtpSms($user->phone, $otp);
         // $this->sendOtpSms("9546805580", "852078");
 
-        
+
 
         // Start countdown (30 seconds)
         $this->startOtpCountdown();
@@ -160,80 +160,36 @@ class Login extends Component
         session()->flash('info', 'An OTP has been sent to your phone. It will expire in 30 minutes.');
     }
 
-    // protected function sendOtpSms($phone, $otp)
-    // {
-        
-    //     try {
-
-    //         $response = Http::withHeaders([
-    //             'Content-Type' => 'application/json',
-    //         ])->post('https://control.msg91.com/api/v5/otp/', [
-    //                     'OTP' => $otp,                        // your OTP
-    //                     // 'otp_expiry' => 5,                           // in minutes
-    //                     'template_id' => env('MSG91_TEMPLATE_ID'),    // your approved template ID
-    //                     'mobile' => '91' . $phone,               // recipient mobile
-    //                     'authkey' => "447174AqwGkJnLZ68a1b309P1",       // API key
-    //                     'realTimeResponse' => true,
-    //                 ]);
-    //         // Log full response for debugging
-    //         \Log::info('MSG91 API Response: ', [
-    //             'status' => $response->status(),
-    //             'body' => $response->body(),
-    //             'headers' => $response->headers(),
-    //         ]);
-
-    //         if ($response->successful()) {
-
-    //             $responseData = $response->json();
-
-    //             if (isset($responseData['type']) && $responseData['type'] === 'success') {
-    //                 return true;
-    //             }
-
-    //             \Log::error('MSG91 API Error: ' . ($responseData['message'] ?? 'Unknown error'));
-    //             session()->flash('error', 'Failed to send OTP. Please try again.');
-    //             return false;
-    //         }
-    //         \Log::error('MSG91 API Failed: ' . $response->body());
-    //         session()->flash('error', 'Failed to send OTP. Please try again.');
-    //         return false;
-
-    //     } catch (\Exception $e) {
-    //         \Log::error('SMS Sending Exception: ' . $e->getMessage());
-    //         session()->flash('error', 'An error occurred while sending OTP. Please try again.');
-    //         return false;
-    //     }
-    // }
 
 
     protected function sendOtpSms($phone, $otp)
-{
-    try {
-        $response = \Http::withHeaders([
-            'Content-Type' => 'application/json',
-        ])->post('https://control.msg91.com/api/v5/otp', [
-            'authkey'     =>"447174AqwGkJnLZ68a1b309P1",
-            'mobile'      => '91' . $phone,
-            'otp'         => $otp,  // ⚡ Must match ##OTP##
-            'template_id' =>"68a177cd881d123fd120d945", // your DLT-approved template id
-        ]);
+    {
+        try {
+            $response = \Http::withHeaders([
+                'Content-Type' => 'application/json',
+            ])->post('https://control.msg91.com/api/v5/otp', [
+                        'authkey' => "447174AqwGkJnLZ68a1b309P1",
+                        'mobile' => '91' . $phone,
+                        'otp' => $otp,  // ⚡ Must match ##OTP##
+                        'template_id' => "68a177cd881d123fd120d945", // your DLT-approved template id
+                    ]);
 
-        \Log::info('MSG91 OTP API Response', [
-            'status' => $response->status(),
-            'body'   => $response->body(),
-        ]);
+            \Log::info('MSG91 OTP API Response', [
+                'status' => $response->status(),
+                'body' => $response->body(),
+            ]);
 
-        if ($response->successful() && $response->json('type') === 'success') {
-            return true;
+            if ($response->successful() && $response->json('type') === 'success') {
+                return true;
+            }
+
+            return false;
+
+        } catch (\Exception $e) {
+            \Log::error('MSG91 OTP Exception: ' . $e->getMessage());
+            return false;
         }
-
-        return false;
-
-    } catch (\Exception $e) {
-        \Log::error('MSG91 OTP Exception: '.$e->getMessage());
-        return false;
     }
-}
 
     protected function startOtpCountdown()
     {
