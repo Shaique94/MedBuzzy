@@ -4,6 +4,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ $title ?? 'Patient Dashboard | MedBuzzy' }}</title>
+    
+    <!-- Font Awesome -->
     <title>{{ $title ?? 'My Dashboard | MedBuzzy' }}</title>
 
     <!-- Tailwind CSS -->
