@@ -47,6 +47,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use App\Livewire\Public\Appointment\ConfirmAppointment;
+use App\Livewire\Public\Appointment\FailedAppointment;
 // Google Auth Routes 
 Route::get('/auth/google', [SocialiteController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('/auth/google/callback', [SocialiteController::class, 'handleGoogleCallback']);
@@ -68,6 +69,8 @@ Route::get('/appointment/receipt/{appointment}/download', [AppointmentReceiptCon
 Route::get('/appointment/receipt/{appointment}', [AppointmentReceiptController::class, 'view'])->name('appointment.receipt');
 Route::get('/appointments/confirmations/{id}', ConfirmAppointment::class)
     ->name('appointment.confirmation');
+Route::get('/appointments/failed/{id}', FailedAppointment::class)
+    ->name('appointment.failed');
 Route::get('/about-us', About::class)->name('about-us');
 Route::get('/contact-us', Contact::class)->name('contact-us');
 

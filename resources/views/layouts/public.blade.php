@@ -305,8 +305,17 @@
                 callback();
             };
             script.onerror = () => {
-                console.error('Failed to load Razorpay SDK');
-                showPaymentFailedOverlay('Unable to load payment service. Please check your internet connection and try again.');
+                console.error('Failed to load Razorpay SDK dynamically');
+                // Try to dispatch payment-failed if we have context, otherwise show modal
+                if (window.lastPaymentData && window.lastPaymentData.appointmentId) {
+                    Livewire.dispatch('payment-failed', {
+                        error: 'Unable to load payment service',
+                        orderId: window.lastPaymentData.orderId,
+                        appointmentId: window.lastPaymentData.appointmentId
+                    });
+                } else {
+                    showPaymentFailedOverlay('Unable to load payment service. Please check your internet connection and try again.');
+                }
             };
             document.body.appendChild(script);
         }
@@ -314,9 +323,21 @@
         function openRazorpayCheckout(data) {
             if (!data) {
                 console.error('No data provided for Razorpay checkout');
-                showPaymentFailedOverlay('Payment initiation failed: No data provided.');
+                // If no appointment data, show modal, otherwise dispatch for redirect
+                if (data && data.appointmentId) {
+                    Livewire.dispatch('payment-failed', {
+                        error: 'Payment initiation failed: No data provided',
+                        orderId: data.orderId,
+                        appointmentId: data.appointmentId
+                    });
+                } else {
+                    showPaymentFailedOverlay('Payment initiation failed: No data provided.');
+                }
                 return;
             }
+            
+            // Store payment data for potential use in error handlers
+            window.lastPaymentData = data;
 
             let retries = 0;
             const maxRetries = 2;
@@ -399,13 +420,14 @@
                         try {
                             const rzp = new Razorpay(options);
                             rzp.on('payment.failed', function (resp) {
-                                console.error('Payment failed:', resp);
+                                console.error('Payment failed - dispatching payment-failed:', resp);
                                 document.body.style.overflow = '';
-                                Livewire.dispatch('payment-failed', { appointmentId: data.appointmentId, orderId: data.orderId ?? data.order_id ?? null, error: resp?.error?.description });
-                                try { window.dispatchEvent(new CustomEvent('payment-failed', { detail: { appointmentId: data.appointmentId, error: resp?.error?.description } })); } catch(e){}
-                                showPaymentFailedOverlay(resp?.error?.description || 'Payment failed', () => {
-                                    Livewire.dispatch('retry-payment');
+                                Livewire.dispatch('payment-failed', { 
+                                    appointmentId: data.appointmentId, 
+                                    orderId: data.orderId ?? data.order_id ?? null, 
+                                    error: resp?.error?.description || 'Payment failed'
                                 });
+                                // Let Livewire handle the redirect to failed page
                             });
                             console.log('Opening Razorpay checkout with options:', options);
                             rzp.open();
@@ -417,14 +439,13 @@
                                 console.log(`Retrying Razorpay checkout (attempt ${retries + 1})`);
                                 setTimeout(attemptOpen, retryDelay);
                             } else {
-                                showPaymentFailedOverlay('Failed to initiate payment. Please try again.', () => {
-                                    Livewire.dispatch('retry-payment');
-                                });
+                                console.log('Max retries reached for Razorpay initialization - dispatching payment-failed');
                                 Livewire.dispatch('payment-failed', {
-                                    error: 'Failed to initialize payment',
+                                    error: 'Failed to initialize payment after multiple attempts',
                                     orderId: data.orderId,
                                     appointmentId: data.appointmentId
                                 });
+                                // Let Livewire backend handle redirect to failed page
                             }
                         }
                     }, 200);
@@ -469,7 +490,8 @@
             Livewire.on('redirect-to-confirmation', (url) => {
                 console.log('Redirecting to confirmation:', url);
                 document.body.style.overflow = '';
-                Livewire.navigate(url);
+                // Use window.location to ensure session preservation
+                window.location.href = url;
             });
         }
 
