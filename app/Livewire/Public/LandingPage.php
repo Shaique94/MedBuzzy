@@ -43,6 +43,8 @@ class LandingPage extends Component
     public function showPhoneModal()
     {
         $this->showModal = true;
+        // Notify the frontend via Livewire event (bridged to a DOM event in blade)
+        $this->dispatch('phone-modal-opened');
     }
 
     public function ClosePhoneModal(){
@@ -77,8 +79,8 @@ class LandingPage extends Component
                 'is_verified' => true
             ]);
 
-            // Redirect to doctors page
-            return $this->redirect(route('our-doctors'), navigate: true);
+            // Redirect to doctors page (use Laravel redirect helper)
+            return redirect()->route('our-doctors');
         } else {
             $this->addError('verificationCode', 'Invalid verification code');
         }

@@ -28,6 +28,8 @@ class User extends Authenticatable
         'gender',
         'email_verified_at',
         'remember_token',
+        'otp',
+        'otp_generated_at'
 
     ];
 

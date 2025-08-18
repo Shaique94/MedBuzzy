@@ -48,7 +48,7 @@
             
             <!-- Book Now - Center button with special styling -->
             <a 
-                href="{{ route('appointment') }}" 
+                href="{{ route('our-doctors') }}" 
                 class="flex flex-col items-center space-y-1 p-2 rounded-xl transition-all duration-200 group"
                 :class="{ 'text-brand-orange-600': activeTab === 'appointment' }"
                 @click="activeTab = 'appointment'"

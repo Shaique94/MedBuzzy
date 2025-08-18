@@ -27,10 +27,11 @@
             </div>
 
             <!-- Desktop Navigation -->
-           
+
 
             <!-- Right Side Actions -->
             <div class="flex items-center space-x-1 md:space-x-4">
+
              <!-- Replace the existing User Profile section with this: -->
 @auth
     <!-- User Profile Dropdown -->
@@ -70,6 +71,7 @@
     </div>
 @endauth
                 
+
                 <!-- Book Now Button -->
                 <a wire:navigate href="{{ route('our-doctors') }}"
                     class="bg-brand-orange-600 text-white px-3 md:px-4 py-2 rounded-lg font-semibold hover:bg-brand-orange-600 transition-colors duration-200 flex items-center shadow-md hover:shadow-lg whitespace-nowrap">
@@ -78,8 +80,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
                         </path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 14h6m-3-3v6">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14h6m-3-3v6">
                         </path>
                     </svg>
                     <span class=" text-xs md:text-sm sm:inline">Find Doctor</span>
@@ -91,7 +92,7 @@
                             class="bg-brand-blue-600 text-white px-3 md:px-4 py-2 rounded-lg font-semibold hover:bg-brand-blue-600 transition-colors duration-200 flex items-center shadow-md hover:shadow-lg whitespace-nowrap">
                             <span class=" text-xs md:text-sm sm:inline">Login/Register</span>
                         </a>
-                        
+
                     </div>
                 @endguest
 
@@ -101,7 +102,7 @@
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg> 
+                    </svg>
                 </button>
             </div>
         </div>
@@ -126,8 +127,16 @@
                 class="block text-gray-700 hover:text-brand-blue-600 font-medium py-2 px-3 rounded-lg hover:bg-brand-blue-50 transition-colors duration-200 mobile-menu-link">
                 Contact Us
             </a>
-            
+
+            <a wire:navigate href="/login"
+                class="bg-brand-blue-600 flex justify-center text-white px-3 md:px-4 py-2 rounded-lg font-semibold hover:bg-brand-blue-600 transition-colors duration-200  items-center shadow-md hover:shadow-lg whitespace-nowrap">
+                <span class=" text-xs md:text-sm sm:inline">Login/register</span>
+            </a>
+
+
+
             <div class="pt-4 border-t space-y-3">
+
               @auth
     {{-- <div class="flex items-center space-x-3 px-3 py-2">
         <div class="w-8 h-8 rounded-full bg-brand-blue-100 flex items-center justify-center text-brand-blue-800 font-semibold">
@@ -155,6 +164,7 @@
         </button>
     </form>
 @endauth
+
             </div>
         </nav>
     </div>
