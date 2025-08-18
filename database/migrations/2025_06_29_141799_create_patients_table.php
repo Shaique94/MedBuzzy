@@ -15,10 +15,10 @@ return new class extends Migration {
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->string('email')->nullable();
-            $table->enum('gender', ['male', 'female', 'other']);
-            $table->unsignedTinyInteger('age');
+            $table->enum('gender', ['male', 'female', 'other'])->nullable();
+            $table->unsignedTinyInteger('age')->nullable();
             $table->string('pincode', 6)->nullable();
-            $table->string('address');
+            $table->string('address')->nullable();
             $table->string('district')->nullable();
             $table->string('state')->nullable();   
             $table->string('country')->nullable()->default('India');

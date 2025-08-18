@@ -660,6 +660,7 @@
                                         </div>
                                     </div>
 
+
                                     <!-- Action Buttons -->
                                     <div class="flex flex-wrap justify-between items-center gap-4">
                                         <button wire:click="$set('step', 2)" class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-all duration-300 flex items-center gap-2">
@@ -709,7 +710,7 @@
         </div>
     </div>
 
-</div>
+
 
 <script>
     // Fix invalid SVG attributes like width/height="auto" to avoid console errors
@@ -752,3 +753,6 @@
         document.addEventListener('livewire:navigated', fixSvgAutoAttributes);
     })();
 </script>
+
+</div>
+
