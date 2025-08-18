@@ -1,4 +1,44 @@
-<div class="md:py-10 mt-5 flex items-center justify-center  p-4">
+<div class="md:py-10 mt-5 flex items-center justify-center  p-4"  x-data="{
+         password: '',
+         strength: 0,
+         strengthText: '',
+         strengthColor: 'bg-gray-200',
+         calculateStrength() {
+             let score = 0;
+             if (!this.password) {
+                 this.strength = 0;
+                 this.strengthText = '';
+                 this.strengthColor = 'bg-gray-200';
+                 return;
+             }
+             
+             // Length check
+             if (this.password.length > 5) score++;
+             if (this.password.length > 8) score++;
+             
+             // Complexity checks
+             if (/[A-Z]/.test(this.password)) score++; // Uppercase
+             if (/[0-9]/.test(this.password)) score++; // Numbers
+             if (/[^A-Za-z0-9]/.test(this.password)) score++; // Special chars
+             
+             this.strength = score;
+             
+             // Set visual feedback
+             if (score <= 2) {
+                 this.strengthText = 'Weak';
+                 this.strengthColor = 'bg-red-400';
+             } else if (score <= 4) {
+                 this.strengthText = 'Medium';
+                 this.strengthColor = 'bg-yellow-400';
+             } else {
+                 this.strengthText = 'Strong';
+                 this.strengthColor = 'bg-teal-400';
+             }
+         }
+     }"
+     x-init="calculateStrength()">
+        
+    
     <div class="max-w-md w-full mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
         <!-- Header with decorative gradient bar -->
         <div class="h-2   bg-brand-blue-500"></div>
@@ -26,12 +66,16 @@
 
             <form wire:submit.prevent="resetPassword" class="space-y-5">
                 <!-- Password Field -->
-                <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
-                    <div class="relative">
-                        <input id="password" type="password" wire:model="password" required
-                            class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-brand-blue-500 focus:border-brand-blue-500 placeholder-gray-400"
-                            placeholder="Enter new password">
+                  <div>
+            <label for="password" class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+            <div class="relative">
+                <input id="password" type="password" 
+                       x-model="password"
+                       @input="calculateStrength()"
+                       wire:model="password"
+                       required
+                       class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-brand-blue-500 focus:border-brand-blue-500 placeholder-gray-400"
+                       placeholder="Enter new password">
                         <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
@@ -63,14 +107,26 @@
                     </div>
                 </div>
 
-                <!-- Password Strength Indicator (optional) -->
-                <div class="bg-gray-50 p-3 rounded-lg border border-gray-200">
-                    <p class="text-xs font-medium text-gray-500 mb-1">PASSWORD STRENGTH</p>
-                    <div class="w-full bg-gray-200 rounded-full h-1.5">
-                        <div class="bg-teal-400 h-1.5 rounded-full" style="width: 75%"></div>
-                    </div>
-                    <p class="mt-2 text-xs text-gray-500">Use 8+ characters with a mix of letters, numbers & symbols</p>
-                </div>
+                 <!-- Password Strength Indicator -->
+        <div class="bg-gray-50 p-3 rounded-lg border border-gray-200" x-show="password">
+            <div class="flex justify-between items-center mb-1">
+                <p class="text-xs font-medium text-gray-500">PASSWORD STRENGTH</p>
+                <p class="text-xs font-medium" x-text="strengthText"
+                   x-bind:class="{
+                       'text-red-500': strength <= 2,
+                       'text-yellow-500': strength > 2 && strength <= 4,
+                       'text-teal-500': strength > 4
+                   }"></p>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-1.5">
+                <div class="h-1.5 rounded-full transition-all duration-300" 
+                     x-bind:class="strengthColor"
+                     x-bind:style="'width: ' + (strength * 20) + '%'"></div>
+            </div>
+            <p class="mt-2 text-xs text-gray-500">
+                Use 8+ characters with a mix of uppercase, numbers & symbols
+            </p>
+        </div>
 
                 <!-- Submit Button -->
                 <div class="pt-2">
