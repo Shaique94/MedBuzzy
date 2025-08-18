@@ -51,140 +51,103 @@
             </div>
         @endif --}}
 
-        <!-- Debug OTP Message (only shown in local environment) -->
-        @if (app()->environment('local') && $showOtpField && session()->has('debug_otp'))
-            <div
-                class="bg-yellow-50 border border-yellow-200 text-yellow-700 px-3 sm:px-4 py-3 rounded-lg mb-4 sm:mb-6 flex items-start text-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5 mr-2 mt-0.5 flex-shrink-0"
-                    viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd"
-                        d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                        clip-rule="evenodd" />
+       
+
+       <form wire:submit.prevent="login" class="space-y-4 sm:space-y-5" x-data="{ phone: '' }">
+    <!-- Phone Field -->
+    <div>
+        <label for="phone" class="block text-sm font-medium text-gray-700 mb-1 sm:mb-1.5">Mobile Number</label>
+        <div class="relative rounded-md shadow-sm">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg class="h-4 w-4 sm:h-5 sm:w-5 text-brand-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M7 2a2 2 0 00-2 2v12a2 2 0 002 2h6a2 2 0 002-2V4a2 2 0 00-2-2H7zm3 14a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
                 </svg>
-                <div>
-                    <p class="font-medium">DEV MODE: OTP for testing</p>
-                    <p>Your OTP is: <span class="font-bold">{{ session('debug_otp') }}</span></p>
-                    <p class="text-xs mt-1">Expires in 30 minutes</p>
-                </div>
             </div>
-        @endif
+            <input type="tel" id="phone" wire:model.live="phone" x-model="phone" placeholder="9708798149"
+                oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);"
+                class="block w-full pl-9 sm:pl-10 pr-3 py-2 sm:py-2.5 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue-500 focus:border-brand-blue-500 transition duration-150 placeholder-gray-400 @error('phone') border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500 @enderror">
+        </div>
+        @error('phone')
+            <p class="mt-1 sm:mt-1.5 text-xs sm:text-sm text-red-600 flex items-start">
+                <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-1.5 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+                <span>{{ $message }}</span>
+            </p>
+        @enderror
+    </div>
 
-        <!-- Form -->
-        <form wire:submit.prevent="login" class="space-y-4 sm:space-y-5">
-            <!-- Phone Field -->
-            <div>
-                <label for="phone" class="block text-sm font-medium text-gray-700 mb-1 sm:mb-1.5">Mobile
-                    Number</label>
-                <div class="relative rounded-md shadow-sm">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <svg class="h-4 w-4 sm:h-5 sm:w-5 text-brand-blue-400" xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M7 2a2 2 0 00-2 2v12a2 2 0 002 2h6a2 2 0 002-2V4a2 2 0 00-2-2H7zm3 14a1 1 0 100-2 1 1 0 000 2z"
-                                clip-rule="evenodd" />
-                        </svg>
-                    </div>
-                    <input type="tel" id="phone" wire:model.live="phone" placeholder="9708798149"
-                        oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);"
-                        class="block w-full pl-9 sm:pl-10 pr-3 py-2 sm:py-2.5 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue-500 focus:border-brand-blue-500 transition duration-150 placeholder-gray-400 @error('phone') border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500 @enderror">
-                </div>
-                @error('phone')
-                    <p class="mt-1 sm:mt-1.5 text-xs sm:text-sm text-red-600 flex items-start">
-                        <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-1.5 mt-0.5 flex-shrink-0" fill="currentColor"
-                            viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <span>{{ $message }}</span>
-                    </p>
-                @enderror
+    @if (!$showOtpField)
+        <!-- Password Field -->
+        <div>
+            <div class="flex justify-between items-center mb-1 sm:mb-1.5">
+                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                <a wire:navigate href="{{ route('password.request') }}"
+                    class="text-xs text-brand-blue-600 hover:text-brand-blue-700 hover:underline transition duration-150">Forgot password?</a>
             </div>
-
-            @if (!$showOtpField)
-                <!-- Password Field -->
-                <div>
-                    <div class="flex justify-between items-center mb-1 sm:mb-1.5">
-                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                        <a wire:navigate href="{{ route('password.request') }}"
-                            class="text-xs text-brand-blue-600 hover:text-brand-blue-700 hover:underline transition duration-150">Forgot
-                            password?</a>
-                    </div>
-                    <div class="relative rounded-md shadow-sm">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="h-4 w-4 sm:h-5 sm:w-5 text-brand-blue-400" xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </div>
-                        <input type="password" id="password" wire:model.defer="password" placeholder="••••••••"
-                            class="block w-full pl-9 sm:pl-10 pr-3 py-2 sm:py-2.5 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue-500 focus:border-brand-blue-500 transition duration-150 placeholder-gray-400 @error('password') border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500 @enderror">
-                    </div>
-                    @error('password')
-                        <p class="mt-1 sm:mt-1.5 text-xs sm:text-sm text-red-600 flex items-start">
-                            <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-1.5 mt-0.5 flex-shrink-0" fill="currentColor"
-                                viewBox="0 0 20 20">
-                                <path fill-rule="evenodd"
-                                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                            <span>{{ $message }}</span>
-                        </p>
-                    @enderror
+            <div class="relative rounded-md shadow-sm">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-4 w-4 sm:h-5 sm:w-5 text-brand-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                    </svg>
                 </div>
+                <input type="password" id="password" wire:model.live="password" placeholder="••••••••"
+                    class="block w-full pl-9 sm:pl-10 pr-3 py-2 sm:py-2.5 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue-500 focus:border-brand-blue-500 transition duration-150 placeholder-gray-400 @error('password') border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500 @enderror"
+                    >
+            </div>
+            @error('password')
+                <p class="mt-1 sm:mt-1.5 text-xs sm:text-sm text-red-600 flex items-start">
+                    <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-1.5 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg>
+                    <span>{{ $message }}</span>
+                </p>
+            @enderror
+        </div>
 
-                <!-- Login Method Toggle -->
-                <div class="flex items-center justify-between mt-4">
-                    <div class="flex items-center">
-                        <input type="checkbox" id="useOtp" wire:model="showOtpField"
-                            class="h-4 w-4 text-brand-blue-600 focus:ring-brand-blue-500 border-gray-300 rounded">
-                        <label for="useOtp" class="ml-2 block text-sm text-gray-700">Use OTP instead</label>
-                    </div>
+        <!-- Login Method Toggle -->
+        <div class="flex items-center justify-between mt-4" x-show="phone.length > 0">
+            <div class="flex items-center">
+                <input type="checkbox" id="useOtp" wire:model.change="showOtpField"
+                    class="h-5 w-5 text-brand-blue-600 focus:ring-brand-blue-500 border-gray-300 rounded">
+                <label for="useOtp" class="ml-2 block text-lg text-gray-700">Use OTP instead</label>
+            </div>
+        </div>
+    @else
+        <!-- OTP Field -->
+        <div>
+            <label for="otp" class="block text-sm font-medium text-gray-700 mb-1 sm:mb-1.5">OTP Code</label>
+            <div class="relative rounded-md shadow-sm">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-4 w-4 sm:h-5 sm:w-5 text-brand-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                    </svg>
                 </div>
-            @else
-                <!-- OTP Field -->
-                <div>
-                    <label for="otp" class="block text-sm font-medium text-gray-700 mb-1 sm:mb-1.5">OTP
-                        Code</label>
-                    <div class="relative rounded-md shadow-sm">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="h-4 w-4 sm:h-5 sm:w-5 text-brand-blue-400" xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </div>
-                        <input type="text" id="otp" wire:model.live="otp" placeholder="Enter 6-digit OTP"
-                            oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 6);"
-                            class="block w-full pl-9 sm:pl-10 pr-3 py-2 sm:py-2.5 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue-500 focus:border-brand-blue-500 transition duration-150 placeholder-gray-400 @error('otp') border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500 @enderror">
-                    </div>
-                    @error('otp')
-                        <p class="mt-1 sm:mt-1.5 text-xs sm:text-sm text-red-600 flex items-start">
-                            <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-1.5 mt-0.5 flex-shrink-0" fill="currentColor"
-                                viewBox="0 0 20 20">
-                                <path fill-rule="evenodd"
-                                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                            <span>{{ $message }}</span>
-                        </p>
-                    @enderror
-                    <div class="mt-2 text-xs text-gray-500">
-                        OTP will expire in 30 minutes
-                    </div>
-                </div>
+                <input type="text" id="otp" wire:model.live="otp" placeholder="Enter 6-digit OTP"
+                    oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 6);"
+                    class="block w-full pl-9 sm:pl-10 pr-3 py-2 sm:py-2.5 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue-500 focus:border-brand-blue-500 transition duration-150 placeholder-gray-400 @error('otp') border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500 @enderror">
+            </div>
+            @error('otp')
+                <p class="mt-1 sm:mt-1.5 text-xs sm:text-sm text-red-600 flex items-start">
+                    <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-1.5 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg>
+                    <span>{{ $message }}</span>
+                </p>
+            @enderror
+            <div class="mt-2 text-xs text-gray-500">
+                OTP will expire in 30 minutes
+            </div>
+        </div>
 
-                <!-- Resend OTP Button Section -->
-                <div class="flex items-center justify-between mt-2">
-                    <div class="flex items-center">
-                        <input type="checkbox" id="usePassword" wire:model="showOtpField"
-                            class="h-4 w-4 text-brand-blue-600 focus:ring-brand-blue-500 border-gray-300 rounded">
-                        <label for="usePassword" class="ml-2 block text-sm text-gray-700">Use Password instead</label>
-                    </div>
-                    <div class="relative">
+        <!-- Resend OTP Button Section -->
+        <div class="flex items-center justify-between mt-2">
+            <div class="flex items-center">
+                <input type="checkbox" id="usePassword" wire:model.change="showOtpField"
+                    class="h-4 w-4 text-brand-blue-600 focus:ring-brand-blue-500 border-gray-300 rounded">
+                <label for="usePassword" class="ml-2 block text-sm text-gray-700">Use Password instead</label>
+            </div>
+            <div class="relative">
                         <button type="button" wire:click="requestOtp" wire:loading.attr="disabled"
                             wire:target="requestOtp" @disabled($otpCooldown > 0)
                             class="text-xs text-brand-blue-600 hover:text-brand-blue-800 hover:underline transition duration-150 disabled:opacity-50 disabled:cursor-not-allowed disabled:no-underline">
@@ -208,41 +171,43 @@
                             </span>
                         </button>
                     </div>
-                </div>
-            @endif
+        </div>
+    @endif
 
-            <!-- Submit Button -->
-            <div class="pt-1">
-                <button type="submit" wire:loading.attr="disabled" wire:target="login"
-                    class="w-full flex justify-center items-center py-2 sm:py-2.5 px-4 border border-transparent rounded-lg text-sm font-semibold text-white bg-brand-blue-600 hover:bg-brand-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-blue-500 transition duration-150 ease-in-out shadow-sm hover:shadow-md disabled:opacity-75 disabled:cursor-not-allowed">
-                    <div wire:loading.remove wire:target="login" class="flex items-center">
-                        <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2 -ml-1" fill="none" stroke="currentColor"
-                            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                        </svg>
-                        {{ $showOtpField ? 'Verify OTP' : 'Sign In' }}
-                    </div>
-                    <div wire:loading wire:target="login" class="flex items-center">
-                        <svg class="animate-spin -ml-1 mr-2 h-4 w-4 sm:h-5 sm:w-5 text-white"
-                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                            </path>
-                        </svg>
-                        {{ $showOtpField ? 'Verifying...' : 'Signing in...' }}
-                    </div>
-                </button>
+    <!-- Submit Button -->
+    <div class="pt-1">
+        <button type="submit" wire:loading.attr="disabled" wire:target="login"
+            class="w-full flex justify-center items-center py-2 sm:py-2.5 px-4 border border-transparent rounded-lg text-sm font-semibold text-white bg-brand-blue-600 hover:bg-brand-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-blue-500 transition duration-150 ease-in-out shadow-sm hover:shadow-md disabled:opacity-75 disabled:cursor-not-allowed">
+            <div wire:loading.remove wire:target="login" class="flex items-center">
+                <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2 -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                </svg>
+                {{ $showOtpField ? 'Verify OTP' : 'Sign In' }}
             </div>
-        </form>
+            <div wire:loading wire:target="login" class="flex items-center">
+                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 sm:h-5 sm:w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                {{ $showOtpField ? 'Verifying...' : 'Signing in...' }}
+            </div>
+        </button>
     </div>
-</div>
+</form>
+    </div>
+    <div
+        wire:target="showOtpField"
+        wire:loading.class.remove="hidden"
+        wire:loading.class=" flex items-center"
+        class="hidden fixed inset-0 z-50 items-center justify-center bg-brand-blue-600 bg-opacity-95">
+        <div class="text-center">
+            <div class="inline-block w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin mb-4" aria-hidden="true"></div>
+            <div class="text-white font-semibold text-lg">Genterating Otp...</div>
+        </div>
+    </div>
 
-@livewireScripts
-{{-- <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script> --}}
-<!-- JavaScript for Countdown -->
+    @livewireScripts
+
 @script
 <script>
     document.addEventListener('livewire:init', () => {
@@ -283,3 +248,4 @@
     });
 </script>
 @endscript
+</div>
