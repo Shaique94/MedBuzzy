@@ -46,8 +46,7 @@ use App\Livewire\Public\Appointment\AppointmentWizard;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
-
-
+use App\Livewire\Public\Appointment\ConfirmAppointment;
 // Google Auth Routes 
 Route::get('/auth/google', [SocialiteController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('/auth/google/callback', [SocialiteController::class, 'handleGoogleCallback']);
@@ -64,10 +63,11 @@ Route::get('/contact-us', ContactUs::class)->name('contact-us');
 Route::get('/register', Register::class)->name('register');
 Route::get('/review',Review::class)->name('review');
 Route::get('/appointment/{doctor_slug}', ManageAppointment::class)->name('appointment');
-Route::get('/appointment/confirmation/{appointment}', AppointmentConfirmation::class)->name('appointment.confirmation');
+Route::get('/appointment/confirmation/{appointment}', AppointmentConfirmation::class)->name('appointment.confirmations');
 Route::get('/appointment/receipt/{appointment}/download', [AppointmentReceiptController::class, 'download'])->name('appointment.receipt.download');
 Route::get('/appointment/receipt/{appointment}', [AppointmentReceiptController::class, 'view'])->name('appointment.receipt');
-
+Route::get('/appointments/confirmations/{id}', ConfirmAppointment::class)
+    ->name('appointment.confirmation');
 Route::get('/about-us', About::class)->name('about-us');
 Route::get('/contact-us', Contact::class)->name('contact-us');
 
