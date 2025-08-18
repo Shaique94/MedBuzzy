@@ -59,13 +59,16 @@
                         <span>{{ \Carbon\Carbon::parse($appointment_date)->format('l, F j, Y') }}</span>
                     </div>
                     @if(!empty($appointment_time))
-                        <div class="flex items-center justify-center sm:justify-start md:justify-center lg:justify-start">
-                            <svg class="w-4 h-4 mr-1 text-brand-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            <span>{{ \Carbon\Carbon::createFromFormat('H:i', $appointment_time)->format('h:i A') }}</span>
-                        </div>
-                    @endif
+    @php
+        try {
+            $time = \Carbon\Carbon::createFromFormat('H:i:s', $appointment_time)->format('h:i A');
+        } catch (\Exception $e) {
+            // Fallback if format doesn't match
+            $time = \Carbon\Carbon::parse($appointment_time)->format('h:i A');
+        }
+    @endphp
+    <span>{{ $time }}</span>
+@endif
                 </div>
             @endif
         </div>
