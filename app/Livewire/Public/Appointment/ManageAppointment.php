@@ -105,6 +105,12 @@ class ManageAppointment extends Component
         // When mounting with a selected doctor, prepare the available dates
         if ($this->selectedDoctor) {
             $this->prepareAvailableDates();
+
+            // Default to today's date and a morning slot when arriving from a doctor link
+            if (empty($this->appointment_date)) {
+                $today = Carbon::today()->format('Y-m-d');
+                $this->setAppointmentDate($today, true);
+            }
         }
 
         // If user wants "self" and is authenticated, pre-fill
@@ -192,30 +198,80 @@ class ManageAppointment extends Component
         }
     }
 
-    public function setAppointmentDate($date)
+    /**
+     * Set appointment date. $forceMorning will prefer morning tab & auto-select first morning slot.
+     */
+    public function setAppointmentDate($date, $forceMorning = false)
     {
         $this->appointment_date = $date;
         $this->appointment_time = null;
         $this->validate(['appointment_date' => $this->rules['appointment_date']]);
         $this->generateTimeSlots();
 
-        // Set active time tab based on current time of day when selecting a date
-        if ($this->appointment_date === Carbon::today()->format('Y-m-d')) {
-            $now = Carbon::now('Asia/Kolkata');
-            $hour = (int) $now->format('H');
-
-            if ($hour < 12) {
-                $this->activeTimeTab = 'morning';
-            } elseif ($hour < 16) {
-                $this->activeTimeTab = 'afternoon';
-            } else {
-                $this->activeTimeTab = 'evening';
-            }
-        } else {
-            // Default to morning tab for other days
+        // If caller requested a morning default, force morning tab. Otherwise keep existing heuristic.
+        if ($forceMorning) {
             $this->activeTimeTab = 'morning';
+        } else {
+            if ($this->appointment_date === Carbon::today()->format('Y-m-d')) {
+                $now = Carbon::now('Asia/Kolkata');
+                $hour = (int) $now->format('H');
+                if ($hour < 12) {
+                    $this->activeTimeTab = 'morning';
+                } elseif ($hour < 16) {
+                    $this->activeTimeTab = 'afternoon';
+                } else {
+                    $this->activeTimeTab = 'evening';
+                }
+            } else {
+                $this->activeTimeTab = 'morning';
+            }
+        }
+
+        // If no appointment_time selected, try to auto-select a morning slot (or first available)
+        if (empty($this->appointment_time)) {
+            $first = $this->pickFirstAvailableSlot($forceMorning ? 'morning' : null);
+            if ($first) {
+                $this->appointment_time = $first;
+            }
         }
     }
+
+    /**
+     * Pick first available slot. $preferredTab: 'morning'|'afternoon'|'evening' or null.
+     * Returns slot key (H:i) or null.
+     */
+    protected function pickFirstAvailableSlot($preferredTab = null)
+    {
+        if (empty($this->availableSlots)) return null;
+
+        // Helper to determine tab for hour
+        $tabForHour = fn(int $hour) => ($hour < 12) ? 'morning' : (($hour < 16) ? 'afternoon' : 'evening');
+
+        // If preferred tab given, try to find in that tab first
+        if ($preferredTab) {
+            foreach ($this->availableSlots as $key => $slot) {
+                // key is 'H:i'
+                $hour = (int) date('H', strtotime($key));
+                if ($tabForHour($hour) === $preferredTab && !$slot['disabled']) {
+                    return $key;
+                }
+            }
+        }
+
+        // Otherwise search in order: morning, afternoon, evening
+        $order = ['morning', 'afternoon', 'evening'];
+        foreach ($order as $tab) {
+            foreach ($this->availableSlots as $key => $slot) {
+                $hour = (int) date('H', strtotime($key));
+                if ($tabForHour($hour) === $tab && !$slot['disabled']) {
+                    return $key;
+                }
+            }
+        }
+
+        return null;
+    }
+  
 
     public function setActiveTimeTab($tab)
     {
@@ -332,9 +388,15 @@ class ManageAppointment extends Component
         if ($this->step === 2) {
             if (empty($this->appointment_date)) {
                 $today = Carbon::today()->format('Y-m-d');
-                $this->setAppointmentDate($today);
+                // prefer morning when entering the date/time step
+                $this->setAppointmentDate($today, true);
             } else {
                 $this->generateTimeSlots();
+                // if still no time selected, attempt to auto-select morning
+                if (empty($this->appointment_time)) {
+                    $first = $this->pickFirstAvailableSlot('morning');
+                    if ($first) $this->appointment_time = $first;
+                }
             }
         }
     }
@@ -1017,6 +1079,27 @@ class ManageAppointment extends Component
     #[Layout('layouts.public')]
     public function render()
     {
+        // Provide formatted date/time for the view
+        $selectedDate = $this->appointment_date ? Carbon::parse($this->appointment_date)->format('l, F j, Y') : null;
+        $selectedTime = null;
+        if ($this->appointment_time) {
+            try {
+                // appointment_time usually 'H:i' (e.g. 14:30)
+                $selectedTime = Carbon::createFromFormat('H:i', $this->appointment_time, 'Asia/Kolkata')->format('h:i A');
+            } catch (\Exception $e) {
+                try {
+                    $selectedTime = Carbon::createFromFormat('H:i:s', $this->appointment_time, 'Asia/Kolkata')->format('h:i A');
+                } catch (\Exception $e) {
+                    // fallback to parsing as generic time string
+                    try {
+                        $selectedTime = Carbon::parse($this->appointment_time, 'Asia/Kolkata')->format('h:i A');
+                    } catch (\Exception $e) {
+                        $selectedTime = $this->appointment_time;
+                    }
+                }
+            }
+        }
+
         return view('livewire.public.appointment.manage-appointment', [
             'selectedDepartment' => $this->selectedDepartment,
             'departments' => $this->departments,
@@ -1025,6 +1108,8 @@ class ManageAppointment extends Component
             'onLeaveDates' => $onLeaveDates ?? [],
             'availableDates' => $this->availableDates,
             'activeTimeTab' => $this->activeTimeTab,
+            'selectedDate' => $selectedDate,
+            'selectedTime' => $selectedTime,
         ]);
     }
     
