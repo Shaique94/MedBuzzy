@@ -142,14 +142,14 @@
                                     @enderror
                                 </div>
 
-                                {{-- <div>
+                                <div>
                                     <input wire:model="phone" hidden type="tel" id="phone" readonly
                                         class="block w-full rounded-md border border-brand-blue-500 p-2 bg-gray-100 focus:border-brand-blue-500 focus:ring-brand-blue-500"
                                         placeholder="10-digit phone number">
                                     @error('phone')
                                         <span class="text-red-500 text-xs">{{ $message }}</span>
                                     @enderror
-                                </div> --}}
+                                </div> 
                             </div>
 
                             <div class="mt-5 sm:mt-6">
