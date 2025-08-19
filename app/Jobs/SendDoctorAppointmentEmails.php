@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Models\Appointment;
 use App\Models\Doctor;
 use App\Mail\DoctorAppointmentReminder;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -20,58 +21,84 @@ class SendDoctorAppointmentEmails implements ShouldQueue
 
     public $selectedDoctorId;
 
-    /**
-     * Create a new job instance.
-     */
-    public function __construct($selectedDoctorId = null)
-    {
-        $this->selectedDoctorId = $selectedDoctorId;
-    }
 
-    /**
-     * Execute the job.
-     */
-    public function handle()
-    {
-        $tomorrow = Carbon::tomorrow('Asia/Kolkata')->toDateString();
-        \Log::info("Running SendDoctorAppointmentEmails for {$tomorrow}");
+public function __construct($selectedDoctorId = null)
+{
+    // Ensure only simple, serializable data is stored
+    $this->selectedDoctorId = $selectedDoctorId;
+}
 
-        // Query appointments for tomorrow, optionally filtered by doctor ID
-        $query = Appointment::with(['patient', 'doctor.user'])
-            ->whereDate('appointment_date', $tomorrow)
-            ->whereIn('status', ['scheduled', 'rescheduled']);
-
-        if ($this->selectedDoctorId) {
-            $query->where('doctor_id', $this->selectedDoctorId);
-        }
-
-        $appointments = $query->get();
-        \Log::info("Found {$appointments->count()} appointments for {$tomorrow}");
-
-        if ($appointments->isEmpty()) {
-            \Log::info("No appointments found for {$tomorrow}. Skipping email queuing.");
-            return;
-        }
-
-        // Group appointments by doctor
-        $appointmentsByDoctor = $appointments->groupBy('doctor_id');
-
-        foreach ($appointmentsByDoctor as $doctorId => $doctorAppointments) {
-            $doctor = Doctor::find($doctorId);
-            if (!$doctor || !$doctor->user) {
-                \Log::info("Doctor ID {$doctorId} not found or has no user.");
-                continue;
+ public function handle()
+{
+    $tomorrow = Carbon::tomorrow('Asia/Kolkata')->toDateString();
+    
+    $query = Appointment::with([
+            'patient' => function($query) {
+                $query->select('id', 'name', 'email');
+            },
+            'doctor.user' => function($query) {
+                $query->select('id', 'name', 'email');
             }
+        ])
+        ->whereDate('appointment_date', $tomorrow)
+        ->whereIn('status', ['scheduled', 'rescheduled'])
+        ->whereHas('patient') // Only appointments with patients
+        ->whereHas('doctor.user'); // Only appointments with valid doctors
 
-            $doctorEmail = $doctor->user->email;
-            $data = [
-                'appointments' => $doctorAppointments,
-                'doctor_name' => $doctor->user->name,
-                'date' => Carbon::tomorrow()->format('d-m-Y'),
-            ];
+    if ($this->selectedDoctorId) {
+        $query->where('doctor_id', $this->selectedDoctorId);
+    }
 
-            \Log::info("Queuing appointment reminder email for Dr. {$doctor->user->name} (ID: {$doctorId}) to {$doctorEmail} with {$doctorAppointments->count()} appointments.");
-            Mail::to($doctorEmail)->queue(new DoctorAppointmentReminder($doctor, $doctorAppointments));
+    $appointments = $query->get();
+    
+    if ($appointments->isEmpty()) {
+        Log::info("No valid appointments found for {$tomorrow}");
+        return;
+    }
+
+    foreach ($appointments->groupBy('doctor_id') as $doctorId => $doctorAppointments) {
+        try {
+            $this->processDoctorAppointments($doctorId, $doctorAppointments, $tomorrow);
+        } catch (\Exception $e) {
+            Log::error("Failed processing doctor {$doctorId}: " . $e->getMessage());
+            continue; // Skip to next doctor instead of failing entire job
         }
     }
+}
+
+ protected function processDoctorAppointments($doctorId, $appointments, $date)
+{
+    $doctor = Doctor::with('user')->find($doctorId);
+    
+    if (!$doctor || !$doctor->user) {
+        Log::error("Doctor ID {$doctorId} not found");
+        return;
+    }
+
+    try {
+        Log::info("Generating PDF for doctor {$doctor->user->email}");
+        $pdf = Pdf::loadView('pdf.doctor_appointments', [
+            'doctor' => $doctor,
+            'appointments' => $appointments,
+            'date' => Carbon::parse($date)->format('F j, Y'),
+            'clinicName' => config('app.name'),
+            'generatedAt' => now()->format('M j, Y g:i A')
+        ]);
+
+        Log::info("Attempting to send email to {$doctor->user->email}");
+        $response = Mail::to($doctor->user->email)->send(
+            new DoctorAppointmentReminder($doctor, $appointments, $pdf->output())
+        );
+        
+        if ($response) {
+            Log::info("Email successfully sent to {$doctor->user->email}");
+        } else {
+            Log::error("Email send returned false for {$doctor->user->email}");
+        }
+        
+    } catch (\Exception $e) {
+        Log::error("Email sending failed: " . $e->getMessage());
+    }
+}
+
 }

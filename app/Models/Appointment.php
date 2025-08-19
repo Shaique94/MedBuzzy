@@ -214,10 +214,12 @@ public function isDoctorAvailable(): bool
         }
     }
 
-    
 
-    public function payments()
-    {
-        return $this->hasMany(Payment::class, 'appointment_id');
-    }
+    protected static function booted()
+{
+    static::addGlobalScope('valid', function ($builder) {
+        $builder->whereNotNull('patient_id')
+                ->whereNotNull('doctor_id');
+    });
+}
 }
