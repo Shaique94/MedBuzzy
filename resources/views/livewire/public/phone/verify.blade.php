@@ -62,7 +62,6 @@
                         <p class="mt-2 text-sm text-gray-500">We sent a 6-digit code to {{ $phone }}.
                             <button wire:click="editPhone" class="text-sm text-brand-blue-600 hover:text-brand-blue-800">Edit</button>
                         </p>
-                        <p class="mt-1 text-xs text-gray-400">Demo code: {{ $generatedCode }}</p>
 
                         <div class="mt-4">
                             <input wire:model="verificationCode" type="text"
