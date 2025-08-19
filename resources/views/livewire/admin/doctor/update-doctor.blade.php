@@ -209,6 +209,11 @@
                                     </h4>
                                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 lg:gap-4 grid-responsive">
                                         <div>
+                                            <label for="pincode" class="block text-sm font-medium text-gray-700 responsive-text-sm">Pincode</label>
+                                            <input wire:model.lazy="pincode" type="text" id="pincode" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm responsive-text-base px-3 py-2" maxlength="6">
+                                            @error('pincode') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+                                        </div>
+                                        <div>
                                             <label for="city" class="block text-sm font-medium text-gray-700 responsive-text-sm">City</label>
                                             <input wire:model="city" type="text" id="city" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm responsive-text-base px-3 py-2">
                                             @error('city') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
@@ -218,11 +223,7 @@
                                             <input wire:model="state" type="text" id="state" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm responsive-text-base px-3 py-2">
                                             @error('state') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
                                         </div>
-                                        <div>
-                                            <label for="pincode" class="block text-sm font-medium text-gray-700 responsive-text-sm">Pincode</label>
-                                            <input wire:model.lazy="pincode" type="text" id="pincode" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm responsive-text-base px-3 py-2" maxlength="6">
-                                            @error('pincode') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
-                                        </div>
+                                        
                                     </div>
                                 </div>
 
@@ -391,49 +392,6 @@
             background: #a1a1a1;
         }
 
-        /* Print styles */
-        @media print {
-            body * {
-                visibility: hidden;
-            }
-            #doctor-modal-content, #doctor-modal-content * {
-                visibility: visible;
-            }
-            #doctor-modal-content {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100% !important;
-                max-width: none !important;
-                margin: 0 !important;
-                padding: 20px !important;
-                box-shadow: none !important;
-                border-radius: 0 !important;
-                max-height: none !important;
-                overflow: visible !important;
-            }
-            .no-print {
-                display: none !important;
-            }
-            .bg-blue-50, .bg-gray-50, .bg-purple-50 {
-                background-color: #f8f9fa !important;
-                border: 1px solid #dee2e6 !important;
-            }
-            .rounded-xl, .rounded-2xl {
-                border-radius: 0.5rem !important;
-            }
-            .shadow-lg, .shadow-2xl, .shadow-sm {
-                box-shadow: none !important;
-            }
-            .section {
-                break-inside: avoid;
-                margin-bottom: 20px;
-            }
-            * {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-        }
 
         /* Mobile responsiveness */
         @media (max-width: 640px) {

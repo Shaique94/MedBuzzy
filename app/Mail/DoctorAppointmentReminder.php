@@ -3,60 +3,45 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
-use App\Models\Doctor;
-use App\Models\Appointment;
-// use Illuminate\Mail\Mailables\Content;
-// use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Collection;
+use Illuminate\Mail\Mailables\Attachment;
 
-class DoctorAppointmentReminder extends Mailable implements ShouldQueue
+class DoctorAppointmentReminder extends Mailable
 {
-    use Queueable, SerializesModels;
+   use Queueable, SerializesModels;
+
+    public $doctor;
+    public $appointments;
+    public $pdf;
 
     /**
      * Create a new message instance.
      */
-   public $doctor;
-    public $appointments;
-
-    public function __construct(Doctor $doctor, Collection $appointments)
+    public function __construct($doctor, $appointments, $pdf)
     {
         $this->doctor = $doctor;
         $this->appointments = $appointments;
-    }
-
-//  public function __construct(public int $doctorId, public int $appointmentId)
-//     {
-//         $this->doctor = Doctor::find($doctorId);
-//         // $this->appointments = Appointment::find($appointmentId);
-//         $this->appointments = collect([Appointment::find($appointmentId)]);
-
-//     }
-
-
-
-  public function build()
-    {
-        return $this->subject('Your Appointments for Tomorrow')
-                    ->view('emails.doctor_appointment_reminder')
-                    ->with([
-                        'doctor' => $this->doctor,
-                        'appointments' => $this->appointments,
-                    ]);
+        $this->pdf = $pdf;
     }
 
     /**
      * Get the message envelope.
      */
-    // public function envelope(): Envelope
-    // {
-    //     return new Envelope(
-    //         subject: 'Doctor Appointment Reminder',
-    //     );
-    // }
+    public function envelope(): Envelope
+    {
+        $hasAppointments = $this->appointments->isNotEmpty(); 
+        
+        $subject = $hasAppointments
+            ? "Tomorrow's Appointments - " . now()->format('M j')
+            : "No Appointments Scheduled for Tomorrow";
+
+        return new Envelope(
+            subject: $subject,
+        );
+    }
 
     /**
      * Get the message content definition.
@@ -64,20 +49,45 @@ class DoctorAppointmentReminder extends Mailable implements ShouldQueue
     // public function content(): Content
     // {
     //     return new Content(
-    //         view: 'view.name',
+    //         view: 'emails.doctor_appointment_reminder',
+    //         with: [
+    //             'doctor' => $this->doctor,
+    //             'appointments' => $this->appointments
+    //         ]
     //     );
     // }
 
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
-    // public function attachments(): array
-    // {
-    //     return [];
-    // }
+
+    public function content(): Content
+{
+    return new Content(
+        view: 'emails.doctor_appointment_reminder',
+        with: [
+            'doctor' => $this->doctor,
+            'appointments' => $this->appointments,
+            'clinicName' => config('app.name'),
+            'date' => now()->addDay()->format('F j, Y'),
+            'generatedAt' => now()->format('M j, Y g:i A'),
+        ]
+    );
 }
 
 
+    /**
+     * Get the attachments for the message.
+     */
+    public function attachments(): array
+    {
+        if ($this->appointments->isEmpty()) {
+            return [];
+        }
+
+        return [
+            Attachment::fromData(
+                fn () => $this->pdf,
+                'appointments_'.now()->format('Y-m-d').'.pdf'
+            )->withMime('application/pdf'),
+        ];
+    }
+}
 

@@ -202,7 +202,7 @@
              
             </div>
             <div class="appointment-status">✓ Confirmed</div>
-        <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('logo/logo.png'))) }}" class="logo">
+        <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('logo/logo1.png'))) }}" class="logo">
             <div class="hospital-title">
                 <h3>MedBuzzy</h3>
                 <div class="tagline">Your Trusted Healthcare Partner</div>

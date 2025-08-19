@@ -2,8 +2,11 @@
     class="fixed h-full w-64 bg-white lg:translate-x-0 transition-transform duration-150 ease-in-out z-20 border-r border-gray-200">
     <div class="flex flex-col h-full">
         <!-- Brand/Logo -->
-        <div class="flex items-center justify-center h-16 lg:h-20 border-b border-gray-200 px-4 lg:px-6 bg-white">
-            <img src="/logo/logo.png" alt="MedBuzzy Logo" class="h-9 lg:h-10" />
+        <div
+            class="flex items-center justify-center h-16 lg:h-20 border-b border-gray-200 px-4 lg:px-6 bg-white lg:block hidden">
+
+            <img src="/logo/logo1.png" alt="MedBuzzy Logo" class="h-16 lg:h-20 lg:block hidden">
+
         </div>
 
         <!-- Navigation -->

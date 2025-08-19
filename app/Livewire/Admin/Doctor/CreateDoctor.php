@@ -131,10 +131,10 @@ class CreateDoctor extends Component
         
         // Add create-specific rules
         $rules['email'] = 'required|email|max:255|unique:users,email';
-        $rules['phone'] = 'required|string|max:15|unique:users,phone';
+        $rules['phone'] = 'required|string|digits:10|regex:/^[6-9]\d{9}$/';
         $rules['password'] = 'required|string|min:6|confirmed';
         $rules['photo'] = 'nullable|image|max:10240';
-        $rules['registration_number'] = 'nullable|string|max:50|unique:doctors,registration_number';
+        $rules['registration_number'] = 'nullable|string|max:50|unique:doctors,registration_number,';
 
         return $rules;
     }
@@ -275,7 +275,7 @@ class CreateDoctor extends Component
                 'experience' => $this->experience,
                 'languages_spoken' => $arrayFields['languages'],
                 'clinic_hospital_name' => $this->clinic_hospital_name,
-                'registration_number' => $this->registration_number,
+                'registration_number' => $this->registration_number !== null && trim($this->registration_number) !== '' ? $this->registration_number : null,
                 'professional_bio' => $this->professional_bio,
                 'achievements_awards' => $arrayFields['achievements'],
                 'verification_documents' => $documents,
