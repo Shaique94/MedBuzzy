@@ -1,7 +1,7 @@
-<div class="lg:col-span-1 bg-gradient-to-r from-brand-blue-50 to-brand-blue-100 p-5 rounded-xl border border-brand-blue-200 shadow-sm">
+<div class="lg:col-span-1 bg-gradient-to-r from-brand-blue-50 to-brand-blue-100 p-5 rounded-xl border border-brand-blue-200">
     <div class="flex flex-col sm:flex-row md:flex-col lg:flex-row items-center sm:items-start md:items-center lg:items-start gap-4">
         <!-- Doctor Image -->
-        <div class="w-24 h-24 sm:w-20 sm:h-20 rounded-full overflow-hidden bg-white border-4 border-white flex-shrink-0 shadow-md relative">
+        <div class="w-24 h-24 sm:w-20 sm:h-20 rounded-full overflow-hidden bg-white border-4 border-white flex-shrink-0 relative">
             <img src="{{ $doctor->image ?? 'https://ui-avatars.com/api/?name=' . urlencode($doctor->user->name) . '&background=random&rounded=true' }}"
                  alt="Dr. {{ $doctor->user->name ?? '' }}" class="w-full h-full object-cover">
             

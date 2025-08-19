@@ -4,7 +4,9 @@
         <!-- Brand/Logo -->
         <div
             class="flex items-center justify-center h-16 lg:h-20 border-b border-gray-200 px-4 lg:px-6 bg-white lg:block hidden">
-            <img src="/logo/logo.png" alt="MedBuzzy Logo" class="h-10 lg:h-12 mt-4 lg:block hidden">
+
+            <img src="/logo/logo1.png" alt="MedBuzzy Logo" class="h-16 lg:h-20 lg:block hidden">
+
         </div>
         <!-- Navigation -->
         <nav class="flex-1 mt-4 lg:mt-6 px-3 lg:px-4 space-y-1 overflow-y-auto">

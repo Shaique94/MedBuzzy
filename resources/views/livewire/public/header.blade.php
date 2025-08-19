@@ -22,7 +22,7 @@
             <!-- Logo -->
             <div class="flex items-center">
                 <a wire:navigate href="/" class="flex items-center">
-                    <img src="/logo/logo.png" alt="MedBuzzy Logo" class="h-9 md:h-12">
+                    <img src="/logo/logo1.png" alt="MedBuzzy Logo" class="h-9 md:h-12">
                 </a>
             </div>
 

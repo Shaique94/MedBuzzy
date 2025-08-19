@@ -55,7 +55,7 @@
             <div class="flex items-center justify-between p-4 border-b border-gray-100">
                 <div class="flex items-center gap-3">
                     <a wire:navigate href="/" class="flex items-center">
-                        <img src="/logo/logo.png" alt="MedBuzzy" class="h-9" />
+                        <img src="/logo/logo1.png" alt="MedBuzzy" class="h-9" />
                     </a>
                 </div>
 
@@ -137,7 +137,7 @@
                         <i class="fas fa-bars text-xl"></i>
                     </button>
                     <a wire:navigate href="/" class="flex items-center">
-                        <img src="/logo/logo.png" alt="MedBuzzy Logo" class="h-9">
+                        <img src="/logo/logo1.png" alt="MedBuzzy Logo" class="h-9">
                     </a>
                 </div>
                 <a href="" class="bg-brand-orange-500 text-white px-3 py-1 rounded-lg text-sm">

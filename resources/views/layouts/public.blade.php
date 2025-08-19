@@ -327,7 +327,7 @@
                             currency: "INR",
                             name: "Medbuzzy",
                             description: "Appointment Booking",
-                            image: "{{ asset('logo/logo.png') }}",
+                            image: "{{ asset('logo/logo1.png') }}",
                             order_id: data.orderId,
                             handler: function (response) {
                                 console.log('Payment success:', response);

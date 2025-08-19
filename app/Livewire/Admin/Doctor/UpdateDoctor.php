@@ -286,7 +286,7 @@ class UpdateDoctor extends Component
         $validationRules = [
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . $this->doctor->user_id,
-            'phone' => 'required|string|max:15|unique:users,phone,' . $this->doctor->user_id,
+            'phone' => 'required|string|digits:10|regex:/^[6-9]\d{9}$/' . $this->doctor->user_id,
             'department_id' => 'required|exists:departments,id',
             'available_days' => 'required|array|min:1',
             'available_days.*' => 'in:Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday',
@@ -412,7 +412,7 @@ class UpdateDoctor extends Component
                 'state' => $this->state,
                 'pincode' => $this->pincode,
                 'clinic_hospital_name' => $this->clinic_hospital_name,
-                'registration_number' => $this->registration_number,
+                'registration_number' => $this->registration_number !== null && trim($this->registration_number) !== '' ? $this->registration_number : null,
                 'languages_spoken' => $arrayFields['languages'],
                 'professional_bio' => $this->professional_bio,
                 'achievements_awards' => $arrayFields['achievements'],
