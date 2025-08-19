@@ -29,6 +29,7 @@ use App\Livewire\Public\Contact\ContactUs;
 use App\Livewire\Public\LandingPage;
 use App\Livewire\Public\OurDoctors\OurDoctors;
 use App\Livewire\Public\OurDoctors\ViewDoctorDetail;
+use App\Livewire\Public\Phone\Verify;
 use App\Livewire\Public\Review\Review;
 use App\Livewire\Public\Section\About;
 use App\Livewire\Public\Section\Contact;
@@ -78,7 +79,7 @@ Route::get('/appointments/failed/{id}', FailedAppointment::class)
     ->name('appointment.failed');
 Route::get('/about-us', About::class)->name('about-us');
 Route::get('/contact-us', Contact::class)->name('contact-us');
-
+Route::get('/Phone/verify', Verify::class)->name('phone-verify');
 // Authentication Routes
 Route::get('/login', Login::class)->name('login');
 Route::post('/logout', function () {

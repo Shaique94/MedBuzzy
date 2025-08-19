@@ -216,8 +216,5 @@ public function isDoctorAvailable(): bool
 
     
 
-    public function payments()
-    {
-        return $this->hasMany(Payment::class, 'appointment_id');
-    }
+   
 }
