@@ -5,6 +5,7 @@ namespace App\Livewire\Public\OurDoctors;
 use App\Models\Department;
 use App\Models\Doctor;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
 use Livewire\Component;
@@ -58,6 +59,11 @@ class OurDoctors extends Component
             $this->departmentSlug = $dept->slug;
         }
     }
+    }
+
+    #[On('usercreated')]
+    public function handleUser(){
+        $this->resetPage();
     }
 
     public function updatedSearchQuery()

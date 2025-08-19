@@ -115,12 +115,13 @@ class Verify extends Component
             'name' => $this->name,
             'email' => $this->email,
             'password' => Hash::make('patient@123'),
+            'role'=>'patient'
         ]);
 
         Auth::login($user);
         \Log::info('User logged in', ['user_id' => $user->id]);
         session()->flash('message', 'Registration successful!');
-
+        $this->dispatch('usercreated');
         return redirect()->route('our-doctors');
     }
 
