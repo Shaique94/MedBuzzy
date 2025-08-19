@@ -15,4 +15,11 @@ class Patient extends Model
     {
         return $this->belongsTo(User::class);
     }
+   
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'patient_id');
+    }
+
 }

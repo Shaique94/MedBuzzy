@@ -465,32 +465,16 @@
 
     <!-- Tawk.to Chat - Desktop Only -->
     <script>
-        if (window.innerWidth > 768) {
-            var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
-            (function(){
-                var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
-                s1.async = true;
-                s1.src = 'https://embed.tawk.to/689c2cfeddd4a0192670a0f5/1j2h0vh9g';
-                s1.charset = 'UTF-8';
-                s1.setAttribute('crossorigin', '*');
-                s0.parentNode.insertBefore(s1, s0);
-            })();
-        }
-        window.addEventListener('resize', function() {
-            if (window.innerWidth > 768 && typeof Tawk_API === 'undefined') {
-                var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
-                (function(){
-                    var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
-                    s1.async = true;
-                    s1.src = 'https://embed.tawk.to/689c2cfeddd4a0192670a0f5/1j2h0vh9g';
-                    s1.charset = 'UTF-8';
-                    s1.setAttribute('crossorigin', '*');
-                    s0.parentNode.insertBefore(s1, s0);
-                })();
-            } else if (window.innerWidth <= 768 && typeof Tawk_API !== 'undefined') {
-                if (Tawk_API.hideWidget) Tawk_API.hideWidget();
-            }
-        });
+        // Initialize Tawk.to chat widget for all screen sizes
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function(){
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/689c2cfeddd4a0192670a0f5/1j2h0vh9g';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
     </script>
 
     <!-- Global payment processing loader (hidden by default) -->
