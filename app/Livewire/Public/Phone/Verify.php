@@ -37,11 +37,11 @@ class Verify extends Component
         ]);
 
         // Generate a random 6-digit code
-        $this->generatedCode = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+         $this->generatedCode = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
 
         // Send OTP via SMS
-        $otpSent = $this->sendOtpSms($this->phone, $this->generatedCode);
-        //  $otpSent = $this->generatedCode = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+          $otpSent = $this->sendOtpSms($this->phone, $this->generatedCode);
+        //   $otpSent = $this->generatedCode = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
 
 
         if (!$otpSent) {

@@ -128,10 +128,14 @@
                 Contact Us
             </a>
 
-            <a wire:navigate href="/login"
+            @guest
+                  <a wire:navigate href="/login"
                 class="bg-brand-blue-600 flex justify-center text-white px-3 md:px-4 py-2 rounded-lg font-semibold hover:bg-brand-blue-600 transition-colors duration-200  items-center shadow-md hover:shadow-lg whitespace-nowrap">
                 <span class=" text-xs md:text-sm sm:inline">Login/register</span>
             </a>
+            @endguest
+
+          
 
 
 
