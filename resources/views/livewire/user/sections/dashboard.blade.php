@@ -201,11 +201,11 @@
                                             <div class="flex flex-wrap items-center mt-2 text-sm text-gray-600 gap-y-1">
                                                 <div class="flex items-center mr-4">
                                                     <i class="fas fa-calendar-alt mr-2 text-brand-blue-500"></i>
-                                                    {{ $appointment->appointment_date->format('D, M j, Y') }}
+                                                 {{ \Carbon\Carbon::parse($appointment->appointment_date)->timezone('Asia/Kolkata')->format('D, M j, Y') }}
                                                 </div>
                                                 <div class="flex items-center mr-4">
                                                     <i class="fas fa-clock mr-2 text-green-500"></i>
-                                                    {{ $appointment->appointment_time->format('h:i A') }}
+                                                    {{ \Carbon\Carbon::parse($appointment->appointment_time)->timezone('Asia/Kolkata')->format('h:i A') }}
                                                 </div>
                                                 @if ($appointment->reason)
                                                     <div class="flex items-center">
@@ -217,10 +217,10 @@
                                         </div>
                                     </div>
                                     <div class="flex space-x-2">
-                                        <button
+                                        {{-- <button
                                             class="text-sm bg-brand-blue-50 text-brand-blue-600 px-4 py-2 rounded-lg hover:bg-brand-blue-100 transition-colors flex items-center">
                                             <i class="fas fa-eye mr-2"></i> Details
-                                        </button>
+                                        </button> --}}
                                         <button wire:click="cancelAppointment({{ $appointment->id }})"
                                             class="text-sm bg-red-50 text-red-600 px-4 py-2 rounded-lg hover:bg-red-100 transition-colors flex items-center">
                                             <i class="fas fa-times mr-2"></i> Cancel
@@ -254,40 +254,56 @@
                     </div>
                 @else
                     <div class="divide-y divide-gray-100">
-                        @foreach ($pastAppointments as $appointment)
-                            <div class="p-5 hover:bg-gray-50 transition-colors">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center space-x-4">
-                                        <div
-                                            class="flex-shrink-0 h-10 w-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-600">
-                                            <i class="fas fa-user-md"></i>
-                                        </div>
-                                        <div>
-                                            <h4 class="font-medium text-gray-900">Dr.
-                                                {{ $appointment->doctor->user->name }}</h4>
-                                            <div
-                                                class="flex flex-wrap items-center mt-1 text-sm text-gray-500 gap-y-1">
-                                                <div class="flex items-center mr-4">
-                                                    <i class="fas fa-calendar-day mr-2"></i>
-                                                    {{ $appointment->appointment_date->format('M j, Y') }}
-                                                </div>
-                                                {{-- <div class="flex items-center">
-                                                <span class="capitalize px-2 py-0.5 rounded text-xs font-medium 
-                                                    @if ($appointment->status === 'completed') bg-green-100 text-green-800
-                                                    @elseif($appointment->status === 'cancelled') bg-red-100 text-red-800
-                                                    @else bg-gray-100 text-gray-800 @endif">
-                                                    {{ $appointment->status }}
-                                                </span>
-                                            </div> --}}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <button class="text-gray-400 hover:text-brand-blue-600">
-                                        <i class="fas fa-chevron-right"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        @endforeach
+                       @foreach ($pastAppointments as $appointment)
+<div class="p-5 hover:bg-gray-50 transition-colors" x-data="{ expanded: false }">
+    <div class="flex items-center justify-between cursor-pointer" @click="expanded = !expanded">
+        <!-- Basic Info -->
+        <div class="flex items-center space-x-4">
+            <div class="flex-shrink-0 h-10 w-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-600">
+                <i class="fas fa-user-md"></i>
+            </div>
+            <div>
+                <h4 class="font-medium text-gray-900">
+                    Dr. {{ $appointment->doctor->user->name }}
+                </h4>
+                <div class="flex items-center mt-1 text-sm text-gray-500">
+                    <i class="fas fa-calendar-day mr-2"></i>
+                    {{ \Carbon\Carbon::parse($appointment->appointment_date)->format('M j, Y') }}
+                </div>
+            </div>
+        </div>
+        <!-- Toggle Button -->
+        <button class="text-gray-400 hover:text-brand-blue-600 transition-transform" 
+                :class="{ 'rotate-90': expanded }">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <!-- Expandable Content -->
+    <div x-show="expanded" x-collapse class="mt-3 pl-14 space-y-2 text-sm">
+        <div class="flex items-center">
+            <i class="fas fa-building mr-2 text-blue-500 w-5"></i>
+            <span class="text-gray-600">Department:</span>
+            <span class="ml-2">{{ $appointment->doctor->department->name }}</span>
+        </div>
+        <div class="flex items-center">
+            <i class="fas fa-envelope mr-2 text-blue-500 w-5"></i>
+            <span class="text-gray-600">Email:</span>
+            <span class="ml-2">{{ $appointment->doctor->user->email }}</span>
+        </div>
+        @if($appointment->reason)
+        <div class="flex items-start">
+            <i class="fas fa-comment-medical mr-2 text-amber-500 w-5 mt-1"></i>
+            <div>
+                <span class="text-gray-600">Reason:</span>
+                <p class="ml-2">{{ $appointment->reason }}</p>
+            </div>
+        </div>
+        @endif
+        <!-- Add more fields as needed -->
+    </div>
+</div>
+@endforeach
                     </div>
                 @endif
             </div>
