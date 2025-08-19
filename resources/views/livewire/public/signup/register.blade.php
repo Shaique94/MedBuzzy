@@ -3,7 +3,7 @@
         <!-- Left Column - Benefits -->
         <div class="md:w-1/2 px-8 py-4 bg-brand-blue-50 text-brand-blue-900 border-r border-brand-blue-100">
             <div class="mb-2 flex justify-center">
-                <img src="/logo/logo.png" alt="MedBuzzy Logo" class="h-10 w-auto">
+                <img src="/logo/logo1.png" alt="MedBuzzy Logo" class="h-10 w-auto">
             </div>
             
             <div class="max-w-md mx-auto">

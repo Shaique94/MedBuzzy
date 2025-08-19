@@ -211,7 +211,7 @@
             </svg>
         </button>
         <div class="flex items-center space-x-1.5 sm:space-x-2">
-            <img src="/logo/logo.png" alt="MedBuzzy Logo" class="h-12 sm:h-12 md:h-20">
+            <img src="/logo/logo1.png" alt="MedBuzzy Logo" class="h-12 sm:h-12 md:h-20">
         </div>
         <div class="flex items-center space-x-1 sm:space-x-2 md:space-x-3">
             <div class="relative">
