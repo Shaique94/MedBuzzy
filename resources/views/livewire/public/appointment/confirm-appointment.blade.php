@@ -1,6 +1,6 @@
 <div class="container mx-auto px-4 py-8 max-w-6xl">
-     <div class="mb-6 p-4 bg-white rounded-lg shadow-sm">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+     <div class="mb-6 p-4 bg-white rounded-lg shadow-sm mt-2">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 ">
             <div>
                 <h1 class="text-2xl font-bold text-gray-800">Appointment Confirmed</h1>
                 <p class="text-green-600 font-medium flex items-center mt-1">

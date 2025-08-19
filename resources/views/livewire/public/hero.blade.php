@@ -86,7 +86,7 @@
                                     </div>
                                     <input type="text" name="search" wire:model.lazy="searchQuery"
                                         placeholder="Search doctors by name or specialty..."
-                                        class="w-full pl-12 pr-32 py-4 border border-gray-200 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-blue-500 focus:border-brand-blue-500"
+                                        class="w-full pl-12 py-4 border border-gray-200 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-blue-500 focus:border-brand-blue-500"
                                         aria-label="Search doctors">
 
                                 </div>

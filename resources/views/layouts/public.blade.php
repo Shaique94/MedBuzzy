@@ -257,40 +257,6 @@
             document.addEventListener('livewire:navigated', initSvgFix);
         })();
 
-        // Payment Failed Overlay
-        function showPaymentFailedOverlay(message, onRetry) {
-            const existing = document.getElementById('payment-failed-overlay');
-            if (existing) existing.remove();
-            const overlay = document.createElement('div');
-            overlay.id = 'payment-failed-overlay';
-            overlay.style.position = 'fixed';
-            overlay.style.inset = '0';
-            overlay.style.background = 'rgba(0,0,0,0.5)';
-            overlay.style.display = 'flex';
-            overlay.style.alignItems = 'center';
-            overlay.style.justifyContent = 'center';
-            overlay.style.zIndex = '10000';
-            overlay.innerHTML = `
-                <div style="background:white;max-width:480px;width:90%;border-radius:12px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,0.2)">
-                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2"><path d="M12 9v4m0 4h.01"/><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
-                        <h3 style="font-weight:700;color:#111827;margin:0;">Payment Failed</h3>
-                    </div>
-                    <p style="color:#374151;margin:8px 0 16px;">${message || 'Payment could not be completed. Please try again.'}</p>
-                    <div style="display:flex;gap:8px;justify-content:flex-end;">
-                        <button id="pf-close" style="padding:8px 12px;border:1px solid #e5e7eb;border-radius:8px;background:#fff;color:#374151;">Close</button>
-                        <button id="pf-retry" style="padding:8px 12px;border:none;border-radius:8px;background:#0d4b8c;color:#fff;">Retry Payment</button>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(overlay);
-            overlay.querySelector('#pf-close').addEventListener('click', () => overlay.remove());
-            overlay.querySelector('#pf-retry').addEventListener('click', () => {
-                overlay.remove();
-                try { onRetry && onRetry(); } catch (e) { console.error(e); }
-            });
-        }
-
         // Razorpay Integration
         function loadRazorpaySDK(callback) {
             if (typeof Razorpay !== 'undefined') {
@@ -306,33 +272,25 @@
             };
             script.onerror = () => {
                 console.error('Failed to load Razorpay SDK dynamically');
-                // Try to dispatch payment-failed if we have context, otherwise show modal
-                if (window.lastPaymentData && window.lastPaymentData.appointmentId) {
-                    Livewire.dispatch('payment-failed', {
-                        error: 'Unable to load payment service',
-                        orderId: window.lastPaymentData.orderId,
-                        appointmentId: window.lastPaymentData.appointmentId
-                    });
-                } else {
-                    showPaymentFailedOverlay('Unable to load payment service. Please check your internet connection and try again.');
-                }
+                // Always notify Livewire; server-side handlers will manage UI/redirects.
+                Livewire.dispatch('payment-failed', {
+                    error: 'Unable to load payment service',
+                    orderId: window.lastPaymentData?.orderId ?? null,
+                    appointmentId: window.lastPaymentData?.appointmentId ?? null
+                });
             };
             document.body.appendChild(script);
         }
 
         function openRazorpayCheckout(data) {
+            data = data[0];
             if (!data) {
                 console.error('No data provided for Razorpay checkout');
-                // If no appointment data, show modal, otherwise dispatch for redirect
-                if (data && data.appointmentId) {
-                    Livewire.dispatch('payment-failed', {
-                        error: 'Payment initiation failed: No data provided',
-                        orderId: data.orderId,
-                        appointmentId: data.appointmentId
-                    });
-                } else {
-                    showPaymentFailedOverlay('Payment initiation failed: No data provided.');
-                }
+                Livewire.dispatch('payment-failed', {
+                    error: 'Payment initiation failed: No data provided',
+                    orderId: data?.orderId ?? null,
+                    appointmentId: data?.appointmentId ?? null
+                });
                 return;
             }
             
@@ -340,8 +298,8 @@
             window.lastPaymentData = data;
 
             let retries = 0;
-            const maxRetries = 2;
-            const retryDelay = 500;
+            const maxRetries = 1; // fewer retries for faster feedback
+            const retryDelay = 200;
 
             function attemptOpen() {
                 loadRazorpaySDK(() => {
@@ -352,13 +310,11 @@
                             console.log(`Retrying Razorpay checkout (attempt ${retries + 1})`);
                             setTimeout(attemptOpen, retryDelay);
                         } else {
-                            showPaymentFailedOverlay('Payment service is currently unavailable. Please try again later.', () => {
-                                Livewire.dispatch('retry-payment');
-                            });
+                            // Notify Livewire that payment initiation failed; server handles retry UI/redirect.
                             Livewire.dispatch('payment-failed', {
                                 error: 'Razorpay SDK failed to load',
-                                orderId: data.orderId,
-                                appointmentId: data.appointmentId
+                                orderId: data.orderId ?? null,
+                                appointmentId: data.appointmentId ?? null
                             });
                         }
                         return;
@@ -408,10 +364,11 @@
                                 ondismiss: function () {
                                     console.log('Razorpay modal dismissed');
                                     document.body.style.overflow = '';
-                                    Livewire.dispatch('payment-failed', { appointmentId: data.appointmentId });
-                                    try { window.dispatchEvent(new CustomEvent('payment-failed', { detail: { appointmentId: data.appointmentId } })); } catch(e){}
-                                    showPaymentFailedOverlay('Payment was cancelled. Please try again.', () => {
-                                        Livewire.dispatch('retry-payment');
+                                    // Let Livewire handle cancelled/dismiss flows
+                                    Livewire.dispatch('payment-failed', { 
+                                        error: 'Payment was cancelled by user',
+                                        orderId: data.orderId ?? null,
+                                        appointmentId: data.appointmentId ?? null
                                     });
                                 }
                             }
@@ -422,13 +379,14 @@
                             rzp.on('payment.failed', function (resp) {
                                 console.error('Payment failed - dispatching payment-failed:', resp);
                                 document.body.style.overflow = '';
+                                // Dispatch standardized failure event; server will handle UI/redirect.
                                 Livewire.dispatch('payment-failed', { 
-                                    appointmentId: data.appointmentId, 
+                                    appointmentId: data.appointmentId ?? null, 
                                     orderId: data.orderId ?? data.order_id ?? null, 
                                     error: resp?.error?.description || 'Payment failed'
                                 });
-                                // Let Livewire handle the redirect to failed page
-                            });
+                                 // Let Livewire handle the redirect to failed page
+                             });
                             console.log('Opening Razorpay checkout with options:', options);
                             rzp.open();
                         } catch (error) {
@@ -442,11 +400,11 @@
                                 console.log('Max retries reached for Razorpay initialization - dispatching payment-failed');
                                 Livewire.dispatch('payment-failed', {
                                     error: 'Failed to initialize payment after multiple attempts',
-                                    orderId: data.orderId,
-                                    appointmentId: data.appointmentId
+                                    orderId: data.orderId ?? null,
+                                    appointmentId: data.appointmentId ?? null
                                 });
-                                // Let Livewire backend handle redirect to failed page
-                            }
+                                 // Let Livewire backend handle redirect to failed page
+                             }
                         }
                     }, 200);
                 });
@@ -507,32 +465,16 @@
 
     <!-- Tawk.to Chat - Desktop Only -->
     <script>
-        if (window.innerWidth > 768) {
-            var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
-            (function(){
-                var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
-                s1.async = true;
-                s1.src = 'https://embed.tawk.to/689c2cfeddd4a0192670a0f5/1j2h0vh9g';
-                s1.charset = 'UTF-8';
-                s1.setAttribute('crossorigin', '*');
-                s0.parentNode.insertBefore(s1, s0);
-            })();
-        }
-        window.addEventListener('resize', function() {
-            if (window.innerWidth > 768 && typeof Tawk_API === 'undefined') {
-                var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
-                (function(){
-                    var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
-                    s1.async = true;
-                    s1.src = 'https://embed.tawk.to/689c2cfeddd4a0192670a0f5/1j2h0vh9g';
-                    s1.charset = 'UTF-8';
-                    s1.setAttribute('crossorigin', '*');
-                    s0.parentNode.insertBefore(s1, s0);
-                })();
-            } else if (window.innerWidth <= 768 && typeof Tawk_API !== 'undefined') {
-                if (Tawk_API.hideWidget) Tawk_API.hideWidget();
-            }
-        });
+        // Initialize Tawk.to chat widget for all screen sizes
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function(){
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/689c2cfeddd4a0192670a0f5/1j2h0vh9g';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
     </script>
 
     <!-- Global payment processing loader (hidden by default) -->

@@ -49,26 +49,46 @@
                 </div>
             </div>
             
-            <!-- Appointment Info -->
-            @if(!empty($appointment_date))
+            <!-- Appointment Info (use formatted props if available) -->
+            @if(!empty($formattedDate) || !empty($formattedTime) || !empty($appointment_date))
                 <div class="text-sm text-gray-600 bg-white bg-opacity-50 px-3 py-2 rounded-lg mt-2">
                     <div class="flex items-center justify-center sm:justify-start md:justify-center lg:justify-start mb-1">
                         <svg class="w-4 h-4 mr-1 text-brand-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
-                        <span>{{ \Carbon\Carbon::parse($appointment_date)->format('l, F j, Y') }}</span>
+                        <span>
+                            @if(!empty($formattedDate))
+                                {{ $formattedDate }}
+                            @elseif(!empty($appointment_date))
+                                {{ \Carbon\Carbon::parse($appointment_date)->format('l, F j, Y') }}
+                            @endif
+                        </span>
                     </div>
-                    @if(!empty($appointment_time))
-    @php
-        try {
-            $time = \Carbon\Carbon::createFromFormat('H:i:s', $appointment_time)->format('h:i A');
-        } catch (\Exception $e) {
-            // Fallback if format doesn't match
-            $time = \Carbon\Carbon::parse($appointment_time)->format('h:i A');
-        }
-    @endphp
-    <span>{{ $time }}</span>
-@endif
+                    @php
+                        $displayTime = null;
+                    @endphp
+                    @if(!empty($formattedTime))
+                        @php $displayTime = $formattedTime; @endphp
+                    @elseif(!empty($appointment_time))
+                        @php
+                            try {
+                                $displayTime = \Carbon\Carbon::createFromFormat('H:i', $appointment_time)->format('h:i A');
+                            } catch (\Exception $e) {
+                                try {
+                                    $displayTime = \Carbon\Carbon::createFromFormat('H:i:s', $appointment_time)->format('h:i A');
+                                } catch (\Exception $e) {
+                                    try {
+                                        $displayTime = \Carbon\Carbon::parse($appointment_time)->format('h:i A');
+                                    } catch (\Exception $e) {
+                                        $displayTime = $appointment_time;
+                                    }
+                                }
+                            }
+                        @endphp
+                    @endif
+                    @if($displayTime)
+                        <div class="text-xs text-gray-700 mt-1">{{ $displayTime }}</div>
+                    @endif
                 </div>
             @endif
         </div>

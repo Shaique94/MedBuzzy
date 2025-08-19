@@ -11,6 +11,7 @@ use App\Livewire\Admin\Auth\ChangePassword;
 use App\Livewire\Admin\Auth\ForgotPassword;
 use App\Livewire\Admin\Auth\Login;
 use App\Livewire\Admin\Enquiry\EnquiryApproval;
+use App\Livewire\Admin\Payment\ManagePayment;
 use App\Livewire\Admin\Review\AdminReviewManagement;
 use App\Livewire\Admin\Sections\Dashboard;
 use App\Livewire\Admin\Sections\EditDoctor;
@@ -128,6 +129,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin'])->group(
     Route::get('/review',AdminReviewManagement::class)->name('reviewapprovel');
     Route::get('/doctors/edit/{id}', EditDoctor::class)->name('editDoctor');
         Route::get('/enquiry',EnquiryApproval::class)->name('enquiry');
+        Route::get('/managePayment',ManagePayment::class)->name('ManagePayment');
 
 });
 
