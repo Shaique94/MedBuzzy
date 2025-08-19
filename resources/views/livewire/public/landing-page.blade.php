@@ -350,7 +350,8 @@
                         </svg>
                     </a>
                 @else
-                    <button @click="$wire.call('showPhoneModal')"
+                    <button 
+                        wire:click="$dispatch('open-phone-modal')" 
                         class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-brand-blue-600 hover:bg-brand-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-blue-500">
                         Find a Doctor
                         <svg class="ml-2 -mr-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -368,7 +369,7 @@
     <x-fullscreen-loader message="Preparing verification…" wire:loading.flex wire:target="showPhoneModal" />
 
     <!-- Phone Modal: add x-ref so Alpine can focus after open -->
-    @if ($showModal)
+    {{-- @if ($showModal)
         <div x-ref="phoneModal" tabindex="-1"
             class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50 transition-opacity duration-300">
             <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6 mx-4 transform transition-all duration-300"
@@ -432,7 +433,9 @@
                 @endif
             </div>
         </div>
-    @endif
+    @endif --}}
+
+    <livewire:public.phone.verify />
 
     <style>
         .scrollbar-hide {
