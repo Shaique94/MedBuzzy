@@ -62,6 +62,7 @@
                         <p class="mt-2 text-sm text-gray-500">We sent a 6-digit code to {{ $phone }}.
                             <button wire:click="editPhone" class="text-sm text-brand-blue-600 hover:text-brand-blue-800">Edit</button>
                         </p>
+                        {{-- <p class="mt-1 text-xs text-gray-400">Demo code: {{ $generatedCode }}</p> --}}
 
                         <div class="mt-4">
                             <input wire:model="verificationCode" type="text"
@@ -79,11 +80,11 @@
                                 <span x-text="countdown > 0 ? 'Resend OTP (' + countdown + 's)' : 'Resend OTP'"></span>
                             </button>
 
-                            <span class="text-sm text-gray-500">
+                            {{-- <span class="text-sm text-gray-500">
                                 @if ($otpSent)
                                     OTP sent successfully!
                                 @endif
-                            </span>
+                            </span> --}}
                         </div>
 
                         <div class="mt-5 sm:mt-6">
@@ -107,9 +108,7 @@
                         </div>
                         <p class="mt-2 text-sm text-gray-500">Please provide your details to continue.</p>
 
-                        @if (session('message'))
-                            <div class="text-green-500 text-sm mt-2">{{ session('message') }}</div>
-                        @endif
+                       
 
                         @if ($errors->any())
                             <div class="text-red-500 text-sm mt-2">
@@ -143,7 +142,14 @@
                                     @enderror
                                 </div>
 
-                               
+                                {{-- <div>
+                                    <input wire:model="phone" hidden type="tel" id="phone" readonly
+                                        class="block w-full rounded-md border border-brand-blue-500 p-2 bg-gray-100 focus:border-brand-blue-500 focus:ring-brand-blue-500"
+                                        placeholder="10-digit phone number">
+                                    @error('phone')
+                                        <span class="text-red-500 text-xs">{{ $message }}</span>
+                                    @enderror
+                                </div> --}}
                             </div>
 
                             <div class="mt-5 sm:mt-6">

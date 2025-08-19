@@ -51,7 +51,7 @@ class Verify extends Component
 
         $this->otpSent = true;
         $this->showVerification = true;
-        $this->countdown = 30; 
+        $this->countdown = 30;
         $this->dispatch('start-countdown'); // Dispatch event for Alpine.js
     }
 
@@ -115,7 +115,7 @@ class Verify extends Component
             'name' => $this->name,
             'email' => $this->email,
             'password' => Hash::make('patient@123'),
-            'role'=>'patient'
+            'role' => 'patient'
         ]);
 
         Auth::login($user);
@@ -127,7 +127,8 @@ class Verify extends Component
 
     public function ClosePhoneModal()
     {
-        $this->reset();
+        $this->reset(['phone', 'verificationCode', 'generatedCode', 'otpSent', 'showVerification', 'submitFinalForm', 'countdown']);
+
         $this->showModal = false;
     }
 
