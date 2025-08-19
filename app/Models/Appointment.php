@@ -213,4 +213,11 @@ public function isDoctorAvailable(): bool
             \Log::error("Failed to send reschedule notification: " . $e->getMessage());
         }
     }
+
+    
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'appointment_id');
+    }
 }
