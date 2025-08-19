@@ -198,7 +198,7 @@
                                                 <div class="flex-1 min-w-0">
                                                     <div
                                                         class="font-semibold text-gray-900 text-base sm:text-lg truncate">
-                                                        {{ $doctor->user->name }}</div>
+                                                      Dr. {{ $doctor->user->name }}</div>
 
                                                     <div
                                                         class="text-xs sm:text-sm text-brand-blue-600 font-medium truncate">

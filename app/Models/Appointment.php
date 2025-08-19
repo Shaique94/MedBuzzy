@@ -214,7 +214,14 @@ public function isDoctorAvailable(): bool
         }
     }
 
-    
 
-   
+
+    protected static function booted()
+{
+    static::addGlobalScope('valid', function ($builder) {
+        $builder->whereNotNull('patient_id')
+                ->whereNotNull('doctor_id');
+    });
+}
+
 }

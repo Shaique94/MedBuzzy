@@ -15,4 +15,5 @@ Artisan::command('inspire', function () {
 // \Log::info('Scheduler loaded in Kernel.php');
 Schedule::job(new \App\Jobs\SendDoctorAppointmentEmails)
     ->timezone('Asia/Kolkata')
-    ->everyMinute();
+   ->dailyAt('00:00')
+    ->onOneServer();
