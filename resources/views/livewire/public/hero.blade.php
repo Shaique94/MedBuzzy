@@ -179,9 +179,14 @@
                                                 <div
                                                     class="w-12 h-12 sm:w-16 sm:h-16 bg-brand-blue-100 rounded-full flex items-center justify-center overflow-hidden border-2 border-white shadow-sm">
                                                     @if ($doctor->image)
-                                                         <img src="{{ $doctor->image }}"
-                                                            alt="Dr. {{ $doctor->user->name }}" loading="lazy"
-                                                            class="w-full h-full object-cover">
+                                                      
+                                                             <img src="{{ $doctor->image ? $doctor->image . '?tr=w-100,h-100,fo-face,f-auto,q-60' : 'https://ui-avatars.com/api/?name=' . urlencode($doctor->user->name) . '&background=random&rounded=true' }}"
+                                                                srcset="{{ $doctor->image ? $doctor->image . '?tr=w-100,h-100,fo-face,f-auto,q-60' : 'https://ui-avatars.com/api/?name=' . urlencode($doctor->user->name) . '&background=random&rounded=true&w=200' }} 200w,
+                                                                {{ $doctor->image ? $doctor->image . '?tr=w-200,h-200,fo-face,f-auto,q-60' : 'https://ui-avatars.com/api/?name=' . urlencode($doctor->user->name) . '&background=random&rounded=true&w=400' }} 400w"
+                                                                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33.33vw, 25vw"
+                                                                alt="Dr. {{ $doctor->user->name ?? '' }}"
+                                                                class="w-full h-full object-cover"
+                                                                loading="lazy">
                                                     @else
                                                         <span
                                                             class="text-xl sm:text-2xl font-semibold text-brand-blue-600">{{ substr($doctor->user->name, 0, 1) }}</span>
