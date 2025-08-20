@@ -10,7 +10,8 @@
 
         <div class=" mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-4">
-                <h2 class="text-xl md:text-2xl font-semibold text-brand-blue-800 mb-1 md:mb-2">Browse by Specialties</h2>
+                <h2 class="text-xl md:text-2xl font-semibold text-brand-blue-800 mb-1 md:mb-2">Browse by Specialties
+                </h2>
                 <p class="text-sm text-gray-600  mx-auto">Find the right specialist for your healthcare needs
                 </p>
             </div>
@@ -43,7 +44,7 @@
                 <div x-ref="container"
                     class="grid grid-flow-col auto-cols-max md:auto-cols-min gap-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory scroll-smooth">
                     @foreach ($departments as $department)
-                        <a wire:navigate href="{{ route('our-doctors', ['department_id' => $department->id]) }}"
+                        <a wire:navigate href="{{ route('our-doctors', ['department' => $department->slug]) }}"
                             wire:key="dept-{{ $department->id }}"
                             class="flex flex-col items-center bg-white rounded-xl shadow hover:shadow-md border border-brand-blue-200 px-6 py-5 min-w-[180px] snap-center transition-all duration-200">
                             <div class="mb-3">
@@ -55,7 +56,7 @@
                                 </svg>
                             </div>
                             <div class="font-semibold text-brand-blue-800 text-base mb-1">{{ $department->name }}</div>
-                    
+
                         </a>
                     @endforeach
                 </div>
@@ -91,9 +92,12 @@
                         <!-- Doctor Image Section -->
                         <div class="relative h-48 overflow-hidden">
                             <a wire:navigate href="{{ route('doctor-detail', ['slug' => $doctor->slug]) }}">
-                                <img src="{{ $doctor->image ?? 'https://ui-avatars.com/api/?name=' . urlencode($doctor->user->name) . '&background=random&rounded=true' }}"
+                                <img src="{{ $doctor->image ? $doctor->image . '?tr=w-300,h-150,fo-auto,f-auto' : 'https://ui-avatars.com/api/?name=' . urlencode($doctor->user->name) . '&background=random&rounded=true' }}"
+                                    srcset="{{ $doctor->image ? $doctor->image . '?tr=w-200,h-100,fo-face,f-auto' : 'https://ui-avatars.com/api/?name=' . urlencode($doctor->user->name) . '&background=random&rounded=true&w=200' }} 200w,
+                                     {{ $doctor->image ? $doctor->image . '?tr=w-300,h-200,fo-auto,f-auto' : 'https://ui-avatars.com/api/?name=' . urlencode($doctor->user->name) . '&background=random&rounded=true&w=400' }} 400w"
+                                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33.33vw, 25vw"
                                     alt="Dr. {{ $doctor->user->name ?? '' }}"
-                                    class="w-full  object-contain transition-transform duration-500 hover:scale-105"
+                                    class="w-full object-cover transition-transform duration-500 hover:scale-105"
                                     loading="lazy">
                             </a>
 
@@ -145,8 +149,8 @@
                                 @if ($doctor->experience)
                                     <div class="flex items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg"
-                                            class="h-5 w-5 text-brand-blue-600 mr-2 shrink-0" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            class="h-5 w-5 text-brand-blue-600 mr-2 shrink-0" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                         </svg>
@@ -157,8 +161,8 @@
                                 @if ($doctor->city)
                                     <div class="flex items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg"
-                                            class="h-5 w-5 text-brand-blue-600 mr-2 shrink-0" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            class="h-5 w-5 text-brand-blue-600 mr-2 shrink-0" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -171,13 +175,12 @@
                                 @if ($doctor->clinic_hospital_name)
                                     <div class="flex items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg"
-                                            class="h-5 w-5 text-brand-blue-600 mr-2 shrink-0" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            class="h-5 w-5 text-brand-blue-600 mr-2 shrink-0" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                                         </svg>
-                                        <span
-                                            class="text-gray-700 truncate">{{ $doctor->clinic_hospital_name }}</span>
+                                        <span class="text-gray-700 truncate">{{ $doctor->clinic_hospital_name }}</span>
                                     </div>
                                 @endif
                             </div>
@@ -243,7 +246,7 @@
     </section>
 
     <!-- How Booking Works Section -->
- <section class="bg-brand-blue-50 py-5">
+    <section class="bg-brand-blue-50 py-5">
         <div class=" mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-xl font-semibold text-brand-blue-800 sm:text-2xl">How It Works</h2>
@@ -278,9 +281,8 @@
                                 <path d="M218.892 153C219.298 150.031 218.46 147.754 218 145" stroke="#003066"
                                     stroke-opacity="0.9" stroke-width="16" stroke-linecap="round"
                                     stroke-linejoin="round"></path>
-                                <path d="M191 154C191 151.332 191 148.668 191 146" stroke="#003066"
-                                    stroke-opacity="0.9" stroke-width="16" stroke-linecap="round"
-                                    stroke-linejoin="round"></path>
+                                <path d="M191 154C191 151.332 191 148.668 191 146" stroke="#003066" stroke-opacity="0.9"
+                                    stroke-width="16" stroke-linecap="round" stroke-linejoin="round"></path>
                                 <path
                                     d="M60 345.501C60 309.522 83.3747 224.325 163.582 228.248C185.925 229.341 191.24 351.835 206.062 345.501C232 334.416 223.446 254.231 243.571 224.158C340.019 219.027 341 340.572 341 359"
                                     stroke="#003066" stroke-opacity="0.9" stroke-width="16" stroke-linecap="round"
@@ -320,8 +322,7 @@
                             <g id="SVGRepo_iconCarrier">
                                 <path
                                     d="M13 17H21M17 21V13M10 11H4M20 9V7C20 5.89543 19.1046 5 18 5H6C4.89543 5 4 5.89543 4 7V19C4 20.1046 4.89543 21 6 21H10M15 3V7M9 3V7"
-                                    stroke="#003066" stroke-width="1.5" stroke-linecap="round"
-                                    stroke-linejoin="round">
+                                    stroke="#003066" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                 </path>
                             </g>
                         </svg>
@@ -356,8 +357,8 @@
                     <a wire:navigate href="{{ route('our-doctors') }}"
                         class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-brand-blue-600 hover:bg-brand-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-blue-500">
                         Find a Doctor
-                        <svg class="ml-2 -mr-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
+                        <svg class="ml-2 -mr-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
@@ -366,8 +367,8 @@
                     <button wire:click="$dispatch('open-phone-modal')"
                         class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-brand-blue-600 hover:bg-brand-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-blue-500">
                         Find a Doctor
-                        <svg class="ml-2 -mr-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
+                        <svg class="ml-2 -mr-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
@@ -382,69 +383,69 @@
 
     <!-- Phone Modal: add x-ref so Alpine can focus after open -->
     {{-- @if ($showModal)
-        <div x-ref="phoneModal" tabindex="-1"
-            class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50 transition-opacity duration-300">
-            <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6 mx-4 transform transition-all duration-300"
-                @click.away="showModal = false">
-                @if (!$showVerification)
-                    <div>
-                        <div class="flex justify-between">
-                            <h3 class="text-lg font-medium text-gray-900">Enter Your Phone Number</h3>
-                            <button wire:click="ClosePhoneModal">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                                </svg>
+    <div x-ref="phoneModal" tabindex="-1"
+        class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50 transition-opacity duration-300">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6 mx-4 transform transition-all duration-300"
+            @click.away="showModal = false">
+            @if (!$showVerification)
+            <div>
+                <div class="flex justify-between">
+                    <h3 class="text-lg font-medium text-gray-900">Enter Your Phone Number</h3>
+                    <button wire:click="ClosePhoneModal">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                        </svg>
 
-                            </button>
+                    </button>
 
-                        </div>
-                        <p class="mt-2 text-sm text-gray-500">We'll send a verification code to this number.
-                        </p>
+                </div>
+                <p class="mt-2 text-sm text-gray-500">We'll send a verification code to this number.
+                </p>
 
-                        <div class="mt-4">
-                            <input wire:model="phone" type="tel"
-                                class="block w-full rounded-md border-gray-300 border border-brand-blue-500 p-2 focus:border-brand-blue-500 focus:ring-brand-blue-500"
-                                oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);"
-                                placeholder="10-digit phone number">
-                            @error('phone')
-                                <span class="text-red-500 text-xs">{{ $message }}</span>
-                            @enderror
-                        </div>
+                <div class="mt-4">
+                    <input wire:model="phone" type="tel"
+                        class="block w-full rounded-md border-gray-300 border border-brand-blue-500 p-2 focus:border-brand-blue-500 focus:ring-brand-blue-500"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);"
+                        placeholder="10-digit phone number">
+                    @error('phone')
+                    <span class="text-red-500 text-xs">{{ $message }}</span>
+                    @enderror
+                </div>
 
-                        <div class="mt-5 sm:mt-6">
-                            <button wire:click="submitPhone" type="button"
-                                class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-brand-blue-600 text-base font-medium text-white hover:bg-brand-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-blue-500 sm:text-sm">
-                                Send Verification Code
-                            </button>
-                        </div>
-                    </div>
-                @else
-                    <div>
-                        <h3 class="text-lg font-medium text-gray-900">Verify Your Phone</h3>
-                        <p class="mt-2 text-sm text-gray-500">We sent a code to {{ $phone }}. Enter it
-                            below.</p>
-                        <p class="mt-1 text-xs text-gray-400">Demo code: {{ $generatedCode }}</p>
-
-                        <div class="mt-4">
-                            <input wire:model="verificationCode" type="text"
-                                class="block w-full rounded-md border-gray-300 border border-brand-blue-500 p-2 focus:border-brand-blue-500 focus:ring-brand-blue-500"
-                                placeholder="4-digit code">
-                            @error('verificationCode')
-                                <span class="text-red-500 text-xs">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div class="mt-5 sm:mt-6">
-                            <button wire:click="verifyCode" type="button"
-                                class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-brand-blue-600 text-base font-medium text-white hover:bg-brand-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-blue-500 sm:text-sm">
-                                Verify & Continue
-                            </button>
-                        </div>
-                    </div>
-                @endif
+                <div class="mt-5 sm:mt-6">
+                    <button wire:click="submitPhone" type="button"
+                        class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-brand-blue-600 text-base font-medium text-white hover:bg-brand-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-blue-500 sm:text-sm">
+                        Send Verification Code
+                    </button>
+                </div>
             </div>
+            @else
+            <div>
+                <h3 class="text-lg font-medium text-gray-900">Verify Your Phone</h3>
+                <p class="mt-2 text-sm text-gray-500">We sent a code to {{ $phone }}. Enter it
+                    below.</p>
+                <p class="mt-1 text-xs text-gray-400">Demo code: {{ $generatedCode }}</p>
+
+                <div class="mt-4">
+                    <input wire:model="verificationCode" type="text"
+                        class="block w-full rounded-md border-gray-300 border border-brand-blue-500 p-2 focus:border-brand-blue-500 focus:ring-brand-blue-500"
+                        placeholder="4-digit code">
+                    @error('verificationCode')
+                    <span class="text-red-500 text-xs">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="mt-5 sm:mt-6">
+                    <button wire:click="verifyCode" type="button"
+                        class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-brand-blue-600 text-base font-medium text-white hover:bg-brand-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-blue-500 sm:text-sm">
+                        Verify & Continue
+                    </button>
+                </div>
+            </div>
+            @endif
         </div>
+    </div>
     @endif --}}
 
     <livewire:public.phone.verify />
@@ -463,7 +464,7 @@
 
 <script>
     // Define Alpine factory once
-    window.departmentsScroller = window.departmentsScroller || function() {
+    window.departmentsScroller = window.departmentsScroller || function () {
         return {
             scroll: 0,
             scrollMax: 0,

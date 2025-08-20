@@ -74,8 +74,14 @@
                         <div class="relative self-center md:self-start flex-shrink-0">
                             <div class="relative">
                                 @if ($doctor->image)
-                                    <img src="{{ $doctor->image }}" alt="Dr. {{ $doctor->user->name }}"
-                                        class="w-24 h-24 md:w-32 md:h-32 rounded-lg border-4 border-white object-cover">
+                                  
+                                         <img src="{{ $doctor->image ? $doctor->image . '?tr=w-100,h-100,fo-face,f-auto,q-60' : 'https://ui-avatars.com/api/?name=' . urlencode($doctor->user->name) . '&background=random&rounded=true' }}"
+                                            srcset="{{ $doctor->image ? $doctor->image . '?tr=w-100,h-100,fo-face,f-auto,q-60' : 'https://ui-avatars.com/api/?name=' . urlencode($doctor->user->name) . '&background=random&rounded=true&w=200' }} 200w,
+                                            {{ $doctor->image ? $doctor->image . '?tr=w-200,h-200,fo-face,f-auto,q-60' : 'https://ui-avatars.com/api/?name=' . urlencode($doctor->user->name) . '&background=random&rounded=true&w=400' }} 400w"
+                                             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33.33vw, 25vw"
+                                            alt="Dr. {{ $doctor->user->name ?? '' }}"
+                                            class="w-24 h-24 md:w-32 md:h-32 rounded-lg border-4 border-white object-cover"
+                                            loading="lazy">
                                 @else
                                     <div
                                         class="w-24 h-24 md:w-32 md:h-32 rounded-lg bg-brand-blue-100 border-4 border-white flex items-center justify-center">
@@ -677,8 +683,13 @@
                                     <div
                                         class="w-14 h-14 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden">
                                         @if ($relatedDoctor->image)
-                                            <img src="{{ $relatedDoctor->image }}" alt="Dr. {{ $relatedDoctor->user->name }}"
-                                                class="w-full h-full object-cover">
+                                            <img src="{{ $relatedDoctor->image ? $relatedDoctor->image . '?tr=w-100,h-100,fo-face,f-auto,q-60' : 'https://ui-avatars.com/api/?name=' . urlencode($relatedDoctor->user->name) . '&background=random&rounded=true' }}"
+                                                                srcset="{{ $relatedDoctor->image ? $relatedDoctor->image . '?tr=w-200,h-200,fo-face,f-auto,q-60' : 'https://ui-avatars.com/api/?name=' . urlencode($relatedDoctor->user->name) . '&background=random&rounded=true&w=200' }} 200w,
+                                                                {{ $relatedDoctor->image ? $relatedDoctor->image . '?tr=w-200,h-200,fo-face,f-auto,q-60' : 'https://ui-avatars.com/api/?name=' . urlencode($relatedDoctor->user->name) . '&background=random&rounded=true&w=400' }} 400w"
+                                                                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33.33vw, 25vw"
+                                                                alt="Dr. {{ $relatedDoctor->user->name ?? '' }}"
+                                                               class="w-full h-full object-cover"
+                                                                loading="lazy">
                                         @else
                                             <span
                                                 class="text-xl font-semibold text-brand-blue-600">{{ substr($relatedDoctor->user->name, 0, 1) }}</span>

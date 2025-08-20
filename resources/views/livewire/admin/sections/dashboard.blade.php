@@ -112,21 +112,20 @@
                 </div>
             </div>
 
-            <!-- Charts and Analytics Section (flat cards) -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
-                <div class="bg-white rounded-lg p-3 sm:p-4 border border-gray-100">
-                    <div class="flex items-center justify-between mb-2">
-                        <h3 class="text-base font-medium text-gray-800">Appointments Overview</h3>
-                        <div class="flex space-x-1">
-                            <button class="px-2 py-1 text-xs font-medium bg-blue-50 text-blue-700 rounded">Week</button>
-                            <button
-                                class="px-2 py-1 text-xs font-medium text-gray-600 rounded hover:bg-gray-50">Month</button>
-                        </div>
-                    </div>
-                    <div class="relative h-40 sm:h-48 lg:h-64">
-                        <canvas id="appointmentsChart" width="400" height="200"></canvas>
-                    </div>
-                </div>
+			{{-- <!-- Charts and Analytics Section (flat cards) -->
+			<div class="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
+				<div class="bg-white rounded-lg p-3 sm:p-4 border border-gray-100">
+					<div class="flex items-center justify-between mb-2">
+						<h3 class="text-base font-medium text-gray-800">Appointments Overview</h3>
+						<div class="flex space-x-1">
+							<button class="px-2 py-1 text-xs font-medium bg-blue-50 text-blue-700 rounded">Week</button>
+							<button class="px-2 py-1 text-xs font-medium text-gray-600 rounded hover:bg-gray-50">Month</button>
+						</div>
+					</div>
+					<div class="relative h-40 sm:h-48 lg:h-64">
+						<canvas id="appointmentsChart" width="400" height="200"></canvas>
+					</div>
+				</div>
 
                 <div class="bg-white rounded-lg p-3 sm:p-4 border border-gray-100">
                     <div class="flex items-center justify-between mb-2">
@@ -203,18 +202,17 @@
                         <span class="text-xs font-medium text-gray-700">Reviews</span>
                     </a>
 
-                    <a wire:navigate href="{{ route('admin.ManagePayment') }}" aria-label="Manage Payments"
-                        class="flex flex-col items-center p-3 rounded-md border border-transparent hover:border-gray-200 hover:bg-gray-50 transition-colors text-center">
-                        <div class="bg-teal-50 text-teal-700 rounded-md p-2 mb-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M17 9V7a2 2 0 00-2-2H5"></path>
-                            </svg>
-                        </div>
-                        <span class="text-xs font-medium text-gray-700">Payments</span>
-                    </a>
-                </div>
-            </div>
+					<a wire:navigate href="{{ route('admin.ManagePayment') }}" aria-label="Manage Payments"
+						class="flex flex-col items-center p-3 rounded-md border border-transparent hover:border-gray-200 hover:bg-gray-50 transition-colors text-center">
+						<div class="bg-teal-50 text-teal-700 rounded-md p-2 mb-2">
+							<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5"></path>
+							</svg>
+						</div>
+						<span class="text-xs font-medium text-gray-700">Payments</span>
+					</a>
+				</div>
+			</div> --}}
 
             <!-- Upcoming Appointments (compact, flat list) -->
             <div class="bg-white rounded-lg border border-gray-100 overflow-hidden">
@@ -301,28 +299,28 @@
             </div>
         </div>
 
-        <!-- JavaScript for Charts and Real-time Updates -->
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // Update current time
-                function updateTime() {
-                    const now = new Date();
-                    const istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC+5:30
-                    const istTime = new Date(now.getTime() + istOffset);
-                    const timeString = istTime.toLocaleTimeString('en-US', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: true
-                    });
-                    const timeElement = document.getElementById('current-time');
-                    if (timeElement) {
-                        timeElement.textContent = timeString;
-                    }
-                }
-
-                updateTime();
-                setInterval(updateTime, 1000);
+		<!-- JavaScript for Charts and Real-time Updates -->
+		{{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				// Update current time
+				function updateTime() {
+					const now = new Date();
+					const istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC+5:30
+					const istTime = new Date(now.getTime() + istOffset);
+					const timeString = istTime.toLocaleTimeString('en-US', { 
+						hour: '2-digit', 
+						minute: '2-digit',
+						hour12: true 
+					});
+					const timeElement = document.getElementById('current-time');
+					if (timeElement) {
+						timeElement.textContent = timeString;
+					}
+				}
+				
+				updateTime();
+				setInterval(updateTime, 1000);
 
                 // Dynamic data from Laravel
                 const weeklyAppointments = @json($weeklyAppointments ?? []);
@@ -508,24 +506,24 @@
                     });
                 });
 
-                // Add loading states for quick action buttons
-                document.querySelectorAll('[href]').forEach(link => {
-                    link.addEventListener('click', function() {
-                        const button = this;
-                        const originalText = button.textContent;
-
-                        if (!button.href.includes(window.location.origin)) {
-                            button.style.opacity = '0.7';
-                            button.style.pointerEvents = 'none';
-
-                            setTimeout(() => {
-                                button.style.opacity = '1';
-                                button.style.pointerEvents = 'auto';
-                            }, 2000);
-                        }
-                    });
-                });
-            });
-        </script>
-    </main>
+				// Add loading states for quick action buttons
+				document.querySelectorAll('[href]').forEach(link => {
+					link.addEventListener('click', function() {
+						const button = this;
+						const originalText = button.textContent;
+						
+						if (!button.href.includes(window.location.origin)) {
+							button.style.opacity = '0.7';
+							button.style.pointerEvents = 'none';
+							
+							setTimeout(() => {
+								button.style.opacity = '1';
+								button.style.pointerEvents = 'auto';
+							}, 2000);
+						}
+					});
+				});
+			});
+		</script> --}}
+	</main>
 </div>

@@ -41,13 +41,13 @@
                 <span class="ml-3 truncate">Reviews</span>
             </a>
 
-            <a href="{{ route('admin.enquiry') }}"
+            <a wire:navigate href="{{ route('admin.enquiry') }}"
                 class="sidebar-link flex items-center w-full px-3 py-3 text-gray-700 responsive-text-base rounded-md hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-300 focus-visible:ring-offset-1 transition-colors">
                 <i class="fas fa-question-circle text-blue-500 w-5 text-center" aria-hidden="true"></i>
                 <span class="ml-3 truncate">Enquiry</span>
             </a>
 
-            <a href="{{ route('admin.ManagePayment') }}"
+            <a wire:navigate href="{{ route('admin.ManagePayment') }}"
                 class="sidebar-link flex items-center w-full px-3 py-3 text-gray-700 responsive-text-base rounded-md hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-300 focus-visible:ring-offset-1 transition-colors">
                 <i class="fas fa-credit-card text-blue-500 w-5 text-center" aria-hidden="true"></i>
                 <span class="ml-3 truncate">Manage Payment</span>

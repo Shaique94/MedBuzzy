@@ -55,7 +55,43 @@
 
        <form wire:submit.prevent="login" class="space-y-4 sm:space-y-5" x-data="{ phone: '' }">
     <!-- Phone Field -->
-    <div>
+   <div>
+    @if (session('message'))
+        <div class="mb-2 sm:mb-3 p-3 bg-blue-100 border border-blue-300 text-blue-700 rounded-lg text-sm sm:text-base flex items-start">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-11a1 1 0 112 0v4a1 1 0 11-2 0V7zm1 8a1 1 0 11-2 0 1 1 0 012 0z" clip-rule="evenodd" />
+            </svg>
+            <span>{{ session('message') }}</span>
+        </div>
+    @endif
+
+    <label for="phone" class="block text-sm font-medium text-gray-700 mb-1 sm:mb-1.5">Mobile Number</label>
+    <div class="relative rounded-md shadow-sm">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg class="h-4 w-4 sm:h-5 sm:w-5 text-brand-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M7 2a2 2 0 00-2 2v12a2 2 0 002 2h6a2 2 0 002-2V4a2 2 0 00-2-2H7zm3 14a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+            </svg>
+        </div>
+        <input 
+            type="tel" 
+            id="phone" 
+            wire:model.live="phone" 
+            placeholder="9708798149"
+            value="{{ session('phone') ?? old('phone', $phone) }}" 
+            oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);"
+            class="block w-full pl-9 sm:pl-10 pr-3 py-2 sm:py-2.5 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue-500 focus:border-brand-blue-500 transition duration-150 placeholder-gray-400 @error('phone') border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500 @enderror"
+        >
+    </div>
+    @error('phone')
+        <p class="mt-1 sm:mt-1.5 text-xs sm:text-sm text-red-600 flex items-start">
+            <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-1.5 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+            </svg>
+            <span>{{ $message }}</span>
+        </p>
+    @enderror
+</div>
+{{-- <div>
         <label for="phone" class="block text-sm font-medium text-gray-700 mb-1 sm:mb-1.5">Mobile Number</label>
         <div class="relative rounded-md shadow-sm">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -63,9 +99,15 @@
                     <path fill-rule="evenodd" d="M7 2a2 2 0 00-2 2v12a2 2 0 002 2h6a2 2 0 002-2V4a2 2 0 00-2-2H7zm3 14a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
                 </svg>
             </div>
-            <input type="tel" id="phone" wire:model.live="phone" x-model="phone" placeholder="9708798149"
+            <input 
+                type="tel" 
+                id="phone" 
+                wire:model.live="phone" 
+                placeholder="9708798149"
+                value="{{ session('phone') ?? old('phone', $phone) }}" 
                 oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);"
-                class="block w-full pl-9 sm:pl-10 pr-3 py-2 sm:py-2.5 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue-500 focus:border-brand-blue-500 transition duration-150 placeholder-gray-400 @error('phone') border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500 @enderror">
+                class="block w-full pl-9 sm:pl-10 pr-3 py-2 sm:py-2.5 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue-500 focus:border-brand-blue-500 transition duration-150 placeholder-gray-400 @error('phone') border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500 @enderror"
+            >
         </div>
         @error('phone')
             <p class="mt-1 sm:mt-1.5 text-xs sm:text-sm text-red-600 flex items-start">
@@ -75,7 +117,7 @@
                 <span>{{ $message }}</span>
             </p>
         @enderror
-    </div>
+    </div> --}}
 
     @if (!$showOtpField)
         <!-- Password Field -->
@@ -106,7 +148,7 @@
         </div>
 
         <!-- Login Method Toggle -->
-        <div class="flex items-center justify-between mt-4" x-show="phone.length > 0">
+        <div class="flex items-center justify-between mt-4" >
             <div class="flex items-center">
                 <input type="checkbox" id="useOtp" wire:model.change="showOtpField"
                     class="h-5 w-5 text-brand-blue-600 focus:ring-brand-blue-500 border-gray-300 rounded">
