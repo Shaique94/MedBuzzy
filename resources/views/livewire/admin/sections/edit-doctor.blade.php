@@ -236,10 +236,10 @@
 
                     <!-- Modal Footer -->
                     <div class="md:col-span-3 flex justify-end space-x-4 pt-6 border-t">
-                        <button type="button" wire:click="closeModal" class="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors">
+                        <button type="button" wire:click="closeModal" class="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
                             Cancel
                         </button>
-                        <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+                        <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
                             Save Changes
                         </button>
                     </div>

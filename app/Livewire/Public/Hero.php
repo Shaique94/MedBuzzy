@@ -16,26 +16,11 @@ class Hero extends Component
     public $departments;
     public $doctors;
 
-    public $totalDoctors;
-    public $totalPatients;
-
-    public function mount()
+    public function mount($doctors = NULL, $departments = NULL)
     {
-        $this->departments = Department::all();
-        $this->doctors = Doctor::with(['reviews' => function($query) {
-                $query->where('approved', true);
-            }])
-            ->withAvg(['reviews' => function($query) {
-                $query->where('approved', true);
-            }], 'rating')
-            ->withCount(['reviews' => function($query) {
-                $query->where('approved', true);
-            }])
-            ->take(6)
-            ->get();
-        
-        $this->totalDoctors = Doctor::count();
-        $this->totalPatients = Patient::count();
+        $this->doctors = $doctors;
+        $this->departments = $departments;
+
     }
 
 public function updatedSelectedDepartment($slug)
@@ -49,12 +34,8 @@ public function updatedSelectedDepartment($slug)
 
     public function search()
     {
-        // Redirect to our-doctors route with search parameters
-        // return redirect()->route('our-doctors', [
-        //     'search' => $this->searchQuery,
-        //     'department_id' => $this->selectedDepartment,
-        // ]);
-$params = [];
+      
+    $params = [];
     
     if ($this->searchQuery) {
         $params['search'] = $this->searchQuery;

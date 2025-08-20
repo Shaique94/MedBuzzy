@@ -1,4 +1,5 @@
-        <section class="relative overflow-hidden bg-gradient-to-br from-brand-blue-50 via-white to-brand-blue-100 py-5 md:pt-10">
+        <section
+            class="relative overflow-hidden bg-gradient-to-br from-brand-blue-50 via-white to-brand-blue-100 py-5 md:pt-10">
             <!-- Decorative Background Elements -->
             <div class="absolute inset-0 overflow-hidden" aria-hidden="true">
                 <div class="absolute top-20 right-20 w-32 h-32 bg-brand-blue-200 rounded-full opacity-20 animate-pulse">
@@ -19,9 +20,7 @@
                                 <span class="text-brand-blue-600">Simplified</span>
                             </h1>
                             <p class="text-lg sm:text-xl text-gray-700 mx-auto lg:mx-0 leading-relaxed">
-                                Connect with trusted doctors, book appointments instantly, and manage your healthcare
-                                journey all in one place.
-                            </p>
+                                Connect with trusted doctors, book appointments instantly.
                         </div>
 
                         <!-- Search Bar -->
@@ -53,8 +52,9 @@
 
                                     <!-- Specialty -->
                                     <div class="relative">
-                                   <label for="specialty-select" class="sr-only">Select Specialty</label>
-                                        <div class="absolute inset-y-0 left-0 p-3 flex items-center pointer-events-none">
+                                        <label for="specialty-select" class="sr-only">Select Specialty</label>
+                                        <div
+                                            class="absolute inset-y-0 left-0 p-3 flex items-center pointer-events-none">
 
                                             <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
@@ -85,7 +85,7 @@
                                         </svg>
                                     </div>
                                     <input type="text" name="search" wire:model.lazy="searchQuery"
-                                        placeholder="Search doctors by name or specialty..."
+                                        placeholder="Search Doctor, specialty etc"
                                         class="w-full pl-12 py-4 border border-gray-200 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-blue-500 focus:border-brand-blue-500"
                                         aria-label="Search doctors">
 
@@ -98,50 +98,7 @@
                             </form>
                         </div>
 
-                        <!-- CTA Buttons -->
 
-                        <!-- Stats -->
-                        {{-- <div class="">
-                            <div
-                                class="flex flex-col md:flex-row items-center justify-between gap-6 bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-                                <div class="flex items-center gap-4 w-full md:w-auto text-center md:text-left">
-                                    <div
-                                        class="hidden md:flex h-12 w-12 rounded-full bg-brand-blue-100 text-brand-blue-600 items-center justify-center">
-                                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
-                                            </path>
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <div class="text-2xl md:text-3xl font-bold text-brand-blue-700">
-                                            {{ $totalDoctors }}+</div>
-                                        <div class="text-sm text-gray-600 font-medium">Expert Doctors</div>
-                                    </div>
-                                </div>
-
-                                <div class="h-px w-full md:h-12 md:w-px bg-gray-200"></div>
-
-                                <div class="flex items-center gap-4 w-full md:w-auto text-center md:text-left">
-                                    <div
-                                        class="hidden md:flex h-12 w-12 rounded-full bg-brand-blue-100 text-brand-blue-600 items-center justify-center">
-                                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M12 4.5c-2.003 0-3.857.6-5.4 1.65m10.8 0A10.856 10.856 0 0012 4.5m5.4 1.65a11 11 0 11-10.8 0">
-                                                </path>
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M9 10h.01M15 10h.01M9.5 15a2.5 2.5 0 005 0">
-                                                </path>
-                                            </svg>    </div>
-                                    <div>
-                                        <div class="text-2xl md:text-3xl font-bold text-brand-blue-700">
-                                            {{ $totalPatients }}+</div>
-                                        <div class="text-sm text-gray-600 font-medium">Happy Patients</div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div> --}}
                     </div>
 
                     <!-- Hero Image / Doctor Carousel -->
@@ -150,6 +107,39 @@
                             doctors: @js($doctors),
                             current: 0,
                             transitioning: false,
+                            touchStartX: 0, // NEW: Track touch start position
+                            touchEndX: 0, // NEW: Track touch end position
+                        
+                        
+                            // NEW: Handle touch start event
+                            handleTouchStart(e) {
+                                this.touchStartX = e.changedTouches[0].screenX;
+                            },
+                        
+                            // NEW: Handle touch end event and detect swipe direction
+                            handleTouchEnd(e) {
+                                this.touchEndX = e.changedTouches[0].screenX;
+                                this.handleSwipe();
+                            },
+                        
+                            // NEW: Determine if it's a valid swipe and navigate accordingly
+                            handleSwipe() {
+                                if (this.transitioning) return;
+                        
+                                const minSwipeDistance = 50; // Minimum distance for a swipe to count
+                        
+                                const swipeDistance = this.touchEndX - this.touchStartX;
+                        
+                                if (Math.abs(swipeDistance) < minSwipeDistance) return;
+                        
+                                if (swipeDistance > 0) {
+                                    // Swipe right - go to previous
+                                    this.prev();
+                                } else {
+                                    // Swipe left - go to next
+                                    this.next();
+                                }
+                            },
                             goTo(idx) {
                                 if (this.transitioning || idx === this.current) return;
                                 this.transitioning = true;
@@ -170,9 +160,11 @@
                             }
                         }" class="relative">
 
-                            <div class="bg-brand-blue-100 rounded-3xl p-8 lg:p-8">
+                            <div class="bg-brand-blue-100 rounded-3xl p-3 lg:p-8" @touchstart="handleTouchStart($event)"
+                                @touchend="handleTouchEnd($event)">
 
-                                <div class="relative h-[340px]">
+
+                                <div class="relative h-[270px] sm:h-[340px]">
                                     @foreach ($doctors as $index => $doctor)
                                         <div x-show="current === {{ $index }}" aria-live="polite"
                                             x-transition:enter="transition-opacity duration-300"
@@ -187,7 +179,7 @@
                                                 <div
                                                     class="w-12 h-12 sm:w-16 sm:h-16 bg-brand-blue-100 rounded-full flex items-center justify-center overflow-hidden border-2 border-white shadow-sm">
                                                     @if ($doctor->image)
-                                                        <img src="{{ $doctor->image }}"
+                                                         <img src="{{ $doctor->image }}"
                                                             alt="Dr. {{ $doctor->user->name }}" loading="lazy"
                                                             class="w-full h-full object-cover">
                                                     @else
@@ -196,14 +188,12 @@
                                                     @endif
                                                 </div>
                                                 <div class="flex-1 min-w-0">
-                                                    <div
+                                                   <a wire:navigate href="{{route('doctor-detail', $doctor->slug)}}"> <div 
                                                         class="font-semibold text-gray-900 text-base sm:text-lg truncate">
-                                                      Dr. {{ $doctor->user->name }}</div>
-
+                                                        Dr. {{ $doctor->user->name }}</div></a>
                                                     <div
                                                         class="text-xs sm:text-sm text-brand-blue-600 font-medium truncate">
                                                         {{ $doctor->department->name ?? 'General Medicine' }}</div>
-
                                                 </div>
                                                 <div class="text-right">
                                                     <div class="flex text-yellow-400 justify-end mb-1"
@@ -372,21 +362,19 @@ if (!$nextSlot) {
                             </div>
                             <!-- Carousel Controls -->
                             <button @click="prev" :disabled="transitioning"
-
-                                class="absolute left-0 top-1/2 -translate-y-1/2 bg-white border border-brand-blue-200 rounded-full p-1 sm:p-2 shadow hover:bg-brand-blue-50 transition -translate-x-1/2 disabled:opacity-50 disabled:cursor-not-allowed"  aria-label="Previous doctor">
-                                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-brand-blue-600" fill="none" stroke="currentColor"
-
-                                    viewBox="0 0 24 24">
+                                class="absolute left-0 top-1/2 -translate-y-1/2 bg-white border border-brand-blue-200 rounded-full p-1 sm:p-2 shadow hover:bg-brand-blue-50 transition -translate-x-1/2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                aria-label="Previous doctor">
+                                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-brand-blue-600" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M15 19l-7-7 7-7"></path>
                                 </svg>
                             </button>
                             <button @click="next" :disabled="transitioning"
-
-                                class="absolute right-0 top-1/2 -translate-y-1/2 bg-white border border-brand-blue-200 rounded-full p-1 sm:p-2 shadow hover:bg-brand-blue-50 transition translate-x-1/2 disabled:opacity-50 disabled:cursor-not-allowed"  aria-label="Next doctor">
-                                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-brand-blue-600" fill="none" stroke="currentColor"
-
-                                    viewBox="0 0 24 24">
+                                class="absolute right-0 top-1/2 -translate-y-1/2 bg-white border border-brand-blue-200 rounded-full p-1 sm:p-2 shadow hover:bg-brand-blue-50 transition translate-x-1/2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                aria-label="Next doctor">
+                                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-brand-blue-600" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9 5l7 7-7 7"></path>
                                 </svg>
