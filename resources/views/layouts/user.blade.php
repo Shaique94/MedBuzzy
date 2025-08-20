@@ -6,8 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title ?? 'Patient Dashboard | MedBuzzy' }}</title>
     
-    <!-- Font Awesome -->
-    <title>{{ $title ?? 'My Dashboard | MedBuzzy' }}</title>
 
     <!-- Tailwind CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">

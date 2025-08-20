@@ -136,7 +136,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin'])->group(
 
 
 // User Routes
-Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
+Route::middleware(['auth', 'is_patient'])->prefix('user')->group(function () {
     Route::get('/dashboard', UserDashboard::class)->name('user.dashboard');
     Route::get('/profile', UserProfile::class)->name('user.profile');
     Route::get('/appointments', MyAppointments::class)->name('user.appointments');
