@@ -1,4 +1,4 @@
-<section class="relative overflow-hidden bg-gradient-to-br from-brand-blue-50 via-white to-brand-blue-100 py-5 md:pt-10">
+        <section class="relative overflow-hidden bg-gradient-to-br from-brand-blue-50 via-white to-brand-blue-100 py-5 md:pt-10">
             <!-- Decorative Background Elements -->
             <div class="absolute inset-0 overflow-hidden" aria-hidden="true">
                 <div class="absolute top-20 right-20 w-32 h-32 bg-brand-blue-200 rounded-full opacity-20 animate-pulse">
@@ -95,6 +95,7 @@
                                 </button>
                             </form>
                         </div>
+
 
                     </div>
 
@@ -355,7 +356,7 @@ if (!$nextSlot) {
                                         class="w-3 h-3 rounded-full transition-all duration-200" role="tab"
                                         :aria-selected="current === {{ $index }} ? 'true' : 'false'"
                                         aria-label="View doctor {{ $index + 1 }}"
-                                        :aria-controls="'doctor-slide-' + {{ $index }}
+                                        :aria-controls="'doctor-slide-' + {{ $index }}"
                                         :tabindex="current === {{ $index }} ? '0' : '-1'"></button>
                                 @endforeach
                             </div>
