@@ -483,7 +483,7 @@
     <script>
         document.addEventListener('livewire:init', () => {
             Livewire.on('razorpay:open', (data) => {
-                console.log('Razorpay event received:', data);
+                
                 
                 if (!data || !data[0]) {
                     console.error('Invalid data received for Razorpay');
@@ -498,7 +498,7 @@
                     description: 'Appointment Booking',
                     order_id: data[0].orderId,
                     handler: function(response) {
-                        console.log('Payment successful:', response);
+                        
                         // Payment successful
                         Livewire.dispatch('payment-success', [
                             response.razorpay_payment_id,
@@ -512,7 +512,7 @@
                     },
                     modal: {
                         ondismiss: function() {
-                            console.log('Payment cancelled by user');
+                            
                             // Payment cancelled
                             Livewire.dispatch('payment-failed', {
                                 error: 'Payment cancelled by user'
@@ -524,7 +524,7 @@
                     }
                 };
                 
-                console.log('Opening Razorpay with options:', options);
+                
                 
                 try {
                     const rzp = new Razorpay(options);

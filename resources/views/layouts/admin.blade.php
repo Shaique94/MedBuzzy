@@ -196,16 +196,16 @@
             };
 
             // Log to confirm jQuery and toastr are loaded
-            console.log('jQuery loaded:', typeof jQuery !== 'undefined');
-            console.log('Toastr loaded:', typeof toastr !== 'undefined');
+            
+            
 
             Livewire.on('success', (message) => {
-                console.log('Livewire success event received:', message);
+                
                 toastr.success(message, 'Success');
             });
 
             Livewire.on('error', (message) => {
-                console.log('Livewire error event received:', message);
+                
                 toastr.error(message, 'Error');
             });
         });

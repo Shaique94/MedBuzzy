@@ -168,7 +168,7 @@
                     },
                     "modal": {
                         "ondismiss": function(){
-                            console.log('Payment cancelled');
+                            
                         }
                     }
                 };

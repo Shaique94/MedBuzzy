@@ -374,7 +374,7 @@
                 document.head.appendChild(script);
 
                 script.onload = function() {
-                    console.log('Alpine.js loaded dynamically');
+                    
                     if (typeof window.Alpine !== 'undefined') {
                         window.Alpine.start();
                     }

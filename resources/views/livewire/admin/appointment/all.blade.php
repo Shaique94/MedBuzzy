@@ -319,7 +319,7 @@
 
     <script>
         function printReceipt(appointmentId) {
-            console.log('Print receipt clicked for appointment:', appointmentId);
+            
             const printUrl = `/appointment/receipt/${appointmentId}`;
             const printWindow = window.open(printUrl, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
             
@@ -337,7 +337,7 @@
 
         // Debug action buttons
         document.addEventListener('livewire:init', () => {
-            console.log('Livewire initialized for appointment list');
+            
         });
     </script>
 </div>

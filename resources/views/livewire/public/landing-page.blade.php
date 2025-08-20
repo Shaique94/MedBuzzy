@@ -353,7 +353,7 @@
             </div>
             <div class="text-center mt-12">
                 @auth
-                    <a href="{{ route('our-doctors') }}"
+                    <a wire:navigate href="{{ route('our-doctors') }}"
                         class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-brand-blue-600 hover:bg-brand-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-blue-500">
                         Find a Doctor
                         <svg class="ml-2 -mr-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
