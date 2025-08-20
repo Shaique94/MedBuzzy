@@ -65,7 +65,7 @@
                          class="absolute -top-1 -right-1 w-3 h-3 bg-brand-blue-500 rounded-full border-2 border-white"></div>
                 </div>
                 <span class="text-[10px] font-medium transition-colors"
-                      :class="activeTab === 'appointment' ? 'text-brand-orange-600' : 'text-gray-500'">Book Now</span>
+                      :class="activeTab === 'appointment' ? 'text-brand-orange-600' : 'text-gray-500'">Find Doctor</span>
             </a>
             
             <!-- Call Us -->

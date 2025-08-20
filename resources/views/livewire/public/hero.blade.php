@@ -20,9 +20,7 @@
                                 <span class="text-brand-blue-600">Simplified</span>
                             </h1>
                             <p class="text-lg sm:text-xl text-gray-700 mx-auto lg:mx-0 leading-relaxed">
-                                Connect with trusted doctors, book appointments instantly, and manage your healthcare
-                                journey all in one place.
-                            </p>
+                                Connect with trusted doctors, book appointments instantly.
                         </div>
 
                         <!-- Search Bar -->
@@ -87,7 +85,7 @@
                                         </svg>
                                     </div>
                                     <input type="text" name="search" wire:model.lazy="searchQuery"
-                                        placeholder="Search doctors by name or specialty..."
+                                        placeholder="Search Doctor, specialty etc"
                                         class="w-full pl-12 py-4 border border-gray-200 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-blue-500 focus:border-brand-blue-500"
                                         aria-label="Search doctors">
 
@@ -100,50 +98,7 @@
                             </form>
                         </div>
 
-                        <!-- CTA Buttons -->
 
-                        <!-- Stats -->
-                        {{-- <div class="">
-                            <div
-                                class="flex flex-col md:flex-row items-center justify-between gap-6 bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-                                <div class="flex items-center gap-4 w-full md:w-auto text-center md:text-left">
-                                    <div
-                                        class="hidden md:flex h-12 w-12 rounded-full bg-brand-blue-100 text-brand-blue-600 items-center justify-center">
-                                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
-                                            </path>
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <div class="text-2xl md:text-3xl font-bold text-brand-blue-700">
-                                            {{ $totalDoctors }}+</div>
-                                        <div class="text-sm text-gray-600 font-medium">Expert Doctors</div>
-                                    </div>
-                                </div>
-
-                                <div class="h-px w-full md:h-12 md:w-px bg-gray-200"></div>
-
-                                <div class="flex items-center gap-4 w-full md:w-auto text-center md:text-left">
-                                    <div
-                                        class="hidden md:flex h-12 w-12 rounded-full bg-brand-blue-100 text-brand-blue-600 items-center justify-center">
-                                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M12 4.5c-2.003 0-3.857.6-5.4 1.65m10.8 0A10.856 10.856 0 0012 4.5m5.4 1.65a11 11 0 11-10.8 0">
-                                                </path>
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M9 10h.01M15 10h.01M9.5 15a2.5 2.5 0 005 0">
-                                                </path>
-                                            </svg>    </div>
-                                    <div>
-                                        <div class="text-2xl md:text-3xl font-bold text-brand-blue-700">
-                                            {{ $totalPatients }}+</div>
-                                        <div class="text-sm text-gray-600 font-medium">Happy Patients</div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div> --}}
                     </div>
 
                     <!-- Hero Image / Doctor Carousel -->
@@ -208,7 +163,8 @@
                             <div class="bg-brand-blue-100 rounded-3xl p-8 lg:p-8" @touchstart="handleTouchStart($event)"
                                 @touchend="handleTouchEnd($event)">
 
-                                <div class="relative h-[340px]">
+
+                                <div class="relative h-[270px] sm:h-[340px]">
                                     @foreach ($doctors as $index => $doctor)
                                         <div x-show="current === {{ $index }}" aria-live="polite"
                                             x-transition:enter="transition-opacity duration-300"

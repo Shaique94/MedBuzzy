@@ -78,8 +78,9 @@
         <div class="mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-10">
                 <h2 class="text-3xl md:text-4xl font-semibold text-brand-blue-800 mb-4">Our Top Specialists</h2>
-                <p class="text-lg text-gray-600 max-w-3xl mx-auto">Connect with our highly qualified and verified
-                    healthcare specialists dedicated to providing exceptional personalized care.</p>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Connect with our verified specialists for personalized care.
+                </p>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
