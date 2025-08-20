@@ -1,4 +1,4 @@
-        <section class="relative overflow-hidden bg-gradient-to-br from-brand-blue-50 via-white to-brand-blue-100 py-5 md:pt-10">
+<section class="relative overflow-hidden bg-gradient-to-br from-brand-blue-50 via-white to-brand-blue-100 py-5 md:pt-10">
             <!-- Decorative Background Elements -->
             <div class="absolute inset-0 overflow-hidden" aria-hidden="true">
                 <div class="absolute top-20 right-20 w-32 h-32 bg-brand-blue-200 rounded-full opacity-20 animate-pulse">
@@ -96,50 +96,6 @@
                             </form>
                         </div>
 
-                        <!-- CTA Buttons -->
-
-                        <!-- Stats -->
-                        {{-- <div class="">
-                            <div
-                                class="flex flex-col md:flex-row items-center justify-between gap-6 bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-                                <div class="flex items-center gap-4 w-full md:w-auto text-center md:text-left">
-                                    <div
-                                        class="hidden md:flex h-12 w-12 rounded-full bg-brand-blue-100 text-brand-blue-600 items-center justify-center">
-                                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
-                                            </path>
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <div class="text-2xl md:text-3xl font-bold text-brand-blue-700">
-                                            {{ $totalDoctors }}+</div>
-                                        <div class="text-sm text-gray-600 font-medium">Expert Doctors</div>
-                                    </div>
-                                </div>
-
-                                <div class="h-px w-full md:h-12 md:w-px bg-gray-200"></div>
-
-                                <div class="flex items-center gap-4 w-full md:w-auto text-center md:text-left">
-                                    <div
-                                        class="hidden md:flex h-12 w-12 rounded-full bg-brand-blue-100 text-brand-blue-600 items-center justify-center">
-                                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M12 4.5c-2.003 0-3.857.6-5.4 1.65m10.8 0A10.856 10.856 0 0012 4.5m5.4 1.65a11 11 0 11-10.8 0">
-                                                </path>
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M9 10h.01M15 10h.01M9.5 15a2.5 2.5 0 005 0">
-                                                </path>
-                                            </svg>    </div>
-                                    <div>
-                                        <div class="text-2xl md:text-3xl font-bold text-brand-blue-700">
-                                            {{ $totalPatients }}+</div>
-                                        <div class="text-sm text-gray-600 font-medium">Happy Patients</div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div> --}}
                     </div>
 
                     <!-- Hero Image / Doctor Carousel -->
@@ -399,7 +355,7 @@ if (!$nextSlot) {
                                         class="w-3 h-3 rounded-full transition-all duration-200" role="tab"
                                         :aria-selected="current === {{ $index }} ? 'true' : 'false'"
                                         aria-label="View doctor {{ $index + 1 }}"
-                                        :aria-controls="'doctor-slide-' + {{ $index }}"
+                                        :aria-controls="'doctor-slide-' + {{ $index }}
                                         :tabindex="current === {{ $index }} ? '0' : '-1'"></button>
                                 @endforeach
                             </div>

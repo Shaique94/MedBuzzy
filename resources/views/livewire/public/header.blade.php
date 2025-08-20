@@ -17,7 +17,7 @@
     </div> --}}
 
     <!-- Main Header -->
-    <div class=" mx-auto px-2 lg:px-[10%] py-2 md:py-3">
+    <div class=" mx-auto px-4 lg:px-[10%] py-2 md:py-3">
         <div class="flex justify-between items-center">
             <!-- Logo -->
             <div class="flex items-center">
@@ -168,7 +168,7 @@
                 @endguest
 
                 <!-- Mobile Menu Button -->
-                <button class="lg:hidden text-gray-600 hover:text-brand-blue-600 p-2 focus:outline-none"
+                <button class="lg:hidden text-gray-600 hover:text-brand-blue-600 p-2 bg-brand-blue-100 rounded focus:outline-none"
                     id="mobile-menu-button" aria-label="Toggle menu">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
