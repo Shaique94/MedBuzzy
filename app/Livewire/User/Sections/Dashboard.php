@@ -19,37 +19,76 @@ class Dashboard extends Component
         $this->loadDashboardData();
     }
 
-    public function loadDashboardData()
-    {
-        // Load appointments
-        $this->upcomingAppointments = Appointment::where('patient_id', $this->user->id)
-            ->whereDate('appointment_date', '>=', now())
-            ->with('doctor.user', 'doctor.department')
-            ->orderBy('appointment_date')
-            ->limit(5)
-            ->get();
+   public function loadDashboardData()
+{
+    $this->user = Auth::user();
+    $now = now()->timezone('Asia/Kolkata');
 
-        $this->pastAppointments = Appointment::where('patient_id', $this->user->id)
-            ->whereDate('appointment_date', '<', now())
-            ->with('doctor.user', 'doctor.department')
-            ->orderByDesc('appointment_date')
-            ->limit(5)
-            ->get();
-
-        // Calculate stats
+    
+    $patient = $this->user->patients()->first();
+    
+    if (!$patient) {
+        
+        $this->upcomingAppointments = collect();
+        $this->pastAppointments = collect();
         $this->stats = [
-            'total_appointments' => Appointment::where('patient_id', $this->user->id)->count(),
-            'upcoming' => $this->upcomingAppointments->count(),
-            'doctors' => Appointment::where('patient_id', $this->user->id)
-                            ->distinct('doctor_id')
-                            ->count(),
-            'departments' => Appointment::where('patient_id', $this->user->id)
-                                ->with('doctor.department')
-                                ->get()
-                                ->unique('doctor.department_id')
-                                ->count()
+            'total_appointments' => 0,
+            'upcoming' => 0,
+            'doctors' => 0,
+            'departments' => 0
         ];
+        return;
     }
+
+    
+    $this->upcomingAppointments = Appointment::where('patient_id', $patient->id)
+        ->where(function ($query) use ($now) {
+            $query->where('appointment_date', '>', $now->toDateString())
+                  ->orWhere(function ($q) use ($now) {
+                      $q->where('appointment_date', $now->toDateString())
+                        ->where('appointment_time', '>=', $now->format('H:i:s'));
+                  });
+        })
+        ->where('status', '!=', 'cancelled')
+        ->with('doctor.user', 'doctor.department')
+        ->orderBy('appointment_date')
+        ->orderBy('appointment_time')
+        ->limit(5)
+        ->get();
+
+    
+ $this->pastAppointments = Appointment::where('patient_id', $patient->id)
+    ->where(function ($query) use ($now) {
+        $query->where('appointment_date', '<', $now->toDateString())
+              ->orWhere(function ($q) use ($now) {
+                  $q->where('appointment_date', $now->toDateString())
+                    ->where('appointment_time', '<', $now->format('H:i:s'));
+              });
+    })
+    ->with([
+        'doctor.user', 
+        'doctor.department',
+       
+    ])
+    ->orderByDesc('appointment_date')
+    ->orderByDesc('appointment_time')
+    ->limit(5)
+    ->get();
+
+    
+    $this->stats = [
+        'total_appointments' => Appointment::where('patient_id', $patient->id)->count(),
+        'upcoming' => $this->upcomingAppointments->count(),
+        'doctors' => Appointment::where('patient_id', $patient->id)
+                        ->distinct('doctor_id')
+                        ->count('doctor_id'),
+        'departments' => Appointment::where('patient_id', $patient->id)
+                            ->with('doctor.department')
+                            ->get()
+                            ->groupBy('doctor.department_id')
+                            ->count()
+    ];
+}
 
     public function cancelAppointment($appointmentId)
     {

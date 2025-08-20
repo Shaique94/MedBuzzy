@@ -45,7 +45,7 @@ public function updatedSelectedDepartment($slug)
         $params['department'] = $this->selectedDepartment;
     }
 
-    return redirect()->route('our-doctors', $params);
+        return $this->redirectRoute('our-doctors', $params, navigate: true);
     }
 
     #[Layout('layouts.public')]
