@@ -19,9 +19,7 @@
                                 <span class="text-brand-blue-600">Simplified</span>
                             </h1>
                             <p class="text-lg sm:text-xl text-gray-700 mx-auto lg:mx-0 leading-relaxed">
-                                Connect with trusted doctors, book appointments instantly, and manage your healthcare
-                                journey all in one place.
-                            </p>
+                                Connect with trusted doctors, book appointments instantly.
                         </div>
 
                         <!-- Search Bar -->
@@ -85,7 +83,7 @@
                                         </svg>
                                     </div>
                                     <input type="text" name="search" wire:model.lazy="searchQuery"
-                                        placeholder="Search doctors by name or specialty..."
+                                        placeholder="Search Doctor, specialty etc"
                                         class="w-full pl-12 py-4 border border-gray-200 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-blue-500 focus:border-brand-blue-500"
                                         aria-label="Search doctors">
 
@@ -170,9 +168,9 @@
                             }
                         }" class="relative">
 
-                            <div class="bg-brand-blue-100 rounded-3xl p-8 lg:p-8">
+                            <div class="bg-brand-blue-100 rounded-3xl p-2 lg:p-8">
 
-                                <div class="relative h-[340px]">
+                                <div class="relative h-[270px] sm:h-[340px]">
                                     @foreach ($doctors as $index => $doctor)
                                         <div x-show="current === {{ $index }}" aria-live="polite"
                                             x-transition:enter="transition-opacity duration-300"
