@@ -41,7 +41,7 @@
                 <div x-ref="container"
                     class="grid grid-flow-col auto-cols-max md:auto-cols-min gap-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory scroll-smooth">
                     @foreach ($departments as $department)
-                        <a wire:navigate href="{{ route('our-doctors', ['department_id' => $department->id]) }}"
+                        <a wire:navigate href="{{ route('our-doctors', ['department' => $department->slug]) }}"
                             wire:key="dept-{{ $department->id }}"
                             class="flex flex-col items-center bg-white rounded-xl shadow hover:shadow-md border border-brand-blue-100 px-6 py-5 min-w-[180px] snap-center transition-all duration-200">
                             <div class="mb-3">
