@@ -119,14 +119,21 @@ class ViewDoctorDetail extends Component
         $this->calculateReviewMetrics();
     }
 
+      public function getDynamicTitleProperty()
+    {
+        $qualification = $this->doctor->qualification ?? '';
+        if (is_array($qualification)) {
+            $qualification = implode(', ', $qualification);
+        }
+        return $this->doctor && $this->doctor->user ? 'Dr. ' . $this->doctor->user->name . ' | ' . $qualification : 'Doctor';
+    }
     #[Layout('layouts.public')]
-    #[Title('Doctor Details')]
     public function render()
     {
         return view('livewire.public.our-doctors.view-doctor-detail', [
             'doctor' => $this->doctor,
             'approvedReviews' => $this->approvedReviews,
             'relatedDoctors' => $this->relatedDoctors
-        ]);
+        ])->layoutData(['title' => $this->dynamicTitle]);
     }
 }
