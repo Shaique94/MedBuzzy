@@ -195,7 +195,7 @@
                                                         class="text-xs sm:text-sm text-brand-blue-600 font-medium truncate">
                                                         {{ $doctor->department->name ?? 'General Medicine' }}</div>
                                                 </div>
-                                                <div class="text-right">
+                                                    <div class="text-right">
                                                     <div class="flex text-yellow-400 justify-end mb-1"
                                                         aria-hidden="true">
                                                         @php
