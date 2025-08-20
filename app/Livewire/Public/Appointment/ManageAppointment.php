@@ -4,7 +4,6 @@ namespace App\Livewire\Public\Appointment;
 
 use App\Jobs\SendBookingConfirmationEmail;
 use App\Models\Appointment;
-use App\Models\Department;
 use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Payment;
@@ -13,7 +12,6 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Http;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
@@ -79,13 +77,10 @@ class ManageAppointment extends Component
 
     public function mount($doctor_slug = null)
     {
-        date_default_timezone_set('Asia/Kolkata');
-        Carbon::setLocale('en');
-        config(['app.timezone' => 'Asia/Kolkata']);
         $this->currentMonth = now()->startOfMonth()->format('Y-m-d');
 
         if ($doctor_slug) {
-            $this->selectedDoctor = Doctor::with(['user', 'department'])->where('slug', $doctor_slug)->first();
+            $this->selectedDoctor = Doctor::with(['user:id,name', 'department:id,name'])->where('slug', $doctor_slug)->first();
             if ($this->selectedDoctor) {
                 $this->doctor_id = $this->selectedDoctor->id;
                 $this->selectedDepartment = $this->selectedDoctor->department_id;
@@ -95,7 +90,7 @@ class ManageAppointment extends Component
         // Handle legacy doctor_id query parameter for backward compatibility
         elseif (request()->has('doctor_id')) {
             $this->doctor_id = request()->query('doctor_id');
-            $this->selectedDoctor = Doctor::with(['user', 'department'])->find($this->doctor_id);
+            $this->selectedDoctor = Doctor::with(['user:id,name', 'department:id,name'])->find($this->doctor_id);
             if ($this->selectedDoctor) {
                 $this->selectedDepartment = $this->selectedDoctor->department_id;
                 $this->step = 2;

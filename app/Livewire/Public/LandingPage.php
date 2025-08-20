@@ -9,30 +9,43 @@ use App\Models\PhoneVerification; // Add this
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Illuminate\Support\Facades\Cache;
 
 #[Title('MedBuzzy - Healthcare Management')]
 class LandingPage extends Component
 {
     public $doctors;
     public $departments;
-   
+
+    public $totalDoctors;
+    public $totalPatients;
+    public $generatedCode;
+    public $showVerification;
     public function mount()
     {
         $this->loadDoctors();
-        $this->departments = Department::where('status', true)->get();
+        $this->departments = Cache::remember('departments', now()->addHours(24), function() {
+            return Department::where('status', true)->get();
+        });
     }
 
     protected function loadDoctors()
     {
-        $this->doctors = Doctor::withCount(['reviews' => function($query) {
+        $this->doctors = Cache::remember('featured_doctors', now()->addMinutes(30), function () { 
+            return Doctor::with([
+            'user:id,name',
+            "department:id,slug,name"
+        ])->withCount(['reviews' => function($query) {
                 $query->where('approved', true);
             }])
+            ->select("id","fee","qualification","image","slug","user_id","department_id","languages_spoken","city")
             ->withAvg(['reviews' => function($query) {
                 $query->where('approved', true);
             }], 'rating')
             ->inRandomOrder()
             ->limit(4)
             ->get();
+        });
     }
 
    

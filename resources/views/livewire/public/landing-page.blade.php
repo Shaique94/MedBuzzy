@@ -1,6 +1,8 @@
 <div x-data @phone-modal-opened.window="$nextTick(()=>{ if($refs.phoneModal){ $refs.phoneModal.focus?.(); } })">
+
+    {{-- {{ dd($doctors) }} --}}
     <!-- Hero with Search (existing component) -->
-    <livewire:public.hero />
+    <livewire:public.hero :doctors="$doctors" :departments="$departments" />
 
     <!-- Featured Specialties Section -->
 
@@ -53,8 +55,7 @@
                                 </svg>
                             </div>
                             <div class="font-semibold text-brand-blue-800 text-base mb-1">{{ $department->name }}</div>
-                            <div class="text-xs text-gray-500">{{ $department->doctors->count() ?? 0 }} doctors</div>
-
+                    
                         </a>
                     @endforeach
                 </div>
