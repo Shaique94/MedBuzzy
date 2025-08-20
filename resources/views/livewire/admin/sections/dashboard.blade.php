@@ -104,7 +104,7 @@
 				</div>
 			</div>
 
-			<!-- Charts and Analytics Section (flat cards) -->
+			{{-- <!-- Charts and Analytics Section (flat cards) -->
 			<div class="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
 				<div class="bg-white rounded-lg p-3 sm:p-4 border border-gray-100">
 					<div class="flex items-center justify-between mb-2">
@@ -197,7 +197,7 @@
 						<span class="text-xs font-medium text-gray-700">Payments</span>
 					</a>
 				</div>
-			</div>
+			</div> --}}
 
 			<!-- Upcoming Appointments (compact, flat list) -->
 			<div class="bg-white rounded-lg border border-gray-100 overflow-hidden">
@@ -266,7 +266,7 @@
 		</div>
 
 		<!-- JavaScript for Charts and Real-time Updates -->
-		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		{{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 		<script>
 			document.addEventListener('DOMContentLoaded', function() {
 				// Update current time
@@ -484,6 +484,6 @@
 					});
 				});
 			});
-		</script>
+		</script> --}}
 	</main>
 </div>
