@@ -4,8 +4,6 @@ namespace App\Livewire\Public;
 
 use App\Models\Department;
 use App\Models\Doctor;
-use App\Models\Enquiry;
-use App\Models\PhoneVerification; // Add this
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;

@@ -35,6 +35,16 @@ class Login extends Component
         'otp.digits' => 'The OTP must be 6 digits.',
     ];
 
+    // Changed: Added mount method to pre-fill phone number from session
+  public function mount()
+{
+    $this->phone = session('phone', ''); // Pre-fill phone from session
+    \Log::debug('Login mount: Session phone value', ['phone' => session('phone')]); // Debug session value
+    
+    if (!empty($this->phone)) {
+        session()->flash('message', 'Phone number is pre-filled');
+    }
+}
     public function updatedShowOtpField($value)
     {
         if ($value) {
@@ -149,9 +159,6 @@ class Login extends Component
 
         // Send OTP via SMS
         $this->sendOtpSms($user->phone, $otp);
-        // $this->sendOtpSms("9546805580", "852078");
-
-
 
         // Start countdown (30 seconds)
         $this->startOtpCountdown();
@@ -160,19 +167,17 @@ class Login extends Component
         session()->flash('info', 'An OTP has been sent to your phone. It will expire in 30 minutes.');
     }
 
-
-
     protected function sendOtpSms($phone, $otp)
     {
         try {
             $response = \Http::withHeaders([
                 'Content-Type' => 'application/json',
             ])->post('https://control.msg91.com/api/v5/otp', [
-                        'authkey' => "447174AqwGkJnLZ68a1b309P1",
-                        'mobile' => '91' . $phone,
-                        'otp' => $otp,  // ⚡ Must match ##OTP##
-                        'template_id' => "68a177cd881d123fd120d945", // your DLT-approved template id
-                    ]);
+                'authkey' => env('MSG91_AUTH_KEY', '447174AqwGkJnLZ68a1b309P1'), // Changed: Use env variable for security
+                'mobile' => '91' . $phone,
+                'otp' => $otp,
+                'template_id' => '68a177cd881d123fd120d945',
+            ]);
 
             \Log::info('MSG91 OTP API Response', [
                 'status' => $response->status(),

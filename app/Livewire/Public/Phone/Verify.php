@@ -19,7 +19,7 @@ class Verify extends Component
     public $verificationCode = '';
     public $generatedCode = '';
     public $otpSent = false;
-    public $countdown = 0; // Start at 0, will be set when OTP is sent
+    public $countdown = 0;
 
     protected $listeners = ['open-phone-modal' => 'showPhoneModal'];
 
@@ -33,16 +33,21 @@ class Verify extends Component
     public function submitPhone()
     {
         $this->validate([
-            'phone' => 'required|numeric|digits:10|regex:/^[6-9]\d{9}$/|unique:users,phone'
+            'phone' => 'required|numeric|digits:10|regex:/^[6-9]\d{9}$/' // Removed 'unique:users,phone'
         ]);
 
+        // Check if phone number already exists
+        if (User::where('phone', $this->phone)->exists()) {
+            session()->flash('phone', $this->phone); // Store phone in session for login page
+            session()->flash('error', 'Phone number already registered. Please log in.'); // Inform user
+            return redirect()->route('login'); // Redirect to login page
+        }
+
         // Generate a random 6-digit code
-         $this->generatedCode = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+        $this->generatedCode = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
 
         // Send OTP via SMS
-          $otpSent = $this->sendOtpSms($this->phone, $this->generatedCode);
-        //   $otpSent = $this->generatedCode = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
-
+        $otpSent = $this->sendOtpSms($this->phone, $this->generatedCode);
 
         if (!$otpSent) {
             $this->addError('phone', 'Failed to send OTP. Please try again.');
@@ -52,12 +57,11 @@ class Verify extends Component
         $this->otpSent = true;
         $this->showVerification = true;
         $this->countdown = 30;
-        $this->dispatch('start-countdown'); // Dispatch event for Alpine.js
+        $this->dispatch('start-countdown');
     }
 
     public function editPhone()
     {
-        // Reset verification-related properties to allow editing phone number
         $this->reset(['verificationCode', 'generatedCode', 'otpSent', 'showVerification', 'countdown']);
     }
 
@@ -68,8 +72,15 @@ class Verify extends Component
         }
 
         $this->validate([
-            'phone' => 'required|numeric|digits:10|regex:/^[6-9]\d{9}$/|unique:users,phone'
+            'phone' => 'required|numeric|digits:10|regex:/^[6-9]\d{9}$/' // Removed 'unique:users,phone'
         ]);
+
+        // Check if phone number already exists
+        if (User::where('phone', $this->phone)->exists()) {
+            session()->flash('phone', $this->phone); // Store phone in session for login page
+            session()->flash('error', 'Phone number already registered. Please log in.'); // Inform user
+            return redirect()->route('login'); // Redirect to login page
+        }
 
         // Generate a new 6-digit code
         $this->generatedCode = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
@@ -84,7 +95,7 @@ class Verify extends Component
 
         $this->otpSent = true;
         $this->countdown = 30;
-        $this->dispatch('start-countdown'); // Dispatch event for Alpine.js
+        $this->dispatch('start-countdown');
     }
 
     public function verifyCode()
@@ -106,10 +117,9 @@ class Verify extends Component
         $this->validate([
             'name' => 'required|string|min:3|max:50',
             'email' => 'required|email|max:100|unique:users,email',
-            'phone' => 'required|numeric|digits:10|regex:/^[6-9]\d{9}$/|unique:users,phone'
+            'phone' => 'required|numeric|digits:10|regex:/^[6-9]\d{9}$/|unique:users,phone' // Kept unique rule here
         ]);
 
-        // Store in database only after final submission
         $user = User::create([
             'phone' => $this->phone,
             'name' => $this->name,
@@ -128,7 +138,6 @@ class Verify extends Component
     public function ClosePhoneModal()
     {
         $this->reset(['phone', 'verificationCode', 'generatedCode', 'otpSent', 'showVerification', 'submitFinalForm', 'countdown']);
-
         $this->showModal = false;
     }
 
@@ -138,11 +147,11 @@ class Verify extends Component
             $response = \Http::withHeaders([
                 'Content-Type' => 'application/json',
             ])->post('https://control.msg91.com/api/v5/otp', [
-                        'authkey' => "447174AqwGkJnLZ68a1b309P1",
-                        'mobile' => '91' . $phone,
-                        'otp' => $otp,
-                        'template_id' => "68a177cd881d123fd120d945",
-                    ]);
+                'authkey' => env('MSG91_AUTH_KEY', '447174AqwGkJnLZ68a1b309P1'), // Use env variable
+                'mobile' => '91' . $phone,
+                'otp' => $otp,
+                'template_id' => "68a177cd881d123fd120d945",
+            ]);
 
             \Log::info('MSG91 OTP API Response', [
                 'status' => $response->status(),
@@ -158,7 +167,6 @@ class Verify extends Component
 
     public function updated($propertyName)
     {
-        // Real-time validation for phone and verification code
         if ($propertyName === 'phone') {
             $this->validateOnly('phone', [
                 'phone' => 'required|numeric|digits:10|regex:/^[6-9]\d{9}$/'

@@ -10,6 +10,8 @@ use Carbon\Carbon;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Illuminate\Support\Facades\Cache;
+
 
 #[Title('Admin Dashboard - MedBuzzy')]
 class Dashboard extends Component
@@ -30,17 +32,29 @@ class Dashboard extends Component
     public function loadDashboardData()
     {
         // Load basic counts
-        $this->appointmentsCount = Appointment::count();
-        $this->patientsCount = Patient::count();
-        $this->doctorsCount = Doctor::where('status', 'active')->count();
-        $this->totalRevenue = Payment::where('status', 'paid')->sum('amount');
+        $this->appointmentsCount = Cache::remember('appointments_Count', 3600, function () {
+            return Appointment::count();
+        });
+        $this->doctorsCount = Cache::remember('doctors_Count', 3600, function () {
+            return Doctor::where('status', true)->count();
+        });
+        $this->patientsCount = Cache::remember('patients_Count', 3600, function () {
+            return Patient::count();
+        });
+
+        $this->totalRevenue = Cache::remember('total_Count', 3600, function () {
+            return Payment::where('status', 'paid')->sum('amount');
+        });
+
+
+       
 
         // Load weekly appointments data for chart
         $this->loadWeeklyAppointments();
-        
+
         // Load monthly revenue data for chart
         $this->loadMonthlyRevenue();
-        
+
         // Load recent appointments
         $this->loadRecentAppointments();
     }
@@ -48,14 +62,21 @@ class Dashboard extends Component
     public function loadWeeklyAppointments()
     {
         $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek = Carbon::now()->endOfWeek();
+
+        // Fetch all appointments of the week in ONE query
+        $appointments = Appointment::selectRaw('DATE(appointment_date) as date, COUNT(*) as count')
+            ->whereBetween('appointment_date', [$startOfWeek, $endOfWeek])
+            ->groupBy('date')
+            ->pluck('count', 'date'); // returns [ '2025-08-18' => 5, '2025-08-19' => 2, ... ]
+
         $this->weeklyAppointments = [];
 
         for ($i = 0; $i < 7; $i++) {
-            $date = $startOfWeek->copy()->addDays($i);
-            $count = Appointment::whereDate('appointment_date', $date)->count();
+            $date = $startOfWeek->copy()->addDays($i)->toDateString();
             $this->weeklyAppointments[] = [
-                'day' => $date->format('D'),
-                'count' => $count
+                'day' => Carbon::parse($date)->format('D'),
+                'count' => $appointments[$date] ?? 0, // use 0 if no records
             ];
         }
     }
@@ -63,29 +84,44 @@ class Dashboard extends Component
     public function loadMonthlyRevenue()
     {
         $this->monthlyRevenue = [];
-        
+
+        $startMonth = Carbon::now()->subMonths(5)->startOfMonth();
+        $endMonth = Carbon::now()->endOfMonth();
+
+        // Get all revenues in one query
+        $revenues = Payment::selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, SUM(amount) as total')
+            ->where('status', 'paid')
+            ->whereBetween('created_at', [$startMonth, $endMonth])
+            ->groupBy('year', 'month')
+            ->pluck('total', 'month');
+
         for ($i = 5; $i >= 0; $i--) {
             $month = Carbon::now()->subMonths($i);
-            $revenue = Payment::where('status', 'paid')
-                ->whereYear('created_at', $month->year)
-                ->whereMonth('created_at', $month->month)
-                ->sum('amount');
-            
+            $monthNumber = (int) $month->format('m');
+
             $this->monthlyRevenue[] = [
                 'month' => $month->format('M'),
-                'revenue' => $revenue
+                'revenue' => $revenues[$monthNumber] ?? 0
             ];
         }
     }
 
+
     public function loadRecentAppointments()
     {
-        $this->appointments = Appointment::with(['patient', 'doctor.user'])
-            ->whereDate('appointment_date', '>=', Carbon::today())
-            ->orderBy('appointment_date', 'asc')
-            ->orderBy('appointment_time', 'asc')
-            ->take(5)
-            ->get();
+        $this->appointments = Cache::remember('upcoming_appointments', now()->addMinutes(30), function () {
+            return Appointment::with([
+                'patient.user:id,name',
+                'doctor.user:id,name',
+                'doctor.department:id,name'
+            ])
+                ->select('id', 'patient_id', 'doctor_id', 'appointment_date', 'appointment_time', 'status')
+                ->whereDate('appointment_date', '>=', Carbon::today())
+                ->orderBy('appointment_date', 'asc')
+                ->orderBy('appointment_time', 'asc')
+                ->limit(5)
+                ->get();
+        });
     }
 
     #[Layout('layouts.admin')]
