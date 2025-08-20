@@ -7,9 +7,9 @@
     <section x-data="departmentsScroller()" x-init="init()" class="py-8 bg-brand-blue-50">
 
         <div class=" mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-semibold text-brand-blue-800 mb-4">Browse by Specialties</h2>
-                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Find the right specialist for your healthcare needs
+            <div class="text-center mb-4">
+                <h2 class="text-xl md:text-2xl font-semibold text-brand-blue-800 mb-1 md:mb-2">Browse by Specialties</h2>
+                <p class="text-sm text-gray-600  mx-auto">Find the right specialist for your healthcare needs
                 </p>
             </div>
 
@@ -74,18 +74,18 @@
     </section>
 
     <!-- Top Doctors Section -->
-    <section class="py-12 bg-white">
+    <section class="py-5 bg-white">
         <div class="mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-10">
-                <h2 class="text-3xl md:text-4xl font-semibold text-brand-blue-800 mb-4">Our Top Specialists</h2>
-                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-                    Connect with our verified specialists for personalized care.
+            <div class="text-center mb-4">
+                <h2 class="text-xl md:text-2xl font-semibold text-brand-blue-800 mb-1">Our Top Specialists</h2>
+                <p class="text-sm text-gray-600 mx-auto">
+                    Connect with our verified specialists.
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-6">
                 @forelse ($doctors as $doctor)
-                    <div class="bg-white rounded-xl border border-brand-blue-100 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden"
+                    <div class="bg-white rounded-xl border border-brand-blue-100 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden p-5 sm:p-4"
                         wire:key="doctor-{{ $doctor->id }}">
                         <!-- Doctor Image Section -->
                         <div class="relative h-48 overflow-hidden">
@@ -99,10 +99,10 @@
                                 class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-brand-blue-900/80 to-transparent p-3">
                                 <div class="flex items-center justify-between">
                                     <span
-                                        class="inline-flex items-center px-2 py-1 bg-brand-blue-600 bg-opacity-90 rounded-md text-xs text-white">
+                                        class="inline-flex items-center px-2 py-1 bg-brand-blue-600 bg-opacity-90 rounded-md text-sm sm:text-xs text-white">
                                         {{ $doctor->department->name ?? 'Specialist' }}
                                     </span>
-                                    <div class="flex items-center text-white text-xs">
+                                    <div class="flex items-center text-white text-sm sm:text-xs">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-400"
                                             viewBox="0 0 20 20" fill="currentColor">
                                             <path
@@ -233,11 +233,11 @@
     </section>
 
     <!-- How Booking Works Section -->
-    <section class="bg-brand-blue-50 py-8">
+ <section class="bg-brand-blue-50 py-5">
         <div class=" mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
-                <h2 class="text-3xl font-semibold text-brand-blue-800 sm:text-4xl">How It Works</h2>
-                <p class="mt-4 max-w-2xl text-lg text-gray-600 mx-auto">
+                <h2 class="text-xl font-semibold text-brand-blue-800 sm:text-2xl">How It Works</h2>
+                <p class="mt-1  text-sm text-gray-600 mx-auto">
                     Book your doctor appointment in three simple steps
                 </p>
             </div>
