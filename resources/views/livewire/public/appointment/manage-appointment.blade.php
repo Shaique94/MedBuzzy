@@ -720,7 +720,252 @@
     </div>
 
 
+   @push('scripts')
+    <script>
+        (function () {
+            // SVG Auto-Fix
+            if (!window.__svgAutoFixInstalled) {
+                window.__svgAutoFixInstalled = true;
 
+                function fixSvgAutoAttributes(root = document) {
+                    try {
+                        const svgs = root.querySelectorAll ? root.querySelectorAll('svg') : [];
+                        svgs.forEach(svg => {
+                            const w = svg.getAttribute('width');
+                            const h = svg.getAttribute('height');
+                            if (w && String(w).toLowerCase() === 'auto') {
+                                svg.setAttribute('width', svg.classList.contains('h-5') ? '20' : '16');
+                            }
+                            if (h && String(h).toLowerCase() === 'auto') {
+                                svg.setAttribute('height', svg.classList.contains('h-5') ? '20' : '16');
+                            }
+                        });
+                    } catch (e) {
+                        console.debug('SVG auto-attr fix skipped:', e);
+                    }
+                }
+
+                const observer = new MutationObserver(mutations => {
+                    for (const m of mutations) {
+                        m.addedNodes.forEach(node => {
+                            if (node && node.nodeType === 1) fixSvgAutoAttributes(node);
+                        });
+                    }
+                });
+
+                function initSvgFix() {
+                    fixSvgAutoAttributes();
+                    try {
+                        observer.observe(document.documentElement, { childList: true, subtree: true });
+                    } catch (_) {}
+                }
+
+                document.addEventListener('DOMContentLoaded', initSvgFix);
+                document.addEventListener('livewire:init', initSvgFix);
+                document.addEventListener('livewire:navigated', initSvgFix);
+            }
+
+            // Razorpay Integration
+            function loadRazorpaySDK(callback) {
+                if (typeof Razorpay !== 'undefined') {
+                    callback();
+                    return;
+                }
+                const script = document.createElement('script');
+                script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+                script.async = true;
+                script.onload = () => {
+                    callback();
+                };
+                script.onerror = () => {
+                    console.error('Failed to load Razorpay SDK dynamically');
+                    window.Livewire?.dispatch('payment-failed', {
+                        error: 'Unable to load payment service',
+                        orderId: window.lastPaymentData?.orderId ?? null,
+                        appointmentId: window.lastPaymentData?.appointmentId ?? null
+                    });
+                };
+                document.body.appendChild(script);
+            }
+
+            function openRazorpayCheckout(data) {
+                data = Array.isArray(data) ? data[0] : data;
+                if (!data) {
+                    console.error('No data provided for Razorpay checkout');
+                    window.Livewire?.dispatch('payment-failed', {
+                        error: 'Payment initiation failed: No data provided',
+                        orderId: null,
+                        appointmentId: null
+                    });
+                    return;
+                }
+
+                window.lastPaymentData = data;
+
+                let retries = 0;
+                const maxRetries = 1;
+                const retryDelay = 200;
+
+                function attemptOpen() {
+                    loadRazorpaySDK(() => {
+                        if (typeof Razorpay === 'undefined') {
+                            console.error('Razorpay SDK not loaded after dynamic load attempt');
+                            if (retries < maxRetries) {
+                                retries++;
+                                setTimeout(attemptOpen, retryDelay);
+                            } else {
+                                window.Livewire?.dispatch('payment-failed', {
+                                    error: 'Razorpay SDK failed to load',
+                                    orderId: data.orderId ?? null,
+                                    appointmentId: data.appointmentId ?? null
+                                });
+                            }
+                            return;
+                        }
+
+                        setTimeout(() => {
+                            const options = {
+                                key: data.key || "{{ config('services.razorpay.key') }}",
+                                amount: String(data.amount),
+                                currency: "INR",
+                                name: "Medbuzzy",
+                                description: "Appointment Booking",
+                                image: "{{ asset('logo/logo1.png') }}",
+                                order_id: data.orderId,
+                                handler: function (response) {
+                                    window.Livewire?.dispatch('payment-success', {
+                                        paymentId: response.razorpay_payment_id,
+                                        orderId: response.razorpay_order_id,
+                                        signature: response.razorpay_signature,
+                                        allData: data,
+                                        appointmentData: data.appointmentData,
+                                        appointmentId: data.appointmentId
+                                    });
+                                    try {
+                                        window.dispatchEvent(new CustomEvent('payment-success', {
+                                            detail: {
+                                                paymentId: response.razorpay_payment_id,
+                                                orderId: response.razorpay_order_id,
+                                                signature: response.razorpay_signature,
+                                                allData: data,
+                                                appointmentData: data.appointmentData,
+                                                appointmentId: data.appointmentId
+                                            }
+                                        }));
+                                    } catch (e) {
+                                        console.debug('CustomEvent dispatch failed', e);
+                                    }
+                                    document.body.style.overflow = '';
+                                },
+                                prefill: {
+                                    name: data?.patientData?.name || "{{ auth()->user()?->name ?? 'Customer' }}",
+                                    email: data?.patientData?.email || "{{ auth()->user()?->email ?? 'customer@example.com' }}",
+                                    contact: data?.patientData?.phone || "{{ auth()->user()?->phone ?? '9999999999' }}"
+                                },
+                                theme: { color: "#3399cc" },
+                                modal: {
+                                    ondismiss: function () {
+                                        document.body.style.overflow = '';
+                                        window.Livewire?.dispatch('payment-failed', {
+                                            error: 'Payment was cancelled by user',
+                                            orderId: data.orderId ?? null,
+                                            appointmentId: data.appointmentId ?? null
+                                        });
+                                    }
+                                }
+                            };
+
+                            try {
+                                const rzp = new Razorpay(options);
+                                rzp.on('payment.failed', function (resp) {
+                                    console.error('Payment failed - dispatching payment-failed:', resp);
+                                    document.body.style.overflow = '';
+                                    window.Livewire?.dispatch('payment-failed', {
+                                        appointmentId: data.appointmentId ?? null,
+                                        orderId: data.orderId ?? data.order_id ?? null,
+                                        error: resp?.error?.description || 'Payment failed'
+                                    });
+                                });
+                                rzp.open();
+                            } catch (error) {
+                                console.error('Error initializing Razorpay checkout:', error);
+                                document.body.style.overflow = '';
+                                if (retries < maxRetries) {
+                                    retries++;
+                                    setTimeout(attemptOpen, retryDelay);
+                                } else {
+                                    window.Livewire?.dispatch('payment-failed', {
+                                        error: 'Failed to initialize payment after multiple attempts',
+                                        orderId: data.orderId ?? null,
+                                        appointmentId: data.appointmentId ?? null
+                                    });
+                                }
+                            }
+                        }, 200);
+                    });
+                }
+
+                attemptOpen();
+            }
+
+            function setupRazorpayListeners() {
+                // Store listener functions to prevent duplicates
+                if (!window.__rzpListeners) {
+                    window.__rzpListeners = {
+                        razorpayOpen: (data) => openRazorpayCheckout(data),
+                        showPaymentFailed: (data) => {
+                            showPaymentFailedOverlay(data?.message || 'Payment failed', () => {
+                                window.Livewire?.dispatch('retry-payment');
+                            });
+                        },
+                        redirectToConfirmation: (url) => {
+                            document.body.style.overflow = '';
+                            window.location.href = url;
+                        }
+                    };
+
+                    // Attach window event listener
+                    window.__rzpOpenHandler = (e) => openRazorpayCheckout(e.detail);
+                    window.addEventListener('razorpay:open', window.__rzpOpenHandler);
+                }
+
+                // Attach Livewire listeners (safe for both Livewire 2 and 3)
+                if (window.Livewire) {
+                    // Use a flag to prevent duplicate Livewire listeners
+                    if (!window.__rzpLivewireListenersSetup) {
+                        window.__rzpLivewireListenersSetup = true;
+
+                        // Use Livewire.on or Livewire.dispatch based on version
+                        const livewireOn = window.Livewire.on || window.Livewire.listen;
+                        if (livewireOn) {
+                            livewireOn.call(window.Livewire, 'razorpay:open', window.__rzpListeners.razorpayOpen);
+                            livewireOn.call(window.Livewire, 'show-payment-failed', window.__rzpListeners.showPaymentFailed);
+                            livewireOn.call(window.Livewire, 'redirect-to-confirmation', window.__rzpListeners.redirectToConfirmation);
+                        }
+                    }
+                }
+            }
+
+            function initialize() {
+                setupRazorpayListeners();
+                if (window.__svgAutoFixInstalled) {
+                    fixSvgAutoAttributes();
+                }
+            }
+
+            // Attach initialization listeners
+            document.addEventListener('livewire:init', initialize);
+            document.addEventListener('livewire:navigated', initialize);
+
+            // Run initialization immediately if Livewire is loaded
+            if (window.Livewire) {
+                initialize();
+            }
+        })();
+    </script>
+@endpush
+
+{{-- 
 <script>
     // Fix invalid SVG attributes like width/height="auto" to avoid console errors
     (function() {
@@ -761,7 +1006,7 @@
         document.addEventListener('livewire:init', fixSvgAutoAttributes);
         document.addEventListener('livewire:navigated', fixSvgAutoAttributes);
     })();
-</script>
+</script> --}}
 
 </div>
 

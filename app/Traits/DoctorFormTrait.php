@@ -148,7 +148,7 @@ trait DoctorFormTrait
             'available_days' => 'required|array|min:1',
             'available_days.*' => 'in:Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday',
             'status' => 'required|in:0,1,2',
-            'phone' => 'required|string|max:10',
+            'phone' => 'required|string|digits:10|regex:/^[6-9]\d{9}$/',
             'fee' => 'required|numeric|min:0',
             'qualification' => 'nullable|string|max:255',
             'start_time' => 'required|date_format:H:i',

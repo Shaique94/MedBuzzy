@@ -55,53 +55,38 @@ class ManageDoctor extends Component
     public function openModal($id = null) // Add method to handle modal opening
     {
         $this->reset([
-            'doctorId',
-            'name',
-            'email',
-            'password',
-            'password_confirmation',
-            'phone',
-            'status',
-            'available_days',
-            'fee',
-            'department_id',
-            'qualification',
-            'photo',
-            'start_time',
-            'end_time',
-            'slot_duration_minutes',
-            'patients_per_slot',
-            'max_booking_days',
-            'imageUrl',
-            'imageId',
-            'pincode',
-            'city',
-            'state',
-        ]);
-
+             'doctorId',
+             'name',
+             'email',
+             'password',
+             'password_confirmation',
+             'phone',
+             'status',
+             'available_days',
+             'fee',
+             'department_id',
+             'qualification',
+             'photo',
+             'start_time',
+             'end_time',
+             'slot_duration_minutes',
+             'patients_per_slot',
+             'max_booking_days',
+             'imageUrl',
+             'imageId',
+             'pincode',
+             'city',
+             'state',
+         ]);
+ 
+        // If an id is provided, delegate editing to the EditDoctor Livewire component
+        // so edit uses the same robust edit/save flow as the insert flow.
         if ($id) {
-            $doctor = Doctor::with('user')->findOrFail($id);
-            $this->doctorId = $doctor->id;
-            $this->name = $doctor->user->name;
-            $this->email = $doctor->user->email;
-            $this->phone = $doctor->user->phone;
-            $this->department_id = $doctor->department_id;
-            $this->available_days = $doctor->available_days;
-            $this->fee = $doctor->fee;
-            $this->status = $doctor->status;
-            $this->qualification = is_array($doctor->qualification) ? implode(', ', $doctor->qualification) : $doctor->qualification;
-            $this->start_time = $doctor->start_time;
-            $this->end_time = $doctor->end_time;
-            $this->slot_duration_minutes = $doctor->slot_duration_minutes;
-            $this->patients_per_slot = $doctor->patients_per_slot;
-            $this->max_booking_days = $doctor->max_booking_days;
-            $this->imageUrl = $doctor->image;
-            $this->imageId = $doctor->image_id;
-            $this->pincode = $doctor->pincode;
-            $this->city = $doctor->city;
-            $this->state = $doctor->state;
+            $this->emitTo('admin.sections.edit-doctor', 'editDoc', $id);
+            return;
         }
-
+ 
+        // No id => open ManageDoctor's own modal for "create new doctor"
         $this->showModal = true;
     }
 

@@ -871,7 +871,7 @@ document.addEventListener('DOMContentLoaded', function() {
             body: JSON.stringify(data)
         })
         .then(response => {
-            console.log('Response status:', response.status);
+            
             if (!response.ok) {
                 return response.json().then(err => {
                     throw new Error(err.message || `Server error: ${response.status}`);
@@ -880,7 +880,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return response.json();
         })
         .then(data => {
-            console.log('Response data:', data);
+            
             if (data.status === 'error') {
                 throw new Error(data.message);
             }

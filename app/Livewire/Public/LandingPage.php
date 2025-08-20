@@ -9,47 +9,46 @@ use App\Models\PhoneVerification; // Add this
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Illuminate\Support\Facades\Cache;
 
 #[Title('MedBuzzy - Healthcare Management')]
 class LandingPage extends Component
 {
     public $doctors;
     public $departments;
-    public $showModal = false;
-    public $phone = '';
-    public $verificationCode = '';
-    public $showVerification = false;
-    public $generatedCode = '';
 
+    public $totalDoctors;
+    public $totalPatients;
+    public $generatedCode;
+    public $showVerification;
     public function mount()
     {
         $this->loadDoctors();
-        $this->departments = Department::where('status', true)->get();
+        $this->departments = Cache::remember('departments', now()->addHours(24), function() {
+            return Department::where('status', true)->get();
+        });
     }
 
     protected function loadDoctors()
     {
-        $this->doctors = Doctor::withCount(['reviews' => function($query) {
+        $this->doctors = Cache::remember('featured_doctors', now()->addMinutes(30), function () { 
+            return Doctor::with([
+            'user:id,name',
+            "department:id,slug,name"
+        ])->withCount(['reviews' => function($query) {
                 $query->where('approved', true);
             }])
+            ->select("id","fee","qualification","image","slug","user_id","department_id","languages_spoken","city")
             ->withAvg(['reviews' => function($query) {
                 $query->where('approved', true);
             }], 'rating')
             ->inRandomOrder()
             ->limit(4)
             ->get();
+        });
     }
 
-    public function showPhoneModal()
-    {
-        $this->showModal = true;
-        // Notify the frontend via Livewire event (bridged to a DOM event in blade)
-        $this->dispatch('phone-modal-opened');
-    }
-
-    public function ClosePhoneModal(){
-        $this->showModal=false;
-    }
+   
 
     public function submitPhone()
     {
@@ -66,26 +65,7 @@ class LandingPage extends Component
         $this->showVerification = true;
     }
 
-    public function verifyCode()
-    {
-        $this->validate([
-            'verificationCode' => 'required|numeric|digits:4'
-        ]);
-
-        if ($this->verificationCode === $this->generatedCode) {
-            // Store the phone verification
-            Enquiry::create([
-                'phone' => $this->phone,
-                'is_verified' => true
-            ]);
-
-            // Redirect to doctors page (use Laravel redirect helper)
-            return redirect()->route('our-doctors');
-        } else {
-            $this->addError('verificationCode', 'Invalid verification code');
-        }
-    }
-
+   
     #[Layout('layouts.public')]
     public function render()
     {

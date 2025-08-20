@@ -286,7 +286,7 @@ class UpdateDoctor extends Component
         $validationRules = [
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . $this->doctor->user_id,
-            'phone' => 'required|string|max:15|unique:users,phone,' . $this->doctor->user_id,
+            'phone' => 'required|string|digits:10|regex:/^[6-9]\d{9}$/|unique:users,phone,' . $this->doctor->user_id,
             'department_id' => 'required|exists:departments,id',
             'available_days' => 'required|array|min:1',
             'available_days.*' => 'in:Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday',
@@ -408,13 +408,13 @@ class UpdateDoctor extends Component
                 'slot_duration_minutes' => $this->slot_duration_minutes,
                 'patients_per_slot' => $this->patients_per_slot,
                 'max_booking_days' => $this->max_booking_days,
-                'city' => $this->city,
-                'state' => $this->state,
-                'pincode' => $this->pincode,
-                'clinic_hospital_name' => $this->clinic_hospital_name,
-                'registration_number' => $this->registration_number,
+                'city' => $this->city !== '' ? $this->city : null,
+                'state' => $this->state !== '' ? $this->state : null,
+                'pincode' => $this->pincode !== '' ? $this->pincode : null,
+                'clinic_hospital_name' => $this->clinic_hospital_name !== '' ? $this->clinic_hospital_name : null,
+                'registration_number' => $this->registration_number !== null && trim($this->registration_number) !== '' ? $this->registration_number : null,
                 'languages_spoken' => $arrayFields['languages'],
-                'professional_bio' => $this->professional_bio,
+                'professional_bio' => $this->professional_bio !== '' ? $this->professional_bio : null,
                 'achievements_awards' => $arrayFields['achievements'],
                 'social_media_links' => $socialMedia,
                 'verification_documents' => $documents,
@@ -482,7 +482,7 @@ class UpdateDoctor extends Component
         $this->password = '';
         $this->password_confirmation = '';
         
-        $this->status = 1;
+        $this->status = false;
         $this->start_time = '09:00';
         $this->end_time = '17:00';
         $this->slot_duration_minutes = 30;
