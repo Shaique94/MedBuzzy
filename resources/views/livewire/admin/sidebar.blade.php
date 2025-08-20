@@ -5,7 +5,7 @@
         <div
             class="flex items-center justify-center h-16 lg:h-20 border-b border-gray-200 px-4 lg:px-6 bg-white lg:block hidden">
 
-            <img src="/logo/logo1.png" alt="MedBuzzy Logo" class="h-16 lg:h-20 lg:block hidden">
+            <img src="/logo/logo1.png" alt="MedBuzzy Logo" class="h-10 lg:h-12 mt-5 lg:block hidden">
 
         </div>
 
