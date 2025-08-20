@@ -10,7 +10,7 @@
     
 
 
-    <!-- Canonical & OpenGraph -->
+    <!-- Canonical & OpenGraph -->c
     <meta property="og:url" content="{{ url()->current() }}">
     <link rel="canonical" href="{{ url()->current() }}">
 
