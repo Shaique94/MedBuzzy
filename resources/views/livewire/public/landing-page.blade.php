@@ -43,7 +43,7 @@
                     @foreach ($departments as $department)
                         <a wire:navigate href="{{ route('our-doctors', ['department_id' => $department->id]) }}"
                             wire:key="dept-{{ $department->id }}"
-                            class="flex flex-col items-center bg-white rounded-xl shadow hover:shadow-md border border-brand-blue-100 px-6 py-5 min-w-[180px] snap-center transition-all duration-200">
+                            class="flex flex-col items-center bg-white rounded-xl shadow hover:shadow-md border border-brand-blue-200 px-6 py-5 min-w-[180px] snap-center transition-all duration-200">
                             <div class="mb-3">
                                 <svg class="w-10 h-10 text-brand-blue-600" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
@@ -85,7 +85,7 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-6">
                 @forelse ($doctors as $doctor)
-                    <div class="bg-white rounded-xl border border-brand-blue-100 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden p-5 sm:p-4"
+                    <div class="bg-white rounded-xl border border-brand-blue-200 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden p-5 sm:p-4"
                         wire:key="doctor-{{ $doctor->id }}">
                         <!-- Doctor Image Section -->
                         <div class="relative h-48 overflow-hidden">
@@ -245,7 +245,7 @@
             </div>
             <div class="grid md:grid-cols-3 gap-10 max-w-5xl mx-auto">
                 <!-- Step 1 -->
-                <div class="bg-white rounded-xl p-6 text-center shadow-lg border border-brand-blue-100 relative">
+                <div class="bg-white rounded-xl p-6 text-center border border-brand-blue-200 relative">
                     <div
                         class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-brand-blue-600 text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-semibold shadow-md">
                         1</div>
@@ -300,7 +300,7 @@
                     <p class="mt-2 text-gray-600">Search for specialists by location, specialty or condition</p>
                 </div>
                 <!-- Step 2 -->
-                <div class="bg-white rounded-xl p-6 text-center shadow-lg border border-brand-blue-100 relative">
+                <div class="bg-white rounded-xl p-6 text-center  border border-brand-blue-200 relative">
                     <div
                         class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-brand-yellow-500 text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-semibold shadow-md">
                         2</div>
@@ -321,7 +321,7 @@
                     <p class="mt-2 text-gray-600">Select a convenient time slot and book instantly</p>
                 </div>
                 <!-- Step 3 -->
-                <div class="bg-white rounded-xl p-6 text-center shadow-lg border border-brand-blue-100 relative">
+                <div class="bg-white rounded-xl p-6 text-center border border-brand-blue-200 relative">
                     <div
                         class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-brand-blue-600 text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-semibold shadow-md">
                         3</div>
