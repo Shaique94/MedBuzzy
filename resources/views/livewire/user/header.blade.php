@@ -3,7 +3,7 @@
         <button onclick="toggleSidebar()" class="mr-4 text-gray-600 hover:text-brand-blue-600">
             <i class="fas fa-bars text-xl"></i>
         </button>
-        <img src="/logo/logo.png" alt="MedBuzzy Logo" class="h-10 lg:h-12">
+        <img src="/logo/logo1.png" alt="MedBuzzy Logo" class="h-10 lg:h-12">
     </div>
     
     <div class="flex items-center space-x-6">

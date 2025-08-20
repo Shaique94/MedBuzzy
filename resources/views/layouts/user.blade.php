@@ -47,6 +47,7 @@
 
        @livewire('user.sidebar')
 
+
         <!-- Page Content -->
         <main class="flex-1 lg:ml-64 p-4 md:p-6 bg-gray-50 min-h-screen transition-all">
             <!-- Mobile Header -->
@@ -56,7 +57,7 @@
                         <i class="fas fa-bars text-xl"></i>
                     </button>
                     <a wire:navigate href="/" class="flex items-center">
-                        <img src="/logo/logo.png" alt="MedBuzzy Logo" class="h-9">
+                        <img src="/logo/logo1.png" alt="MedBuzzy Logo" class="h-9">
                     </a>
                 </div>
                 <a href="" class="bg-brand-orange-500 text-white px-3 py-1 rounded-lg text-sm">

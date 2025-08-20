@@ -1,14 +1,14 @@
-<div class="lg:col-span-1 bg-gradient-to-r from-brand-blue-50 to-brand-blue-100 p-5 rounded-xl border border-brand-blue-200 shadow-sm">
+<div class="lg:col-span-1 bg-gradient-to-r from-brand-blue-50 to-brand-blue-100 p-5 rounded-xl border border-brand-blue-200">
     <div class="flex flex-col sm:flex-row md:flex-col lg:flex-row items-center sm:items-start md:items-center lg:items-start gap-4">
         <!-- Doctor Image -->
-        <div class="w-24 h-24 sm:w-20 sm:h-20 rounded-full overflow-hidden bg-white border-4 border-white flex-shrink-0 shadow-md relative">
+        <div class="w-24 h-24 sm:w-20 sm:h-20 rounded-full overflow-hidden bg-white border-4 border-white flex-shrink-0 relative">
             <img src="{{ $doctor->image ?? 'https://ui-avatars.com/api/?name=' . urlencode($doctor->user->name) . '&background=random&rounded=true' }}"
-                 alt="Dr. {{ $doctor->user->name ?? '' }}" class="w-full h-full object-cover">
-            
-            <!-- Verified Badge -->
-            <div class="absolute bottom-0 right-0 bg-green-500 text-white rounded-full p-1 border-2 border-white">
-                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+             alt="Dr. {{ $doctor->user->name ?? '' }}" class="w-full h-full object-cover">
+
+            <!-- Subtle verified badge only when doctor is verified -->
+            <div class="absolute -bottom-1 -right-1 bg-green-600 text-white rounded-full p-0.5 border-2 border-white shadow-sm w-4 h-4 flex items-center justify-center">
+                <svg class="w-2 h-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                 </svg>
             </div>
         </div>
@@ -29,16 +29,7 @@
                     <span>{{ $doctor->experience }} yrs exp</span>
                 </div>
                 @endif
-                
-                <!-- Rating if available -->
-                @if(isset($doctor->reviews_avg_rating) || isset($doctor->rating))
-                <div class="flex items-center text-xs">
-                    <svg class="w-3 h-3 mr-1 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                    <span>{{ number_format(isset($doctor->reviews_avg_rating) ? $doctor->reviews_avg_rating : ($doctor->rating ?? 0), 1) }}</span>
-                </div>
-                @endif
+               
                 
                 <!-- Fee -->
                 <div class="flex items-center text-xs">

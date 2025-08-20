@@ -18,6 +18,13 @@ class EditDoctor extends Component
 {
     use WithFileUploads;
 
+    // Listen for calls from other components (ManageDoctor uses emitTo)
+    protected $listeners = [
+        'editDoc' => 'editDoc',
+        // keep compatibility with previous global event name if used elsewhere
+        'openModal' => 'editDoc',
+    ];
+
     public $doctor;
     public $showModal = false;
 
@@ -44,7 +51,6 @@ class EditDoctor extends Component
     public $city;
     public $state;
 
-    #[On('openModal')]
     public function editDoc($id)
     {
         $this->doctor = Doctor::with('user')->findOrFail($id);

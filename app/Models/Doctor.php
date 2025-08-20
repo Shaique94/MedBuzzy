@@ -37,9 +37,6 @@ class Doctor extends Model
         'unavailable_to',
         'max_booking_days',
         'experience',
-        'pincode',
-        'city',
-        'state',
     ];
 
     protected $casts = [
