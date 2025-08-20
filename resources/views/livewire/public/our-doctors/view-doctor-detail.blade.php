@@ -149,7 +149,7 @@
                             </div>
 
                             <!-- Appointment Button (Desktop) -->
-                            <div class="hidden md:flex gap-3 mt-3">
+                            <div class=" md:flex gap-3 mt-3">
                                 <a wire:navigate href="{{ route('appointment', ['doctor_slug' => $doctor->slug]) }}"
                                     class="bg-brand-blue-500 hover:bg-brand-blue-600 text-white py-2 px-4 rounded-lg inline-flex items-center gap-2 transition-colors text-sm">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

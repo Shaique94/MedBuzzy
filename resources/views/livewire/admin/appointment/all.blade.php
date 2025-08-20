@@ -238,9 +238,9 @@
                                     <span class="px-2 py-1 inline-flex text-xs leading-4 font-semibold rounded-full bg-green-100 text-green-800">
                                         <i class="fas fa-check-circle mr-1"></i> Paid
                                     </span>
-                                @elseif ($appointment->payment?->status === 'due')
+                                @elseif ($appointment->payment?->status === 'failed')
                                     <span class="px-2 py-1 inline-flex text-xs leading-4 font-semibold rounded-full bg-red-100 text-red-800">
-                                        <i class="fas fa-exclamation-circle mr-1"></i> Due
+                                        <i class="fas fa-exclamation-circle mr-1"></i> Failed
                                     </span>
                                 @else
                                     <span class="px-2 py-1 inline-flex text-xs leading-4 font-semibold rounded-full bg-gray-100 text-gray-800">
@@ -272,12 +272,7 @@
                                         title="Update Appointment">
                                         <i class="fas fa-edit text-sm sm:text-base"></i>
                                     </button>
-                                    <button class="text-purple-500 hover:text-purple-700 p-1 sm:p-2 rounded-lg hover:bg-purple-50 transition"
-                                        wire:click="managePayment({{ $appointment->id }})"
-                                        onclick="console.log('Payment clicked for {{ $appointment->id }}')"
-                                        title="Manage Payment">
-                                        <i class="fas fa-credit-card text-sm sm:text-base"></i>
-                                    </button>
+                                    
                                 </div>
                             </td>
                         </tr>
@@ -311,8 +306,7 @@
     <!-- Edit Modal Component -->
     @livewire('admin.appointment.edit-modal')
     
-    <!-- Payment Modal Component -->
-    @livewire('admin.appointment.payment-modal')
+  
 
     <!-- View Details Component -->
     @livewire('admin.appointment.view-details')
