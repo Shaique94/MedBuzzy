@@ -87,12 +87,10 @@
                     <div class="bg-white rounded-xl border border-brand-blue-100 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden"
                         wire:key="doctor-{{ $doctor->id }}">
                         <!-- Doctor Image Section -->
-                        <div class="relative h-48 overflow-hidden">
-                            <img src="{{ $doctor->image ?? 'https://ui-avatars.com/api/?name=' . urlencode($doctor->user->name) . '&background=random&rounded=true' }}"
+                        <div class="relative h-auto overflow-hidden">
+                            <img src="{{ $doctor->image ? $doctor->image . '?tr=w-200,h-200,fo-face,q-60' : 'https://ui-avatars.com/api/?name=' . urlencode($doctor->user->name) . '&background=random&rounded=true' }}"
                                 alt="Dr. {{ $doctor->user->name ?? '' }}"
-                                class="w-full  object-contain transition-transform duration-500 hover:scale-105"
-                                loading="lazy">
-
+                                class="w-full transition-transform duration-500 hover:scale-105" loading="lazy">
 
                             <div
                                 class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-brand-blue-900/80 to-transparent p-3">

@@ -49,7 +49,31 @@
         <!-- Dropdown Menu -->
         <div x-show="open" @click.away="open = false" 
              class="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-50 border border-gray-100">
-              @if(auth()->user()->role === 'patient')
+             @if(auth()->user()->role === 'admin')
+                <a wire:navigate href="{{ route('admin.dashboard') }}" 
+                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-brand-blue-50 flex items-center space-x-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 0v4m0-4h4m-4 0H8m6 8H6a2 2 0 01-2-2V6a2 2 0 012-2h12a2 2 0 012 2v12a2 2 0 01-2 2h-6z"/>
+                    </svg>
+                    <span>Admin Dashboard</span>
+                </a>
+            @elseif(auth()->user()->role === 'doctor')
+                <a wire:navigate href="{{ route('doctor.dashboard') }}" 
+                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-brand-blue-50 flex items-center space-x-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 0v4m0-4h4m-4 0H8m6 8H6a2 2 0 01-2-2V6a2 2 0 012-2h12a2 2 0 012 2v12a2 2 0 01-2 2h-6z"/>
+                    </svg>
+                    <span>Doctor Dashboard</span>
+                </a>
+                @elseif(auth()->user()->role === 'manager')
+                    <a wire:navigate href="{{ route('manager.dashboard') }}" 
+                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-brand-blue-50 flex items-center space-x-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 0v4m0-4h4m-4 0H8m6 8H6a2 2 0 01-2-2V6a2 2 0 012-2h12a2 2 0 012 2v12a2 2 0 01-2 2h-6z"/>
+                        </svg>
+                        <span>Manager Dashboard</span>
+                    </a>
+            @else
                 <a wire:navigate href="{{ route('user.dashboard') }}" 
                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-brand-blue-50 flex items-center space-x-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -57,6 +81,8 @@
                     </svg>
                     <span>My Profile</span>
                 </a>
+               
+
             @endif
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
