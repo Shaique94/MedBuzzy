@@ -188,14 +188,12 @@
                                                     @endif
                                                 </div>
                                                 <div class="flex-1 min-w-0">
-                                                   <a href="{{route('doctor-detail', $doctor->slug)}}"> <div 
+                                                   <a wire:navigate href="{{route('doctor-detail', $doctor->slug)}}"> <div 
                                                         class="font-semibold text-gray-900 text-base sm:text-lg truncate">
                                                         Dr. {{ $doctor->user->name }}</div></a>
-
                                                     <div
                                                         class="text-xs sm:text-sm text-brand-blue-600 font-medium truncate">
                                                         {{ $doctor->department->name ?? 'General Medicine' }}</div>
-
                                                 </div>
                                                 <div class="text-right">
                                                     <div class="flex text-yellow-400 justify-end mb-1"
