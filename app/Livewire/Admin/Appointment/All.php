@@ -79,10 +79,7 @@ class All extends Component
         $this->dispatch('openEditModal', appointmentId: $id);
     }
 
-    public function managePayment($id)
-    {
-        $this->dispatch('openPaymentModal', appointmentId: $id);
-    }
+  
 
     public function printReceipt($id)
     {
@@ -181,7 +178,12 @@ class All extends Component
         $this->resetPage();
         $this->dispatch('success', __('New appointment has been created successfully!'));
     }
-
+       #[On('appointmentFailed')]
+    public function handleAppointmentFailed()
+    {
+        $this->resetPage();
+        $this->dispatch('error', __('Failed to create new appointment. Please try again.'));
+    }
     #[Layout('layouts.admin')]
     public function render()
     {
