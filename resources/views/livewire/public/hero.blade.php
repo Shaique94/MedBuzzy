@@ -160,7 +160,7 @@
                             }
                         }" class="relative">
 
-                            <div class="bg-brand-blue-100 rounded-3xl p-8 lg:p-8" @touchstart="handleTouchStart($event)"
+                            <div class="bg-brand-blue-100 rounded-3xl p-3 lg:p-8" @touchstart="handleTouchStart($event)"
                                 @touchend="handleTouchEnd($event)">
 
 
@@ -179,7 +179,7 @@
                                                 <div
                                                     class="w-12 h-12 sm:w-16 sm:h-16 bg-brand-blue-100 rounded-full flex items-center justify-center overflow-hidden border-2 border-white shadow-sm">
                                                     @if ($doctor->image)
-                                                        <img src="{{ $doctor->image }}"
+                                                         <img src="{{ $doctor->image }}"
                                                             alt="Dr. {{ $doctor->user->name }}" loading="lazy"
                                                             class="w-full h-full object-cover">
                                                     @else
@@ -188,9 +188,9 @@
                                                     @endif
                                                 </div>
                                                 <div class="flex-1 min-w-0">
-                                                    <div
+                                                   <a href="{{route('doctor-detail', $doctor->slug)}}"> <div 
                                                         class="font-semibold text-gray-900 text-base sm:text-lg truncate">
-                                                        Dr. {{ $doctor->user->name }}</div>
+                                                        Dr. {{ $doctor->user->name }}</div></a>
 
                                                     <div
                                                         class="text-xs sm:text-sm text-brand-blue-600 font-medium truncate">
