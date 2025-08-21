@@ -23,7 +23,7 @@ class All extends Component
     // Modal properties
     public $showViewModal = false;
     public $showPaymentModal = false;
-    public $showEditModal = false;
+    // public $showEditModal = false;
     public $selectedAppointment = null;
 
     public function updatedPerPage()
@@ -74,10 +74,10 @@ class All extends Component
         }
     }
 
-    public function editAppointment($id)
-    {
-        $this->dispatch('openEditModal', appointmentId: $id);
-    }
+    // public function editAppointment($id)
+    // {
+    //     $this->dispatch('OpenModal', appointmentId: $id);
+    // }
 
   
 
@@ -97,13 +97,13 @@ class All extends Component
         $this->dispatch('openModal', id: $id);
     }
 
-    public function closeModal()
-    {
-        $this->showViewModal = false;
-        $this->showPaymentModal = false;
-        $this->showEditModal = false;
-        $this->selectedAppointment = null;
-    }
+    // public function closeModal()
+    // {
+    //     $this->showViewModal = false;
+    //     $this->showPaymentModal = false;
+    //     $this->showEditModal = false;
+    //     $this->selectedAppointment = null;
+    // }
 
     public function getAppointmentsProperty()
     {
@@ -137,8 +137,7 @@ class All extends Component
                 })
                 ->orWhereHas('patient', function($q) use ($searchTerm) {
                     $q->where('name', 'like', $searchTerm)
-                      ->orWhere('email', 'like', $searchTerm)
-                      ->orWhere('phone', 'like', $searchTerm);
+                      ->orWhere('email', 'like', $searchTerm);
                 });
             });
         }

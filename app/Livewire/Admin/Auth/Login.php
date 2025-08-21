@@ -10,7 +10,7 @@ use Livewire\Component;
 use Illuminate\Support\Carbon;
 use GuzzleHttp\Client;
 
-#[Title('Admin Login')]
+#[Title('Login')]
 class Login extends Component
 {
     public $phone;
