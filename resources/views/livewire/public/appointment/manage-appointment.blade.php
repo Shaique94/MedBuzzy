@@ -720,6 +720,15 @@
     </div>
 
 
+<div wire:loading.delay class="fixed inset-0 z-50 bg-white bg-opacity-75 backdrop-blur-sm flex items-center justify-center" x-cloak>
+    <div class="flex flex-col items-center justify-center text-center min-h-screen">
+        <div class="w-16 h-16 border-4 border-brand-blue-600 border-t-transparent rounded-full animate-spin mb-4" aria-hidden="true"></div>
+        <div class="text-brand-blue-600 font-semibold text-lg">
+            Please Wait...
+        </div>
+    </div>
+</div>
+
    @push('scripts')
     <script>
         (function () {
