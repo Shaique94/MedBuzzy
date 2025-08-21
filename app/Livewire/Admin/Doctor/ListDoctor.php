@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Doctor;
 use App\Models\Doctor;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Services\ImageKitService; 
@@ -15,87 +16,41 @@ class ListDoctor extends Component
     use WithPagination;
 
     public $search = '';
-    public $confirmingDelete = false;
-    public $doctorIdToDelete = null;
 
-    protected $listeners = [
-        'refreshDoctorList' => '$refresh',
-        'doctorCreated' => '$refresh',
-        'doctorUpdated' => '$refresh',
-        'confirmDeleteDoctor' => 'deleteDoctor'
-    ];
+    #[On('refreshDoctorList')]
+    public function refreshList()
+    {
+        // This will refresh the component
+    }
+
+    #[On('doctorCreated')]
+    public function handleDoctorCreated()
+    {
+        $this->dispatch('success', __('Doctor created successfully and added to the list.'));
+       
+       
+    }
+
+    #[On('doctorUpdated')]
+    public function handleDoctorUpdated()
+    {
+        $this->dispatch('success', __('Doctor updated successfully.'));
+       
+    }
 
     public function updatingSearch()
     {
         $this->resetPage();
     }
 
-    public function confirmDelete($id)
-    {
-        $doctor = Doctor::with('user')->findOrFail($id);
-        
-        $this->dispatch('openDeleteModal', [
-            'title' => 'Delete Doctor',
-            'message' => 'Are you sure you want to delete this doctor? All associated appointments and data will be permanently removed.',
-            'confirmText' => 'Delete Doctor',
-            'cancelText' => 'Cancel',
-            'itemName' => $doctor->user->name,
-            'itemType' => 'doctor',
-            'deleteAction' => 'confirmDeleteDoctor',
-            'itemId' => $id
-        ]);
-    }
-
-    public function deleteDoctor($id)
-    {
-        try {
-            $doctor = Doctor::findOrFail($id);
-            $user = $doctor->user;
-            $doctorName = $user->name;
-
-            // Delete image if exists
-            if ($doctor->image_id) {
-                $imageKit = new ImageKitService();
-                $imageKit->delete($doctor->image_id);
-            }
-
-            $doctor->delete();
-            $user->delete();
-
-            $this->dispatch('success', __("Doctor '{$doctorName}' has been successfully deleted."));
-            $this->dispatch('refreshDoctorList');
-        } catch (\Exception $e) {
-            $this->dispatch('error', __('Error deleting doctor: ' . $e->getMessage()));
-        }
-    }
-
-    // Keep old methods for backward compatibility
-    public function cancelDelete()
-    {
-        $this->confirmingDelete = false;
-        $this->doctorIdToDelete = null;
-    }
-
-    public function delete()
-    {
-        if (!$this->doctorIdToDelete) {
-            return;
-        }
-
-        $this->deleteDoctor($this->doctorIdToDelete);
-        
-        $this->confirmingDelete = false;
-        $this->doctorIdToDelete = null;
-    }
-
     public function openCreateModal()
     {
-        $this->dispatch('openCreateModal');
+        return redirect()->route('admin.doctors.create');
     }
 
     public function openUpdateModal($doctorId)
     {
-        $this->dispatch('openUpdateModal', $doctorId);
+        return redirect()->route('admin.doctors.edit', $doctorId);
     }
 
     public function openViewModal($doctorId)

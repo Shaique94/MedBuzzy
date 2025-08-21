@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $title ?? 'MedBuzzy - Healthcare Management System' }}</title>
+    <title>{{ isset($title) ? \Illuminate\Support\Str::limit($title, 60) . ' | ' . config('app.name', 'MedBuzzy - Healthcare Management System | Online Appointment Booking') : config('app.name', 'MedBuzzy - Healthcare Management System | Online Appointment Booking') }}</title>
+
     <meta name="description" content="Book appointments with trusted doctors in Purnea, Bihar. MedBuzzy offers instant booking, expert consultations, and 24/7 support.">
     <link rel="canonical" href="{{ url()->current() }}">
     <meta property="og:title" content="Book Doctors Online | MedBuzzy">

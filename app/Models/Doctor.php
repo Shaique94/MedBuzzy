@@ -37,6 +37,7 @@ class Doctor extends Model
         'unavailable_to',
         'max_booking_days',
         'experience',
+        'review_avg',
     ];
 
     protected $casts = [
@@ -48,6 +49,9 @@ class Doctor extends Model
         'achievements_awards' => 'array',
         'verification_documents' => 'array',
         'social_media_links' => 'array',
+        'review_avg' => 'float', // Cast review_avg as float
+        'start_time' => 'datetime:H:i',
+        'end_time' => 'datetime:H:i',
     ];
 
    protected static function boot()
@@ -93,6 +97,26 @@ class Doctor extends Model
     return $slug;
 }
 
+
+public function updateReviewAverage()
+{
+    $average = $this->reviews()->where('approved', true)->avg('rating');
+    $previousAvg = $this->review_avg;
+    
+    \Log::info("Calculating review_avg for doctor {$this->id} with ratings: " . $this->reviews()->where('approved', true)->pluck('rating')->implode(', '));
+    
+    // Update the review_avg column directly without triggering model events
+    $this->timestamps = false; // Prevent updated_at from being modified
+    $this->update(['review_avg' => $average ?: null]);
+    $this->timestamps = true; // Re-enable timestamps
+    
+    // Refresh the model to ensure we have the latest data
+    $this->refresh();
+    
+    \Log::info("Updated review_avg from {$previousAvg} to {$average} for doctor {$this->id}");
+    
+    return $average;
+}
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -324,6 +348,7 @@ class Doctor extends Model
             throw new \Exception("Failed to generate time slots: " . $e->getMessage());
         }
     }
+
 }
 
 

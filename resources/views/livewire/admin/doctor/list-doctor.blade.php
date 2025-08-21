@@ -1,11 +1,5 @@
 <div>
-    <!-- Include Create, Update, and View components -->
-    <livewire:admin.doctor.create-doctor />
-    <livewire:admin.doctor.update-doctor />
-    <livewire:admin.doctor.view-doctor />
-    
-    <!-- Include Delete Confirmation Modal -->
-    <livewire:components.delete-confirmation-modal />
+     <livewire:admin.doctor.view-doctor />
     
     <div class="container mx-auto max-w-8xl px-2 sm:px-4 lg:px-6">
         <!-- Enhanced Header Section -->
@@ -45,12 +39,12 @@
                     </div>
                     
                     <!-- Add Doctor Button -->
-                    <button wire:click="openCreateModal" 
+                    <a href="{{ route('admin.doctors.create') }}" 
                             class="bg-blue-600  hover:bg-blue-800 text-white px-4 py-2 sm:py-2.5 rounded-lg font-medium shadow-lg transition-all duration-300 flex items-center justify-center space-x-2 hover:shadow-xl transform hover:-translate-y-0.5 text-sm sm:text-base">
                         <i class="fas fa-plus text-sm"></i>
                         <span class="hidden sm:inline">Add Doctor</span>
                         <span class="sm:hidden">Add</span>
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -187,14 +181,10 @@
                                             class="text-blue-600 hover:text-blue-900 transition-colors duration-200 p-1.5 hover:bg-blue-50 rounded-lg">
                                         <i class="fas fa-eye text-xs"></i>
                                     </button>
-                                    <button wire:click="openUpdateModal({{ $doctor->id }})" 
+                                    <a href="{{ route('admin.doctors.edit', $doctor->id) }}" 
                                             class="text-green-600 hover:text-green-900 transition-colors duration-200 p-1.5 hover:bg-green-50 rounded-lg">
                                         <i class="fas fa-edit text-xs"></i>
-                                    </button>
-                                    <button wire:click="confirmDelete({{ $doctor->id }})" 
-                                            class="text-red-600 hover:text-red-900 transition-colors duration-200 p-1.5 hover:bg-red-50 rounded-lg">
-                                        <i class="fas fa-trash text-xs"></i>
-                                    </button>
+                                    </a>
                                 </div>
                             </td>
                         </tr>
@@ -205,10 +195,10 @@
                                     <i class="fas fa-user-md text-gray-300 text-6xl mb-4"></i>
                                     <h3 class="text-lg font-medium text-gray-900 mb-2">No doctors found</h3>
                                     <p class="text-gray-500 mb-6">Get started by adding your first doctor to the system.</p>
-                                    <button wire:click="openCreateModal" 
+                                    <a href="{{ route('admin.doctors.create') }}" 
                                             class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200">
                                         <i class="fas fa-plus mr-2"></i>Add First Doctor
-                                    </button>
+                                    </a>
                                 </div>
                             </td>
                         </tr>
@@ -272,12 +262,9 @@
                                 <button wire:click="openViewModal({{ $doctor->id }})" class="flex-1 text-center px-3 py-3 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-200 transition-colors duration-200 min-h-[44px] touch-target">
                                     <i class="fas fa-eye mr-1"></i>View
                                 </button>
-                                <button wire:click="openUpdateModal({{ $doctor->id }})" class="flex-1 text-center px-3 py-3 bg-indigo-100 text-indigo-700 rounded-lg text-sm font-medium hover:bg-indigo-200 transition-colors duration-200 min-h-[44px] touch-target">
+                                <a href="{{ route('admin.doctors.edit', $doctor->id) }}" class="flex-1 text-center px-3 py-3 bg-indigo-100 text-indigo-700 rounded-lg text-sm font-medium hover:bg-indigo-200 transition-colors duration-200 min-h-[44px] touch-target">
                                     <i class="fas fa-edit mr-1"></i>Edit
-                                </button>
-                                <button wire:click="confirmDelete({{ $doctor->id }})" class="flex-1 text-center px-3 py-3 bg-red-100 text-red-700 rounded-lg text-sm font-medium hover:bg-red-200 transition-colors duration-200 min-h-[44px] touch-target">
-                                    <i class="fas fa-trash mr-1"></i>Delete
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -299,12 +286,12 @@
                             @endif
                         </p>
                         @if(!$search)
-                        <button wire:click="openCreateModal" class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200">
+                        <a href="{{ route('admin.doctors.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                             </svg>
                             Add First Doctor
-                        </button>
+                        </a>
                         @endif
                     </div>
                 </div>
@@ -428,4 +415,5 @@
             }
         }
     </style>
+
 </div>
