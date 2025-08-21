@@ -1,26 +1,26 @@
 <div class="h-full bg-white shadow-md flex flex-col transition-all duration-300 ease-in-out">
     <!-- Profile Section -->
     <div class="p-6 border-b flex items-center space-x-4">
-        @if($doctor->image)
-            <img src="{{ $doctor->image }}?v={{ time() }}" 
+        @if($doctorImage)
+            <img src="{{ $doctorImage }}?v={{ time() }}" 
                  alt="Doctor Profile" 
                  class="w-12 h-12 rounded-full object-cover border-2 border-blue-100 transition-all duration-300"
-                 wire:key="sidebar-profile-image-{{ $doctor->id }}-{{ now()->timestamp }}">
+                 wire:key="sidebar-profile-image-{{ $doctorId }}-{{ now()->timestamp }}">
         @else
             <div class="w-12 h-12 rounded-full bg-blue-100 border-2 border-blue-200 flex items-center justify-center text-blue-600 font-semibold transition-all duration-300">
-                {{ substr($doctor->user->name, 0, 1) }}
+                {{ substr($doctorName, 0, 1) }}
             </div>
         @endif
         <div class="flex flex-1 items-center justify-between ">
             <div>
-                <h2 class="font-semibold text-gray-800 text-lg transition-all duration-300">{{ $doctor->user->name }}</h2>
-                <p class="text-gray-500 text-sm transition-all duration-300">{{ $doctor->department->name ?? 'No Department' }}</p>
+                <h2 class="font-semibold text-gray-800 text-lg transition-all duration-300">{{ $doctorName }}</h2>
+                <p class="text-gray-500 text-sm transition-all duration-300">{{ $departmentName }}</p>
             </div>
 
             <!-- Close Button with Animation -->
-            <button id="sidebarToggle" onclick="toggleSidebar()" 
+            <button onclick="closeSidebar()" 
                     class="md:hidden text-gray-500 hover:text-gray-700 focus:outline-none transition-all duration-300 transform hover:rotate-90">
-                <svg id="closeIcon" class="h-6 w-6 transition-all duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <svg class="h-6 w-6 transition-all duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
             </button>
@@ -29,7 +29,7 @@
 
     <!-- Navigation -->
     <nav class="flex-1 p-4 space-y-1">
-        <a wire:navigate href="{{ route('doctor.dashboard') }}"
+        <a wire:navigate href="{{ route('doctor.dashboard') }}" onclick="closeSidebar()"
             class="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-100 rounded-lg transition">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-blue-500" fill="none"
                 viewBox="0 0 24 24" stroke="currentColor">
@@ -39,7 +39,7 @@
         </a>
 
         <!-- Create Manager -->
-        <a wire:navigate href="{{ route('doctor.manager.create') }}"
+        <a wire:navigate href="{{ route('doctor.manager.create') }}" onclick="closeSidebar()"
             class="flex items-center px-4 py-2 text-gray-700 hover:bg-green-100 rounded-lg transition">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-green-500" fill="none"
                 viewBox="0 0 24 24" stroke="currentColor">
@@ -48,7 +48,7 @@
             Create Manager
         </a>
 
-        <a wire:navigate href="{{ route('doctor.create-slot') }}"
+        <a wire:navigate href="{{ route('doctor.create-slot') }}" onclick="closeSidebar()"
             class="flex items-center px-4 py-2 text-gray-700 hover:bg-green-100 rounded-lg transition">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-green-500" fill="none"
                 viewBox="0 0 24 24" stroke="currentColor">
@@ -57,7 +57,7 @@
             Create Slot
         </a>
 
-        <a wire:navigate href="{{ route('doctor.add-leave') }}"
+        <a wire:navigate href="{{ route('doctor.add-leave') }}" onclick="closeSidebar()"
             class="flex items-center px-4 py-2 text-gray-700 hover:bg-red-100 rounded-lg transition">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-red-500" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">
@@ -66,19 +66,18 @@
             Add Leave
         </a>
 
-
-        <!-- Add more doctor links here -->
-<a wire:navigate href="{{ route('doctor.payments') }}"
-   class="flex items-center px-4 py-3 text-gray-700 hover:text-purple-700 hover:bg-purple-50 rounded-lg transition-all duration-200 group">
-   <div class="flex items-center justify-center h-8 w-8 rounded-full bg-purple-100 group-hover:bg-purple-200 transition-all duration-200 mr-3">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-600 group-hover:text-purple-700" fill="none" 
-           viewBox="0 0 24 24" stroke="currentColor">
-         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-               d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-      </svg>
-   </div>
-   <span class="font-medium group-hover:font-semibold">Payments</span>
-</a>
+        <!-- Payments Link -->
+        <a wire:navigate href="{{ route('doctor.payments') }}" onclick="closeSidebar()"
+           class="flex items-center px-4 py-3 text-gray-700 hover:text-purple-700 hover:bg-purple-50 rounded-lg transition-all duration-200 group">
+           <div class="flex items-center justify-center h-8 w-8 rounded-full bg-purple-100 group-hover:bg-purple-200 transition-all duration-200 mr-3">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-600 group-hover:text-purple-700" fill="none" 
+                   viewBox="0 0 24 24" stroke="currentColor">
+                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                       d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+           </div>
+           <span class="font-medium group-hover:font-semibold">Payments</span>
+        </a>
     </nav>
 
     <!-- Logout -->

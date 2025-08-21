@@ -82,12 +82,12 @@ class EditModal extends Component
             'dob' => $this->dob,
             'status' => $this->status,
         ]);
-
+$this->dispatch('manager-updated');
         // Close modal and refresh
         $this->closeModal();
         $this->dispatch('refreshManagers');
         
-        return redirect()->route('doctor.manager-list')
+        return redirect()->route('doctor.manager.list')
             ->with('success', 'Manager updated successfully!');
 
     } catch (\Exception $e) {

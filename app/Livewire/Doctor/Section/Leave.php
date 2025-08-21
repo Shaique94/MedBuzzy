@@ -17,9 +17,9 @@ class Leave extends Component
 
     public function mount()
     {
-        $this->doctor = Doctor::where('user_id', Auth::id())->first();
-        $this->from_date = $this->doctor->unavailable_from;
-        $this->to_date = $this->doctor->unavailable_to;
+        $this->loadDoctor();
+        $this->from_date = $this->doctor->unavailable_from ?? null;
+        $this->to_date = $this->doctor->unavailable_to ?? null;
     }
 
     public function save()
@@ -28,6 +28,7 @@ class Leave extends Component
             'from_date' => 'required|date|after_or_equal:today',
             'to_date' => 'required|date|after_or_equal:from_date',
         ]);
+        
         $this->doctor->update([
             'unavailable_from' => $this->from_date,
             'unavailable_to' => $this->to_date,
@@ -35,13 +36,25 @@ class Leave extends Component
 
         session()->flash('success', 'Leave updated successfully.');
 
+        // Just reset the form fields, don't call mount() again
         $this->reset(['from_date', 'to_date']);
-        $this->mount(); 
+        
+        // Reload the doctor data to reflect changes
+        $this->loadDoctor();
     }
 
     #[Layout('layouts.doctor')]
     public function render()
     {
         return view('livewire.doctor.section.leave');
+    }
+
+    protected function loadDoctor()
+    {
+        // Load doctor only once and reuse
+        if (!$this->doctor) {
+            $this->doctor = Doctor::where('user_id', Auth::id())->first();
+        }
+        return $this->doctor;
     }
 }
