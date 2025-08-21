@@ -1,5 +1,5 @@
 <div
-    class="lg:col-span-1 bg-gradient-to-r from-brand-blue-50 to-brand-blue-100 p-5 rounded-xl border border-brand-blue-200">
+    class="lg:col-span-1 bg-gradient-to-r self-start sticky top-10 from-brand-blue-50 to-brand-blue-100 p-5 rounded-xl border border-brand-blue-200">
     <div
         class="flex flex-col sm:flex-row md:flex-col lg:flex-row items-center sm:items-start md:items-center lg:items-start gap-4">
         <!-- Doctor Image -->
