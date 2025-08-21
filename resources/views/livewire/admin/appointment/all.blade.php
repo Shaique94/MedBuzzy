@@ -12,7 +12,7 @@
                         <p class="text-blue-100 text-sm sm:text-base">Manage patient appointments efficiently</p>
                     </div>
                 </div>
-                <a wire:navigate href="{{ route('admin.add.appointment') }}"
+                <a wire:navigate href="{{ route('our-doctors') }}"
                     class="bg-white hover:bg-blue-50 text-blue-600 px-4 py-2 sm:px-6 sm:py-3 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 font-medium text-sm sm:text-base">
                     <i class="fas fa-plus"></i>
                     <span>New Appointment</span>
