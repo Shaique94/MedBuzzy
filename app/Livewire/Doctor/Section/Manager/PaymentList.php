@@ -5,15 +5,17 @@ namespace App\Livewire\Doctor\Section\Manager;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Payment;
+use App\Models\Doctor;
 use Carbon\Carbon;
- use Livewire\Attributes\Layout;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
+use Illuminate\Support\Facades\DB;
 
 #[Layout('layouts.doctor')]
 #[Title('Payment Management')]
 class PaymentList extends Component
 {
-   use WithPagination;
+    use WithPagination;
 
     // Search and Filters
     public $search = '';
@@ -36,7 +38,6 @@ class PaymentList extends Component
 
     public function updated($property)
     {
-        // Reset pagination when any filter changes
         if (in_array($property, ['search', 'dateFrom', 'dateTo', 'status', 'method'])) {
             $this->resetPage();
         }
@@ -54,30 +55,85 @@ class PaymentList extends Component
 
     public function resetFilters()
     {
-        $this->reset([
-            'search',
-            'dateFrom',
-            'dateTo',
-            'status',
-            'method',
-            'sortField',
-            'sortDirection'
-        ]);
+        $this->reset(['search', 'dateFrom', 'dateTo', 'status', 'method', 'sortField', 'sortDirection']);
         $this->resetPage();
     }
 
-
   public function render()
+{
+    $doctorId = $this->getDoctorId();
+    
+    if (!$doctorId) {
+        return view('livewire.doctor.section.manager.payment-list', [
+            'payments' => collect([]),
+            'stats' => $this->getEmptyStats(),
+            'statuses' => ['pending', 'paid', 'failed'],
+            'methods' => ['cash', 'card', 'upi'],
+            'hasFilters' => false
+        ]);
+    }
+    
+    $stats = $this->getPaymentStats($doctorId);
+    $payments = $this->getFilteredPayments($doctorId);
+
+    return view('livewire.doctor.section.manager.payment-list', [
+        'payments' => $payments,
+        'stats' => $stats,
+        'statuses' => ['pending', 'paid', 'failed'],
+        'methods' => ['cash', 'card', 'upi'],
+        'hasFilters' => $this->hasFilters()
+    ]);
+}
+
+    protected function getEmptyStats()
     {
-        $payments = Payment::query()
-            ->with(['patient', 'appointment'])
-            ->whereHas('appointment', function($query) {
-                $query->where('doctor_id', auth()->user()->doctor->id);
+        return ['total' => 0, 'paid' => 0, 'pending' => 0, 'amount' => 0];
+    }
+
+    protected function getDoctorId()
+    {
+        $user = auth()->user();
+        return $user && $user->doctor ? $user->doctor->id : null;
+    }
+
+    protected function getPaymentStats($doctorId)
+    {
+        $stats = DB::table('payments')
+            ->selectRaw('
+                COUNT(*) as total,
+                SUM(CASE WHEN status = "paid" THEN 1 ELSE 0 END) as paid,
+                SUM(CASE WHEN status = "pending" THEN 1 ELSE 0 END) as pending,
+                SUM(CASE WHEN status = "paid" THEN amount ELSE 0 END) as amount
+            ')
+            ->whereExists(function ($query) use ($doctorId) {
+                $query->select(DB::raw(1))
+                      ->from('appointments')
+                      ->whereColumn('payments.appointment_id', 'appointments.id')
+                      ->where('appointments.doctor_id', $doctorId)
+                      ->whereNotNull('appointments.patient_id')
+                      ->whereNotNull('appointments.doctor_id');
             })
+            ->first();
+
+        return [
+            'total' => $stats->total ?? 0,
+            'paid' => $stats->paid ?? 0,
+            'pending' => $stats->pending ?? 0,
+            'amount' => $stats->amount ?? 0
+        ];
+    }
+
+    protected function getFilteredPayments($doctorId)
+    {
+        $query = Payment::with([
+                'patient.user:id,name,phone,email',
+                'appointment:id,appointment_date,doctor_id'
+            ])
+            ->whereHas('appointment', fn($q) => $q->where('doctor_id', $doctorId))
             ->when($this->search, function ($query) {
                 $searchTerm = '%' . $this->search . '%';
                 $query->where(function ($q) use ($searchTerm) {
-                    $q->whereHas('patient', function($q) use ($searchTerm) {
+                    $q->whereHas('patient.user', function($q) use ($searchTerm) {
                         $q->where('name', 'like', $searchTerm)
                           ->orWhere('phone', 'like', $searchTerm)
                           ->orWhere('email', 'like', $searchTerm);
@@ -100,26 +156,9 @@ class PaymentList extends Component
             ->when($this->method, function ($query) {
                 $query->where('method', $this->method);
             })
-            ->orderBy($this->sortField, $this->sortDirection)
-            ->paginate(10);
+            ->orderBy($this->sortField, $this->sortDirection);
 
-        $stats = [
-            'total' => Payment::whereHas('appointment', fn($q) => $q->where('doctor_id', auth()->user()->doctor->id))->count(),
-            'paid' => Payment::whereHas('appointment', fn($q) => $q->where('doctor_id', auth()->user()->doctor->id))
-                ->where('status', 'paid')->count(),
-            'pending' => Payment::whereHas('appointment', fn($q) => $q->where('doctor_id', auth()->user()->doctor->id))
-                ->where('status', 'pending')->count(),
-            'amount' => Payment::whereHas('appointment', fn($q) => $q->where('doctor_id', auth()->user()->doctor->id))
-                ->where('status', 'paid')->sum('amount'),
-        ];
-
-        return view('livewire.doctor.section.manager.payment-list', [
-            'payments' => $payments,
-            'stats' => $stats,
-            'statuses' => ['pending', 'paid', 'failed'],
-            'methods' => ['cash', 'card', 'upi'],
-            'hasFilters' => $this->hasFilters()
-        ]);
+        return $query->paginate(10);
     }
 
     public function hasFilters()

@@ -6,22 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
-          <title>{{ $title ?? ' Doctor Panel - MedBuzzy' }}</title>
-    
+    <title>{{ $title ?? 'Doctor Panel - MedBuzzy' }}</title>
 
-
-    <!-- Canonical & OpenGraph -->c
+    <!-- Canonical & OpenGraph -->
     <meta property="og:url" content="{{ url()->current() }}">
     <link rel="canonical" href="{{ url()->current() }}">
 
     <!-- App styles and scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-        @livewireStyles
+    @livewireStyles
 </head>
 
 <body class="bg-gray-100 font-sans antialiased">
-
-
     <!-- Page Container -->
     <div class="min-h-screen flex">
 
@@ -30,8 +26,8 @@
             <livewire:doctor.sidebar />
         </div>
 
- <!-- Sidebar Overlay (for mobile) -->
-        <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-20 md:hidden hidden" onclick="toggleSidebar()"></div>
+        <!-- Sidebar Overlay (for mobile) -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-20 md:hidden hidden" onclick="closeSidebar()"></div>
 
         <!-- Main Content -->
         <div class="flex-1 flex flex-col md:ml-64 transition-all duration-300">
@@ -40,8 +36,8 @@
             <livewire:doctor.header />
 
             <!-- Page Content -->
-            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
-                <div class="container mx-auto px-4 sm:px-6 py-6 ">
+            <main class="flex-1 overflow-x-hidden bg-gray-100">
+                <div class="container mx-auto px-4 sm:px-6 py-6">
                     {{ $slot }}
                 </div>
             </main>
@@ -51,56 +47,68 @@
         </div>
     </div>
 
-    <!-- Sidebar Toggle Script -->
+    @livewireScripts
+    
+    <!-- Simple and Reliable Sidebar Script -->
     <script>
-        // function toggleSidebar() {
-        //     const sidebar = document.getElementById('sidebar');
-        //     sidebar.classList.toggle('-translate-x-full');
-        // }
-
-         function toggleSidebar() {
+        // Toggle sidebar function
+        function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
             
+            // Toggle sidebar
             sidebar.classList.toggle('-translate-x-full');
+            
+            // Toggle overlay
             overlay.classList.toggle('hidden');
             
-            // Toggle body scroll
-            document.body.classList.toggle('overflow-hidden', !sidebar.classList.contains('-translate-x-full'));
+            // Prevent body scroll when sidebar is open
+            if (!sidebar.classList.contains('-translate-x-full')) {
+                document.body.classList.add('overflow-hidden');
+            } else {
+                document.body.classList.remove('overflow-hidden');
+            }
         }
-
-        // Close sidebar when clicking outside (mobile)
-        document.addEventListener('click', (e) => {
+        
+        // Close sidebar function
+        function closeSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
             
-            if (!sidebar.contains(e.target) && !e.target.closest('[data-sidebar-toggle]') && !overlay.classList.contains('hidden')) {
-                sidebar.classList.add('-translate-x-full');
-                overlay.classList.add('hidden');
-                document.body.classList.remove('overflow-hidden');
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        }
+        
+        // Close sidebar when clicking outside (for mobile)
+        document.addEventListener('click', function(e) {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const toggleButton = document.querySelector('[onclick="toggleSidebar()"]');
+            
+            // If click is outside sidebar and overlay is visible, close sidebar
+            if (!sidebar.contains(e.target) && 
+                e.target !== toggleButton && 
+                !toggleButton.contains(e.target) &&
+                !overlay.classList.contains('hidden')) {
+                closeSidebar();
             }
         });
-    </script>
-
-    @livewireScripts
-
-<script>
-    document.addEventListener('livewire:initialized', () => {
-        Livewire.on('profile-picture-updated', (event) => {
-            // Force refresh any Livewire components showing the profile picture
-            Livewire.dispatch('refresh-navigation');
-            
-            // Update all profile images on the page
-            document.querySelectorAll('[wire\\:key^="profile-image-"]').forEach(img => {
-                img.src = `${event.imageUrl}?t=${new Date().getTime()}`;
-            });
+        
+        // Close sidebar when pressing Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const overlay = document.getElementById('sidebar-overlay');
+                if (!overlay.classList.contains('hidden')) {
+                    closeSidebar();
+                }
+            }
         });
-    });
-</script>
-
+        
+        // Close sidebar when navigating (Livewire navigation)
+        document.addEventListener('livewire:navigated', function() {
+            closeSidebar();
+        });
+    </script>
 </body>
 </html>
-
-
-
-
