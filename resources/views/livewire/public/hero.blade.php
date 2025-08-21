@@ -204,7 +204,7 @@
                                                     <div class="flex text-yellow-400 justify-end mb-1"
                                                         aria-hidden="true">
                                                         @php
-                                                            $avgRating = $doctor->reviews_avg_rating ?? 0;
+                                                            $avgRating = $doctor->review_avg ?? 0;
                                                             $fullStars = floor($avgRating);
                                                             $hasHalfStar = $avgRating - $fullStars >= 0.5;
                                                             $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
@@ -249,8 +249,8 @@
                                                     <div class="text-[10px] sm:text-xs text-gray-600">
                                                         @if ($avgRating > 0)
                                                             {{ number_format($avgRating, 1) }}
-                                                            @if ($doctor->reviews_count > 0)
-                                                                ({{ $doctor->reviews_count }})
+                                                            @if ($doctor->review_avg > 0)
+                                                                ({{ $doctor->review_avg }})
                                                             @endif
                                                         @else
                                                             No ratings

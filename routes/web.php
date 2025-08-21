@@ -18,6 +18,8 @@ use App\Livewire\Admin\Sections\EditDoctor;
 use App\Livewire\Admin\Sections\ManageDepartment;
 use App\Livewire\Admin\Sections\ManageDoctor;
 use App\Livewire\Admin\Doctor\ListDoctor;
+use App\Livewire\Admin\Doctor\CreateDoctor;
+use App\Livewire\Admin\Doctor\UpdateDoctor;
 use App\Livewire\Doctor\Section\CreateSlot;
 use App\Livewire\Doctor\Section\Leave;
 use App\Livewire\Doctor\Section\Manager\CreateManger;
@@ -123,6 +125,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin'])->group(
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/manage-doctors', ManageDoctor::class)->name('manage.doctors');
     Route::get('/doctors', ListDoctor::class)->name('doctors.list');
+    Route::get('/doctors/create', CreateDoctor::class)->name('doctors.create');
+    Route::get('/doctors/{id}/edit', UpdateDoctor::class)->name('doctors.edit');
     Route::get('/manage-departments', ManageDepartment::class)->name('departments');
     Route::get('/appointment', All::class)->name('appointment');
     Route::get('/appointment/add', Add::class)->name('add.appointment');

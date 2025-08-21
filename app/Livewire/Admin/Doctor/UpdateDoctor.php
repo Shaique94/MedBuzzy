@@ -6,6 +6,8 @@ use App\Models\Department;
 use App\Models\Doctor;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Services\ImageKitService;
@@ -15,12 +17,14 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
+#[Title('Update Doctor')]
+#[Layout('layouts.admin')]
 class UpdateDoctor extends Component
 {
     use WithFileUploads, DoctorFormTrait;
 
     public $doctor;
-    public $showModal = false;
+    public $doctorId;
     public $name;
     public $email;
     public $password;
@@ -57,12 +61,69 @@ class UpdateDoctor extends Component
     public $departments;
     public $manager_id = 1;
 
-    protected $listeners = ['openUpdateModal' => 'openModal'];
-
-    public function mount()
+    public function mount($id)
     {
+        $this->doctorId = $id;
         $this->departments = Department::all();
-        $this->resetForm();
+        $this->loadDoctor();
+    }
+
+    private function loadDoctor()
+    {
+        try {
+            $this->doctor = Doctor::with(['user', 'department'])->findOrFail($this->doctorId);
+            
+            // Load doctor data into form fields
+            $this->name = $this->doctor->user->name;
+            $this->email = $this->doctor->user->email;
+            $this->phone = $this->doctor->user->phone;
+            $this->gender = $this->doctor->user->gender;
+            $this->department_id = $this->doctor->department_id;
+            $this->experience = $this->doctor->experience ?? 0;
+            $this->qualification = is_array($this->doctor->qualification) 
+                ? implode(', ', $this->doctor->qualification) 
+                : $this->doctor->qualification ?? '';
+            $this->status = $this->doctor->status;
+            $this->fee = $this->doctor->fee;
+            $this->start_time = $this->doctor->start_time ? Carbon::parse($this->doctor->start_time)->format('H:i') : '09:00';
+            $this->end_time = $this->doctor->end_time ? Carbon::parse($this->doctor->end_time)->format('H:i') : '17:00';
+            $this->available_days = is_array($this->doctor->available_days) 
+                ? $this->doctor->available_days 
+                : [];
+            $this->slot_duration_minutes = $this->doctor->slot_duration_minutes ?? 30;
+            $this->patients_per_slot = $this->doctor->patients_per_slot ?? 1;
+            $this->max_booking_days = $this->doctor->max_booking_days ?? 7;
+            $this->imageUrl = $this->doctor->image_url;
+            $this->imageId = $this->doctor->image_id;
+            $this->city = $this->doctor->city;
+            $this->state = $this->doctor->state;
+            $this->pincode = $this->doctor->pincode;
+            $this->clinic_hospital_name = $this->doctor->clinic_hospital_name;
+            $this->registration_number = $this->doctor->registration_number;
+            $this->languages_spoken = is_array($this->doctor->languages_spoken) 
+                ? implode(', ', $this->doctor->languages_spoken) 
+                : $this->doctor->languages_spoken ?? '';
+            $this->professional_bio = $this->doctor->professional_bio;
+            $this->achievements_awards = is_array($this->doctor->achievements_awards) 
+                ? implode(', ', $this->doctor->achievements_awards) 
+                : $this->doctor->achievements_awards ?? '';
+            $this->verification_documents = is_array($this->doctor->verification_documents) 
+                ? $this->doctor->verification_documents 
+                : [];
+            $this->social_media_links = is_array($this->doctor->social_media_links) && !empty($this->doctor->social_media_links)
+                ? array_map(function($platform, $url) {
+                    return ['platform' => $platform, 'url' => $url];
+                }, array_keys($this->doctor->social_media_links), array_values($this->doctor->social_media_links))
+                : [['platform' => '', 'url' => '']];
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            session()->flash('error', 'Doctor not found.');
+            return redirect()->route('admin.doctors.list');
+        } catch (\Exception $e) {
+            Log::error('Error loading doctor: ' . $e->getMessage());
+            session()->flash('error', 'Error loading doctor data.');
+            return redirect()->route('admin.doctors.list');
+        }
     }
 
     public function updatedImage()
@@ -182,85 +243,44 @@ class UpdateDoctor extends Component
         return $documents;
     }
 
-
-
-    public function openModal($doctorId)
+    private function processArrayFields()
     {
-        try {
-            if (empty($doctorId) || !is_numeric($doctorId)) {
-                throw new \Exception('Invalid doctor ID provided');
-            }
-
-            $this->doctor = Doctor::with(['user', 'department'])->findOrFail($doctorId);
-
-            if (!$this->doctor->user || !$this->doctor->department) {
-                throw new \Exception('Doctor user or department data not found');
-            }
-
-            $this->name = $this->doctor->user->name ?? '';
-            $this->email = $this->doctor->user->email ?? '';
-            $this->phone = $this->doctor->user->phone ?? '';
-            $this->password = ''; // Always start with empty password
-            $this->password_confirmation = ''; // Always start with empty password confirmation
-            $this->experience = $this->doctor->experience ?? '';
-            $this->qualification = is_array($this->doctor->qualification) ? implode(', ', $this->doctor->qualification) : ($this->doctor->qualification ?? '');
-            $this->gender = $this->doctor->user->gender ?? '';
-            $this->status = $this->doctor->status ?? 1;
-            $this->fee = $this->doctor->fee ?? '';
-            $this->start_time = $this->doctor->start_time ? Carbon::parse($this->doctor->start_time)->format('H:i') : '09:00';
-            $this->end_time = $this->doctor->end_time ? Carbon::parse($this->doctor->end_time)->format('H:i') : '17:00';
-            $this->available_days = is_array($this->doctor->available_days) ? $this->doctor->available_days : [];
-            $this->slot_duration_minutes = $this->doctor->slot_duration_minutes ?? 30;
-            $this->patients_per_slot = $this->doctor->patients_per_slot ?? 1;
-            $this->max_booking_days = $this->doctor->max_booking_days ?? 7;
-            $this->city = $this->doctor->city ?? '';
-            $this->state = $this->doctor->state ?? '';
-            $this->pincode = $this->doctor->pincode ?? '';
-            $this->clinic_hospital_name = $this->doctor->clinic_hospital_name ?? '';
-            $this->registration_number = $this->doctor->registration_number ?? '';
-            $this->languages_spoken = is_array($this->doctor->languages_spoken) ? implode(', ', $this->doctor->languages_spoken) : ($this->doctor->languages_spoken ?? '');
-            $this->professional_bio = $this->doctor->professional_bio ?? '';
-            $this->achievements_awards = is_array($this->doctor->achievements_awards) ? implode(', ', $this->doctor->achievements_awards) : ($this->doctor->achievements_awards ?? '');
-            $this->social_media_links = is_array($this->doctor->social_media_links) ? array_map(fn($url, $platform) => ['platform' => $platform, 'url' => $url], array_values($this->doctor->social_media_links), array_keys($this->doctor->social_media_links)) : [['platform' => '', 'url' => '']];
-            $this->verification_documents = $this->doctor->verification_documents ?? [];
-            $this->department_id = $this->doctor->department_id ?? '';
-            $this->imagePreview = $this->doctor->image ?? null;
-            $this->imageUrl = $this->doctor->image ?? null;
-            $this->imageId = $this->doctor->image_id ?? null;
-
-            // Force clear password fields to prevent validation issues
-            $this->password = '';
-            $this->password_confirmation = '';
-            $this->resetErrorBag(['password', 'password_confirmation']);
-
-            $this->showModal = true;
-            $this->dispatch('modalOpened');
-            
-            Log::info('UpdateDoctor modal opened', [
-                'doctor_id' => $doctorId,
-                'password_cleared' => true,
-                'password_value' => $this->password,
-                'confirmation_value' => $this->password_confirmation
-            ]);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            Log::warning('Doctor not found', ['doctor_id' => $doctorId]);
-            session()->flash('error', 'Doctor not found.');
-            $this->showModal = false;
-            $this->resetForm();
-        } catch (\Exception $e) {
-            Log::error('Error loading doctor details: ' . $e->getMessage(), ['doctor_id' => $doctorId]);
-            session()->flash('error', 'An error occurred while loading doctor details.');
-            $this->showModal = false;
-            $this->resetForm();
-        }
+        return [
+            'qualifications' => $this->qualification ? 
+                array_filter(array_map('trim', explode(',', $this->qualification))) : 
+                null,
+            'languages' => $this->languages_spoken ? 
+                array_filter(array_map('trim', explode(',', $this->languages_spoken))) : 
+                null,
+            'achievements' => $this->achievements_awards ? 
+                array_filter(array_map('trim', explode(',', $this->achievements_awards))) : 
+                null,
+        ];
     }
+
+    private function processSocialMedia()
+    {
+        if (!$this->social_media_links) {
+            return null;
+        }
+
+        $socialMedia = [];
+        foreach ($this->social_media_links as $link) {
+            if (!empty($link['platform']) && !empty($link['url'])) {
+                $socialMedia[$link['platform']] = $link['url'];
+            }
+        }
+
+        return empty($socialMedia) ? null : $socialMedia;
+    }
+
+
+
 
     public function updateDoctor()
     {
         // Debug: Log password field values
         Log::info('Password fields before processing', [
-            'password' => $this->password,
-            'password_confirmation' => $this->password_confirmation,
             'password_length' => strlen($this->password ?? ''),
             'confirmation_length' => strlen($this->password_confirmation ?? '')
         ]);
@@ -272,13 +292,11 @@ class UpdateDoctor extends Component
         // Clear password confirmation if password is empty to avoid validation issues
         if (empty($this->password)) {
             $this->password_confirmation = '';
-            $this->resetErrorBag(['password', 'password_confirmation']);
         }
         
         Log::info('Password fields after processing', [
-            'password' => $this->password,
-            'password_confirmation' => $this->password_confirmation,
-            'password_empty' => empty($this->password),
+            'password_length' => strlen($this->password ?? ''),
+            'confirmation_length' => strlen($this->password_confirmation ?? ''),
             'will_validate_password' => !empty($this->password) && strlen($this->password) > 0
         ]);
         
@@ -286,31 +304,23 @@ class UpdateDoctor extends Component
         $validationRules = [
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . $this->doctor->user_id,
-            'phone' => 'required|string|digits:10|regex:/^[6-9]\d{9}$/|unique:users,phone,' . $this->doctor->user_id,
+            'phone' => 'required|string|max:15|unique:users,phone,' . $this->doctor->user_id,
+            'gender' => 'required|in:male,female,other',
+            'experience' => 'required|integer|min:0|max:50',
             'department_id' => 'required|exists:departments,id',
-            'available_days' => 'required|array|min:1',
-            'available_days.*' => 'in:Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday',
-            'status' => 'required|in:0,1,2',
             'fee' => 'required|numeric|min:0',
-            'qualification' => 'nullable|string|max:255',
+            'status' => 'required|in:0,1,2',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
+            'available_days' => 'required|array|min:1',
             'slot_duration_minutes' => 'required|integer|min:5|max:120',
             'patients_per_slot' => 'required|integer|min:1|max:10',
             'max_booking_days' => 'required|integer|min:1|max:30',
             'pincode' => 'required|digits:6',
             'city' => 'required|string|max:100',
             'state' => 'required|string|max:100',
-            'gender' => 'required|in:male,female,other',
-            'experience' => 'required|integer|min:0|max:50',
-            'languages_spoken' => 'nullable|string|max:255',
-            'clinic_hospital_name' => 'nullable|string|max:100',
-            'professional_bio' => 'nullable|string|max:65535',
-            'achievements_awards' => 'nullable|string|max:255',
-            'social_media_links.*.platform' => 'nullable|in:twitter,facebook,instagram',
-            'social_media_links.*.url' => 'nullable|url|max:255',
-            'image' => 'nullable|image|max:10240',
             'registration_number' => 'nullable|string|max:50|unique:doctors,registration_number,' . $this->doctor->id,
+            'image' => 'nullable|image|max:10240',
         ];
         
         // Only add password validation if user actually wants to change password
@@ -319,10 +329,9 @@ class UpdateDoctor extends Component
             $validationRules['password'] = 'required|min:8';
             $validationRules['password_confirmation'] = 'required|same:password';
         } else {
-            // Force clear if it looks like autofill or placeholder
+            // Clear password fields to prevent any validation issues
             $this->password = '';
             $this->password_confirmation = '';
-            $this->resetErrorBag(['password', 'password_confirmation']);
         }
         
         // Add document validation if files are uploaded
@@ -336,22 +345,19 @@ class UpdateDoctor extends Component
         try {
             DB::beginTransaction();
 
-            $imageUrl = $this->doctor->image;
-            $imageId = $this->doctor->image_id;
-
             // Handle image upload
+            $imageUrl = $this->imageUrl;
+            $imageId = $this->imageId;
+            
             if ($this->image) {
-                $imageKit = new ImageKitService();
-                
                 // Delete old image if exists
-                if ($this->doctor->image_id) {
-                    try {
-                        $imageKit->delete($this->doctor->image_id);
-                    } catch (\Exception $e) {
-                        Log::error('Failed to delete old image: ' . $e->getMessage());
-                    }
+                if ($imageId) {
+                    $imageKit = new ImageKitService();
+                    $imageKit->delete($imageId);
                 }
                 
+                // Upload new image
+                $imageKit = new ImageKitService();
                 $response = $imageKit->upload(
                     fopen($this->image->getRealPath(), 'r'),
                     'doctor_' . time() . '.' . $this->image->getClientOriginalExtension(),
@@ -376,28 +382,23 @@ class UpdateDoctor extends Component
             $socialMedia = $this->processSocialMedia();
 
             // Update user
-            $user = User::find($this->doctor->user_id);
-            if (!$user) {
-                throw new \Exception('User not found');
-            }
-
-            $userData = [
+            $this->doctor->user->update([
                 'name' => ucfirst(trim($this->name)),
                 'email' => $this->email,
                 'phone' => $this->phone,
                 'gender' => $this->gender,
-            ];
+            ]);
 
-            if ($this->password) {
-                $userData['password'] = Hash::make($this->password);
+            // Update password if provided
+            if (!empty($this->password)) {
+                $this->doctor->user->update([
+                    'password' => Hash::make($this->password)
+                ]);
             }
-
-            $user->update($userData);
 
             // Update doctor
             $this->doctor->update([
                 'department_id' => $this->department_id,
-                'manager_id' => $this->manager_id,
                 'experience' => $this->experience,
                 'qualification' => $arrayFields['qualifications'],
                 'status' => $this->status,
@@ -408,96 +409,49 @@ class UpdateDoctor extends Component
                 'slot_duration_minutes' => $this->slot_duration_minutes,
                 'patients_per_slot' => $this->patients_per_slot,
                 'max_booking_days' => $this->max_booking_days,
-                'city' => $this->city !== '' ? $this->city : null,
-                'state' => $this->state !== '' ? $this->state : null,
-                'pincode' => $this->pincode !== '' ? $this->pincode : null,
-                'clinic_hospital_name' => $this->clinic_hospital_name !== '' ? $this->clinic_hospital_name : null,
-                'registration_number' => $this->registration_number !== null && trim($this->registration_number) !== '' ? $this->registration_number : null,
-                'languages_spoken' => $arrayFields['languages'],
-                'professional_bio' => $this->professional_bio !== '' ? $this->professional_bio : null,
-                'achievements_awards' => $arrayFields['achievements'],
-                'social_media_links' => $socialMedia,
-                'verification_documents' => $documents,
                 'image' => $imageUrl,
                 'image_id' => $imageId,
-                'slug' => Str::slug($this->name),
+                'city' => $this->city,
+                'state' => $this->state,
+                'pincode' => $this->pincode,
+                'clinic_hospital_name' => $this->clinic_hospital_name,
+                'registration_number' => $this->registration_number,
+                'languages_spoken' => $arrayFields['languages'],
+                'professional_bio' => $this->professional_bio,
+                'achievements_awards' => $arrayFields['achievements'],
+                'verification_documents' => $documents,
+                'social_media_links' => $socialMedia,
             ]);
 
             DB::commit();
 
-            session()->flash('success', 'Doctor details updated successfully.');
-            $this->showModal = false;
-            $this->resetForm();
+            // Dispatch success event and show toast message
             $this->dispatch('doctorUpdated');
-            $this->dispatch('refreshDoctorList');
+           
+            return redirect()->route('admin.doctors.list');
             
         } catch (\Exception $e) {
             DB::rollBack();
+            
+            // Clean up uploaded files on error
+            if (isset($response) && isset($response->result->fileId) && $response->result->fileId !== $this->imageId) {
+                try {
+                    $imageKit = new ImageKitService();
+                    $imageKit->delete($response->result->fileId);
+                } catch (\Exception $cleanupError) {
+                    Log::error('Failed to cleanup uploaded image: ' . $cleanupError->getMessage());
+                }
+            }
+
             Log::error('Error updating doctor: ' . $e->getMessage(), [
-                'doctor_id' => $this->doctor->id,
                 'trace' => $e->getTraceAsString()
             ]);
-            session()->flash('error', 'An error occurred while updating doctor details: ' . $e->getMessage());
+
         }
-    }
-
-    public function removeDocument($index)
-    {
-        try {
-            if (isset($this->verification_documents[$index])) {
-                $imageKit = new ImageKitService();
-                $imageKit->delete(basename($this->verification_documents[$index]));
-                unset($this->verification_documents[$index]);
-                $this->verification_documents = array_values($this->verification_documents);
-                $this->doctor->update(['verification_documents' => $this->verification_documents]);
-                Log::info('Document removed', ['index' => $index, 'doctor_id' => $this->doctor->id]);
-            }
-        } catch (\Exception $e) {
-            Log::error('Error removing document: ' . $e->getMessage(), ['index' => $index, 'doctor_id' => $this->doctor->id]);
-            session()->flash('error', 'An error occurred while removing the document.');
-        }
-    }
-
-
-
-    public function closeModal()
-    {
-        $this->showModal = false;
-        $this->resetForm();
-        Log::info('UpdateDoctor modal closed');
-    }
-
-    private function resetForm()
-    {
-        $this->reset([
-            'name', 'email', 'password', 'password_confirmation', 'phone', 'experience', 'qualification', 'gender',
-            'status', 'fee', 'start_time', 'end_time', 'available_days', 'slot_duration_minutes',
-            'patients_per_slot', 'max_booking_days', 'image', 'imagePreview', 'imageUrl', 'imageId', 'city',
-            'state', 'pincode', 'clinic_hospital_name', 'registration_number', 'languages_spoken',
-            'professional_bio', 'achievements_awards', 'social_media_links', 'verification_documents',
-            'new_verification_documents', 'department_id'
-        ]);
-        
-        // Explicitly clear password fields
-        $this->password = '';
-        $this->password_confirmation = '';
-        
-        $this->status = false;
-        $this->start_time = '09:00';
-        $this->end_time = '17:00';
-        $this->slot_duration_minutes = 30;
-        $this->patients_per_slot = 1;
-        $this->max_booking_days = 7;
-        $this->social_media_links = [['platform' => '', 'url' => '']];
-        $this->resetErrorBag();
     }
 
     public function render()
     {
-        return view('livewire.admin.doctor.update-doctor', [
-            'doctor' => $this->doctor,
-            'imagePreview' => $this->imagePreview,
-            'departments' => $this->departments,
-        ]);
+        return view('livewire.admin.doctor.update-doctor');
     }
 }

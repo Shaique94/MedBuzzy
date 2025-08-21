@@ -8,6 +8,7 @@ use App\Models\Enquiry;
 use App\Models\PhoneVerification; // Add this
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Illuminate\Support\Facades\Cache;
 
@@ -21,6 +22,7 @@ class LandingPage extends Component
     public $totalPatients;
     public $generatedCode;
     public $showVerification;
+    
     public function mount()
     {
         $this->loadDoctors();
@@ -31,24 +33,20 @@ class LandingPage extends Component
 
     protected function loadDoctors()
     {
-        $this->doctors = Cache::remember('featured_doctors', now()->addMinutes(30), function () { 
+       $this->doctors = Cache::remember('featured_doctors', now()->addMinutes(30), function () { 
             return Doctor::with([
             'user:id,name',
             "department:id,slug,name"
         ])->withCount(['reviews' => function($query) {
                 $query->where('approved', true);
             }])
-            ->select("id","fee","qualification","image","slug","user_id","department_id","languages_spoken","city")
-            ->withAvg(['reviews' => function($query) {
-                $query->where('approved', true);
-            }], 'rating')
+            ->select("id","fee","qualification","image","slug","user_id","department_id","languages_spoken","city","review_avg")
+            ->where('status', 1) // Assuming there's a status field, add this filter
             ->inRandomOrder()
             ->limit(4)
             ->get();
-        });
-    }
-
-   
+           });
+            }
 
     public function submitPhone()
     {
@@ -65,7 +63,19 @@ class LandingPage extends Component
         $this->showVerification = true;
     }
 
-   
+    #[On('refreshDoctors')]
+    public function refreshDoctors()
+    {
+        $this->loadDoctors();
+    }
+
+    #[On('doctor-review-updated')]
+    public function handleDoctorReviewUpdated($doctorId)
+    {
+        // Refresh the entire doctors list to ensure updated averages are shown
+        $this->loadDoctors();
+    }
+
     #[Layout('layouts.public')]
     public function render()
     {
