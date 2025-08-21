@@ -8,7 +8,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Component;
-
+use Carbon\Carbon;
 #[Title('Update Appointment')]
 class Update extends Component
 {
@@ -16,18 +16,18 @@ class Update extends Component
     public $email;
     public $phone;
     public $gender;
-    public $address;
-    public $pincode;
-    public $state = "Bihar";
-    public $country = "India";
     public $doctor_id;
-public $showModel;
-    public $doctors;
-    public $age;
+    public $doctor_name;
+    public $appointment_date;
+    public $appointment_date_formatted;
+    public $appointment_time;
+    public $appointment_time_formatted;
     public $status;
+    // public $showModal;
+    public $doctors;
+    public $appointment_id;
 
-        #[On('OpenModel')]
-
+    // #[On('OpenModal')]
     public function mount($id)
     {
         $this->doctors = Doctor::all();
@@ -38,26 +38,20 @@ public $showModel;
         $this->email = $appointment->patient->email;
         $this->phone = $appointment->patient->phone;
         $this->gender = $appointment->patient->gender;
-        $this->age = $appointment->patient->age;
-        $this->address = $appointment->patient->address;
-        $this->pincode = $appointment->patient->pincode;
-        $this->state = $appointment->patient->state ?? 'Bihar';
-        $this->country = $appointment->patient->country ?? 'India';
-        $this->showModel=true;
+        $this->doctor_id = $appointment->doctor_id;
+        $this->doctor_name = $appointment->doctor->user->name . ' - ' . $appointment->doctor->department->name;
+        $this->appointment_date = $appointment->appointment_date;
+        $this->appointment_date_formatted = Carbon::parse($appointment->appointment_date)->format('d M Y');
+        $this->appointment_time = $appointment->appointment_time;
+        $this->appointment_time_formatted = Carbon::parse($appointment->appointment_time)->format('h:i A');
+      
     }
 
-    public function update()
+    public function updateAppointment()
     {
         $this->validate([
             'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
             'gender' => 'required|in:male,female,other',
-            'email' => 'nullable|email|max:255',
-            'age' => 'nullable|numeric|min:0',
-            'address' => 'nullable|string|max:255',
-            'pincode' => 'nullable|string|max:10',
-            'state' => 'nullable|string|max:100',
-            'country' => 'nullable|string|max:100',
         ]);
 
         try {
@@ -67,20 +61,11 @@ public $showModel;
             $patient = $appointment->patient;
             $patient->update([
                 'name' => $this->name,
-                'email' => $this->email,
-                'phone' => $this->phone,
                 'gender' => $this->gender,
-                'age' => $this->age,
-                'address' => $this->address,
-                'pincode' => $this->pincode,
-                'state' => $this->state,
-                'country' => $this->country,
             ]);
 
-           
-
             $this->dispatch('success', __('Appointment updated successfully!'));
-            $this->dispatch('closeModal');
+            // $this->dispatch('closeModal');
             return $this->redirect(route('admin.appointment'), navigate: true);
 
         } catch (\Exception $e) {
@@ -89,11 +74,11 @@ public $showModel;
         }
     }
 
-    public function closeModal()
-    {
-        $this->showModel=false;
-        return redirect()->route('admin.dashboard');
-    }
+    // public function closeModal()
+    // {
+    //     $this->showModal = false;
+    //     return redirect()->route('admin.dashboard');
+    // }
 
     #[Layout('layouts.admin')]
     public function render()
