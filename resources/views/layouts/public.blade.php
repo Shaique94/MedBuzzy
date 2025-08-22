@@ -7,12 +7,19 @@
 
     <title>{{ isset($title) ? \Illuminate\Support\Str::limit($title, 60) . ' | ' . config('app.name', 'MedBuzzy - Healthcare Management System | Online Appointment Booking') : config('app.name', 'MedBuzzy - Healthcare Management System | Online Appointment Booking') }}</title>
 
-    <meta name="description" content="Book appointments with trusted doctors in Purnea, Bihar. MedBuzzy offers instant booking, expert consultations, and 24/7 support.">
+      <meta name="description" content="Book appointments with trusted doctors in Purnea, Bihar. MedBuzzy offers instant booking, expert consultations, and 24/7 support. Find the best healthcare specialists near you.">
     <link rel="canonical" href="{{ url()->current() }}">
     <meta property="og:title" content="Book Doctors Online | MedBuzzy">
     <meta property="og:description" content="Book appointments with trusted doctors in Purnea, Bihar. MedBuzzy offers instant booking, expert consultations, and 24/7 support.">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:type" content="website">
+
+     <meta property="og:image" content="{{ asset('logo/logo1.png') }}">
+
+    <!-- Additional helpful meta tags -->
+    <meta name="keywords" content="doctors, appointment booking, healthcare, Purnea, Bihar, online consultation, medical services">
+    <meta name="author" content="MedBuzzy">
+    <meta name="robots" content="index, follow">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
