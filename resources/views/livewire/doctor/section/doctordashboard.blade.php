@@ -9,18 +9,23 @@
                         Welcome back Dr. <span class="text-blue-600 ml-1">{{ $doctor_name ?? 'John Doe' }}</span>
                     </h1>
                 </div>
-                  <div class="relative w-full md:w-64 lg:w-96">
-                <!-- Fixed search input -->
-                <input type="text" wire:model.debounce.300ms="search" 
-                    placeholder="Search by patient name or notes..."
-                    class="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <svg class="w-5 h-5 text-gray-400 absolute left-3 top-2.5" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor">
-                    <path
-                        d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
-                        stroke-width="2" stroke-linecap="round" />
-                </svg>
-            </div>
+               <div class="relative w-full md:w-64 lg:w-96">
+    <label for="search-input" class="sr-only">Search appointments</label>
+   <input 
+    id="search-input"
+    type="text" 
+    wire:model="search" 
+    wire:keydown.debounce.300ms="loadAppointmentsAndCounts"
+    placeholder="Search by patient name or notes..."
+    aria-label="Search appointments"
+    class="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <svg class="w-5 h-5 text-gray-400 absolute left-3 top-2.5" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" aria-hidden="true">
+        <path
+            d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
+            stroke-width="2" stroke-linecap="round" />
+    </svg>
+</div>
             </div>
 
                <!-- Stats Cards -->
@@ -92,39 +97,45 @@
                     <h2 class="text-lg md:text-xl font-semibold text-gray-800 mb-3">Upcoming Appointments</h2>
                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <!-- From Date -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">From Date</label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
-                                </svg>
-                            </div>
-                            <!-- Fixed date input -->
-                            <input type="date" wire:model="fromDate"
-                                class="w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                    </div>
+                  <div>
+    <label for="from-date" class="block text-sm font-medium text-gray-700 mb-1">From Date</label>
+    <div class="relative">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+            </svg>
+        </div>
+        <input 
+            id="from-date"
+            type="date" 
+            wire:model="fromDate"
+            aria-describedby="from-date-description"
+            class="w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+    </div>
+</div>
 
                     <!-- To Date -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">To Date</label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
-                                </svg>
-                            </div>
-                            <!-- Fixed date input -->
-                            <input type="date" wire:model="toDate"
-                                class="w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                    </div>
+                  <div>
+    <label for="to-date" class="block text-sm font-medium text-gray-700 mb-1">To Date</label>
+    <div class="relative">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+            </svg>
+        </div>
+        <input 
+            id="to-date"
+            type="date" 
+            wire:model="toDate"
+            aria-describedby="to-date-description"
+            class="w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+    </div>
+</div>
 
                     <!-- Apply / Reset Buttons -->
                     <div class="md:col-span-2 flex flex-col sm:flex-row gap-2 items-stretch sm:items-end">
-                        <button wire:click="applyFilters"
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition flex items-center justify-center gap-2 shadow-md hover:shadow-lg">
+                      <button wire:click="applyFilters" type="button"
+    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition flex items-center justify-center gap-2 shadow-md hover:shadow-lg">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
                             </svg>
@@ -218,11 +229,17 @@
                             </button>
                         </div>
                     </div>
-                    @empty
-                    <div class="text-center py-8 text-gray-500">
-                        No appointments found matching your criteria.
-                    </div>
-                    @endforelse
+                <!-- Mobile View Empty State -->
+@empty
+<div class="text-center py-8 text-gray-500">
+    <div class="inline-block bg-white p-6 rounded-lg shadow-sm">
+        <svg class="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+        </svg>
+        <p class="text-sm">No appointments found</p>
+    </div>
+</div>
+@endforelse
                 </div>
 
                 <!-- Table - Desktop View -->
@@ -309,13 +326,19 @@
                                     </div>
                                 </td>
                             </tr>
-                            @empty
-                            <tr>
-                                <td colspan="5" class="py-8 text-center text-gray-500">
-                                    No appointments found matching your criteria.
-                                </td>
-                            </tr>
-                            @endforelse
+                           <!-- Desktop View Empty State -->
+@empty
+<tr>
+    <td colspan="5" class="py-8 text-center">
+        <div class="inline-block bg-white p-6 rounded-lg shadow-sm">
+            <svg class="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+            </svg>
+            <p class="text-sm text-gray-500">No appointments found</p>
+        </div>
+    </td>
+</tr>
+@endforelse
                         </tbody>
                     </table>
                 </div>

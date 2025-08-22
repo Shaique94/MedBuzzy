@@ -29,66 +29,68 @@ class Doctordashboard extends Component
     protected $doctorId;
 
     #[Layout('layouts.doctor')]
-    public function mount()
-    {
-        $this->filtersApplied = false;
-        
-        // Get the doctor ID with proper caching (1 hour)
-        $user = auth()->user();
-        $this->doctorId = Cache::remember('doctor_id_' . $user->id, 3600, function () use ($user) {
-            return Doctor::where('user_id', $user->id)->value('id');
+ public function mount()
+{
+    $this->filtersApplied = false;
+    
+    // Get user once
+    $user = auth()->user();
+    $this->doctor_name = $user->name;
+    
+    // Get doctor ID with faster caching (5 minutes instead of 1 hour)
+    $this->doctorId = Cache::remember('doctor_id_' . $user->id, 300, function () use ($user) {
+        return Doctor::where('user_id', $user->id)->value('id');
+    });
+    
+    // Load cached counts immediately for faster initial render
+    $this->loadCachedCounts();
+    
+    // Load appointments immediately instead of deferring
+    $this->loadAppointmentsAndCounts();
+}
+
+   public function loadAppointmentsAndCounts()
+{
+    $filtersUsed = false;
+
+    $query = Appointment::with(['patient:id,name']) 
+        ->where('doctor_id', $this->doctorId)
+        ->whereIn('status', ['scheduled', 'pending'])
+        ->orderBy('appointment_date', 'asc')
+        ->orderBy('appointment_time', 'asc');
+
+    // Apply filters...
+    if (!empty($this->search)) {
+        $query->where(function($q) {
+            $q->whereHas('patient', function ($q2) {
+                $q2->where('name', 'like', '%' . $this->search . '%');
+            })->orWhere('notes', 'like', '%' . $this->search . '%');
         });
-        
-        $this->doctor_name = $user->name;
-        
-        $this->loadAppointmentsAndCounts();
+        $filtersUsed = true;
     }
 
-    public function loadAppointmentsAndCounts()
-    {
-        $filtersUsed = false;
+    if (!empty($this->fromDate)) {
+        $query->whereDate('appointment_date', '>=', $this->fromDate);
+        $filtersUsed = true;
+    }
 
-        // Base query for appointments - only select needed fields
-        $query = Appointment::with(['patient:id,name']) // Only load patient id and name
-            ->where('doctor_id', $this->doctorId)
-            ->whereIn('status', ['scheduled', 'pending']) // Only show upcoming appointments
-            ->orderBy('appointment_date', 'asc')
-            ->orderBy('appointment_time', 'asc');
+    if (!empty($this->toDate)) {
+        $query->whereDate('appointment_date', '<=', $this->toDate);
+        $filtersUsed = true;
+    }
 
-        // Apply filters if any
-        if (!empty($this->search)) {
-            $query->where(function($q) {
-                $q->whereHas('patient', function ($q2) {
-                    $q2->where('name', 'like', '%' . $this->search . '%');
-                })->orWhere('notes', 'like', '%' . $this->search . '%');
-            });
-            $filtersUsed = true;
-        }
-
-        if (!empty($this->fromDate)) {
-            $query->whereDate('appointment_date', '>=', $this->fromDate);
-            $filtersUsed = true;
-        }
-
-        if (!empty($this->toDate)) {
-            $query->whereDate('appointment_date', '<=', $this->toDate);
-            $filtersUsed = true;
-        }
-
-        $this->filtersApplied = $filtersUsed;
-        
-        // Always load appointments when filters are applied or when showing the dashboard
-        $this->appointments = $query->get();
-        
-        // Calculate counts from the appointments
+    $this->filtersApplied = $filtersUsed;
+    
+    // Use chunking or pagination for large datasets
+    $this->appointments = $query->take(50)->get(); // Limit to 50 appointments
+    
+    // Only update counts if no filters applied
+    if (!$this->filtersApplied && empty($this->search)) {
+        $this->updateCachedCounts();
+    } else {
         $this->calculateCountsFromAppointments();
-        
-        // If no filters are applied, also update the cached counts
-        if (!$this->filtersApplied && empty($this->search)) {
-            $this->updateCachedCounts(); // Fixed method name
-        }
     }
-
+}
     // Load counts from cache or calculate and cache them
     public function loadCachedCounts()
     {
@@ -109,7 +111,7 @@ class Doctordashboard extends Component
     }
     
     // Update cached counts with current data
-    public function updateCachedCounts() // Fixed method name (removed extra characters)
+    public function updateCachedCounts() 
     {
         $cacheKey = 'doctor_dashboard_counts_' . $this->doctorId;
         $counts = $this->calculateAllCountsFromDatabase();
@@ -149,20 +151,19 @@ class Doctordashboard extends Component
         $this->patient_count = $this->appointments->pluck('patient_id')->unique()->count();
     }
 
-    public function updatedSearch()
+   public function updatedSearch()
     {
-        // Use simple debounce without events for reliability
         $this->loadAppointmentsAndCounts();
     }
 
     public function updatedFromDate()
     {
-        // Don't automatically load on date change, wait for apply button
+        $this->loadAppointmentsAndCounts();
     }
 
     public function updatedToDate()
     {
-        // Don't automatically load on date change, wait for apply button
+        $this->loadAppointmentsAndCounts();
     }
     
     public function applyFilters()

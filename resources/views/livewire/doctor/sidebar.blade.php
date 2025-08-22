@@ -19,8 +19,8 @@
 
             <!-- Close Button with Animation -->
             <button onclick="closeSidebar()" 
-                    class="md:hidden text-gray-500 hover:text-gray-700 focus:outline-none transition-all duration-300 transform hover:rotate-90">
-                <svg class="h-6 w-6 transition-all duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    class="md:hidden text-gray-500 hover:text-gray-700 focus:outline-none transition-all duration-300 transform hover:rotate-90" aria-label="Close sidebar">
+                <svg class="h-6 w-6 transition-all duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
             </button>
