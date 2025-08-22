@@ -64,17 +64,17 @@ class AppointmentList extends Component
             ->count();
     }
 
-public function applyFilters()
-{
-    // This just resets the page - filters are already applied automatically
-    $this->resetPage();
-}
+    public function applyFilters()
+    {
+        // This just resets the page - filters are already applied automatically
+        $this->resetPage();
+    }
 
     public function getDoctorsCountProperty()
     {
         return Doctor::whereHas('managers', function($query) {
             $query->where('user_id', Auth::id());
-        })->count(); // Removed ->active()
+        })->count();
     }
 
     public function resetFilters()
@@ -82,6 +82,50 @@ public function applyFilters()
         $this->reset(['search', 'departmentFilter', 'statusFilter', 'doctorFilter', 'fromDate', 'toDate']);
         $this->showReset = false;
         $this->resetPage();
+    }
+
+    // Fixed updateStatus method
+    public function updateStatus($appointmentId, $status)
+    {
+        $validStatuses = ['pending', 'scheduled', 'completed', 'completed', 'cancelled', 'rescheduled'];
+        
+        if (!in_array($status, $validStatuses)) {
+            session()->flash('error', 'Invalid status selected.');
+            return;
+        }
+
+        $appointment = Appointment::find($appointmentId);
+        
+        if (!$appointment) {
+            session()->flash('error', 'Appointment not found.');
+            return;
+        }
+
+        // Check if the authenticated manager is authorized to update this appointment
+        if (!$appointment->doctor->managers->contains(Auth::id())) {
+            session()->flash('error', 'You are not authorized to update this appointment.');
+            return;
+        }
+
+        // Update the appointment status
+        $appointment->status = $status;
+        $appointment->save();
+
+        // Flash success message
+        session()->flash('message', 'Appointment status updated successfully.');
+
+        // No need to reset page, just let Livewire re-render
+    }
+
+    public function confirmCancel($appointmentId)
+    {
+        $appointment = Appointment::find($appointmentId);
+        if ($appointment && $appointment->doctor->managers->contains(Auth::id())) {
+            $appointment->update(['status' => 'cancelled']);
+            session()->flash('message', 'Appointment cancelled successfully.');
+        } else {
+            session()->flash('error', 'You are not authorized to cancel this appointment.');
+        }
     }
 
     protected function baseQuery()
@@ -111,12 +155,10 @@ public function applyFilters()
 
         $query->when($this->statusFilter, fn($q) => $q->where('status', $this->statusFilter));
 
-  $query->when($this->doctorFilter, function($q) {
-    return $q->where('doctor_id', $this->doctorFilter)
-             ->whereHas('doctor.managers', function($query) {
-                 $query->where('user_id', Auth::id());
-             });
-});
+        $query->when($this->doctorFilter, fn($q) => $q->where('doctor_id', $this->doctorFilter)
+            ->whereHas('doctor.managers', fn($query) => 
+                $query->where('user_id', Auth::id())
+        ));
 
         $query->when($this->fromDate, fn($q) => $q->whereDate('appointment_date', '>=', $this->fromDate));
 

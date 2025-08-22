@@ -23,6 +23,7 @@ use App\Livewire\Doctor\Section\Leave;
 use App\Livewire\Doctor\Section\Manager\CreateManger;
 use App\Livewire\Doctor\Section\Doctordashboard;
 use App\Livewire\Doctor\Section\Manager\PaymentList;
+use App\Livewire\Manager\Sections\AppointmentReport;
 use App\Livewire\Public\Appointment\AppointmentConfirmation;
 use App\Livewire\Public\Appointment\ManageAppointment;
 use App\Livewire\Public\Contact\ContactUs;
@@ -113,6 +114,7 @@ Route::prefix('manager')->name('manager.')->middleware(['auth', 'is_manager'])->
     Route::post('/appointments/reschedule-all', [AppointmentController::class, 'rescheduleAll'])->name('appointments.reschedule-all');
     Route::post('/appointments/check-statuses', [AppointmentController::class, 'checkStatuses'])->name('appointments.check-statuses');
     Route::get('/doctors/{doctor}/slots', [AppointmentController::class, 'getAvailableSlots']);
+    Route::get('/report',AppointmentReport::class)->name('report');
     
 });
 Route::get('manager/patients/{id}', PatientView::class)->name('doctor.patients.view');
