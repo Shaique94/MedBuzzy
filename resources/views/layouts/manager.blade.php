@@ -7,6 +7,8 @@
 
     {{-- <title>{{ $title ? $title . ' | Manager Panel - MedBuzzy' : 'Manager Panel - MedBuzzy' }}</title> --}}
     
+      <!-- Add meta description -->
+    <meta name="description" content="MedBuzzy Manager Portal - Oversee healthcare operations, manage staff, and monitor system performance.">
     
     <!-- Open Graph & canonical tags (optional) -->
     <meta property="og:url" content="{{ url()->current() }}">

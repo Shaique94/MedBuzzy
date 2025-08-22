@@ -7,6 +7,9 @@
     
     <title>{{ $title ? $title . ' | Admin Panel - MedBuzzy' : 'Admin Panel - MedBuzzy' }}</title>
     
+   <!-- Add meta description -->
+    <meta name="description" content="MedBuzzy Admin Panel - Manage healthcare services, appointments, doctors, and patient records efficiently.">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 

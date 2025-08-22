@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title ?? 'Patient Dashboard | MedBuzzy' }}</title>
     
+  <meta name="description" content="MedBuzzy Patient Portal - Manage your appointments, medical records, and communicate with healthcare providers.">
 
     <!-- Tailwind CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">

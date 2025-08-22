@@ -8,6 +8,9 @@
     
     <title>{{ $title ?? 'Doctor Panel - MedBuzzy' }}</title>
 
+  <!-- Add meta description -->
+    <meta name="description" content="MedBuzzy Doctor Portal - Manage your appointments, patient records, and medical practice efficiently.">
+
     <!-- Canonical & OpenGraph -->
     <meta property="og:url" content="{{ url()->current() }}">
     <link rel="canonical" href="{{ url()->current() }}">

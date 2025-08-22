@@ -70,7 +70,7 @@ class Doctordashboard extends Component
             $filtersUsed = true;
         }
 
-        if (!empty($this极狐->toDate)) {
+        if (!empty($this->toDate)) {
             $query->whereDate('appointment_date', '<=', $this->toDate);
             $filtersUsed = true;
         }
