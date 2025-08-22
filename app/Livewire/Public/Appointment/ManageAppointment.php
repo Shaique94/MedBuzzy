@@ -478,9 +478,7 @@ class ManageAppointment extends Component
             ]
         );
 
-
-
-        // Pre-create Appointment
+ 
         $appointment = Appointment::create([
             'doctor_id' => $this->doctor_id,
             'patient_id' => $patient->id,
@@ -491,7 +489,10 @@ class ManageAppointment extends Component
             'rescheduled' => false,
             'is_rescheduled' => false,
         ]);
-
+            
+        // Dispatch the email job
+         $testing= SendBookingConfirmationEmail::dispatch($patient, $appointment);
+        // Pre-create Appointment
         $this->appointmentId = $appointment->id;
 
         // Create Razorpay Order
