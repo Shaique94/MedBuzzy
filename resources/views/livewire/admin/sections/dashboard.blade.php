@@ -1,20 +1,6 @@
 <div>
     <main class="flex-1 overflow-x-hidden overflow-y-auto min-h-screen">
         <div class="container mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 max-w-7xl">
-            <!-- Enhanced Page Header -->
-            <div class="mb-4 sm:mb-6 lg:mb-10">
-                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
-                    {{-- <div>
-                        <h1 class="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-900 mb-2">
-                            Dashboard Overview
-                        </h1>
-                        <p class="text-sm text-gray-600 max-w-2xl">
-                            Welcome back! Here's a concise overview of your medical practice today.
-                        </p>
-                    </div> --}}
-                   
-                </div>
-            </div>
 
             <!-- Stats Cards (flat, no shadows) -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-4 sm:mb-6">
@@ -114,10 +100,7 @@
                         <p class="text-xs text-gray-600 mt-1">Upcoming scheduled visits</p>
                     </div>
                     <div class="flex items-center gap-2">
-                        <span
-                            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-800">
-                            {{ count($appointments) }} Today
-                        </span>
+                       
                         <a wire:navigate href="{{ route('admin.appointment') }}"
                             class="inline-flex items-center px-2 py-1 border border-blue-200 rounded text-xs font-medium text-blue-700 bg-blue-50">View
                             All</a>
@@ -163,10 +146,12 @@
                             </div>
 
                             <div class="flex items-center gap-2">
-                                <a wire:navigate
+                                {{-- <a wire:navigate
                                     href="{{ route('appointment.receipt', ['appointment' => $appointment->id]) }}"
                                     target="_blank"
-                                    class="px-3 py-1 text-xs text-blue-600 border border-transparent rounded hover:bg-blue-50">Details</a>
+                                    class="px-3 py-1 text-xs text-blue-600 border border-transparent rounded hover:bg-blue-50">Details</a> --}}
+                                    <button type="button" wire:click="viewAppointment({{ $appointment->id }})"
+                                    class="px-3 py-1 text-xs text-blue-600 border border-transparent rounded hover:bg-blue-50">Details</button>
                                 <a wire:navigate href="{{ route('admin.update.appointment', $appointment->id) }}"
                                     class="px-3 py-1 text-xs text-amber-600 border border-transparent rounded hover:bg-amber-50">Edit</a>
                             </div>
@@ -183,4 +168,7 @@
             </div>
         </div>
 	</main>
+      
+    <!-- View Details Component -->
+    @livewire('admin.appointment.view-details')
 </div>

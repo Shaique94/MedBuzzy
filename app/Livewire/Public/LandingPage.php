@@ -35,11 +35,8 @@ class LandingPage extends Component
             return Doctor::with([
             'user:id,name',
             "department:id,slug,name"
-        ])->withCount(['reviews' => function($query) {
-                $query->where('approved', true);
-            }])
-            ->select("id","fee","qualification","image","slug","user_id","department_id","languages_spoken","city","review_avg")
-            ->where('status', 1) // Assuming there's a status field, add this filter
+        ])->select("id","fee","qualification","image","slug","user_id","department_id","languages_spoken","city","review_avg")
+            ->where('status', 1)
             ->inRandomOrder()
             ->limit(4)
             ->get();

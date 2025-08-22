@@ -462,7 +462,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                <span>30-minute consultations</span>
+                                <span>{{ $doctor->slot_duration_minutes }}-minute consultations</span>
                             </div>
                             <div class="flex items-center gap-2">
                                 <svg class="w-4 h-4 text-brand-blue-500" fill="none" stroke="currentColor"
@@ -564,28 +564,20 @@
                             <div class="flex-1">
                                 <div class="space-y-1.5">
                                     @php
-                                        $ratingCounts = $doctor
-                                            ->reviews()
-                                            ->where('approved', true)
-                                            ->selectRaw('rating, count(*) as count')
-                                            ->groupBy('rating')
-                                            ->pluck('count', 'rating')
-                                            ->toArray();
-
-                                        // Calculate percentages for star ratings
-                                        $percentages = [];
-                                        for ($i = 5; $i >= 1; $i--) {
-                                            $count = $ratingCounts[$i] ?? 0;
-                                            $percentages[$i] = $countFeedback > 0 ? ($count / $countFeedback) * 100 : 0;
+                                        // Initialize rating counts and percentages
+                                        $ratingCounts = $ratingCounts ?? [];
+                                        $percentages = $ratingPercentages ?? [];
+                                        for ($i = 1; $i <= 5; $i++) {
+                                            $ratingCounts[$i] = $ratingCounts[$i] ?? 0;
+                                            $percentages[$i] = isset($percentages[$i]) ? $percentages[$i] : 0;
                                         }
                                     @endphp
 
                                     @for ($i = 5; $i >= 1; $i--)
                                         <div class="flex items-center gap-2">
                                             <span class="text-sm text-gray-600 w-8">{{ $i }}★</span>
-                                            <div class="flex-1 bg-gray-200 rounded-full h-2">
-                                                <div class="bg-brand-blue-500 h-2 rounded-full"
-                                                    style="width: {{ $percentages[$i] }}%"></div>
+                                            <div class="flex-1 bg-gray-200 rounded-full h-2 overflow-hidden">
+                                                <div class="bg-brand-blue-500 h-2 rounded-full" style="width: {{ round($percentages[$i] ?? 0, 1) }}%"></div>
                                             </div>
                                             <span class="text-sm text-gray-600 w-12">{{ $ratingCounts[$i] ?? 0 }}</span>
                                         </div>
@@ -640,6 +632,23 @@
                                 @endforelse
                             </div>
 
+                            <!-- Read more / Show less -->
+                            @if(!$showingAllReviews && $countFeedback > count($approvedReviews))
+                                <div class="text-center mt-4">
+                                    <button wire:click="loadMoreReviews" class="text-brand-blue-600 font-medium">
+                                        Read more ({{ $countFeedback - count($approvedReviews) }} more)
+                                    </button>
+                                </div>
+                            @endif
+
+                            @if($showingAllReviews)
+                                <div class="text-center mt-4">
+                                    <button wire:click="collapseReviews" class="text-gray-600 font-medium">
+                                        Show less
+                                    </button>
+                                </div>
+                            @endif
+                        
                             <!-- Review Modal -->
                             <livewire:public.review.review />
                         </div>
@@ -703,14 +712,13 @@
                                         </p>
 
                                         <div class="flex items-center gap-1 mt-1">
-                                            @php $rating = $relatedDoctor->reviews_avg_rating ?? 0; @endphp
+                                            @php $rating = $relatedDoctor->review_avg ?? 0; @endphp
                                             <div class="flex text-amber-400">
                                                 @for ($i = 1; $i <= 5; $i++)
                                                     <svg class="w-3 h-3 {{ $i <= round($rating) ? 'text-amber-400' : 'text-gray-300' }}"
                                                         fill="currentColor" viewBox="0 0 20 20">
                                                         <path
                                                             d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                                    </svg>
                                                 @endfor
                                             </div>
                                             <span class="text-xs text-gray-600">

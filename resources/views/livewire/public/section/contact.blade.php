@@ -123,17 +123,20 @@
                                             id="name" 
                                             name="name" 
                                             wire:model="name"
-                                            required
+                                             
                                             class="py-3 px-4 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-brand-blue-500 focus:border-brand-blue-500 transition duration-150"
                                             placeholder="Your full name"
                                         >
                                     </div>
+                                      @error('name')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
                                 </div>
 
 
-                            <form class="space-y-6" wire:submit.prevent="submit">
+                            
                                 <div>
-                                    <label for="name" class="block text-sm font-medium text-gray-700">Full Name
+                                    <label for="email" class="block text-sm font-medium text-gray-700">Email
                                         <span class="text-red-500">*</span></label>
                                     <div class="mt-1">
                                         <input 
@@ -141,19 +144,19 @@
                                             id="email" 
                                             name="email" 
                                             wire:model="email"
-                                            required
+                                             
                                             class="py-3 px-4 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-brand-blue-500 focus:border-brand-blue-500 transition duration-150"
                                             placeholder="your.email@example.com"
                                         >
 
                                     </div>
-                                    @error('name')
+                                    @error('email')
                                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                     @enderror
                                 </div>
 
                                 <div>
-                                    <label for="email" class="block text-sm font-medium text-gray-700">Email
+                                    <label for="phone" class="block text-sm font-medium text-gray-700"> Phone Number
                                         <span class="text-red-500">*</span></label>
                                     <div class="mt-1">
                                         <input 
@@ -166,20 +169,19 @@
                                         >
 
                                     </div>
-                                    @error('email')
+                                    @error('phone')
                                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                     @enderror
                                 </div>
 
                                 <div>
-                                    <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number
+                                    <label for="subject" class="block text-sm font-medium text-gray-700">Subject
                                         <span class="text-red-500">*</span></label>
                                     <div class="mt-1">
                                         <select 
                                             id="subject" 
                                             name="subject" 
                                             wire:model="subject"
-                                            required
                                             class="py-3 px-4 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-brand-blue-500 focus:border-brand-blue-500 transition duration-150"
                                         >
                                             <option value="">Select a subject</option>
@@ -192,7 +194,7 @@
                                         </select>
 
                                     </div>
-                                    @error('phone')
+                                    @error('subject')
                                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                     @enderror
                                 </div>
@@ -206,7 +208,7 @@
                                             name="message" 
                                             wire:model="message"
                                             rows="5" 
-                                            required
+                                             
                                             class="py-3 px-4 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-brand-blue-500 focus:border-brand-blue-500 transition duration-150"
                                             placeholder="How can we help you?"
                                         ></textarea>

@@ -13,14 +13,14 @@
                 <!-- Header with MedBuzzy branding -->
                 <div class="bg-blue-600 px-6 py-4 flex items-center justify-between">
                     <div class="flex items-center space-x-3">
-                        <div class="flex items-center justify-center bg-white rounded-full w-10 h-10">
+                        {{-- <div class="flex items-center justify-center bg-white rounded-full w-10 h-10">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                             </svg>
-                        </div>
+                        </div> --}}
                         <h2 class="text-xl font-bold text-white">MedBuzzy</h2>
                     </div>
-                    <button wire:click="closeModal" class="text-white hover:text-blue-100">
+                    <button wire:click="closeModal" class="text-blue-600 hover:text-blue-100">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                         </svg>
@@ -57,13 +57,10 @@
                                 
                                 <div class="grid grid-cols-4 gap-2">
                                     <dt class="col-span-1 text-sm font-medium text-gray-500">Contact</dt>
-                                    <dd class="col-span-3 text-gray-800">{{ $appointment->patient->phone }}</dd>
+                                    <dd class="col-span-3 text-gray-800">{{ $appointment->patient->user->phone }}</dd>
                                 </div>
                                 
-                                <div class="grid grid-cols-4 gap-2">
-                                    <dt class="col-span-1 text-sm font-medium text-gray-500">Notes</dt>
-                                    <dd class="col-span-3 text-gray-800">{{ $appointment->notes }}</dd>
-                                </div>
+                                
                             </div>
                         </div>
 
@@ -105,14 +102,6 @@
                                     </dd>
                                 </div>
                                 
-                                <div class="grid grid-cols-4 gap-2">
-                                    <dt class="col-span-1 text-sm font-medium text-gray-500">Queue No.</dt>
-                                    <dd class="col-span-3 text-gray-800">
-                                        <span class="inline-block px-2 py-1 rounded bg-gray-200 text-gray-800 text-xs">
-                                            #{{ str_pad($appointment->queue_number ?? 1, 3, '0', STR_PAD_LEFT) }}
-                                        </span>
-                                    </dd>
-                                </div>
                             </div>
                         </div>
                     </div>
