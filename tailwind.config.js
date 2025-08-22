@@ -2,6 +2,7 @@ module.exports = {
   content: [
     "./resources/**/*.blade.php",
     "./resources/**/*.js",
+      "./app/Livewire/**/*.php",   
     "./app/View/Components/**/*.php",
     "./storage/framework/views/*.php",
   ],

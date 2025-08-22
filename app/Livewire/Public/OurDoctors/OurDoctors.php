@@ -103,22 +103,15 @@ class OurDoctors extends Component
     {
         $query = Doctor::query()
             ->join('users', 'doctors.user_id', '=', 'users.id')
-            ->with(['user', 'department', 'reviews' => function($query) {
-                $query->where('approved', true);
-            }])
-            ->select('doctors.*')
-            ->withAvg(['reviews' => function($query) {
-                $query->where('approved', true);
-            }], 'rating')
-            ->withCount(['reviews' => function($query) {
-                $query->where('approved', true);
-            }]);
+            ->with(['user:id,name', 'department:id,slug,name'])
+            ->select(['doctors.id','user_id','department_id', 'slug','image','fee','experience','qualification','city', 'review_avg','available_days'
+            ])->where('status', 1);
 
-      if (!empty($this->departmentSlug)) {
-    $query->whereHas('department', function($q) {
-        $q->where('slug', $this->departmentSlug);
-    });
-}
+            if (!empty($this->departmentSlug)) {
+                $query->whereHas('department', function($q) {
+                $q->where('slug', $this->departmentSlug);
+            });
+    }
 
         if (!empty($this->searchQuery)) {
             $query->where(function ($q) {
@@ -152,7 +145,7 @@ class OurDoctors extends Component
         
         // Rating filter
         if ($this->minRating > 0) {
-            $query->having('reviews_avg_rating', '>=', $this->minRating);
+            $query->whereNotNull('doctors.review_avg')->where('doctors.review_avg', '>=', $this->minRating);
         }
         
         // Fee range filter
@@ -167,7 +160,7 @@ class OurDoctors extends Component
         // Sorting
         switch ($this->sortBy) {
             case 'rating':
-                $query->orderByDesc('reviews_avg_rating');
+                $query->orderByDesc('doctors.review_avg');
                 break;
             case 'experience':
                 $query->orderByDesc('doctors.experience');
@@ -180,14 +173,14 @@ class OurDoctors extends Component
                 break;
             default:
                 $query->orderBy('users.name', 'asc');
-                break;
-        }
+                 break;
+         }
 
         $doctors = $query->paginate(10);
 
-        return view('livewire.public.our-doctors.our-doctors', [
-            'doctors' => $doctors,
-            'hasActiveFilters' => $this->hasActiveFilters
-        ]);
-    }
-}
+         return view('livewire.public.our-doctors.our-doctors', [
+             'doctors' => $doctors,
+             'hasActiveFilters' => $this->hasActiveFilters
+         ]);
+     }
+ }

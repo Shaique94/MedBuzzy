@@ -223,32 +223,3 @@
         </div>
     @endif
 </div>
-
-<script>
-    function otpComponent(initialCountdown) {
-        return {
-            countdown: initialCountdown,
-            countdownInterval: null,
-            init() {
-                if (this.countdown > 0) {
-                    this.startCountdown();
-                }
-                $wire.on('start-countdown', () => {
-                    this.countdown = 30;
-                    this.startCountdown();
-                    console.log('Countdown reset to 30');
-                });
-            },
-            startCountdown() {
-                clearInterval(this.countdownInterval);
-                this.countdownInterval = setInterval(() => {
-                    if (this.countdown > 0) {
-                        this.countdown--;
-                    } else {
-                        clearInterval(this.countdownInterval);
-                    }
-                }, 1000);
-            }
-        }
-    }
-</script>

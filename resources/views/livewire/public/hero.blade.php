@@ -179,29 +179,32 @@
                                                 <div
                                                     class="w-12 h-12 sm:w-16 sm:h-16 bg-brand-blue-100 rounded-full flex items-center justify-center overflow-hidden border-2 border-white shadow-sm">
                                                     @if ($doctor->image)
-                                                         <img src="{{ $doctor->image }}"
-                                                            alt="Dr. {{ $doctor->user->name }}" loading="lazy"
-                                                            class="w-full h-full object-cover">
+                                                      
+                                                             <img src="{{ $doctor->image ? $doctor->image . '?tr=w-100,h-100,fo-face,f-auto,q-60' : 'https://ui-avatars.com/api/?name=' . urlencode($doctor->user->name) . '&background=random&rounded=true' }}"
+                                                                srcset="{{ $doctor->image ? $doctor->image . '?tr=w-100,h-100,fo-face,f-auto,q-60' : 'https://ui-avatars.com/api/?name=' . urlencode($doctor->user->name) . '&background=random&rounded=true&w=200' }} 200w,
+                                                                {{ $doctor->image ? $doctor->image . '?tr=w-200,h-200,fo-face,f-auto,q-60' : 'https://ui-avatars.com/api/?name=' . urlencode($doctor->user->name) . '&background=random&rounded=true&w=400' }} 400w"
+                                                                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33.33vw, 25vw"
+                                                                alt="Dr. {{ $doctor->user->name ?? '' }}"
+                                                                class="w-full h-full object-cover"
+                                                                loading="lazy">
                                                     @else
                                                         <span
                                                             class="text-xl sm:text-2xl font-semibold text-brand-blue-600">{{ substr($doctor->user->name, 0, 1) }}</span>
                                                     @endif
                                                 </div>
                                                 <div class="flex-1 min-w-0">
-                                                   <a href="{{route('doctor-detail', $doctor->slug)}}"> <div 
+                                                   <a wire:navigate href="{{route('doctor-detail', $doctor->slug)}}"> <div 
                                                         class="font-semibold text-gray-900 text-base sm:text-lg truncate">
                                                         Dr. {{ $doctor->user->name }}</div></a>
-
                                                     <div
                                                         class="text-xs sm:text-sm text-brand-blue-600 font-medium truncate">
                                                         {{ $doctor->department->name ?? 'General Medicine' }}</div>
-
                                                 </div>
-                                                <div class="text-right">
+                                                    <div class="text-right">
                                                     <div class="flex text-yellow-400 justify-end mb-1"
                                                         aria-hidden="true">
                                                         @php
-                                                            $avgRating = $doctor->reviews_avg_rating ?? 0;
+                                                            $avgRating = $doctor->review_avg ?? 0;
                                                             $fullStars = floor($avgRating);
                                                             $hasHalfStar = $avgRating - $fullStars >= 0.5;
                                                             $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
@@ -246,8 +249,8 @@
                                                     <div class="text-[10px] sm:text-xs text-gray-600">
                                                         @if ($avgRating > 0)
                                                             {{ number_format($avgRating, 1) }}
-                                                            @if ($doctor->reviews_count > 0)
-                                                                ({{ $doctor->reviews_count }})
+                                                            @if ($doctor->review_avg > 0)
+                                                                ({{ $doctor->review_avg }})
                                                             @endif
                                                         @else
                                                             No ratings

@@ -18,6 +18,8 @@ use App\Livewire\Admin\Sections\EditDoctor;
 use App\Livewire\Admin\Sections\ManageDepartment;
 use App\Livewire\Admin\Sections\ManageDoctor;
 use App\Livewire\Admin\Doctor\ListDoctor;
+use App\Livewire\Admin\Doctor\CreateDoctor;
+use App\Livewire\Admin\Doctor\UpdateDoctor;
 use App\Livewire\Doctor\Section\CreateSlot;
 use App\Livewire\Doctor\Section\Leave;
 use App\Livewire\Doctor\Section\Manager\CreateManger;
@@ -49,8 +51,9 @@ use App\Livewire\Public\Appointment\AppointmentWizard;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
-
+use App\Livewire\User\Sections\Dashboard as UserDashboard;
 use App\Livewire\User\Sections\Profile as UserProfile;
+use App\Livewire\User\Sections\MyAppointments;
 
 use App\Livewire\Public\Appointment\ConfirmAppointment;
 use App\Livewire\Public\Appointment\FailedAppointment;
@@ -124,6 +127,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin'])->group(
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/manage-doctors', ManageDoctor::class)->name('manage.doctors');
     Route::get('/doctors', ListDoctor::class)->name('doctors.list');
+    Route::get('/doctors/create', CreateDoctor::class)->name('doctors.create');
+    Route::get('/doctors/{id}/edit', UpdateDoctor::class)->name('doctors.edit');
     Route::get('/manage-departments', ManageDepartment::class)->name('departments');
     Route::get('/appointment', All::class)->name('appointment');
     Route::get('/appointment/add', Add::class)->name('add.appointment');
@@ -138,9 +143,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin'])->group(
 
 
 // User Routes
-Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
-    Route::get('/dashboard', \App\Livewire\User\Sections\Dashboard::class)->name('user.dashboard');
-        Route::get('/profile', UserProfile::class)->name('user.profile');
+Route::middleware(['auth', 'is_patient'])->prefix('user')->group(function () {
+    Route::get('/dashboard', UserDashboard::class)->name('user.dashboard');
+    Route::get('/profile', UserProfile::class)->name('user.profile');
+    Route::get('/appointments', MyAppointments::class)->name('user.appointments');
 });
 
 

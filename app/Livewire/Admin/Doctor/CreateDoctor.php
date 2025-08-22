@@ -15,12 +15,12 @@ use App\Services\ImageKitService;
 use App\Traits\DoctorFormTrait;
 
 #[Title('Create Doctor')]
+#[Layout('layouts.admin')]
 class CreateDoctor extends Component
 {
     use WithFileUploads, DoctorFormTrait;
 
     public $departments;
-    public $showModal = false;
     public $name;
     public $email;
     public $department_id;
@@ -54,8 +54,6 @@ class CreateDoctor extends Component
     public $social_media_platforms = ['twitter', 'facebook', 'instagram'];
     public $isProcessing = false;
 
-    protected $listeners = ['openCreateModal' => 'openModal'];
-
     public function rules()
     {
         return $this->getValidationRules();
@@ -64,18 +62,6 @@ class CreateDoctor extends Component
     public function mount()
     {
         $this->departments = Department::all();
-    }
-
-    public function openModal()
-    {
-        $this->resetForm();
-        $this->showModal = true;
-    }
-
-    public function closeModal()
-    {
-        $this->showModal = false;
-        $this->resetErrorBag();
         $this->resetForm();
     }
 
@@ -287,8 +273,9 @@ class CreateDoctor extends Component
             $this->resetForm();
             $this->dispatch('success', __('Doctor created successfully.'));
             $this->dispatch('doctorCreated');
-            $this->dispatch('refreshDoctorList');
-            $this->closeModal();
+          
+            
+            return redirect()->route('admin.doctors.list');
 
         } catch (\Exception $e) {
             \DB::rollBack();

@@ -24,29 +24,39 @@ class AdminReviewManagement extends Component
       public function loadReviews()
     {
         $this->pendingReviews = Review::where('approved', false)
-            ->with(['doctor', 'user'])
+            ->with([ 'user:id,name'])
             ->latest()
             ->get();
 
             $this->approvedReviews = Review::where('approved', true)
-            ->with(['doctor', 'user'])
+            ->with(['user:id,name'])
             ->latest()
             ->get();
 
     }
 
     public function approve($reviewId){
-        $review=Review::findOrFail($reviewId);
-          $review->update(['approved' => true]);
-           $this->loadReviews();
-        $this->dispatch('notify', message: 'Review approved successfully!');
+        $review = Review::findOrFail($reviewId);
+        $review->update(['approved' => true]);
+        
+        $this->loadReviews();
+        $this->dispatch('success', __('Review approved successfully!'));
+
+        // Dispatch global event to refresh all components showing doctor data
+        $this->dispatch('doctor-review-updated', doctorId: $review->doctor_id);
     }
 
      public function reject($reviewId)
     {
-        Review::findOrFail($reviewId)->delete();
+        $review = Review::findOrFail($reviewId);
+        $doctorId = $review->doctor_id;
+        $review->delete();
+        
         $this->loadReviews();
         $this->dispatch('notify', message: 'Review rejected and deleted.');
+        
+        // Dispatch global event to refresh all components showing doctor data
+        $this->dispatch('doctor-review-updated', doctorId: $doctorId);
     }
 
     #[Layout('layouts.admin')]

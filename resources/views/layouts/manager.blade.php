@@ -5,9 +5,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
+    
+ feature/error-fix-admin
      {{-- <title>{{ $title ? $title . ' | Manager Panel - MedBuzzy' : 'Manager Panel - MedBuzzy' }}</title>  --}}
 
+
+    
+      <!-- Add meta description -->
+    <meta name="description" content="MedBuzzy Manager Portal - Oversee healthcare operations, manage staff, and monitor system performance.">
+    
 
     <!-- Open Graph & canonical tags (optional) -->
     <meta property="og:url" content="{{ url()->current() }}">

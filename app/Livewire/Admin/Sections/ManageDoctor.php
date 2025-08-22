@@ -324,7 +324,14 @@ class ManageDoctor extends Component
     #[Layout('layouts.admin')]
     public function render()
     {
-        $query = Doctor::with(['user', 'department'])->latest();
+        $query = Doctor::select([
+                'id', 'user_id', 'department_id', 'fee', 'status',
+                'available_days', 'qualification', 'image', 'image_id',
+                'slug', 'start_time', 'end_time', 'slot_duration_minutes',
+                'patients_per_slot', 'max_booking_days', 'pincode', 'city', 'state'
+            ])
+            ->with(['user:id,name,email,phone', 'department:id,name'])
+            ->latest();
 
         if (!empty($this->search)) {
             $query->whereHas('user', function ($q) {

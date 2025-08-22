@@ -22,8 +22,6 @@ class All extends Component
 
     // Modal properties
     public $showViewModal = false;
-    public $showPaymentModal = false;
-    public $showEditModal = false;
     public $selectedAppointment = null;
 
     public function updatedPerPage()
@@ -49,7 +47,7 @@ class All extends Component
     public function updateStatus($id, string $status)
     {
         try {
-            $validStatuses = ['pending', 'scheduled', 'completed', 'cancelled', 'checked_in'];
+            $validStatuses = ['pending','scheduled','completed','cancelled'];
             
             if (!in_array($status, $validStatuses)) {
                 $this->dispatch('error', __('Invalid status selected'));
@@ -74,20 +72,6 @@ class All extends Component
         }
     }
 
-    public function editAppointment($id)
-    {
-        $this->dispatch('openEditModal', appointmentId: $id);
-    }
-
-    public function managePayment($id)
-    {
-        $this->dispatch('openPaymentModal', appointmentId: $id);
-    }
-
-    public function printReceipt($id)
-    {
-        $this->dispatch('printReceipt', appointmentId: $id);
-    }
 
     public function refreshAppointments()
     {
@@ -100,13 +84,13 @@ class All extends Component
         $this->dispatch('openModal', id: $id);
     }
 
-    public function closeModal()
-    {
-        $this->showViewModal = false;
-        $this->showPaymentModal = false;
-        $this->showEditModal = false;
-        $this->selectedAppointment = null;
-    }
+    // public function closeModal()
+    // {
+    //     $this->showViewModal = false;
+    //     $this->showPaymentModal = false;
+    //     $this->showEditModal = false;
+    //     $this->selectedAppointment = null;
+    // }
 
     public function getAppointmentsProperty()
     {
@@ -140,8 +124,7 @@ class All extends Component
                 })
                 ->orWhereHas('patient', function($q) use ($searchTerm) {
                     $q->where('name', 'like', $searchTerm)
-                      ->orWhere('email', 'like', $searchTerm)
-                      ->orWhere('phone', 'like', $searchTerm);
+                      ->orWhere('email', 'like', $searchTerm);
                 });
             });
         }
@@ -163,11 +146,6 @@ class All extends Component
         $this->toDate = null;
     }
 
-    #[On('paymentUpdated')]
-    public function refreshList()
-    {
-        $this->resetPage();
-    }
 
     #[On('appointmentUpdated')]
     public function refreshListAfterEdit()
@@ -175,14 +153,7 @@ class All extends Component
         $this->resetPage();
     }
 
-    #[On('appointmentCreated')]
-    public function handleAppointmentCreated()
-    {
-        $this->resetPage();
-        $this->dispatch('success', __('New appointment has been created successfully!'));
-    }
-
-    #[Layout('layouts.admin')]
+        #[Layout('layouts.admin')]
     public function render()
     {
         return view('livewire.admin.appointment.all', [

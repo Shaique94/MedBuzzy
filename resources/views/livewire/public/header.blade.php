@@ -1,21 +1,4 @@
 <header class="bg-white fixed w-full top-0 z-50 shadow-sm">
-    {{-- <!-- Top Bar -->
-    <div class="bg-brand-blue-900 p-2 text-white hidden md:block">
-        <div class="container mx-auto px-4 flex justify-between items-center text-sm">
-           
-            <div class="flex items-center space-x-4">
-              <a href="mailto:{{ $contactDetails['email'] }}" class="flex items-center space-x-2 hover:text-white transition-colors">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
-                        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
-                    </svg>
-                    {{ $contactDetails['email'] }}
-                </a>
-                <a href="tel:{{ $contactDetails['phone'] }}" class="font-semibold hover:text-white transition-colors">{{ $contactDetails['phone'] }}</a>
-            </div>
-        </div>
-    </div> --}}
-
     <!-- Main Header -->
     <div class=" mx-auto px-4 lg:px-[10%] py-2 md:py-3">
         <div class="flex justify-between items-center">
@@ -102,7 +85,7 @@
                     <div class="hidden lg:flex items-center space-x-3 relative" x-data="{ open: false }">
                         <button @click="open = !open" class="flex items-center space-x-2 focus:outline-none">
                             <div
-                                class="w-9 h-9 rounded-full bg-brand-blue-100 flex items-center justify-center text-brand-blue-800 font-semibold">
+                                class="w-9 h-9 rounded-full bg-brand-blue-100 flex items-center justify-center text-brand-blue-800">
                                 {{ substr(auth()->user()->name, 0, 1) }}
                             </div>
                             <span class="text-gray-700 font-medium">{{ auth()->user()->name }}</span>
@@ -126,6 +109,15 @@
                                     </svg>
                                     <span>My Profile</span>
                                 </a>
+                                @elseif (auth()->user()->role === 'admin')
+                                <a wire:navigate href="{{ route('admin.dashboard') }}"
+                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-brand-blue-50 flex items-center space-x-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                    <span>Admin Dashboard</span>
+                                </a>
                             @endif
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
@@ -145,7 +137,7 @@
 
                 <!-- Book Now Button -->
                 <a wire:navigate href="{{ route('our-doctors') }}"
-                    class="bg-brand-orange-600 text-white px-3 md:px-4 py-2 rounded-lg md:font-semibold hover:bg-brand-orange-600 transition-colors duration-200 items-center shadow-md hover:shadow-lg whitespace-nowrap hidden sm:flex">
+                    class="bg-brand-orange-600 text-white px-3 md:px-4 py-2 rounded-lg hover:bg-brand-orange-600 transition-colors duration-200 items-center shadow-md hover:shadow-lg whitespace-nowrap hidden sm:flex">
 
                     <svg class="w-4 h-4 mr-1 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -160,7 +152,7 @@
                 @guest
                     <div class="hidden md:flex items-center">
                         <a wire:navigate href="/login"
-                            class="bg-brand-blue-600 text-white px-3 md:px-4 py-2 rounded-lg font-semibold hover:bg-brand-blue-600 transition-colors duration-200 flex items-center shadow-md hover:shadow-lg whitespace-nowrap">
+                            class="bg-brand-blue-600 text-white px-3 md:px-4 py-2 rounded-lg hover:bg-brand-blue-600 transition-colors duration-200 flex items-center shadow-md hover:shadow-lg whitespace-nowrap">
                             <span class=" text-xs md:text-sm sm:inline">Login/Register</span>
                         </a>
 
@@ -201,7 +193,7 @@
 
             @guest
                 <a wire:navigate href="/login"
-                    class="bg-brand-blue-600 flex justify-center text-white px-3 md:px-4 py-2 rounded-lg font-semibold hover:bg-brand-blue-600 transition-colors duration-200  items-center shadow-md hover:shadow-lg whitespace-nowrap">
+                    class="bg-brand-blue-600 flex justify-center text-white px-3 md:px-4 py-2 rounded-lg  hover:bg-brand-blue-600 transition-colors duration-200  items-center shadow-md hover:shadow-lg whitespace-nowrap">
                     <span class=" text-xs md:text-sm sm:inline">Login/register</span>
                 </a>
             @endguest
@@ -213,13 +205,7 @@
             <div class="pt-4 border-t space-y-3">
 
                 @auth
-                    {{-- <div class="flex items-center space-x-3 px-3 py-2">
-        <div class="w-8 h-8 rounded-full bg-brand-blue-100 flex items-center justify-center text-brand-blue-800 font-semibold">
-            {{ substr(auth()->user()->name, 0, 1) }}
-        </div>
-        <span class="text-gray-700 font-medium">{{ auth()->user()->name }}</span>
-    </div> --}}
-
+                   
                     @if (auth()->user()->role === 'patient')
                         <a wire:navigate href="{{ route('user.dashboard') }}"
                             class="block text-gray-700 hover:text-brand-blue-600 font-medium py-2 px-3 rounded-lg hover:bg-brand-blue-50 transition-colors duration-200 flex items-center space-x-2 mobile-menu-link">

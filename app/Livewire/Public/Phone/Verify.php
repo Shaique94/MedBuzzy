@@ -132,11 +132,10 @@ class Verify extends Component
         \Log::info('User logged in', ['user_id' => $user->id]);
         session()->flash('message', 'Registration successful!');
         $this->dispatch('usercreated');
-        return redirect()->route('our-doctors');
+        $this->redirectRoute("our-doctors",navigate:true);
     }
 
-    public function ClosePhoneModal()
-    {
+    public function ClosePhoneModal(){
         $this->reset(['phone', 'verificationCode', 'generatedCode', 'otpSent', 'showVerification', 'submitFinalForm', 'countdown']);
         $this->showModal = false;
     }

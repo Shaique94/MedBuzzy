@@ -12,7 +12,7 @@
                         <p class="text-blue-100 text-sm sm:text-base">Manage patient appointments efficiently</p>
                     </div>
                 </div>
-                <a wire:navigate href="{{ route('admin.add.appointment') }}"
+                <a wire:navigate href="{{ route('our-doctors') }}"
                     class="bg-white hover:bg-blue-50 text-blue-600 px-4 py-2 sm:px-6 sm:py-3 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 font-medium text-sm sm:text-base">
                     <i class="fas fa-plus"></i>
                     <span>New Appointment</span>
@@ -113,34 +113,100 @@
             <div class="sm:hidden">
                 <!-- Mobile View: Display as Cards -->
                 @forelse ($appointments as $appointment)
-                    <div class="bg-white rounded-lg shadow-md p-4 mb-4 border border-gray-200">
-                        <h4 class="font-semibold text-gray-800">
-                            {{ $appointment->patient->name }}
-                        </h4>
-                        <p class="text-gray-600 text-sm">
-                            Dr. {{ $appointment->doctor->user->name }}
-                        </p>
-                        <p class="text-gray-500 text-xs">
-                           {{ \Carbon\Carbon::parse($appointment->appointment_date)->format('d M Y') }} at
-                            {{ \Carbon\Carbon::parse($appointment->appointment_time)->format('h:i A') }}
-                        </p>
-                        <div class="mt-2">
-                            <span
-                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                {{ $appointment->status }}
-                            </span>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 transition-all duration-300 hover:shadow-xl">
+            <!-- Card Header -->
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 border-b border-gray-200">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="font-bold text-gray-800 text-lg">{{ $appointment->patient->name }}</h3>
+                        <p class="text-gray-600 text-sm mt-1">Appointment ID: #{{ $appointment->id }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Card Body -->
+            <div class="p-5">
+                <div class="flex items-center mb-4">
+                    <div class="bg-blue-100 p-2 rounded-lg">
+                        <i class="fas fa-user-md text-blue-600"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-xs text-gray-500">Doctor</p>
+                        <p class="text-sm font-medium text-gray-800">Dr. {{ $appointment->doctor->user->name }}</p>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4 mb-5">
+                    <div class="flex items-center">
+                        <div class="bg-purple-100 p-2 rounded-lg">
+                            <i class="fas fa-calendar-day text-purple-600"></i>
                         </div>
-                        <div class="mt-3 flex justify-end">
-                            <button wire:click="viewAppointment({{ $appointment->id }})"
-                                class="text-blue-600 hover:text-blue-800 text-sm">View</button>
+                        <div class="ml-3">
+                            <p class="text-xs text-gray-500">Date</p>
+                            <p class="text-sm font-medium text-gray-800">{{ \Carbon\Carbon::parse($appointment->appointment_date)->format('d M Y') }}</p>
                         </div>
                     </div>
+                    
+                    <div class="flex items-center">
+                        <div class="bg-amber-100 p-2 rounded-lg">
+                            <i class="fas fa-clock text-amber-600"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-xs text-gray-500">Time</p>
+                            <p class="text-sm font-medium text-gray-800">{{ \Carbon\Carbon::parse($appointment->appointment_time)->format('h:i A') }}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Status and Actions -->
+                <div class="flex justify-between items-center">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium 
+                        {{ $appointment->status == 'scheduled' ? 'bg-green-100 text-green-800' : '' }}
+                        {{ $appointment->status == 'pending' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                        {{ $appointment->status == 'cancelled' ? 'bg-red-100 text-red-800' : '' }}
+                        {{ $appointment->status == 'completed' ? 'bg-blue-100 text-blue-800' : '' }}">
+                        <span class="w-2 h-2 rounded-full mr-2 
+                            {{ $appointment->status == 'scheduled' ? 'bg-green-500' : '' }}
+                            {{ $appointment->status == 'pending' ? 'bg-yellow-500' : '' }}
+                            {{ $appointment->status == 'cancelled' ? 'bg-red-500' : '' }}
+                            {{ $appointment->status == 'Completed' ? 'bg-blue-500' : '' }}"></span>
+                        {{ $appointment->status }}
+                    </span>
+                    
+                    <div class="flex gap-2">
+                        <button class="text-blue-600 p-2.5 rounded-lg transition-colors duration-200"
+                                wire:click="viewAppointment({{ $appointment->id }})"
+                                title="View Details">
+                            <i class="fas fa-eye text-sm"></i>
+                        </button>
+                        
+                        <a href="{{ route('appointment.receipt.download', ['appointment' => $appointment->id]) }}"
+                           class="text-green-600 p-2.5 rounded-lg transition-colors duration-200"
+                           title="Download Receipt" download>
+                            <i class="fas fa-download text-sm"></i>
+                        </a>
+                        
+                        <a href="{{ route('admin.update.appointment', ['id' => $appointment->id]) }}" 
+                           class="text-amber-600 p-2.5 rounded-lg transition-colors duration-200"
+                           title="Update Appointment">
+                            <i class="fas fa-edit text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Additional Info -->
+        <div class="mt-6 text-center text-gray-500 text-sm">
+            <p>Hover over buttons to see their functions. Click to perform actions.</p>
+        </div>
+
                 @empty
                     <div class="p-4 text-center text-gray-500">No appointments found.</div>
                 @endforelse
             </div>
 
-            <table class="hidden sm:table min-w-full divide-y divide-gray-200">
+            <table class="hidden lg:block min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
                         <th scope="col"
@@ -218,33 +284,29 @@
                                 </div>
                             </td>
                             <td class="px-4 sm:px-6 py-4 whitespace-nowrap">
-                                @if ($appointment->status === 'checked_in')
-                                    <span class="px-2 py-1 inline-flex text-xs leading-4 font-semibold rounded-full bg-green-100 text-green-800">
-                                        <i class="fas fa-check-circle mr-1"></i> Checked In
-                                    </span>
-                                @else
+                               
                                     <select wire:change="updateStatus({{ $appointment->id }}, $event.target.value)"
                                         class="appearance-none bg-gray-50 border border-gray-200 text-gray-700 py-1 px-2 pr-6 sm:py-1.5 sm:px-3 sm:pr-8 rounded-md leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-xs sm:text-sm cursor-pointer">
-                                        @foreach (['pending', 'scheduled', 'completed', 'cancelled'] as $status)
+                                        @foreach (['pending', 'scheduled', 'completed'] as $status)
                                             <option value="{{ $status }}" @selected($appointment->status === $status)>
                                                 {{ ucfirst($status) }}
                                             </option>
                                         @endforeach
                                     </select>
-                                @endif
+                               
                             </td>
                             <td class="px-4 sm:px-6 py-4 whitespace-nowrap">
                                 @if ($appointment->payment?->status === 'paid')
                                     <span class="px-2 py-1 inline-flex text-xs leading-4 font-semibold rounded-full bg-green-100 text-green-800">
                                         <i class="fas fa-check-circle mr-1"></i> Paid
                                     </span>
-                                @elseif ($appointment->payment?->status === 'due')
+                                @elseif ($appointment->payment?->status === 'failed')
                                     <span class="px-2 py-1 inline-flex text-xs leading-4 font-semibold rounded-full bg-red-100 text-red-800">
-                                        <i class="fas fa-exclamation-circle mr-1"></i> Due
+                                        <i class="fas fa-exclamation-circle mr-1"></i> Failed
                                     </span>
                                 @else
                                     <span class="px-2 py-1 inline-flex text-xs leading-4 font-semibold rounded-full bg-gray-100 text-gray-800">
-                                        <i class="fas fa-question-circle mr-1"></i> N/A
+                                        <i class="fas fa-question-circle mr-1"></i> Pending
                                     </span>
                                 @endif
                             </td>
@@ -256,28 +318,23 @@
                                         title="View Details">
                                         <i class="fas fa-eye"></i>
                                     </button>
-                                    <button onclick="printReceipt({{ $appointment->id }})"
+                                    {{-- <button onclick="printReceipt({{ $appointment->id }})"
                                         class="text-gray-500 hover:text-gray-700 p-1 sm:p-2 rounded-lg hover:bg-gray-50 transition"
                                         title="Print Receipt">
                                         <i class="fas fa-print text-sm sm:text-base"></i>
-                                    </button>
+                                    </button> --}}
                                     <a href="{{ route('appointment.receipt.download', ['appointment' => $appointment->id]) }}"
                                         class="text-green-500 hover:text-green-700 p-1 sm:p-2 rounded-lg hover:bg-green-50 transition"
                                         title="Download Receipt" download>
                                         <i class="fas fa-download text-sm sm:text-base"></i>
                                     </a>
-                                    <button class="text-orange-500 hover:text-orange-700 p-1 sm:p-2 rounded-lg hover:bg-orange-50 transition"
-                                        wire:click="editAppointment({{ $appointment->id }})"
+                                    <a href="{{ route('admin.update.appointment', ['id' => $appointment->id]) }}" class="text-orange-500 hover:text-orange-700 p-1 sm:p-2 rounded-lg hover:bg-orange-50 transition"
+                                      
                                         onclick="console.log('Edit clicked for {{ $appointment->id }}')"
                                         title="Update Appointment">
                                         <i class="fas fa-edit text-sm sm:text-base"></i>
-                                    </button>
-                                    <button class="text-purple-500 hover:text-purple-700 p-1 sm:p-2 rounded-lg hover:bg-purple-50 transition"
-                                        wire:click="managePayment({{ $appointment->id }})"
-                                        onclick="console.log('Payment clicked for {{ $appointment->id }}')"
-                                        title="Manage Payment">
-                                        <i class="fas fa-credit-card text-sm sm:text-base"></i>
-                                    </button>
+                                    </a>
+                                    
                                 </div>
                             </td>
                         </tr>
@@ -288,7 +345,7 @@
                                     <i class="fas fa-calendar-times text-4xl sm:text-5xl mb-3 sm:mb-4"></i>
                                     <h3 class="text-base sm:text-lg font-medium text-gray-600 mb-1">No appointments found</h3>
                                     <p class="text-xs sm:text-sm max-w-md px-4">Try adjusting your search filters or create a new appointment to get started</p>
-                                    <a wire:navigate href="{{ route('admin.add.appointment') }}"
+                                    <a wire:navigate href="{{ route('our-doctors') }}"
                                         class="mt-3 sm:mt-4 text-blue-500 hover:text-blue-600 font-medium flex items-center text-sm sm:text-base">
                                         <i class="fas fa-plus mr-2"></i> Create New Appointment
                                     </a>
@@ -308,18 +365,13 @@
         @endif
     </div>
 
-    <!-- Edit Modal Component -->
-    @livewire('admin.appointment.edit-modal')
     
-    <!-- Payment Modal Component -->
-    @livewire('admin.appointment.payment-modal')
-
     <!-- View Details Component -->
     @livewire('admin.appointment.view-details')
-
+{{-- 
     <script>
         function printReceipt(appointmentId) {
-            console.log('Print receipt clicked for appointment:', appointmentId);
+            
             const printUrl = `/appointment/receipt/${appointmentId}`;
             const printWindow = window.open(printUrl, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
             
@@ -337,7 +389,7 @@
 
         // Debug action buttons
         document.addEventListener('livewire:init', () => {
-            console.log('Livewire initialized for appointment list');
+            
         });
-    </script>
+    </script> --}}
 </div>
