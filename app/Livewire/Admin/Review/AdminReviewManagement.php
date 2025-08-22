@@ -24,12 +24,12 @@ class AdminReviewManagement extends Component
       public function loadReviews()
     {
         $this->pendingReviews = Review::where('approved', false)
-            ->with(['doctor', 'user'])
+            ->with([ 'user:id,name'])
             ->latest()
             ->get();
 
             $this->approvedReviews = Review::where('approved', true)
-            ->with(['doctor', 'user'])
+            ->with(['user:id,name'])
             ->latest()
             ->get();
 
@@ -40,8 +40,8 @@ class AdminReviewManagement extends Component
         $review->update(['approved' => true]);
         
         $this->loadReviews();
-        $this->dispatch('notify', message: 'Review approved successfully!');
-        
+        $this->dispatch('success', __('Review approved successfully!'));
+
         // Dispatch global event to refresh all components showing doctor data
         $this->dispatch('doctor-review-updated', doctorId: $review->doctor_id);
     }

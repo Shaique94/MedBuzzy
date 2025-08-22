@@ -17,7 +17,7 @@ class Contact extends Component
     public $phone = '';
     public $message = '';
 
-    public function submit()
+    public function submitContactForm()
     {
         // Validate form data
         $validated = $this->validate([

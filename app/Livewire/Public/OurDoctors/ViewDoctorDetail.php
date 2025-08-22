@@ -3,7 +3,7 @@
 namespace App\Livewire\Public\OurDoctors;
 
 use App\Models\Doctor;
-use App\Models\DoctorReview;
+use App\Models\Review;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -17,30 +17,41 @@ class ViewDoctorDetail extends Component
     public $countFeedback = 0;
     public $approvedReviews = []; 
     public $relatedDoctors = []; // Added property for related doctors
+    public $ratingCounts = []; // count per star
+    public $ratingPercentages = []; // percentage per star
+    public $reviewsLimit = 3; // how many reviews to show initially
+    public $showingAllReviews = false;
 
     public function mount($slug)
     {
         $this->slug = $slug;
 
         // Load doctor with detailed review data
-        $this->doctor = Doctor::where('slug', $this->slug)
-            ->with(['user', 'department', 'reviews' => function($query) {
-                $query->where('approved', true)
-                      ->with('user')
-                      ->latest();
-            }])
+                 $this->doctor = Doctor::where('slug', $this->slug)
+                 ->with(['user:id,name', 'department:id,name,slug'])
+                ->select(['id','user_id','department_id','slug','image','fee','review_avg','qualification','city','experience', 'available_days','start_time','end_time','slot_duration_minutes','languages_spoken','clinic_hospital_name','professional_bio','achievements_awards','social_media_links'])
+            
             ->firstOrFail();
 
         $this->doctorId = $this->doctor->id;
 
-        // Get approved reviews
-        $this->approvedReviews = $this->doctor->reviews()->where('approved', true)
-            ->with('user')
+        $this->approvedReviews = Review::where('doctor_id', $this->doctorId)
+            ->where('approved', true)
+            ->with('user:id,name')
             ->latest()
+            ->limit($this->reviewsLimit)
             ->get();
 
-        // Calculate review metrics
+        // Get total approved reviews count (lightweight scalar query)
+        $this->countFeedback = Review::where('doctor_id', $this->doctorId)
+            ->where('approved', true)
+            ->count();
+
+        // Calculate review metrics using precomputed column and distribution for bars
         $this->calculateReviewMetrics();
+
+        // Compute full rating distribution for bar visualization
+        $this->computeRatingDistributionExplicitly();
         
         // Load related doctors
         $this->loadRelatedDoctors();
@@ -52,29 +63,22 @@ class ViewDoctorDetail extends Component
             return;
         }
         
+        // Prefer the precomputed review_avg column and avoid withCount subselects.
         $this->relatedDoctors = Doctor::where('department_id', $this->doctor->department_id)
             ->where('id', '!=', $this->doctor->id)
-            ->with(['user', 'department'])
-            ->withAvg(['reviews' => function($query) {
-                $query->where('approved', true);
-            }], 'rating')
-            ->withCount(['reviews' => function($query) {
-                $query->where('approved', true);
-            }])
+            ->select('id', 'user_id', 'department_id', 'slug', 'image', 'fee', 'review_avg')
+            ->with(['user:id,name', 'department:id,name'])
+            ->orderByDesc('review_avg')
             ->limit(3)
             ->get();
             
-        // If not enough related doctors in same department, get more doctors
+        // If not enough related doctors in same department, get more doctors ordered by review_avg
         if ($this->relatedDoctors->count() < 3) {
             $additionalDoctors = Doctor::where('id', '!=', $this->doctor->id)
                 ->whereNotIn('id', $this->relatedDoctors->pluck('id')->toArray())
-                ->with(['user', 'department'])
-                ->withAvg(['reviews' => function($query) {
-                    $query->where('approved', true);
-                }], 'rating')
-                ->withCount(['reviews' => function($query) {
-                    $query->where('approved', true);
-                }])
+                ->select('id', 'user_id', 'department_id', 'slug', 'image', 'fee', 'review_avg')
+                ->with(['user:id,name', 'department:id,name'])
+                ->orderByDesc('review_avg')
                 ->limit(3 - $this->relatedDoctors->count())
                 ->get();
                 
@@ -82,16 +86,23 @@ class ViewDoctorDetail extends Component
         }
     }
 
+    public function computeRatingDistribution()
+    {
+        // By default avoid running counts for faster page loads.
+        // Use precomputed review_avg only. Leave distribution empty/zero to avoid heavy queries.
+        $this->ratingCounts = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0];
+        $this->ratingPercentages = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0];
+    }
+
     public function calculateReviewMetrics()
     {
-        $reviews = $this->doctor->reviews->where('approved', true);
-        
-        $this->countFeedback = $reviews->count();
-        
-        // Calculate average rating
-        if ($this->countFeedback > 0) {
-            $this->averageRating = $reviews->avg('rating');
-        }
+        // Use precomputed review_avg column and the loaded total approved reviews count to display metrics
+        $this->countFeedback = $this->countFeedback ?? Review::where('doctor_id', $this->doctorId)->where('approved', true)->count();
+
+        // Use DB column review_avg when available, fallback to 0
+        $this->averageRating = $this->doctor->review_avg !== null ? (float) $this->doctor->review_avg : 0.0;
+
+        // ratingCounts and ratingPercentages are computed explicitly elsewhere for accuracy
     }
     
     public function getListeners()
@@ -101,39 +112,101 @@ class ViewDoctorDetail extends Component
         ];
     }
     
+    public function loadMoreReviews()
+    {
+        // Load more reviews (show all approved reviews up to a reasonable cap)
+        $this->showingAllReviews = true;
+        $this->reviewsLimit = 100; // cap to avoid fetching huge volumes
+
+        $this->approvedReviews = Review::where('doctor_id', $this->doctorId)
+            ->where('approved', true)
+            ->with('user:id,name')
+            ->latest()
+            ->limit($this->reviewsLimit)
+            ->get();
+
+        // recompute metrics if needed
+        $this->calculateReviewMetrics();
+    }
+
+    public function collapseReviews()
+    {
+        $this->showingAllReviews = false;
+        $this->reviewsLimit = 3;
+
+        $this->approvedReviews = Review::where('doctor_id', $this->doctorId)
+            ->where('approved', true)
+            ->with('user:id,name')
+            ->latest()
+            ->limit($this->reviewsLimit)
+            ->get();
+    }
+
     public function refreshReviews()
     {
-        // Reload doctor reviews when a new review is added
-        $this->doctor->load(['reviews' => function($query) {
-            $query->where('approved', true)
-                  ->with('user')
-                  ->latest();
-        }]);
+        // Reload doctor with minimal columns and relations (avoid withCount)
+        $this->doctor = Doctor::where('id', $this->doctorId)
+            ->select(['id','user_id','department_id','slug','image','fee','review_avg','qualification','city','experience'])
+            ->with(['user:id,name', 'department:id,name,slug'])
+            ->first();
         
-        // Update the approvedReviews collection
-        $this->approvedReviews = $this->doctor->reviews()->where('approved', true)
-            ->with('user')
+        // Reload a limited set of approved reviews for display with minimal user columns
+        $this->approvedReviews = Review::where('doctor_id', $this->doctorId)
+            ->where('approved', true)
+            ->with('user:id,name')
             ->latest()
+            ->limit($this->reviewsLimit)
             ->get();
+
+        // Update total approved count
+        $this->countFeedback = Review::where('doctor_id', $this->doctorId)->where('approved', true)->count();
+
+        // Recompute distribution for bars
+        $this->computeRatingDistributionExplicitly();
             
         $this->calculateReviewMetrics();
     }
 
       public function getDynamicTitleProperty()
-    {
-        $qualification = $this->doctor->qualification ?? '';
-        if (is_array($qualification)) {
-            $qualification = implode(', ', $qualification);
-        }
-        return $this->doctor && $this->doctor->user ? 'Dr. ' . $this->doctor->user->name . ' | ' . $qualification : 'Doctor';
-    }
-    #[Layout('layouts.public')]
-    public function render()
-    {
-        return view('livewire.public.our-doctors.view-doctor-detail', [
-            'doctor' => $this->doctor,
-            'approvedReviews' => $this->approvedReviews,
-            'relatedDoctors' => $this->relatedDoctors
-        ])->layoutData(['title' => $this->dynamicTitle]);
-    }
+      {
+          $qualification = $this->doctor->qualification ?? '';
+          if (is_array($qualification)) {
+              $qualification = implode(', ', $qualification);
+          }
+          return $this->doctor && $this->doctor->user ? 'Dr. ' . $this->doctor->user->name . ' | ' . $qualification : 'Doctor';
+      }
+      #[Layout('layouts.public')]
+      public function render()
+      {
+          return view('livewire.public.our-doctors.view-doctor-detail', [
+              'doctor' => $this->doctor,
+              'approvedReviews' => $this->approvedReviews,
+              'relatedDoctors' => $this->relatedDoctors
+          ])->layoutData(['title' => $this->dynamicTitle]);
+      }
+      
+      /**
+       * Explicitly compute rating distribution (runs a DB grouped query).
+       * Call this only if distribution is required (deferred / on-demand) to avoid slowing initial load.
+       */
+      public function computeRatingDistributionExplicitly()
+      {
+          $raw = Review::where('doctor_id', $this->doctorId)
+              ->where('approved', true)
+              ->selectRaw('rating, count(*) as count')
+              ->groupBy('rating')
+              ->pluck('count', 'rating')
+              ->toArray();
+
+          $this->ratingCounts = [];
+          $this->ratingPercentages = [];
+
+          $total = array_sum($raw);
+
+          for ($i = 1; $i <= 5; $i++) {
+              $count = isset($raw[$i]) ? (int) $raw[$i] : 0;
+              $this->ratingCounts[$i] = $count;
+              $this->ratingPercentages[$i] = $total > 0 ? ($count / $total) * 100 : 0;
+          }
+      }
 }

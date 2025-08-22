@@ -201,13 +201,13 @@
                 </a>
              
             </div>
-            <div class="appointment-status">✓ Confirmed</div>
+            <div class="appointment-status">✓ {{$appointment->status}}</div>
         <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('logo/logo1.png'))) }}" class="logo">
             <div class="hospital-title">
                 <h3>MedBuzzy</h3>
                 <div class="tagline">Your Trusted Healthcare Partner</div>
             </div>
-            <div style="font-size:12px; color:#666;">Appointment ID: #{{ $appointment->appointment_no }}</div>
+            <div style="font-size:12px; color:#666;">Appointment ID: #00{{ $appointment->id }}</div>
         </div>
 
         <table class="content-table">
@@ -228,7 +228,7 @@
                     </div>
                     <div class="info-group">
                         <div class="label">Contact</div>
-                        <div class="value">{{ $appointment->patient->phone }}</div>
+                        <div class="value">{{ $appointment->patient->user->phone }}</div>
                     </div>
                     <div class="info-group">
                         <div class="label">Amount Paid</div>
@@ -274,11 +274,10 @@
                 <li>Contact us 24 hours in advance for changes.</li>
             </ul>
         </div>
-
         <div class="footer">
-            <strong>Contact:</strong> +91 9471659700 |
-            <strong>Address:</strong> Hope Chauraha, Rambagh Road, Linebazar, Purnea 854301
+            &copy; {{ date('Y') }} MedBuzzy. All rights reserved.
         </div>
+        
     </div>
 </div>
 </body>

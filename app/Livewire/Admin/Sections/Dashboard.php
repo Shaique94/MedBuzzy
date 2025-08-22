@@ -23,6 +23,7 @@ class Dashboard extends Component
     public $totalRevenue;
     public $weeklyAppointments = [];
     public $monthlyRevenue = [];
+    public $showViewModal = false;
 
     public function mount()
     {
@@ -33,7 +34,7 @@ class Dashboard extends Component
     {
         // Load basic counts
         $this->appointmentsCount = Cache::remember('appointments_Count', 3600, function () {
-            return Appointment::count();
+            return Appointment::where('status', 'scheduled')->count();
         });
         $this->doctorsCount = Cache::remember('doctors_Count', 3600, function () {
             return Doctor::where('status', true)->count();
@@ -47,64 +48,10 @@ class Dashboard extends Component
         });
 
 
-       
-
-        // Load weekly appointments data for chart
-        $this->loadWeeklyAppointments();
-
-        // Load monthly revenue data for chart
-        $this->loadMonthlyRevenue();
-
         // Load recent appointments
         $this->loadRecentAppointments();
     }
 
-    public function loadWeeklyAppointments()
-    {
-        $startOfWeek = Carbon::now()->startOfWeek();
-        $endOfWeek = Carbon::now()->endOfWeek();
-
-        // Fetch all appointments of the week in ONE query
-        $appointments = Appointment::selectRaw('DATE(appointment_date) as date, COUNT(*) as count')
-            ->whereBetween('appointment_date', [$startOfWeek, $endOfWeek])
-            ->groupBy('date')
-            ->pluck('count', 'date'); // returns [ '2025-08-18' => 5, '2025-08-19' => 2, ... ]
-
-        $this->weeklyAppointments = [];
-
-        for ($i = 0; $i < 7; $i++) {
-            $date = $startOfWeek->copy()->addDays($i)->toDateString();
-            $this->weeklyAppointments[] = [
-                'day' => Carbon::parse($date)->format('D'),
-                'count' => $appointments[$date] ?? 0, // use 0 if no records
-            ];
-        }
-    }
-
-    public function loadMonthlyRevenue()
-    {
-        $this->monthlyRevenue = [];
-
-        $startMonth = Carbon::now()->subMonths(5)->startOfMonth();
-        $endMonth = Carbon::now()->endOfMonth();
-
-        // Get all revenues in one query
-        $revenues = Payment::selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, SUM(amount) as total')
-            ->where('status', 'paid')
-            ->whereBetween('created_at', [$startMonth, $endMonth])
-            ->groupBy('year', 'month')
-            ->pluck('total', 'month');
-
-        for ($i = 5; $i >= 0; $i--) {
-            $month = Carbon::now()->subMonths($i);
-            $monthNumber = (int) $month->format('m');
-
-            $this->monthlyRevenue[] = [
-                'month' => $month->format('M'),
-                'revenue' => $revenues[$monthNumber] ?? 0
-            ];
-        }
-    }
 
 
     public function loadRecentAppointments()
@@ -124,6 +71,11 @@ class Dashboard extends Component
         });
     }
 
+
+    public function viewAppointment($id)
+    {
+        $this->dispatch('openModal', id: $id);
+    }
     #[Layout('layouts.admin')]
     public function render()
     {
