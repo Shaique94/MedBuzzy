@@ -66,6 +66,12 @@ class ManagePayment extends Component
         $this->resetPage();
     }
 
+   public function resetFilters()
+{
+    $this->reset(['search', 'dateRange', 'methodFilter']);
+    $this->activeTab = 'all'; // Optionally reset the active tab to 'all'
+}
+
     #[Layout('layouts.admin')]
     public function render()
     {
