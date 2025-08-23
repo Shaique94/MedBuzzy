@@ -6,7 +6,7 @@
     <div class="flex items-center justify-between p-4 border-b border-gray-100">
         <div class="flex items-center gap-3">
             <a wire:navigate href="/" class="flex items-center">
-                <img src="/logo/logo.png" alt="MedBuzzy" class="h-9" />
+                <img src="/logo/logo1.png" alt="MedBuzzy" class="h-9" />
             </a>
         </div>
         <div class="flex items-center gap-2">
@@ -40,11 +40,11 @@
                 <i class="fas fa-star w-5 text-center flex-shrink-0"></i>
                 <span class="sidebar-text ml-3">Review</span>
             </a>
-             <a wire:navigate href="" 
+             {{-- <a wire:navigate href="" 
            class="flex items-center p-3 rounded-lg hover:bg-blue-50 text-gray-700 sidebar-item-transition">
             <i class="fas fa-prescription w-5 text-center flex-shrink-0"></i>
             <span class="sidebar-text ml-3">Prescriptions</span>
-        </a>
+        </a> --}}
         <!-- Other navigation items -->
             <form method="POST" action="{{ route('logout') }}">
             @csrf

@@ -3,9 +3,9 @@
     <div class="bg-white rounded-lg shadow-sm p-6">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-gray-800">My Appointments</h1>
-            {{-- <button class="bg-brand-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg flex items-center">
+            <a href="{{ route('our-doctors') }}" class="bg-brand-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center">
                 <i class="fas fa-plus mr-2"></i> New Appointment
-            </button> --}}
+            </a>
         </div>
         
         <!-- Tabs -->
@@ -98,14 +98,18 @@
                         <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm flex items-center">
                             <i class="fas fa-check-circle mr-1"></i> Completed
                         </span>
+                         <button wire:click="deleteAppointment({{ $appointment->id }})" 
+       class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm flex items-center">
+        <i class="fas fa-trash mr-1"></i> Delete
+    </button>
                         {{-- <button wire:click="viewDetails({{ $appointment->id }})" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm flex items-center">
                             <i class="fas fa-eye mr-1"></i> View Details
                         </button> --}}
-                        @if(!$appointment->has_rating)
+                        {{-- @if(!$appointment->has_rating)
                         <button wire:click="rateAppointment({{ $appointment->id }})" class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm flex items-center">
                             <i class="fas fa-star mr-1"></i> Rate
                         </button>
-                        @endif
+                        @endif --}}
                     </div>
                 </div>
             </div>
