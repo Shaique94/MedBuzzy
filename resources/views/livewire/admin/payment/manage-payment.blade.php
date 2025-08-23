@@ -195,7 +195,7 @@
 
 
         <!-- Loading Indicator - Enhanced with better animation and text -->
-        <div class="">
+        <div class="flex justify-center items-center">
             <div wire:loading class="flex justify-center items-center p-8 sm:p-12">
             <div class="flex flex-col items-center">
                 <div class="animate-spin rounded-full h-8 w-8 sm:h-12 sm:w-12 border-t-2 border-b-2 border-blue-500 mb-4"></div>
