@@ -33,7 +33,7 @@
                     <div class="relative z-10 flex items-center justify-between">
                         <div>
                             <p class="text-xs font-semibold text-blue-600 uppercase tracking-wider ">Health Overview</p>
-                            <h3 class="text-2xl font-bold text-gray-800 mt-2">{{ $stats['total_appointments'] }}</h3>
+                            <h2 class="text-2xl font-bold text-gray-800 mt-2">{{ $stats['total_appointments'] }}</h2>
                             <p class="text-xs text-gray-500 mt-1">Total medical visits</p>
                         </div>
                         <div
@@ -220,11 +220,11 @@
                                         {{-- <button
                                             class="text-sm bg-brand-blue-50 text-brand-blue-600 px-4 py-2 rounded-lg hover:bg-brand-blue-100 transition-colors flex items-center">
                                             <i class="fas fa-eye mr-2"></i> Details
-                                        </button> --}}
-                                        <button wire:click="cancelAppointment({{ $appointment->id }})"
+                                    </button> --}}
+                                        <a wire:click="cancelAppointment({{ $appointment->id}})"
                                             class="text-sm bg-red-50 text-red-600 px-4 py-2 rounded-lg hover:bg-red-100 transition-colors flex items-center">
                                             <i class="fas fa-times mr-2"></i> Cancel
-                                        </button>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -273,10 +273,11 @@
             </div>
         </div>
         <!-- Toggle Button -->
-        <button class="text-gray-400 hover:text-brand-blue-600 transition-transform" 
-                :class="{ 'rotate-90': expanded }">
-            <i class="fas fa-chevron-right"></i>
-        </button>
+        <a class="text-gray-400 hover:text-brand-blue-600 transition-transform" 
+                :class="{ 'rotate-90': expanded }"  aria-label="Toggle appointment details"
+        :aria-expanded="expanded">
+            <i class="fas fa-chevron-right" aria-hidden="true"></i>
+    </a>
     </div>
 
     <!-- Expandable Content -->

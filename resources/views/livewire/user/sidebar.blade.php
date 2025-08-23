@@ -35,11 +35,11 @@
             <i class="fas fa-user-edit w-5 text-center flex-shrink-0"></i>
             <span class="sidebar-text ml-3">Profile Settings</span>
         </a>
-                   <a wire:navigate href="" 
+                   {{-- <a wire:navigate href="" 
                class="flex items-center p-3 rounded-lg hover:bg-blue-50 text-gray-700 sidebar-item-transition">
                 <i class="fas fa-star w-5 text-center flex-shrink-0"></i>
                 <span class="sidebar-text ml-3">Review</span>
-            </a>
+            </a> --}}
              {{-- <a wire:navigate href="" 
            class="flex items-center p-3 rounded-lg hover:bg-blue-50 text-gray-700 sidebar-item-transition">
             <i class="fas fa-prescription w-5 text-center flex-shrink-0"></i>

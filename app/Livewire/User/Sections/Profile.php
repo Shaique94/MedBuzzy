@@ -61,13 +61,13 @@ public function mount()
         'name' => 'required|string|max:255',
         'phone' => 'required|string|max:15',
         'gender' => 'required|in:male,female,other,prefer-not-to-say',
-        'date_of_birth' => 'nullable|date',
-        'blood_group' => 'nullable|in:A+,A-,B+,B-,AB+,AB-,O+,O-',
-        'address' => 'required|string|max:255',
-        'district' => 'required|string|max:100',
-        'state' => 'required|string|max:100',
-        'country' => 'required|string|max:100',
-        'pincode' => 'required|string|max:10',
+        // 'date_of_birth' => 'nullable|date',
+        // 'blood_group' => 'nullable|in:A+,A-,B+,B-,AB+,AB-,O+,O-',
+        // 'address' => 'required|string|max:255',
+        // 'district' => 'required|string|max:100',
+        // 'state' => 'required|string|max:100',
+        // 'country' => 'required|string|max:100',
+        // 'pincode' => 'required|string|max:10',
         'newImage' => 'nullable|image|max:10240',
     ]);
 
@@ -86,18 +86,18 @@ public function mount()
             'name' => $this->name,
             'phone' => $this->phone,
             'gender' => $this->gender,
-            'date_of_birth' => $this->date_of_birth,
-            'blood_group' => $this->blood_group,
+            // 'date_of_birth' => $this->date_of_birth,
+            // 'blood_group' => $this->blood_group,
         ]);
 
         // Update or create patient record
         $patientData = [
               'name' => $this->name, 
-            'address' => $this->address,
-            'district' => $this->district,
-            'state' => $this->state,
-            'country' => $this->country,
-            'pincode' => $this->pincode,
+            // 'address' => $this->address,
+            // 'district' => $this->district,
+            // 'state' => $this->state,
+            // 'country' => $this->country,
+            // 'pincode' => $this->pincode,
                'gender' => $this->gender,
         ];
 

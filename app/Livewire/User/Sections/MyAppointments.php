@@ -68,8 +68,7 @@ class MyAppointments extends Component
             ->whereIn('status', ['scheduled', 'confirmed', 'pending'])
             ->where('appointment_date', '>=', now()->toDateString())
             ->sortBy('appointment_date')
-            ->sortBy('appointment_time')
-            ->take(3);
+            ->sortBy('appointment_time');
     }
 
     protected function getPastAppointments()
@@ -110,7 +109,7 @@ class MyAppointments extends Component
         
         if ($appointment && $appointment->patient_id == $this->patientId) {
             $appointment->delete();
-            $this->loadAppointments(); // Reload data
+            $this->loadAppointments(); 
             $this->dispatch('notify', 'Appointment deleted successfully!');
         }
     }
