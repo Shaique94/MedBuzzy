@@ -56,14 +56,14 @@
                                 <dd class="col-span-3 text-gray-800">{{ ucfirst($selectedPatient->gender) }}</dd>
                             </div>
                             
-                            <div class="grid grid-cols-4 gap-2">
+                            {{-- <div class="grid grid-cols-4 gap-2">
                                 <dt class="col-span-1 text-sm font-medium text-gray-500">Age</dt>
                                 <dd class="col-span-3 text-gray-800">{{ $selectedPatient->age }}</dd>
-                            </div>
+                            </div> --}}
 
                             <div class="grid grid-cols-4 gap-2">
                                 <dt class="col-span-1 text-sm font-medium text-gray-500">Contact</dt>
-                                <dd class="col-span-3 text-gray-800">{{ $selectedPatient->phone }}</dd>
+                                <dd class="col-span-3 text-gray-800">{{ $selectedPatient->user->phone }}</dd>
                             </div>
                             
                             <div class="grid grid-cols-4 gap-2">
@@ -71,18 +71,18 @@
                                 <dd class="col-span-3 text-gray-800">{{ $selectedPatient->email ?? 'N/A' }}</dd>
                             </div>
                             
-                            <div class="grid grid-cols-4 gap-2">
+                            {{-- <div class="grid grid-cols-4 gap-2">
                                 <dt class="col-span-1 text-sm font-medium text-gray-500">Pincode</dt>
                                 <dd class="col-span-3 text-gray-800">{{ $selectedPatient->pincode ?? 'N/A' }}</dd>
-                            </div>
+                            </div> --}}
                             
-                            <div class="grid grid-cols-4 gap-2">
+                            {{-- <div class="grid grid-cols-4 gap-2">
                                 <dt class="col-span-1 text-sm font-medium text-gray-500">Address</dt>
                                 <dd class="col-span-3 text-gray-800">
                                     {{ $selectedPatient->address }}<br>
                                     {{ $selectedPatient->district }}, {{ $selectedPatient->state }}, {{ $selectedPatient->country }}
                                 </dd>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
 
