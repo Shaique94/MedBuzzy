@@ -116,8 +116,8 @@
 
         <!-- Table Section -->
         <div class="overflow-x-auto">
-            <div class="sm:hidden">
-                <!-- Mobile View: Cards with improved spacing and styling -->
+            <div class="lg:hidden">
+                <!-- Mobile View: Display as Cards -->
                 @forelse ($appointments as $appointment)
                     <div class="m-4 bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 transition-all duration-300 hover:shadow-lg">
                         <!-- Card Header -->

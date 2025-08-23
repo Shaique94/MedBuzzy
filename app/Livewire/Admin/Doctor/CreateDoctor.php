@@ -121,6 +121,11 @@ class CreateDoctor extends Component
         $rules['password'] = 'required|string|min:6|confirmed';
         $rules['photo'] = 'nullable|image|max:10240';
         $rules['registration_number'] = 'nullable|string|max:50|unique:doctors,registration_number,';
+        
+        // Allow any type of verification document, size limited
+        if ($this->verification_documents && count($this->verification_documents) > 0) {
+            $rules['verification_documents.*'] = 'nullable|file|max:10240';
+        }
 
         return $rules;
     }
@@ -139,8 +144,7 @@ class CreateDoctor extends Component
                 null,
         ];
     }
-
-    private function processDocuments()
+ private function processDocuments()
     {
         if (!$this->verification_documents) {
             return null;
@@ -148,7 +152,7 @@ class CreateDoctor extends Component
 
         $imageKit = new ImageKitService();
         $documents = [];
-        
+
         foreach ($this->verification_documents as $index => $file) {
             try {
                 $response = $imageKit->upload(
@@ -170,8 +174,7 @@ class CreateDoctor extends Component
                 throw $e;
             }
         }
-
-        return $documents;
+             return $documents;
     }
 
     private function processSocialMedia()
@@ -189,6 +192,7 @@ class CreateDoctor extends Component
 
         return empty($socialMedia) ? null : $socialMedia;
     }
+
 
     public function save()
     {
@@ -209,8 +213,8 @@ class CreateDoctor extends Component
                     'doctors'
                 );
 
-                if (!isset($response->result->url)) {
-                    throw new \Exception('Photo upload failed');
+                if (!isset($response->result->url) || !isset($response->result->fileId)) {
+                    throw new \Exception('Image upload failed');
                 }
 
                 $imageUrl = $response->result->url;
@@ -281,23 +285,10 @@ class CreateDoctor extends Component
             \DB::rollBack();
             
             // Clean up uploaded files on error
-            if (isset($imageId)) {
-                try {
-                    $imageKit = new ImageKitService();
-                    $imageKit->delete($imageId);
-                } catch (\Exception $cleanupError) {
-                    \Log::error('Failed to cleanup uploaded image: ' . $cleanupError->getMessage());
-                }
-            }
+            if (isset($imageId)) { try { $imageKit->delete($imageId); } catch (\Exception $ex) { } }
 
             // Clean up user if created
-            if (isset($user)) {
-                try {
-                    $user->delete();
-                } catch (\Exception $cleanupError) {
-                    \Log::error('Failed to cleanup created user: ' . $cleanupError->getMessage());
-                }
-            }
+            if (isset($user)) { try { $user->delete(); } catch (\Exception $ex) { } }
 
             \Log::error('Error creating doctor: ' . $e->getMessage(), [
                 'trace' => $e->getTraceAsString()

@@ -53,14 +53,12 @@ class UpdateDoctor extends Component
     public $languages_spoken;
     public $professional_bio;
     public $achievements_awards;
-    public $social_media_links = [['platform' => '', 'url' => '']];
+       public $social_media_links = [['platform' => '', 'url' => '']];
     public $social_media_platforms = ['twitter', 'facebook', 'instagram'];
     public $verification_documents = [];
     public $new_verification_documents;
     public $department_id;
     public $departments;
-    public $manager_id = 1;
-
     public function mount($id)
     {
         $this->doctorId = $id;
@@ -209,6 +207,8 @@ class UpdateDoctor extends Component
         }        return $rules;
     }
 
+
+
     private function processDocuments()
     {
         $documents = $this->verification_documents;
@@ -238,28 +238,27 @@ class UpdateDoctor extends Component
                     }
                 }
             }
-        }
+
+ }
 
         return $documents;
-    }
-
-    private function processArrayFields()
-    {
-        return [
-            'qualifications' => $this->qualification ? 
-                array_filter(array_map('trim', explode(',', $this->qualification))) : 
-                null,
-            'languages' => $this->languages_spoken ? 
-                array_filter(array_map('trim', explode(',', $this->languages_spoken))) : 
-                null,
-            'achievements' => $this->achievements_awards ? 
-                array_filter(array_map('trim', explode(',', $this->achievements_awards))) : 
-                null,
-        ];
-    }
+        }
 
     private function processSocialMedia()
     {
+        // Prefer structured social_media array (twitter/facebook/instagram)
+        if (is_array($this->social_media)) {
+            $socialMedia = [];
+            foreach (['twitter', 'facebook', 'instagram'] as $platform) {
+                $url = trim($this->social_media[$platform] ?? '');
+                if (!empty($url)) {
+                    $socialMedia[$platform] = $url;
+                }
+            }
+            return empty($socialMedia) ? null : $socialMedia;
+        }
+
+        // Fallback to previous format
         if (!$this->social_media_links) {
             return null;
         }
@@ -274,8 +273,39 @@ class UpdateDoctor extends Component
         return empty($socialMedia) ? null : $socialMedia;
     }
 
+    // Convert comma-separated inputs into arrays for storage
+    private function processArrayFields(): array
+    {
+        $qualifications = array_values(array_filter(array_map('trim', explode(',', $this->qualification ?? ''))));
+        $languages = array_values(array_filter(array_map('trim', explode(',', $this->languages_spoken ?? ''))));
+        $achievements = array_values(array_filter(array_map('trim', explode(',', $this->achievements_awards ?? ''))));
 
+        return [
+            'qualifications' => $qualifications,
+            'languages' => $languages,
+            'achievements' => $achievements,
+        ];
+    }
+    // Remove a verification document locally (will be excluded when saving)
+    public function removeVerificationDocument(int $index)
+    {
+        if (isset($this->verification_documents[$index])) {
+            array_splice($this->verification_documents, $index, 1);
+        }
+    }
 
+    // Social media link helpers for the UI
+    public function addSocialMediaLink()
+    {
+        $this->social_media_links[] = ['platform' => '', 'url' => ''];
+    }
+
+    public function removeSocialMediaLink(int $index)
+    {
+        if (isset($this->social_media_links[$index])) {
+            array_splice($this->social_media_links, $index, 1);
+        }
+    }
 
     public function updateDoctor()
     {
@@ -324,12 +354,14 @@ class UpdateDoctor extends Component
         ];
         
         // Only add password validation if user actually wants to change password
-        // Use helper method to check if password is really provided
-        if (!$this->isPasswordFieldEmpty()) {
+        // Use trimmed value and guard against common browser autofill placeholder characters
+        $trimmedPassword = trim($this->password ?? '');
+        $autofillPatterns = ['••••••••', '********', '•••••', 'password'];
+        if ($trimmedPassword !== '' && !in_array($trimmedPassword, $autofillPatterns) && str_repeat('•', strlen($trimmedPassword)) !== $trimmedPassword) {
             $validationRules['password'] = 'required|min:8';
             $validationRules['password_confirmation'] = 'required|same:password';
         } else {
-            // Clear password fields to prevent any validation issues
+            // Clear password fields to prevent any validation issues when no real password was provided
             $this->password = '';
             $this->password_confirmation = '';
         }
@@ -345,18 +377,20 @@ class UpdateDoctor extends Component
         try {
             DB::beginTransaction();
 
-            // Handle image upload
-            $imageUrl = $this->imageUrl;
-            $imageId = $this->imageId;
-            
+            // Handle deletion of documents marked for removal BEFORE processing uploads
+            // processDocuments will perform the deletions and return updated array
+            $documents = $this->processDocuments();
+
+            // Preserve current image values
+            $currentImageUrl = $this->imageUrl;
+            $currentImageId = $this->imageId;
+
+            // Variables to hold newly uploaded image info (if any)
+            $newImageUrl = null;
+            $newImageId = null;
+
             if ($this->image) {
-                // Delete old image if exists
-                if ($imageId) {
-                    $imageKit = new ImageKitService();
-                    $imageKit->delete($imageId);
-                }
-                
-                // Upload new image
+                // Upload new image first. Only if upload succeeds will we remove old image.
                 $imageKit = new ImageKitService();
                 $response = $imageKit->upload(
                     fopen($this->image->getRealPath(), 'r'),
@@ -364,19 +398,37 @@ class UpdateDoctor extends Component
                     'doctors'
                 );
 
-                if (!isset($response->result->url)) {
+                if (!isset($response->result->url) || !isset($response->result->fileId)) {
                     throw new \Exception('Image upload failed');
                 }
 
-                $imageUrl = $response->result->url;
-                $imageId = $response->result->fileId;
+                $newImageUrl = $response->result->url;
+                $newImageId = $response->result->fileId;
+
+                // Attempt to delete old image (best-effort). If deletion fails, log and continue.
+                if ($currentImageId) {
+                    try {
+                        $imageKit->delete($currentImageId);
+                    } catch (\Exception $deleteEx) {
+                        Log::warning('Failed to delete previous image after successful upload: ' . $deleteEx->getMessage(), [
+                            'doctor_id' => $this->doctor->id,
+                            'old_image_id' => $currentImageId
+                        ]);
+                        // do not throw — old image failing to delete shouldn't block the update
+                    }
+                }
+
+                // Set image values to new ones
+                $imageUrl = $newImageUrl;
+                $imageId = $newImageId;
+            } else {
+                // No new image uploaded — keep existing values
+                $imageUrl = $currentImageUrl;
+                $imageId = $currentImageId;
             }
 
             // Process array fields
             $arrayFields = $this->processArrayFields();
-            
-            // Process documents
-            $documents = $this->processDocuments();
             
             // Process social media
             $socialMedia = $this->processSocialMedia();
@@ -425,19 +477,17 @@ class UpdateDoctor extends Component
 
             DB::commit();
 
-            // Dispatch success event and show toast message
-            $this->dispatch('doctorUpdated');
-           
-            return redirect()->route('admin.doctors.list');
             
+            return redirect()->route('admin.doctors.list');
+
         } catch (\Exception $e) {
             DB::rollBack();
-            
-            // Clean up uploaded files on error
-            if (isset($response) && isset($response->result->fileId) && $response->result->fileId !== $this->imageId) {
+
+            // If a new image was uploaded but the transaction failed, attempt to delete the newly uploaded image (cleanup)
+            if (isset($newImageId) && $newImageId && $newImageId !== ($this->imageId ?? null)) {
                 try {
                     $imageKit = new ImageKitService();
-                    $imageKit->delete($response->result->fileId);
+                    $imageKit->delete($newImageId);
                 } catch (\Exception $cleanupError) {
                     Log::error('Failed to cleanup uploaded image: ' . $cleanupError->getMessage());
                 }
