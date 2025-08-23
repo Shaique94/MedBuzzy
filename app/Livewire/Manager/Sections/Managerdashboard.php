@@ -8,23 +8,23 @@ use App\Models\Appointment;
 use App\Models\Doctor;
 use App\Models\Patient;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\Auth;
 use App\Models\Payment;
 
 #[Title('Manager Dashboard')]
 class Managerdashboard extends Component
 {
-    public  $appointments;
+    public $appointments;
     public $appointmentsCount;
     public $patientsCount;
     public $doctorsCount;
-        public $todaysPaymentsTotal;
+    public $todaysPaymentsTotal;
     public $todaysAppointmentsCount;
     public $todaysCompletedPayments;
 
-#[Layout('layouts.manager')]  
+    #[Layout('layouts.manager')]
 
-         public function mount()
+    public function mount()
     {
         $this->loadCounts();
         $this->loadAppointments();
@@ -36,7 +36,7 @@ class Managerdashboard extends Component
         return view('livewire.manager.sections.managerdashboard');
     }
 
-   public function loadCounts()
+    public function loadCounts()
     {
         $managerUserId = Auth::id();
 
@@ -63,7 +63,7 @@ class Managerdashboard extends Component
     }
 
 
-     public function loadAppointments()
+    public function loadAppointments()
     {
         $managerUserId = Auth::id();
 
@@ -80,7 +80,7 @@ class Managerdashboard extends Component
             ->get();
     }
 
-     public function loadTodaysPayments()
+    public function loadTodaysPayments()
     {
         $managerUserId = Auth::id();
 
@@ -90,8 +90,8 @@ class Managerdashboard extends Component
                 $q->where('user_id', $managerUserId);
             });
         })
-        ->whereDate('created_at', Carbon::today())
-        ->sum('amount');
+            ->whereDate('created_at', Carbon::today())
+            ->sum('amount');
 
         // Count of today's appointments for managed doctors
         $this->todaysAppointmentsCount = Appointment::whereHas('doctor', function ($query) use ($managerUserId) {
@@ -99,8 +99,8 @@ class Managerdashboard extends Component
                 $q->where('user_id', $managerUserId);
             });
         })
-        ->whereDate('appointment_date', Carbon::today())
-        ->count();
+            ->whereDate('appointment_date', Carbon::today())
+            ->count();
 
         // Count of today's completed payments for managed doctors
         $this->todaysCompletedPayments = Payment::whereHas('appointment.doctor', function ($query) use ($managerUserId) {
@@ -108,9 +108,9 @@ class Managerdashboard extends Component
                 $q->where('user_id', $managerUserId);
             });
         })
-        ->whereDate('created_at', Carbon::today())
-        ->where('status', 'completed')
-        ->count();
+            ->whereDate('created_at', Carbon::today())
+            ->where('status', 'completed')
+            ->count();
     }
 
 }
