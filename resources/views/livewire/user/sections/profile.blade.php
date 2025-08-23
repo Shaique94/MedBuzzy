@@ -141,7 +141,7 @@
         </div>
 
         <!-- Address Information Section -->
-        <div class="bg-blue-50 p-6 rounded-lg">
+        {{-- <div class="bg-blue-50 p-6 rounded-lg">
             <h4 class="text-lg font-medium text-gray-900 mb-4 flex items-center">
                 <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
@@ -196,7 +196,7 @@
                     @error('pincode') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <!-- Action Buttons -->
         <div class="flex justify-between items-center pt-6 border-t border-gray-200">
