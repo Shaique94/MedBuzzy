@@ -110,7 +110,7 @@
 
         <!-- Table Section -->
         <div class="overflow-x-auto">
-            <div class="sm:hidden">
+            <div class="lg:hidden">
                 <!-- Mobile View: Display as Cards -->
                 @forelse ($appointments as $appointment)
                     <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 transition-all duration-300 hover:shadow-xl">

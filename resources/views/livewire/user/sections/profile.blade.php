@@ -200,7 +200,7 @@
 
         <!-- Action Buttons -->
         <div class="flex justify-between items-center pt-6 border-t border-gray-200">
-            <button type="button" wire:click="$emit('closeModal')" 
+            <button type="button" wire:click="$dispatch('closeModal')" 
                     class="px-6 py-2 text-gray-600 hover:text-gray-800 font-medium rounded-lg border border-gray-300 hover:bg-gray-50">
                 Cancel
             </button>

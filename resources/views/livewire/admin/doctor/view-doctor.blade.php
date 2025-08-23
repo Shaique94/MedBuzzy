@@ -2,12 +2,12 @@
     <!-- Enhanced Doctor Detail Modal -->
     @if ($showModal && $doctor && isset($doctor->id) && $doctor->user && $doctor->department)
         <div class="fixed inset-0 z-50 overflow-y-auto bg-gray-900/60 backdrop-blur-sm flex items-center justify-center p-1 sm:p-2 lg:p-4" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-            <div class="bg-white rounded-xl sm:rounded-2xl shadow-2xl max-w-6xl w-full mx-1 sm:mx-2 lg:mx-0 transform transition-all duration-300 max-h-[98vh] sm:max-h-[95vh] overflow-y-auto print-content modal-enter" id="doctor-modal-content">
+            <div class="bg-white rounded-xl sm:rounded-2xl max-w-6xl w-full mx-1 sm:mx-2 lg:mx-0 transform transition-all duration-300 max-h-[98vh] sm:max-h-[95vh] overflow-y-auto print-content modal-enter" id="doctor-modal-content">
                 <div class="px-3 py-3 sm:px-4 sm:py-4 lg:px-8 lg:py-6">
                     <!-- Enhanced Header -->
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0 mb-6">
                         <div class="flex items-center space-x-3 sm:space-x-4 w-full sm:w-auto">
-                            <div class="flex-shrink-0 h-14 w-14 sm:h-16 sm:w-16 lg:h-20 lg:w-20 bg-blue-200 rounded-full flex items-center justify-center shadow-lg">
+                            <div class="flex-shrink-0 h-14 w-14 sm:h-16 sm:w-16 lg:h-20 lg:w-20 bg-blue-200 rounded-full flex items-center justify-center">
                                 @if (isset($doctor->image) && $doctor->image)
                                     <img src="{{ $doctor->image }}" class="h-14 w-14 sm:h-16 sm:w-16 lg:h-20 lg:w-20 rounded-full object-cover ring-4 ring-blue-200" alt="{{ $doctor->user->name ?? 'Doctor' }}'s profile picture">
                                 @else
@@ -264,41 +264,8 @@
                             </div>
                         </div>
 
-                        <!-- Right Column - Statistics & Recent Activity -->
+                        <!-- Right Column - Recent Activity -->
                         <div class="space-y-4 lg:space-y-6">
-                            <!-- Quick Stats -->
-                            <div class="bg-purple-50 rounded-xl p-4 lg:p-6 border border-purple-100 section">
-                                <h4 class="text-base lg:text-lg font-semibold text-gray-900 mb-3 lg:mb-4 flex items-center">
-                                    <svg class="h-5 w-5 text-purple-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                                    </svg>
-                                    Quick Stats
-                                </h4>
-                                <div class="space-y-3">
-                                    <div class="flex justify-between items-center p-3 bg-white rounded-lg shadow-sm">
-                                        <span class="text-sm text-gray-600 responsive-text-sm">Total Appointments</span>
-                                        <span class="text-base font-bold text-gray-900 responsive-text-base">{{ isset($doctor->total_appointments) ? $doctor->total_appointments : ($doctor->appointments ? $doctor->appointments->count() : 0) }}</span>
-                                    </div>
-                                    <div class="flex justify-between items-center p-3 bg-white rounded-lg shadow-sm">
-                                        <span class="text-sm text-gray-600 responsive-text-sm">Average Rating</span>
-                                        <div class="flex items-center">
-                                            <span class="text-base font-bold text-gray-900 responsive-text-base">{{ number_format(isset($doctor->average_rating) ? $doctor->average_rating : ($doctor->rating ?? 0), 1) }}</span>
-                                            <svg class="h-4 w-4 text-yellow-400 ml-1" fill="currentColor" viewBox="0 0 20 20">
-                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.719c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <div class="flex justify-between items-center p-3 bg-white rounded-lg shadow-sm">
-                                        <span class="text-sm text-gray-600 responsive-text-sm">Total Reviews</span>
-                                        <span class="text-base font-bold text-gray-900 responsive-text-base">{{ isset($doctor->total_reviews) ? $doctor->total_reviews : ($doctor->review_count ?? 0) }}</span>
-                                    </div>
-                                    <div class="flex justify-between items-center p-3 bg-white rounded-lg shadow-sm">
-                                        <span class="text-sm text-gray-600 responsive-text-sm">Member Since</span>
-                                        <span class="text-base font-bold text-gray-900 responsive-text-base">{{ isset($doctor->created_at) ? $doctor->created_at->format('M Y') : 'N/A' }}</span>
-                                    </div>
-                                </div>
-                            </div>
-
                             <!-- Recent Appointments -->
                             @if(($doctor->appointments && $doctor->appointments->count() > 0) || (isset($doctor->recent_appointments) && $doctor->recent_appointments->count() > 0))
                                 <div class="bg-gray-50 rounded-xl p-4 lg:p-6 border border-gray-100 section">
@@ -368,8 +335,7 @@
                                                     <div class="flex items-center">
                                                         @for($i = 1; $i <= 5; $i++)
                                                             <svg class="h-4 w-4 {{ $i <= $review->rating ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20">
-                                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3 .921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784 .57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.719c-.783-.57-.38-1.81 .588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                                            </svg>
+                                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3 .921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.719c-.783-.57-.38-1.81 .588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                                         @endfor
                                                     </div>
                                                     <span class="ml-2 text-xs text-gray-500 responsive-text-xs">{{ $review->created_at->diffForHumans() }}</span>
@@ -403,7 +369,7 @@
                     <div class="mb-4">
                         <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
                             <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.732 16.5c-.77 .833 .192 2.5 1.732 2.5z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
                             </svg>
                         </div>
                     </div>
@@ -416,158 +382,25 @@
             </div>
         </div>
     @endif
+</div>
 
-    <!-- Styles -->
-    <style>
-        /* Custom scrollbar for modal */
-        .overflow-y-auto::-webkit-scrollbar {
-            width: 8px;
-        }
-        .overflow-y-auto::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-        .overflow-y-auto::-webkit-scrollbar-thumb {
-            background: #c1c1c1;
-            border-radius: 10px;
-        }
-        .overflow-y-auto::-webkit-scrollbar-thumb:hover {
-            background: #a1a1a1;
-        }
-
-        /* Print styles */
-        @media print {
-            body * {
-                visibility: hidden;
-            }
-            #doctor-modal-content, #doctor-modal-content * {
-                visibility: visible;
-            }
-            #doctor-modal-content {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100% !important;
-                max-width: none !important;
-                margin: 0 !important;
-                padding: 20px !important;
-                box-shadow: none !important;
-                border-radius: 0 !important;
-                max-height: none !important;
-                overflow: visible !important;
-            }
-            .no-print {
-                display: none !important;
-            }
-            .bg-blue-50, .bg-gray-50, .bg-purple-50 {
-                background-color: #f8f9fa !important;
-                border: 1px solid #dee2e6 !important;
-            }
-            .rounded-xl, .rounded-2xl {
-                border-radius: 0.5rem !important;
-            }
-            .shadow-lg, .shadow-2xl, .shadow-sm {
-                box-shadow: none !important;
-            }
-            .section {
-                break-inside: avoid;
-                margin-bottom: 20px;
-            }
-            * {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-        }
-
-        /* Mobile responsiveness */
-        @media (max-width: 640px) {
-            .print-content {
-                margin: 0.25rem;
-                max-height: 98vh;
-                padding: 0.75rem;
-            }
-            .modal-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1rem;
-            }
-            .responsive-text-xs { font-size: 0.75rem; }
-            .responsive-text-sm { font-size: 0.875rem; }
-            .responsive-text-base { font-size: 0.9rem; }
-            .responsive-text-lg { font-size: 1rem; }
-            .grid-responsive {
-                grid-template-columns: 1fr;
-                gap: 0.75rem;
-            }
-            .xl\:col-span-2 {
-                grid-column: span 1;
-            }
-        }
-
-        @media (min-width: 641px) and (max-width: 1023px) {
-            .grid-responsive {
-                grid-template-columns: 1fr;
-                gap: 1.25rem;
-            }
-            .responsive-text-base { font-size: 1rem; }
-            .responsive-text-lg { font-size: 1.125rem; }
-        }
-
-        @media (min-width: 1024px) {
-            .responsive-text-base { font-size: 1rem; }
-            .responsive-text-lg { font-size: 1.25rem; }
-        }
-
-        /* Animation for modal entrance */
-        .modal-enter {
-            animation: modalSlideIn 0.3s ease-out;
-        }
-
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px) scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        /* Touch targets for mobile */
-        .touch-target {
-            min-height: 44px;
-            min-width: 44px;
-        }
-
-        /* Status badge styles */
-        .status-badge {
-            transition: transform 0.2s ease;
-        }
-
-        .status-badge:hover {
-            transform: scale(1.05);
-        }
-    </style>
-
-    <!-- Scripts -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Close modal on Escape key press
-            document.addEventListener('keydown', function (event) {
-                if (event.key === 'Escape') {
-                    const modal = document.querySelector('#doctor-modal-content');
-                    if (modal) {
-                        window.Livewire.emit('closeModal');
-                    }
+<!-- Scripts -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Close modal on Escape key press
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                const modal = document.querySelector('#doctor-modal-content');
+                if (modal) {
+                    window.Livewire.dispatch('closeModal');
                 }
-            });
-
-            // Focus on the modal for accessibility
-            const modal = document.querySelector('#doctor-modal-content');
-            if (modal) {
-                modal.focus();
             }
         });
-    </script>
-</div>
+
+        // Focus on the modal for accessibility
+        const modal = document.querySelector('#doctor-modal-content');
+        if (modal) {
+            modal.focus();
+        }
+    });
+</script>

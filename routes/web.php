@@ -14,9 +14,7 @@ use App\Livewire\Admin\Enquiry\EnquiryApproval;
 use App\Livewire\Admin\Payment\ManagePayment;
 use App\Livewire\Admin\Review\AdminReviewManagement;
 use App\Livewire\Admin\Sections\Dashboard;
-use App\Livewire\Admin\Sections\EditDoctor;
 use App\Livewire\Admin\Sections\ManageDepartment;
-use App\Livewire\Admin\Sections\ManageDoctor;
 use App\Livewire\Admin\Doctor\ListDoctor;
 use App\Livewire\Admin\Doctor\CreateDoctor;
 use App\Livewire\Admin\Doctor\UpdateDoctor;
@@ -125,7 +123,6 @@ Route::get('manager/patients/{id}', PatientView::class)->name('doctor.patients.v
 // Admin Routes
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin'])->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
-    Route::get('/manage-doctors', ManageDoctor::class)->name('manage.doctors');
     Route::get('/doctors', ListDoctor::class)->name('doctors.list');
     Route::get('/doctors/create', CreateDoctor::class)->name('doctors.create');
     Route::get('/doctors/{id}/edit', UpdateDoctor::class)->name('doctors.edit');
@@ -135,7 +132,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin'])->group(
     Route::get('/appointment/update/{id}', Update::class)->name('update.appointment');
     Route::get('/appointment/view/{id}', ViewDetails::class)->name('view.appointment');
     Route::get('/review',AdminReviewManagement::class)->name('reviewapprovel');
-    Route::get('/doctors/edit/{id}', EditDoctor::class)->name('editDoctor');
         Route::get('/enquiry',EnquiryApproval::class)->name('enquiry');
         Route::get('/managePayment',ManagePayment::class)->name('ManagePayment');
 

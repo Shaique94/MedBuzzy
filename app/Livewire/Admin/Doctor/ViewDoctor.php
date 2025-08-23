@@ -29,21 +29,15 @@ class ViewDoctor extends Component
                 throw new \Exception('Invalid doctor ID provided');
             }
 
-            // Load doctor with all necessary relationships
+            // Load doctor with necessary relationships, counts and averages in a single optimized query
             $this->doctor = Doctor::with([
-                'user' => function ($query) {
-                    $query->select('id', 'name', 'email', 'phone');
-                },
-                'department' => function ($query) {
-                    $query->select('id', 'name');
-                },
+                'user:id,name,email,phone',
+                'department:id,name',
                 'appointments' => function ($query) {
-                    $query->with(['patient' => function ($q) {
-                        $q->select('id', 'name');
-                    }])
-                    ->select('id', 'doctor_id', 'patient_id', 'appointment_date', 'appointment_time', 'status', 'created_at')
-                    ->latest()
-                    ->take(5);
+                    $query->with(['patient' => function ($q) { $q->select('id', 'name'); }])
+                          ->select('id', 'doctor_id', 'patient_id', 'appointment_date', 'appointment_time', 'status', 'created_at')
+                          ->latest()
+                          ->take(5);
                 },
                 'reviews' => function ($query) {
                     $query->where('approved', true)
@@ -52,6 +46,8 @@ class ViewDoctor extends Component
                           ->take(5);
                 }
             ])
+            ->withCount(['appointments', 'reviews as approved_reviews_count' => function ($q) { $q->where('approved', true); }])
+            ->withAvg(['reviews as average_rating' => function ($q) { $q->where('approved', true); }], 'rating')
             ->select([
                 'id',
                 'user_id',
@@ -97,8 +93,9 @@ class ViewDoctor extends Component
                 $this->doctor->available_days = array_map('ucfirst', $this->doctor->available_days);
             }
 
-            // Calculate additional statistics
-            $this->calculateDoctorStats();
+            $this->doctor->total_appointments = $this->doctor->appointments_count ?? $this->doctor->appointments()->count();
+            $this->doctor->average_rating = $this->doctor->average_rating ? round($this->doctor->average_rating, 1) : 0;
+            $this->doctor->total_reviews = $this->doctor->approved_reviews_count ?? ($this->doctor->reviews()->where('approved', true)->count());
 
             $this->showModal = true;
 
@@ -121,58 +118,6 @@ class ViewDoctor extends Component
             $this->dispatch('error', __('An error occurred while loading doctor details. Please try again.'));
             $this->showModal = false;
             $this->doctor = null;
-        }
-    }
-
-    private function calculateDoctorStats()
-    {
-        if (!$this->doctor) {
-            return;
-        }
-
-        try {
-            // Cache query results to avoid multiple database hits
-            $appointmentsQuery = $this->doctor->appointments();
-            $reviewsQuery = $this->doctor->reviews()->where('approved', true);
-
-            // Calculate total appointments count
-            $this->doctor->total_appointments = $appointmentsQuery->count();
-
-            // Calculate average rating from approved reviews
-            $this->doctor->average_rating = $reviewsQuery->avg('rating') ?? 0;
-
-            // Calculate total approved reviews count
-            $this->doctor->total_reviews = $reviewsQuery->count();
-
-            // Get recent appointments with patient names
-            $this->doctor->recent_appointments = $appointmentsQuery
-                ->with(['patient:id,name'])
-                ->latest()
-                ->take(3)
-                ->get()
-                ->map(function ($appointment) {
-                    return [
-                        'patient_name' => $appointment->patient->name ?? 'Unknown Patient',
-                        'appointment_date' => $appointment->appointment_date,
-                        'appointment_time' => $appointment->appointment_time,
-                        'status' => $appointment->status
-                    ];
-                });
-
-            // Set attributes for backward compatibility
-            $this->doctor->setAttribute('rating', $this->doctor->average_rating);
-            $this->doctor->setAttribute('review_count', $this->doctor->total_reviews);
-
-        } catch (\Exception $e) {
-            \Log::warning('Error calculating doctor stats: ' . $e->getMessage(), [
-                'doctor_id' => $this->doctor->id
-            ]);
-
-            // Set default values on error
-            $this->doctor->total_appointments = 0;
-            $this->doctor->average_rating = 0;
-            $this->doctor->total_reviews = 0;
-            $this->doctor->recent_appointments = collect();
         }
     }
 
