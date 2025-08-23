@@ -28,7 +28,7 @@
 
     <form wire:submit.prevent="updateProfile" class="space-y-6">
         <!-- Profile Photo -->
-        <div>
+        {{-- <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">Profile Photo</label>
             <div class="flex items-center">
                 <div class="relative">
@@ -59,7 +59,7 @@
                 </div>
             </div>
             @error('newImage') <span class="mt-1 text-sm text-red-600">{{ $message }}</span> @enderror
-        </div>
+        </div> --}}
 
         <!-- Personal Information Section -->
         <div class="bg-gray-50 p-6 rounded-lg">
@@ -113,15 +113,15 @@
                 </div>
 
                 <!-- Date of Birth -->
-                <div>
+                {{-- <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
                     <input type="date" wire:model="date_of_birth" 
                            class="w-full border border-gray-300 rounded-lg py-2 px-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     @error('date_of_birth') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
-                </div>
+                </div> --}}
 
                 <!-- Blood Group -->
-                <div>
+                {{-- <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Blood Group</label>
                     <select wire:model="blood_group" 
                             class="w-full border border-gray-300 rounded-lg py-2 px-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
@@ -136,7 +136,7 @@
                         <option value="O-">O-</option>
                     </select>
                     @error('blood_group') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
-                </div>
+                </div> --}}
             </div>
         </div>
 
@@ -200,10 +200,10 @@
 
         <!-- Action Buttons -->
         <div class="flex justify-between items-center pt-6 border-t border-gray-200">
-            <button type="button" wire:click="$dispatch('closeModal')" 
+            {{-- <button type="button" wire:click="$emit('closeModal')" 
                     class="px-6 py-2 text-gray-600 hover:text-gray-800 font-medium rounded-lg border border-gray-300 hover:bg-gray-50">
                 Cancel
-            </button>
+            </button> --}}
             
             <button type="submit" 
                     class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition flex items-center"

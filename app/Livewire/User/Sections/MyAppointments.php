@@ -14,89 +14,104 @@ class MyAppointments extends Component
     public $showDetailModal = false;
     public $selectedAppointment = null;
     public $patientId;
-    
+    public $allAppointments;
+
     public function mount()
     {
-       
         $patient = Patient::where('user_id', auth()->id())->first();
         $this->patientId = $patient ? $patient->id : null;
-        
-       
         $this->activeTab = 'upcoming';
+        
+        // Load all data on mount
+        $this->loadAppointments();
+    }
+    
+    protected function loadAppointments()
+    {
+        if (!$this->patientId) {
+            $this->allAppointments = collect();
+            return;
+        }
+
+        // Single query with proper eager loading
+        $this->allAppointments = Appointment::with([
+                'doctor.user', 
+                'doctor.department'
+            ])
+            ->where('patient_id', $this->patientId)
+            ->orderBy('appointment_date', 'desc')
+            ->orderBy('appointment_time', 'desc')
+            ->get();
     }
     
     public function render()
     {
+        // Calculate the different appointment types here
+        $upcomingAppointments = $this->getUpcomingAppointments();
+        $pastAppointments = $this->getPastAppointments();
+        $cancelledAppointments = $this->getCancelledAppointments();
+
         return view('livewire.user.sections.my-appointments', [
-            'upcomingAppointments' => $this->upcomingAppointments,
-            'pastAppointments' => $this->pastAppointments,
-            'cancelledAppointments' => $this->cancelledAppointments,
+            'upcomingAppointments' => $upcomingAppointments,
+            'pastAppointments' => $pastAppointments,
+            'cancelledAppointments' => $cancelledAppointments,
         ]);
     }
 
-   
-
-    public function getUpcomingAppointmentsProperty()
+    protected function getUpcomingAppointments()
     {
-        if (!$this->patientId) {
+        if (!$this->allAppointments || $this->allAppointments->isEmpty()) {
             return collect();
         }
 
-        return Appointment::with(['doctor.user']) 
-            ->where('patient_id', $this->patientId)
+        return $this->allAppointments
             ->whereIn('status', ['scheduled', 'confirmed', 'pending'])
-            ->whereDate('appointment_date', '>=', now())
-            ->orderBy('appointment_date')
-            ->orderBy('appointment_time')
-               ->limit(3)
-            ->get();
+            ->where('appointment_date', '>=', now()->toDateString())
+            ->sortBy('appointment_date')
+            ->sortBy('appointment_time')
+            ->take(3);
     }
 
-    public function getPastAppointmentsProperty()
+    protected function getPastAppointments()
     {
-        if (!$this->patientId) {
+        if (!$this->allAppointments || $this->allAppointments->isEmpty()) {
             return collect();
         }
         
- return Appointment::with(['doctor.user']) 
-            ->where('patient_id', $this->patientId)
+        return $this->allAppointments
             ->where('status', 'completed')
-            ->whereDate('appointment_date', '<', now())
-            ->orderBy('appointment_date', 'desc')
-            ->orderBy('appointment_time', 'desc')
-            ->get();
+            ->where('appointment_date', '<', now()->toDateString());
     }
     
-    public function getCancelledAppointmentsProperty()
+    protected function getCancelledAppointments()
     {
-        if (!$this->patientId) {
+        if (!$this->allAppointments || $this->allAppointments->isEmpty()) {
             return collect();
         }
 
-        return Appointment::with(['doctor.user']) 
-            ->where('patient_id', $this->patientId)
-            ->where('status', 'cancelled')
-            ->orderBy('appointment_date', 'desc')
-            ->orderBy('appointment_time', 'desc')
-            ->get();
+        return $this->allAppointments
+            ->where('status', 'cancelled');
     }
 
-       public function cancelAppointment($appointmentId)
+    public function cancelAppointment($appointmentId)
     {
         $appointment = Appointment::findOrFail($appointmentId);
         $appointment->update(['status' => 'cancelled']);
+        
+        // Reload appointments after cancellation
+        $this->loadAppointments();
+        
         $this->dispatch('notify', 'Appointment cancelled successfully!');
     }
 
     public function deleteAppointment($appointmentId)
-{
-    $appointment = Appointment::where('id', $appointmentId)
-        ->where('patient_id', $this->patientId) 
-        ->firstOrFail();
-
-    $appointment->delete();
-
-    $this->dispatch('notify', 'Appointment deleted successfully!');
-}
-
+    {
+        $appointment = $this->allAppointments->firstWhere('id', $appointmentId);
+        
+        if ($appointment && $appointment->patient_id == $this->patientId) {
+            $appointment->delete();
+            $this->loadAppointments(); // Reload data
+            $this->dispatch('notify', 'Appointment deleted successfully!');
+        }
+    }
 }
