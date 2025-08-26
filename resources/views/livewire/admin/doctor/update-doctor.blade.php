@@ -486,8 +486,8 @@
         @endif
         <input wire:model="image" type="file" id="photo"
             class="mt-4 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-all duration-200"
-            accept="image/jpeg,image/png,image/gif">
-        <p class="text-xs text-gray-500 mt-1">JPG, PNG or GIF (Max 10MB)</p>
+            accept="image/*">
+        <p class="text-xs text-gray-500 mt-1">Upload any image file (Max 10MB)</p>
         @error('image') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
     </div>
 </div>
