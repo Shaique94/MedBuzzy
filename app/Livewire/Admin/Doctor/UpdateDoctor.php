@@ -136,9 +136,9 @@ class UpdateDoctor extends Component
     {
         if ($this->image && $this->image instanceof \Illuminate\Http\UploadedFile) {
             try {
-                // Validate image before generating preview
+                // Validate file size before generating preview
                 $this->validate([
-                    'image' => 'image|max:10240', // 10MB max
+                    'image' => 'max:10240', // 10MB max
                 ]);
 
                 $this->imagePreview = $this->image->temporaryUrl();
@@ -184,9 +184,6 @@ class UpdateDoctor extends Component
         $rules['phone'] = 'required|string|max:15|unique:users,phone,' . $this->doctor->user_id;
         $rules['image'] = ['nullable', function ($attribute, $value, $fail) {
             if ($value && $value instanceof \Illuminate\Http\UploadedFile) {
-                if (!in_array($value->getClientMimeType(), ['image/jpeg', 'image/png', 'image/gif'])) {
-                    $fail('The image must be a valid image file (JPEG, PNG, or GIF).');
-                }
                 if ($value->getSize() > 10240 * 1024) { // 10MB
                     $fail('The image must not be larger than 10MB.');
                 }
@@ -326,14 +323,29 @@ class UpdateDoctor extends Component
             if ($this->image && $this->image instanceof \Illuminate\Http\UploadedFile) {
                 $imageKit = new ImageKitService();
                 try {
+                    // Log before upload attempt
+                    Log::info('Attempting to upload image', [
+                        'original_name' => $this->image->getClientOriginalName(),
+                        'mime_type' => $this->image->getMimeType(),
+                        'size' => $this->image->getSize()
+                    ]);
+
                     $response = $imageKit->upload(
                         fopen($this->image->getRealPath(), 'r'),
-                        'doctor_' . time() . '.' . $this->image->getClientOriginalExtension(),
+                        'doctor_' . time() . '_' . Str::random(8) . '.' . $this->image->getClientOriginalExtension(),
                         'doctors'
                     );
 
+                    // Log the response
+                    Log::info('ImageKit upload response', [
+                        'response' => $response
+                    ]);
+
                     if (!isset($response->result->url) || !isset($response->result->fileId)) {
-                        throw new \Exception('Image upload failed: No URL or fileId returned');
+                        Log::error('ImageKit upload failed - missing URL or fileId', [
+                            'response' => $response
+                        ]);
+                        throw new \Exception('Image upload failed: Response missing required data');
                     }
 
                     $imageToSave = $response->result->url;
