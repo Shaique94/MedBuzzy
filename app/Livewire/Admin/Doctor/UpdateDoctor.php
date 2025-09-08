@@ -511,7 +511,18 @@ class UpdateDoctor extends Component
             // Convert working hours to database format
             $convertedSchedule = $this->convertWorkingHoursToDatabase();
 
-            $this->doctor->update([
+            // Log the update process for debugging
+            Log::info('UpdateDoctor: Starting update process', [
+                'doctor_id' => $this->doctor->id,
+                'original_use_day_specific_schedule' => $this->doctor->use_day_specific_schedule,
+                'original_day_specific_schedule' => $this->doctor->day_specific_schedule ? 'NOT NULL' : 'NULL',
+                'new_use_day_specific_schedule' => $convertedSchedule['use_day_specific_schedule'],
+                'current_working_hours' => $this->working_hours,
+                'converted_schedule' => $convertedSchedule
+            ]);
+
+            // Update the doctor record
+            $doctorUpdateData = [
                 'department_id' => $this->department_id,
                 'experience' => $this->experience,
                 'qualification' => $arrayFields['qualifications'],
@@ -537,6 +548,24 @@ class UpdateDoctor extends Component
                 'social_media_links' => $socialMedia,
                 'use_day_specific_schedule' => $convertedSchedule['use_day_specific_schedule'],
                 'day_specific_schedule' => $convertedSchedule['day_specific_schedule'],
+            ];
+
+            Log::info('UpdateDoctor: About to update with data', [
+                'doctor_id' => $this->doctor->id,
+                'update_data_schedule_related' => [
+                    'start_time' => $doctorUpdateData['start_time'],
+                    'end_time' => $doctorUpdateData['end_time'],
+                    'available_days' => $doctorUpdateData['available_days'],
+                    'patients_per_slot' => $doctorUpdateData['patients_per_slot'],
+                    'use_day_specific_schedule' => $doctorUpdateData['use_day_specific_schedule'],
+                    'day_specific_schedule' => $doctorUpdateData['day_specific_schedule'],
+                ]
+            ]);
+
+            $this->doctor->update($doctorUpdateData);
+
+            Log::info('UpdateDoctor: Successfully updated doctor', [
+                'doctor_id' => $this->doctor->id,
             ]);
 
             DB::commit();
@@ -933,11 +962,49 @@ class UpdateDoctor extends Component
 
         $allDays = [];
         $daySpecificSchedule = [];
-        $hasSpecificSchedules = count($this->working_hours) > 1;
         $generalStartTime = '09:00';
         $generalEndTime = '17:00';
         $generalPatientsPerSlot = 1;
 
+        // Initialize all days as not available first
+        $allPossibleDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+        foreach ($allPossibleDays as $day) {
+            $daySpecificSchedule[$day] = [
+                'is_available' => false,
+                'start_time' => null,
+                'end_time' => null,
+                'patients_per_slot' => 1,
+            ];
+        }
+
+        // Check if we need day-specific scheduling
+        // We need it if:
+        // 1. There are multiple working hour entries with different schedules, OR
+        // 2. There are days with different start/end times or patients per slot, OR
+        // 3. Some days are closed while others are open, OR 
+        // 4. The doctor previously had day-specific scheduling enabled
+        $needsDaySpecificScheduling = false;
+        
+        // If doctor previously had day-specific scheduling, maintain it unless explicitly disabled
+        if ($this->doctor->use_day_specific_schedule) {
+            $needsDaySpecificScheduling = true;
+        }
+        
+        // Check for multiple different schedules
+        if (count($this->working_hours) > 1) {
+            $needsDaySpecificScheduling = true;
+        }
+        
+        // Check for closed days or 24-hour days
+        foreach ($this->working_hours as $schedule) {
+            if ((isset($schedule['closed']) && $schedule['closed']) || 
+                (isset($schedule['open_24_hours']) && $schedule['open_24_hours'])) {
+                $needsDaySpecificScheduling = true;
+                break;
+            }
+        }
+
+        // Process working hours and update day-specific schedule
         foreach ($this->working_hours as $schedule) {
             foreach ($schedule['days'] as $day) {
                 $dayLower = strtolower($day);
@@ -976,8 +1043,8 @@ class UpdateDoctor extends Component
             'end_time' => $generalEndTime,
             'available_days' => array_unique($allDays),
             'patients_per_slot' => $generalPatientsPerSlot,
-            'use_day_specific_schedule' => $hasSpecificSchedules,
-            'day_specific_schedule' => $hasSpecificSchedules ? $daySpecificSchedule : null,
+            'use_day_specific_schedule' => $needsDaySpecificScheduling,
+            'day_specific_schedule' => $needsDaySpecificScheduling ? $daySpecificSchedule : null,
         ];
     }
 }
