@@ -86,6 +86,10 @@
                                         <p class="mt-1 text-base text-gray-900 responsive-text-base">{{ $doctor->user->phone ?? 'Not provided' }}</p>
                                     </div>
                                     <div>
+                                        <label class="block text-sm font-medium text-gray-700 responsive-text-sm">Gender</label>
+                                        <p class="mt-1 text-base text-gray-900 responsive-text-base capitalize">{{ $doctor->user->gender ?? 'Not specified' }}</p>
+                                    </div>
+                                    <div>
                                         <label class="block text-sm font-medium text-gray-700 responsive-text-sm">Experience</label>
                                         <p class="mt-1 text-base text-gray-900 responsive-text-base">{{ $doctor->experience ?? 'Not specified' }} years</p>
                                     </div>
@@ -217,31 +221,81 @@
                                     </svg>
                                     Schedule & Availability
                                 </h4>
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-4 grid-responsive">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 responsive-text-sm">Working Hours</label>
-                                        <p class="mt-1 text-base text-gray-900 responsive-text-base">
-                                            {{ isset($doctor->start_time) ? \Carbon\Carbon::parse($doctor->start_time)->format('h:i A') : 'N/A' }} - 
-                                            {{ isset($doctor->end_time) ? \Carbon\Carbon::parse($doctor->end_time)->format('h:i A') : 'N/A' }}
-                                        </p>
+
+                                @if($doctor->use_day_specific_schedule && $doctor->day_specific_schedule)
+                                    <!-- Day-Specific Schedule -->
+                                    <div class="mb-4">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                            Day-Specific Schedule
+                                        </span>
                                     </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 responsive-text-sm">Available Days</label>
-                                        <p class="mt-1 text-base text-gray-900 responsive-text-base">
-                                            @if(isset($doctor->available_days) && is_array($doctor->available_days) && count($doctor->available_days) > 0)
-                                                {{ implode(', ', $doctor->available_days) }}
-                                            @else
-                                                Not specified
+                                    <div class="space-y-3">
+                                        @foreach(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as $day)
+                                            @if(isset($doctor->day_specific_schedule[$day]))
+                                                @php
+                                                    $daySchedule = $doctor->day_specific_schedule[$day];
+                                                    $isAvailable = $daySchedule['is_available'] ?? false;
+                                                @endphp
+                                                <div class="flex justify-between items-center py-2 border-b border-gray-200 last:border-b-0">
+                                                    <div class="flex items-center">
+                                                        <span class="text-sm font-medium text-gray-900 capitalize w-20">{{ $day }}</span>
+                                                        <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium
+                                                            {{ $isAvailable ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
+                                                            {{ $isAvailable ? 'Available' : 'Closed' }}
+                                                        </span>
+                                                    </div>
+                                                    @if($isAvailable)
+                                                        <div class="text-right">
+                                                            <p class="text-sm text-gray-900">
+                                                                {{ isset($daySchedule['start_time']) ? \Carbon\Carbon::parse($daySchedule['start_time'])->format('h:i A') : 'N/A' }} - 
+                                                                {{ isset($daySchedule['end_time']) ? \Carbon\Carbon::parse($daySchedule['end_time'])->format('h:i A') : 'N/A' }}
+                                                            </p>
+                                                            <p class="text-xs text-gray-500">
+                                                                {{ $daySchedule['patients_per_slot'] ?? 1 }} patient(s) per slot
+                                                            </p>
+                                                        </div>
+                                                    @endif
+                                                </div>
                                             @endif
-                                        </p>
+                                        @endforeach
                                     </div>
+                                @else
+                                    <!-- General Schedule -->
+                                    <div class="mb-4">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            General Schedule
+                                        </span>
+                                    </div>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-4 grid-responsive">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 responsive-text-sm">Working Hours</label>
+                                            <p class="mt-1 text-base text-gray-900 responsive-text-base">
+                                                {{ isset($doctor->start_time) ? \Carbon\Carbon::parse($doctor->start_time)->format('h:i A') : 'N/A' }} - 
+                                                {{ isset($doctor->end_time) ? \Carbon\Carbon::parse($doctor->end_time)->format('h:i A') : 'N/A' }}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 responsive-text-sm">Available Days</label>
+                                            <p class="mt-1 text-base text-gray-900 responsive-text-base">
+                                                @if(isset($doctor->available_days) && is_array($doctor->available_days) && count($doctor->available_days) > 0)
+                                                    {{ implode(', ', $doctor->available_days) }}
+                                                @else
+                                                    Not specified
+                                                @endif
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 responsive-text-sm">Patients Per Slot</label>
+                                            <p class="mt-1 text-base text-gray-900 responsive-text-base">{{ $doctor->patients_per_slot ?? 'N/A' }} patient(s)</p>
+                                        </div>
+                                    </div>
+                                @endif
+                                
+                                <!-- Common Schedule Information -->
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-4 grid-responsive mt-4 pt-4 border-t border-gray-200">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 responsive-text-sm">Slot Duration</label>
                                         <p class="mt-1 text-base text-gray-900 responsive-text-base">{{ $doctor->slot_duration_minutes ?? 'N/A' }} minutes</p>
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 responsive-text-sm">Patients Per Slot</label>
-                                        <p class="mt-1 text-base text-gray-900 responsive-text-base">{{ $doctor->patients_per_slot ?? 'N/A' }} patient(s)</p>
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 responsive-text-sm">Max Booking Days</label>

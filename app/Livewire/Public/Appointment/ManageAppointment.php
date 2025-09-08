@@ -131,65 +131,55 @@ class ManageAppointment extends Component
             return;
         }
 
-        $availableDays = is_array($this->selectedDoctor->available_days)
-            ? $this->selectedDoctor->available_days
-            : (is_string($this->selectedDoctor->available_days)
-                ? json_decode($this->selectedDoctor->available_days, true)
-                : []);
-
-        $availableDayNumbers = [];
-        $dayNameToNumber = [
-            'Sunday' => 0,
-            'Monday' => 1,
-            'Tuesday' => 2,
-            'Wednesday' => 3,
-            'Thursday' => 4,
-            'Friday' => 5,
-            'Saturday' => 6,
-        ];
-
-        foreach ($availableDays as $dayName) {
-            if (isset($dayNameToNumber[$dayName])) {
-                $availableDayNumbers[] = $dayNameToNumber[$dayName];
-            }
-        }
-
-        $today = Carbon::today();
+        $today = Carbon::today('Asia/Kolkata');
         $maxBookingDays = $this->selectedDoctor->max_booking_days ?? 30;
-        $endDate = $today->copy()->addDays($maxBookingDays - 1);
-        $onLeaveDates = [];
-
-        if ($this->selectedDoctor->unavailable_from && $this->selectedDoctor->unavailable_to) {
-            $startDate = Carbon::parse($this->selectedDoctor->unavailable_from, 'Asia/Kolkata');
-            $endDate = Carbon::parse($this->selectedDoctor->unavailable_to, 'Asia/Kolkata');
-            for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
-                $onLeaveDates[] = $date->format('Y-m-d');
+        
+        $dates = [];
+        for ($i = 0; $i < $maxBookingDays; $i++) {
+            $date = $today->copy()->addDays($i);
+            $dayName = strtolower($date->englishDayOfWeek);
+            
+            // Get day-specific schedule
+            $daySchedule = $this->selectedDoctor->getWorkingHoursForDay($dayName);
+            
+            // Skip if doctor is not available on this day
+            if (!$daySchedule['is_available']) {
+                continue;
+            }
+            
+            // Skip if doctor is on leave
+            if ($this->selectedDoctor->isOnLeave($date)) {
+                continue;
+            }
+            
+            // Get available time slots for this date
+            $timeSlots = $this->selectedDoctor->generateTimeSlots($date->format('Y-m-d'));
+            
+            // Only include dates that have available slots
+            if (!empty($timeSlots)) {
+                $availableSlots = array_filter($timeSlots, function($slot) {
+                    return !$slot['disabled'];
+                });
+                
+                if (!empty($availableSlots)) {
+                    $dates[] = [
+                        'date' => $date->format('Y-m-d'),
+                        'isToday' => $date->isToday(),
+                        'dayName' => $date->format('D'),
+                        'dayNumber' => $date->format('j'),
+                        'monthName' => $date->format('M'),
+                        'fullDate' => $date->format('l, F j, Y'),
+                        'available_slots' => count($availableSlots)
+                    ];
+                }
             }
         }
-
-        $this->availableDates = [];
-        $currentDate = $today->copy();
-        $daysAdded = 0;
-
-        while ($daysAdded < $maxBookingDays && $currentDate <= $endDate) {
-            $formattedDate = $currentDate->format('Y-m-d');
-            $isAvailableDay = in_array($currentDate->dayOfWeek, $availableDayNumbers);
-            $isOnLeave = in_array($formattedDate, $onLeaveDates);
-            $isBookable = $isAvailableDay && !$isOnLeave;
-
-            if ($isBookable || $currentDate->isToday()) {
-                $this->availableDates[] = [
-                    'date' => $formattedDate,
-                    'isToday' => $currentDate->isToday(),
-                    'dayName' => $currentDate->format('D'),
-                    'dayNumber' => $currentDate->format('j'),
-                    'monthName' => $currentDate->format('M'),
-                    'fullDate' => $currentDate->format('l, F j, Y'),
-                ];
-                $daysAdded++;
-            }
-
-            $currentDate->addDay();
+        
+        $this->availableDates = $dates;
+        
+        // If no available dates found, set an empty array
+        if (empty($this->availableDates)) {
+            $this->availableDates = [];
         }
     }
 
@@ -282,15 +272,27 @@ class ManageAppointment extends Component
             return;
         }
 
-        $startTime = Carbon::parse($this->selectedDoctor->start_time);
-        $endTime = Carbon::parse($this->selectedDoctor->end_time);
+        $appointmentDate = Carbon::parse($this->appointment_date, 'Asia/Kolkata');
+        $dayOfWeek = strtolower($appointmentDate->englishDayOfWeek);
+        
+        // Get day-specific working hours
+        $daySchedule = $this->selectedDoctor->getWorkingHoursForDay($dayOfWeek);
+        
+        // Check if doctor is available on this day
+        if (!$daySchedule['is_available']) {
+            $this->availableSlots = [];
+            return;
+        }
+
+        $startTime = Carbon::parse($daySchedule['start_time']);
+        $endTime = Carbon::parse($daySchedule['end_time']);
         $duration = $this->selectedDoctor->slot_duration_minutes;
-        $maxPatientsPerSlot = $this->selectedDoctor->patients_per_slot ?? 1;
+        $maxPatientsPerSlot = $daySchedule['patients_per_slot'];
         $this->availableSlots = [];
         $currentSlot = $startTime->copy();
 
         $now = Carbon::now('Asia/Kolkata');
-        $isToday = Carbon::parse($this->appointment_date)->isToday();
+        $isToday = $appointmentDate->isToday();
 
         while ($currentSlot->lt($endTime)) {
             $slotEnd = $currentSlot->copy()->addMinutes($duration);

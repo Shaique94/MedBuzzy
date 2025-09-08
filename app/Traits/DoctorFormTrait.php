@@ -145,8 +145,14 @@ trait DoctorFormTrait
         return [
             'name' => 'required|string|max:255',
             'department_id' => 'required|exists:departments,id',
-            'available_days' => 'required|array|min:1',
+            'available_days' => 'required_unless:use_day_specific_schedule,true|array|min:1',
             'available_days.*' => 'in:Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday',
+            'selected_days' => 'required_if:use_day_specific_schedule,true|array|min:1',
+            'selected_days.*' => 'in:Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday',
+            'timing_mode' => 'required_if:use_day_specific_schedule,true|in:same,different',
+            'same_timing_start' => 'required_if:timing_mode,same|date_format:H:i',
+            'same_timing_end' => 'required_if:timing_mode,same|date_format:H:i|after:same_timing_start',
+            'same_timing_patients' => 'required_if:timing_mode,same|integer|min:1|max:10',
             'status' => 'required|in:0,1,2',
             'phone' => 'required|string|digits:10|regex:/^[6-9]\d{9}$/',
             'fee' => 'required|numeric|min:0',
@@ -167,6 +173,90 @@ trait DoctorFormTrait
             'achievements_awards' => 'nullable|string|max:255',
             'social_media_links.*.platform' => 'nullable|in:twitter,facebook,instagram',
             'social_media_links.*.url' => 'nullable|url|max:255',
+            // Day-specific scheduling validation
+            'use_day_specific_schedule' => 'boolean',
+            'day_specific_schedule' => 'nullable|array',
+            'day_specific_schedule.*.start_time' => 'nullable|date_format:H:i',
+            'day_specific_schedule.*.end_time' => 'nullable|date_format:H:i',
+            'day_specific_schedule.*.patients_per_slot' => 'nullable|integer|min:1|max:10',
+            'day_specific_schedule.*.is_available' => 'boolean',
         ];
+    }
+
+    /**
+     * Initialize default day-specific schedule
+     */
+    public function initializeDaySpecificSchedule()
+    {
+        $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+        $schedule = [];
+        
+        foreach ($days as $day) {
+            $schedule[$day] = [
+                'start_time' => $this->start_time ?? '09:00',
+                'end_time' => $this->end_time ?? '17:00',
+                'patients_per_slot' => $this->patients_per_slot ?? 1,
+                'is_available' => false
+            ];
+        }
+        
+        return $schedule;
+    }
+
+    /**
+     * Apply bulk schedule changes
+     */
+    public function applyBulkSchedule($type, $scheduleData)
+    {
+        if (!isset($this->day_specific_schedule) || !is_array($this->day_specific_schedule)) {
+            $this->day_specific_schedule = $this->initializeDaySpecificSchedule();
+        }
+
+        switch ($type) {
+            case 'all_days':
+                // Apply same schedule to all days
+                foreach (['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as $day) {
+                    $this->day_specific_schedule[$day] = array_merge(
+                        $this->day_specific_schedule[$day] ?? [],
+                        $scheduleData
+                    );
+                }
+                break;
+
+            case 'mon_to_sat':
+                // Apply same schedule to Monday through Saturday
+                foreach (['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'] as $day) {
+                    $this->day_specific_schedule[$day] = array_merge(
+                        $this->day_specific_schedule[$day] ?? [],
+                        $scheduleData
+                    );
+                }
+                break;
+
+            case 'sunday_only':
+                // Apply schedule to Sunday only
+                $this->day_specific_schedule['sunday'] = array_merge(
+                    $this->day_specific_schedule['sunday'] ?? [],
+                    $scheduleData
+                );
+                break;
+        }
+    }
+
+    /**
+     * Toggle day availability
+     */
+    public function toggleDayAvailability($dayName)
+    {
+        $dayName = strtolower($dayName);
+        
+        if (!isset($this->day_specific_schedule) || !is_array($this->day_specific_schedule)) {
+            $this->day_specific_schedule = $this->initializeDaySpecificSchedule();
+        }
+
+        if (isset($this->day_specific_schedule[$dayName])) {
+            $this->day_specific_schedule[$dayName]['is_available'] = 
+                !($this->day_specific_schedule[$dayName]['is_available'] ?? false);
+        }
     }
 }

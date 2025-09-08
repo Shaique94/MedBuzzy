@@ -29,7 +29,7 @@ class ViewDoctorDetail extends Component
         // Load doctor with detailed review data
                  $this->doctor = Doctor::where('slug', $this->slug)
                  ->with(['user:id,name', 'department:id,name,slug'])
-                ->select(['id','user_id','department_id','slug','image','fee','review_avg','qualification','city','experience', 'available_days','start_time','end_time','slot_duration_minutes','languages_spoken','clinic_hospital_name','professional_bio','achievements_awards','social_media_links'])
+                ->select(['id','user_id','department_id','slug','image','fee','review_avg','qualification','city','experience', 'available_days','start_time','end_time','slot_duration_minutes','languages_spoken','clinic_hospital_name','professional_bio','achievements_awards','social_media_links','use_day_specific_schedule','day_specific_schedule'])
             
             ->firstOrFail();
 
@@ -146,7 +146,7 @@ class ViewDoctorDetail extends Component
     {
         // Reload doctor with minimal columns and relations (avoid withCount)
         $this->doctor = Doctor::where('id', $this->doctorId)
-            ->select(['id','user_id','department_id','slug','image','fee','review_avg','qualification','city','experience'])
+            ->select(['id','user_id','department_id','slug','image','fee','review_avg','qualification','city','experience','available_days','start_time','end_time','use_day_specific_schedule','day_specific_schedule'])
             ->with(['user:id,name', 'department:id,name,slug'])
             ->first();
         
