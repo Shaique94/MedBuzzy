@@ -155,11 +155,22 @@
                         <span class="font-medium">Available days:</span>
                         <span>
                             @php
-                                $availableDays = is_array($doctor->available_days)
-                                    ? $doctor->available_days
-                                    : (is_string($doctor->available_days)
-                                        ? json_decode($doctor->available_days, true)
-                                        : []);
+                                // Handle day-specific scheduling
+                                if ($doctor->use_day_specific_schedule && $doctor->day_specific_schedule) {
+                                    $availableDays = [];
+                                    foreach ($doctor->day_specific_schedule as $day => $schedule) {
+                                        if (isset($schedule['is_available']) && $schedule['is_available']) {
+                                            $availableDays[] = ucfirst($day);
+                                        }
+                                    }
+                                } else {
+                                    // Fallback to general available_days
+                                    $availableDays = is_array($doctor->available_days)
+                                        ? $doctor->available_days
+                                        : (is_string($doctor->available_days)
+                                            ? json_decode($doctor->available_days, true)
+                                            : []);
+                                }
                             @endphp
                             {{ implode(', ', $availableDays) }}
                         </span>
@@ -220,10 +231,19 @@
                             d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <div>
-                        <span class="font-medium">Hours:</span>
+                        <span class="font-medium">
+                            @if($doctor->use_day_specific_schedule)
+                                Typical hours:
+                            @else
+                                Hours:
+                            @endif
+                        </span>
                         <span>
                             {{ \Carbon\Carbon::parse($doctor->start_time)->format('h:i A') }} -
                             {{ \Carbon\Carbon::parse($doctor->end_time)->format('h:i A') }}
+                            @if($doctor->use_day_specific_schedule)
+                                <small class="text-gray-500">(varies by day)</small>
+                            @endif
                         </span>
                     </div>
                 </div>

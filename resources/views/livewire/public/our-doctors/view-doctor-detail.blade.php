@@ -395,38 +395,57 @@
 
                         <div class="space-y-2">
                             @php
-                                $availableDays = is_array($doctor->available_days)
-                                    ? $doctor->available_days
-                                    : (is_string($doctor->available_days)
-                                        ? json_decode($doctor->available_days, true) ?? []
-                                        : []);
                                 $allDays = [
-                                    'Monday',
-                                    'Tuesday',
-                                    'Wednesday',
-                                    'Thursday',
-                                    'Friday',
-                                    'Saturday',
-                                    'Sunday',
+                                    'monday' => 'Monday',
+                                    'tuesday' => 'Tuesday',
+                                    'wednesday' => 'Wednesday',
+                                    'thursday' => 'Thursday',
+                                    'friday' => 'Friday',
+                                    'saturday' => 'Saturday',
+                                    'sunday' => 'Sunday',
                                 ];
-                                $today = date('l');
+                                $today = strtolower(date('l'));
                             @endphp
 
-                            @foreach ($allDays as $day)
+                            @foreach ($allDays as $dayKey => $dayName)
                                 @php
-                                    $isAvailable = in_array($day, $availableDays);
-                                    $isToday = $day === $today;
+                                    // Get day-specific schedule if available
+                                    if ($doctor->use_day_specific_schedule && isset($doctor->day_specific_schedule[$dayKey])) {
+                                        $daySchedule = $doctor->day_specific_schedule[$dayKey];
+                                        $isAvailable = $daySchedule['is_available'] ?? false;
+                                        $startTime = $isAvailable && isset($daySchedule['start_time']) 
+                                            ? \Carbon\Carbon::parse($daySchedule['start_time'])->format('g:i A')
+                                            : null;
+                                        $endTime = $isAvailable && isset($daySchedule['end_time']) 
+                                            ? \Carbon\Carbon::parse($daySchedule['end_time'])->format('g:i A')
+                                            : null;
+                                        $timeDisplay = $isAvailable && $startTime && $endTime 
+                                            ? "$startTime - $endTime" 
+                                            : 'Closed';
+                                    } else {
+                                        // Fallback to general availability
+                                        $availableDays = is_array($doctor->available_days)
+                                            ? array_map('strtolower', $doctor->available_days)
+                                            : (is_string($doctor->available_days)
+                                                ? array_map('strtolower', json_decode($doctor->available_days, true) ?? [])
+                                                : []);
+                                        $isAvailable = in_array($dayKey, $availableDays);
+                                        $timeDisplay = $isAvailable 
+                                            ? (\Carbon\Carbon::parse($doctor->start_time ?? '09:00')->format('g:i A') . ' - ' . \Carbon\Carbon::parse($doctor->end_time ?? '18:00')->format('g:i A'))
+                                            : 'Closed';
+                                    }
+                                    $isToday = $dayKey === $today;
                                 @endphp
                                 <div
                                     class="flex items-center justify-between p-3 rounded-lg {{ $isToday ? 'bg-brand-blue-50 border border-brand-blue-200' : 'bg-gray-50 border border-gray-100' }}">
                                     <div class="flex items-center gap-2">
                                         <div
                                             class="w-8 h-8 rounded-full flex items-center justify-center {{ $isAvailable ? 'bg-brand-blue-100 text-brand-blue-600' : 'bg-gray-200 text-gray-500' }}">
-                                            <span class="font-medium text-xs">{{ substr($day, 0, 2) }}</span>
+                                            <span class="font-medium text-xs">{{ substr($dayName, 0, 2) }}</span>
                                         </div>
                                         <div>
                                             <div class="{{ $isAvailable ? 'text-gray-900' : 'text-gray-500' }}">
-                                                {{ $day }}
+                                                {{ $dayName }}
                                                 @if ($isToday)
                                                     <span
                                                         class="ml-2 bg-brand-blue-500 text-white text-xs px-2 py-0.5 rounded-full">Today</span>
@@ -437,7 +456,7 @@
                                     <div class="text-right">
                                         <div
                                             class="{{ $isAvailable ? 'text-brand-blue-600 font-medium' : 'text-gray-400' }}">
-                                            {{ $isAvailable ? '9:00 AM - 6:00 PM' : 'Closed' }}
+                                            {{ $timeDisplay }}
                                         </div>
                                     </div>
                                 </div>
@@ -515,9 +534,23 @@
                                     @endif
                                 </p>
                                 <div class="flex flex-wrap gap-2">
-                                    <a href="https://maps.google.com/?q=@if ($doctor->city && $doctor->state) {{ urlencode($doctor->city . ', ' . $doctor->state . ', India') }}@else Purnea,Bihar,India @endif"
+                                    @php
+                                        $locationQuery = '';
+                                        if ($doctor->clinic_hospital_name) {
+                                            $locationQuery .= $doctor->clinic_hospital_name . ', ';
+                                        }
+                                        if ($doctor->city && $doctor->state) {
+                                            $locationQuery .= $doctor->city . ', ' . $doctor->state . ', India';
+                                            if ($doctor->pincode) {
+                                                $locationQuery .= ' ' . $doctor->pincode;
+                                            }
+                                        } else {
+                                            $locationQuery .= 'Purnea, Bihar, India';
+                                        }
+                                    @endphp
+                                    <a href="https://maps.google.com/?q={{ urlencode($locationQuery) }}"
                                         target="_blank"
-                                        class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-lg transition-colors text-sm">
+                                        class="inline-flex items-center gap-2 bg-brand-blue-500 hover:bg-brand-blue-600 text-white px-3 py-1.5 rounded-lg transition-colors text-sm">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />

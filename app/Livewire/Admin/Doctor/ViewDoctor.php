@@ -31,7 +31,7 @@ class ViewDoctor extends Component
 
             // Load doctor with necessary relationships, counts and averages in a single optimized query
             $this->doctor = Doctor::with([
-                'user:id,name,email,phone',
+                'user:id,name,email,phone,gender',
                 'department:id,name',
                 'appointments' => function ($query) {
                     $query->with(['patient' => function ($q) { $q->select('id', 'name'); }])
@@ -75,8 +75,10 @@ class ViewDoctor extends Component
                 'languages_spoken',
                 'achievements_awards',
                 'professional_bio',
-                'social_media_links'
-            ])
+                'social_media_links',
+                
+                'use_day_specific_schedule',
+                'day_specific_schedule'            ])
             ->findOrFail($doctorId);
 
             // Validate required relationships

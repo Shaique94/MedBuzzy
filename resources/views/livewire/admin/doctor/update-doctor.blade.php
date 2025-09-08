@@ -348,107 +348,80 @@
                 </div>
             </div>
 
-            <!-- Schedule & Availability -->
+            <!-- Working Hours -->
             <div class="bg-white rounded-lg p-6">
-                <div class="flex items-center mb-6">
-                    <div class="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center mr-3">
-                        <svg class="w-4 h-4 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                                clip-rule="evenodd" />
-                        </svg>
-                    </div>
-                    <h2 class="text-xl font-semibold text-gray-900">Schedule & Availability</h2>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Available Days -->
-                    <div class="md:col-span-2 space-y-2">
-                        <label class="block text-sm font-medium text-gray-700">
-                            Available Days <span class="text-red-500">*</span>
-                        </label>
-                        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2">
-                            @foreach(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as $day)
-                                <label
-                                    class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors duration-200">
-                                    <input type="checkbox" wire:model="available_days" value="{{ $day }}"
-                                        class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
-                                    <span class="ml-2 text-sm text-gray-700">{{ $day }}</span>
-                                </label>
-                            @endforeach
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center mr-3">
+                            <svg class="w-4 h-4 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                                    clip-rule="evenodd" />
+                            </svg>
                         </div>
-                        @error('available_days')
-                            <p class="text-sm text-red-600">{{ $message }}</p>
-                        @enderror
+                        <h2 class="text-xl font-semibold text-gray-900">Working Hours</h2>
                     </div>
-
-                    <!-- Start Time -->
-                    <div class="space-y-2">
-                        <label for="start_time" class="block text-sm font-medium text-gray-700">
-                            Start Time <span class="text-red-500">*</span>
-                        </label>
-                        <input type="time" id="start_time" wire:model="start_time"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 @error('start_time') border-red-300 @enderror">
-                        @error('start_time')
-                            <p class="text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- End Time -->
-                    <div class="space-y-2">
-                        <label for="end_time" class="block text-sm font-medium text-gray-700">
-                            End Time <span class="text-red-500">*</span>
-                        </label>
-                        <input type="time" id="end_time" wire:model="end_time"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 @error('end_time') border-red-300 @enderror">
-                        @error('end_time')
-                            <p class="text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Slot Duration -->
-                    <div class="space-y-2">
-                        <label for="slot_duration_minutes" class="block text-sm font-medium text-gray-700">
-                            Slot Duration (Minutes) <span class="text-red-500">*</span>
-                        </label>
-                        <select id="slot_duration_minutes" wire:model="slot_duration_minutes"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 @error('slot_duration_minutes') border-red-300 @enderror">
-                            <option value="15">15 minutes</option>
-                            <option value="30">30 minutes</option>
-                            <option value="45">45 minutes</option>
-                            <option value="60">60 minutes</option>
-                        </select>
-                        @error('slot_duration_minutes')
-                            <p class="text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Patients per Slot -->
-                    <div class="space-y-2">
-                        <label for="patients_per_slot" class="block text-sm font-medium text-gray-700">
-                            Patients per Slot <span class="text-red-500">*</span>
-                        </label>
-                        <input type="number" id="patients_per_slot" wire:model="patients_per_slot" min="1" max="10"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 @error('patients_per_slot') border-red-300 @enderror"
-                            placeholder="1">
-                        @error('patients_per_slot')
-                            <p class="text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Max Booking Days -->
-                    <div class="space-y-2">
-                        <label for="max_booking_days" class="block text-sm font-medium text-gray-700">
-                            Max Booking Days <span class="text-red-500">*</span>
-                        </label>
-                        <input type="number" id="max_booking_days" wire:model="max_booking_days" min="1" max="30"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 @error('max_booking_days') border-red-300 @enderror"
-                            placeholder="7">
-                        @error('max_booking_days')
-                            <p class="text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
+                    <button type="button" wire:click="openAddHoursModal"
+                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                        </svg>
+                        Add working hours
+                    </button>
                 </div>
+
+                <!-- Working Hours List -->
+                @if(count($working_hours) > 0)
+                    <div class="space-y-3">
+                        @foreach($working_hours as $index => $hours)
+                            <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg bg-gray-50">
+                                <div class="flex-1">
+                                    <div class="flex items-center space-x-4">
+                                        <div class="text-sm font-medium text-gray-900">
+                                            {{ implode(', ', $hours['days']) }}
+                                        </div>
+                                        <div class="text-sm text-gray-500">
+                                            @if($hours['closed'])
+                                                Closed
+                                            @elseif($hours['open_24_hours'])
+                                                Open 24 hours
+                                            @else
+                                                {{ $hours['start_time'] }} - {{ $hours['end_time'] }}
+                                            @endif
+                                        </div>
+                                        @if(!$hours['closed'] && !$hours['open_24_hours'])
+                                            <div class="text-sm text-gray-500">
+                                                {{ $hours['patients_per_slot'] }} patient{{ $hours['patients_per_slot'] > 1 ? 's' : '' }} per slot
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <button type="button" wire:click="editWorkingHours({{ $index }})"
+                                        class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                        Edit
+                                    </button>
+                                    <button type="button" wire:click="removeWorkingHours({{ $index }})"
+                                        class="text-red-600 hover:text-red-800 text-sm font-medium">
+                                        Remove
+                                    </button>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="text-center py-8">
+                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <h3 class="mt-2 text-sm font-medium text-gray-900">No working hours set</h3>
+                        <p class="mt-1 text-sm text-gray-500">Get started by adding your first working hours.</p>
+                    </div>
+                @endif
+
+                @error('working_hours')
+                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                @enderror
             </div>
 
             <!-- Photo & Security -->
@@ -651,6 +624,144 @@
                 </div>
             </div>
         </form>
+
+        <!-- Working Hours Modal -->
+        @if($show_hours_modal)
+            <div class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                    <!-- Background overlay -->
+                    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" wire:click="closeHoursModal"></div>
+
+                    <!-- Modal panel -->
+                    <div class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+                        <div class="mb-4">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                                    {{ $editing_hours_index !== null ? 'Edit Working Hours' : 'Add Working Hours' }}
+                                </h3>
+                                <button type="button" wire:click="closeHoursModal" class="text-gray-400 hover:text-gray-600 focus:outline-none">
+                                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <p class="mt-1 text-sm text-gray-500">Select days and time</p>
+                        </div>
+
+                        <div class="space-y-6">
+                            <!-- Days Selection -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-3">Select Days</label>
+                                <div class="grid grid-cols-7 gap-2">
+                                    @php
+                                        $dayLabels = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+                                        $fullDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                                        $dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                                    @endphp
+                                    @foreach($fullDays as $index => $day)
+                                        <div class="flex flex-col items-center">
+                                            <button type="button" 
+                                                    wire:click="toggleModalDay('{{ $day }}')"
+                                                    class="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 flex items-center justify-center text-sm font-medium cursor-pointer transition-all duration-200
+                                                            {{ in_array($day, $modal_selected_days ?? []) ? 'border-blue-500 bg-blue-500 text-white shadow-lg' : 'border-gray-300 bg-white text-gray-700 hover:border-blue-300 hover:bg-blue-50' }}">
+                                                {{ $dayLabels[$index] }}
+                                            </button>
+                                            <span class="text-xs text-gray-600 mt-1 hidden sm:block">{{ $dayNames[$index] }}</span>
+                                        </div>
+                                    @endforeach
+                                </div>
+                                @error('modal_selected_days')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Hours Type Options -->
+                            <div class="space-y-3">
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-2 sm:space-y-0">
+                                    <label class="flex items-center">
+                                        <input type="checkbox" wire:model="modal_open_24_hours" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                        <span class="ml-2 text-sm text-gray-700">Open 24 hours</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" wire:model="modal_closed" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                        <span class="ml-2 text-sm text-gray-700">Closed</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Time Selection -->
+                            @if(!$modal_closed && !$modal_open_24_hours)
+                                <div class="space-y-4">
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="modal_start_time" class="block text-sm font-medium text-gray-700 mb-1">Open time</label>
+                                            <div class="relative">
+                                                <input type="time" 
+                                                       id="modal_start_time"
+                                                       wire:model="modal_start_time" 
+                                                       class="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                                    <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            @error('modal_start_time')
+                                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+                                        <div>
+                                            <label for="modal_end_time" class="block text-sm font-medium text-gray-700 mb-1">Close time</label>
+                                            <div class="relative">
+                                                <input type="time" 
+                                                       id="modal_end_time"
+                                                       wire:model="modal_end_time" 
+                                                       class="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                                    <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            @error('modal_end_time')
+                                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label for="modal_patients_per_slot" class="block text-sm font-medium text-gray-700 mb-1">Patients per slot</label>
+                                        <input type="number" 
+                                               id="modal_patients_per_slot"
+                                               wire:model="modal_patients_per_slot" 
+                                               min="1" 
+                                               max="10"
+                                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                        @error('modal_patients_per_slot')
+                                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+
+                        <!-- Modal Actions -->
+                        <div class="mt-6 flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3">
+                            <button type="button" 
+                                    wire:click="closeHoursModal"
+                                    class="w-full sm:w-auto px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                                Cancel
+                            </button>
+                            <button type="button" 
+                                    wire:click="saveWorkingHours"
+                                    class="w-full sm:w-auto px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                {{ $editing_hours_index !== null ? 'Update' : 'Save' }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
     </div>
 
     <style>
