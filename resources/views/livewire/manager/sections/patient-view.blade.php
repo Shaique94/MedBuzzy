@@ -46,7 +46,7 @@
                         </div>
                         <div class="flex justify-between">
                             <span class="text-gray-500 text-sm">Phone:</span>
-                            <span class="text-gray-800 text-sm font-medium">{{ $patient->phone }}</span>
+                            <span class="text-gray-800 text-sm font-medium">{{ $patient->user->phone }}</span>
                         </div>
                         <div class="flex justify-between">
                             <span class="text-gray-500 text-sm">Email:</span>
@@ -91,7 +91,7 @@
                         </div>
                         <div class="flex">
                             <span class="text-gray-500 w-32">Phone:</span>
-                            <span class="text-gray-800 font-medium">{{ $patient->phone }}</span>
+                            <span class="text-gray-800 font-medium">{{ $patient->user->phone }}</span>
                         </div>
                         <div class="flex">
                             <span class="text-gray-500 w-32">Email:</span>

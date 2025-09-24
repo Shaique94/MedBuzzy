@@ -146,8 +146,8 @@
                         <div class="text-sm font-medium text-gray-900">{{ $appointment->patient->name }}</div>
                         <div class="text-xs text-gray-500">
                             Patient ID: {{ $appointment->patient->id }}
-                            @if ($appointment->patient->phone)
-                                • <i class="fas fa-phone mr-1"></i>{{ $appointment->patient->phone }}
+                            @if ($appointment->patient->user->phone)
+                                • <i class="fas fa-phone mr-1"></i>{{ $appointment->patient->user->phone }}
                             @endif
                         </div>
                     </div>
@@ -240,8 +240,8 @@
                                     <div class="text-sm font-medium text-gray-900">{{ $appointment->patient->name }}</div>
                                     <div class="text-xs text-gray-500">
                                         ID: {{ $appointment->patient->id }}
-                                        @if ($appointment->patient->phone)
-                                            • <i class="fas fa-phone mr-1"></i>{{ $appointment->patient->phone }}
+                                        @if ($appointment->patient->user->phone)
+                                            • <i class="fas fa-phone mr-1"></i>{{ $appointment->patient->user->phone }}
                                         @endif
                                     </div>
                                 </div>

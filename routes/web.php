@@ -24,7 +24,6 @@ use App\Livewire\Doctor\Section\Manager\CreateManger;
 use App\Livewire\Doctor\Section\Doctordashboard;
 use App\Livewire\Doctor\Section\Manager\PaymentList;
 use App\Livewire\Manager\Sections\AppointmentReport;
-use App\Livewire\Public\Appointment\AppointmentConfirmation;
 use App\Livewire\Public\Appointment\ManageAppointment;
 use App\Livewire\Public\Contact\ContactUs;
 use App\Livewire\Public\LandingPage;
@@ -55,14 +54,27 @@ use App\Livewire\User\Sections\MyAppointments;
 
 use App\Livewire\Public\Appointment\ConfirmAppointment;
 use App\Livewire\Public\Appointment\FailedAppointment;
-
+use App\Http\Controllers\AppointmentPaymentController;
 // Google Auth Routes 
 Route::get('/auth/google', [SocialiteController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('/auth/google/callback', [SocialiteController::class, 'handleGoogleCallback']);
 
+// Main Home Route
+Route::get('/', LandingPage::class)->name('hero');
 
 // Public Routes
-Route::get('/', LandingPage::class)->name('hero');
+
+
+
+
+// Appointment Payment Routes
+Route::prefix('appointment')->name('appointment.')->group(function () {
+    Route::get('{appointment}/payment', [AppointmentPaymentController::class, 'show'])->name('payment');
+    Route::post('{appointment}/payment/create-order', [AppointmentPaymentController::class, 'createOrder'])->name('payment.create-order');
+    Route::post('{appointment}/payment/verify', [AppointmentPaymentController::class, 'verifyPayment'])->name('payment.verify');
+    Route::get('{appointment}/payment/failed', [AppointmentPaymentController::class, 'paymentFailed'])->name('payment.failed');
+    Route::get('{appointment}/confirmation', [AppointmentPaymentController::class, 'confirmation'])->name('confirmation');
+});
 Route::get('/doctors/{department?}', OurDoctors::class)->name('our-doctors');
 Route::get('/terms-conditions', TermsCondition::class)->name('terms-conditons');
 Route::get('/privacy-policy', PrivacyPolicy::class)->name('privacy-policy');
@@ -71,9 +83,9 @@ Route::get('/contact-us', ContactUs::class)->name('contact-us');
 Route::get('/register', Register::class)->name('register');
 Route::get('/review',Review::class)->name('review');
 Route::get('/appointment/{doctor_slug}', ManageAppointment::class)->name('appointment');
-Route::get('/appointment/confirmation/{appointment}', AppointmentConfirmation::class)->name('appointment.confirmations');
+Route::get('/appointment', ManageAppointment::class)->name('appointment.booking');
 Route::get('/appointment/receipt/{appointment}/download', [AppointmentReceiptController::class, 'download'])->name('appointment.receipt.download');
-Route::get('/appointment/receipt/{appointment}', [AppointmentReceiptController::class, 'view'])->name('appointment.receipt');
+    Route::get('/appointment/receipt/{appointment}', [AppointmentReceiptController::class, 'view'])->name('appointment.receipt');
 Route::get('/appointments/confirmations/{id}', ConfirmAppointment::class)
     ->name('appointment.confirmation');
 Route::get('/appointments/failed/{id}', FailedAppointment::class)

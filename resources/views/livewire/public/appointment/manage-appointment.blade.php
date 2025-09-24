@@ -612,59 +612,66 @@
                                         </div>
                                     </div>
 
-                                    <!-- Payment Summary Card -->
-                                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                                        <div class="bg-gradient-to-r from-brand-blue-600 to-brand-blue-700 px-5 py-4">
-                                            <h3 class="text-lg font-semibold text-white flex items-center">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z" />
-                                                </svg>
-                                                Payment Summary
-                                            </h3>
+                                    <!-- Additional Notes Section -->
+                                    <div class="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
+                                        <div class="bg-gradient-to-r from-brand-blue-50 to-brand-blue-100 px-5 py-4 border-b border-brand-blue-200">
+                                            <h3 class="text-lg font-semibold text-brand-blue-900">Additional Information</h3>
+                                            <p class="text-sm text-brand-blue-700 mt-1">Any specific concerns or notes for the doctor (optional)</p>
                                         </div>
                                         
                                         <div class="p-5">
-                                            {{-- Selected slot summary (from previous step) --}}
-                                            @if(!empty($selectedDate) || !empty($selectedTime))
-                                                <div class="mb-4 p-3 bg-brand-blue-50 rounded-lg border border-brand-blue-100 text-sm text-brand-blue-800">
-                                                    <strong>Selected Slot:</strong>
-                                                    @if($selectedDate) {{ $selectedDate }} @endif
-                                                    @if($selectedTime) at {{ $selectedTime }} @endif
-                                                </div>
-                                            @endif
-
-                                            <!-- Doctor's Fee -->
-                                            <div class="flex justify-between items-center py-3 border-b border-gray-200">
-                                                <div>
-                                                    <h4 class="text-sm font-medium text-gray-800 flex items-center">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5 text-brand-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                            <!-- Notes Field -->
+                                            <div class="relative">
+                                                <label for="appointment-notes" class="block text-sm font-medium text-gray-700 mb-2">
+                                                    Additional Notes
+                                                    <span class="text-xs text-gray-500 ml-1">(optional)</span>
+                                                </label>
+                                                <div class="mt-1 relative rounded-md">
+                                                    <div class="absolute top-3 left-3 pointer-events-none">
+                                                        <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                                         </svg>
-                                                        Doctor's Consultation Fee
-                                                    </h4>
-                                                    <p class="text-xs text-gray-500 mt-1 ml-5.5">Payable directly to doctor during visit</p>
+                                                    </div>
+                                                    <textarea id="appointment-notes" wire:model.defer="notes" rows="4"
+                                                        class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-brand-blue-500 focus:border-brand-blue-500 resize-none"
+                                                        placeholder="Any specific concerns, symptoms, or information you'd like to share with the doctor..."></textarea>
                                                 </div>
-                                                <span class="text-sm font-semibold bg-gray-100 px-3 py-1 rounded-md">₹{{ $selectedDoctor->fee }}</span>
+                                                @error('notes')
+                                                    <p class="mt-1 text-sm text-red-600 flex items-center">
+                                                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                                        </svg>
+                                                        {{ $message }}
+                                                    </p>
+                                                @enderror
                                             </div>
 
-                                            <!-- Booking Fee -->
-                                            <div class="flex justify-between items-center py-3 border-b border-gray-200">
-                                                <div>
-                                                    <h4 class="text-sm font-medium text-gray-800 flex items-center">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5 text-brand-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                        </svg>
-                                                        Booking Fee
-                                                    </h4>
-                                                    <p class="text-xs text-gray-500 mt-1 ml-5.5">Secures your appointment (non-refundable)</p>
+                                            <!-- Appointment Summary -->
+                                            <div class="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                                                <h4 class="text-sm font-medium text-gray-800 mb-3 flex items-center">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5 text-brand-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    </svg>
+                                                    Appointment Summary
+                                                </h4>
+                                                <div class="space-y-2 text-sm">
+                                                    @if($formattedAppointmentDate)
+                                                        <div class="flex justify-between">
+                                                            <span class="text-gray-600">Date:</span>
+                                                            <span class="font-medium">{{ $formattedAppointmentDate }}</span>
+                                                        </div>
+                                                    @endif
+                                                    @if($formattedAppointmentTime)
+                                                        <div class="flex justify-between">
+                                                            <span class="text-gray-600">Time:</span>
+                                                            <span class="font-medium">{{ $formattedAppointmentTime }}</span>
+                                                        </div>
+                                                    @endif
+                                                    <div class="flex justify-between border-t pt-2">
+                                                        <span class="text-gray-600">Doctor's Fee:</span>
+                                                        <span class="font-medium">₹{{ $selectedDoctor->fee }} (pay at clinic)</span>
+                                                    </div>
                                                 </div>
-                                                <span class="text-sm font-semibold bg-gray-100 px-3 py-1 rounded-md">₹50.00</span>
-                                            </div>
-
-                                            <!-- Total -->
-                                            <div class="flex justify-between items-center mt-4 p-3 bg-brand-blue-50 rounded-lg border border-brand-blue-100">
-                                                <span class="text-base font-bold text-gray-800">Total Amount Due Now</span>
-                                                <span class="text-lg font-bold text-brand-blue-700 bg-white px-3 py-1 rounded-md border border-brand-blue-200 shadow-sm">₹50.00</span>
                                             </div>
                                         </div>
                                     </div>
@@ -678,20 +685,20 @@
                                             </svg>
                                             Back to Date & Time
                                         </button>
-                                        <button wire:click="createOrder" 
+                                        <button wire:click="createAppointment" 
                                             wire:loading.attr="disabled" 
                                             wire:loading.class="opacity-75"
-                                            wire:target="createOrder"
+                                            wire:target="createAppointment"
                                             class="px-6 py-3 bg-gradient-to-r from-brand-blue-600 to-brand-blue-700 hover:from-brand-blue-700 hover:to-brand-blue-800 text-white font-semibold rounded-lg shadow-md transition-all duration-300 flex items-center gap-3">
-                                            <svg wire:loading.remove wire:target="createOrder" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                            <svg wire:loading.remove wire:target="createAppointment" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                             </svg>
-                                            <svg wire:loading wire:target="createOrder" class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <svg wire:loading wire:target="createAppointment" class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                                             </svg>
-                                            <span wire:loading.remove wire:target="createOrder">Confirm & Pay ₹50 Booking Fee</span>
-                                            <span wire:loading wire:target="createOrder">Processing Payment...</span>
+                                            <span wire:loading.remove wire:target="createAppointment">Book Appointment</span>
+                                            <span wire:loading wire:target="createAppointment">Creating Appointment...</span>
                                         </button>
                                     </div>
                                 </div>
@@ -699,18 +706,20 @@
 
 
 
-                            <!-- Payment Disclaimer -->
+                            <!-- Appointment Information -->
                             <div class="text-center px-2 py-2">
-                                <p class="text-xs text-gray-500">
-                                    <svg class="w-4 h-4 inline-block mr-1 -mt-1" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                    The doctor's fee of ₹{{ $selectedDoctor->fee }} will be collected directly by the
-                                    doctor during your appointment.
-                                    Today's payment is only for the booking fee to secure your slot.
-                                </p>
+                                <div class="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                                    <p class="text-sm text-blue-700 flex items-center justify-center">
+                                        <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span class="font-medium">Important:</span>
+                                    </p>
+                                    <p class="text-sm text-blue-600 mt-2">
+                                        Your appointment will be confirmed and you'll be redirected to complete the booking process. 
+                                        The doctor's consultation fee of ₹{{ $selectedDoctor->fee }} will be collected directly during your visit.
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     @endif
@@ -729,247 +738,49 @@
     </div>
 </div>
 
-   @push('scripts')
+@push('scripts')
     <script>
-        (function () {
-            // SVG Auto-Fix
-            if (!window.__svgAutoFixInstalled) {
-                window.__svgAutoFixInstalled = true;
+        // Fix invalid SVG attributes like width/height="auto" to avoid console errors
+        (function() {
+            if (window.__svgAutoFixInstalled) return;
+            window.__svgAutoFixInstalled = true;
 
-                function fixSvgAutoAttributes(root = document) {
-                    try {
-                        const svgs = root.querySelectorAll ? root.querySelectorAll('svg') : [];
-                        svgs.forEach(svg => {
-                            const w = svg.getAttribute('width');
-                            const h = svg.getAttribute('height');
-                            if (w && String(w).toLowerCase() === 'auto') {
-                                svg.setAttribute('width', svg.classList.contains('h-5') ? '20' : '16');
-                            }
-                            if (h && String(h).toLowerCase() === 'auto') {
-                                svg.setAttribute('height', svg.classList.contains('h-5') ? '20' : '16');
-                            }
-                        });
-                    } catch (e) {
-                        console.debug('SVG auto-attr fix skipped:', e);
-                    }
-                }
-
-                const observer = new MutationObserver(mutations => {
-                    for (const m of mutations) {
-                        m.addedNodes.forEach(node => {
-                            if (node && node.nodeType === 1) fixSvgAutoAttributes(node);
-                        });
-                    }
-                });
-
-                function initSvgFix() {
-                    fixSvgAutoAttributes();
-                    try {
-                        observer.observe(document.documentElement, { childList: true, subtree: true });
-                    } catch (_) {}
-                }
-
-                document.addEventListener('DOMContentLoaded', initSvgFix);
-                document.addEventListener('livewire:init', initSvgFix);
-                document.addEventListener('livewire:navigated', initSvgFix);
-            }
-
-            // Razorpay Integration
-            function loadRazorpaySDK(callback) {
-                if (typeof Razorpay !== 'undefined') {
-                    callback();
-                    return;
-                }
-                const script = document.createElement('script');
-                script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-                script.async = true;
-                script.onload = () => {
-                    callback();
-                };
-                script.onerror = () => {
-                    console.error('Failed to load Razorpay SDK dynamically');
-                    window.Livewire?.dispatch('payment-failed', {
-                        error: 'Unable to load payment service',
-                        orderId: window.lastPaymentData?.orderId ?? null,
-                        appointmentId: window.lastPaymentData?.appointmentId ?? null
-                    });
-                };
-                document.body.appendChild(script);
-            }
-
-            function openRazorpayCheckout(data) {
-                data = Array.isArray(data) ? data[0] : data;
-                if (!data) {
-                    console.error('No data provided for Razorpay checkout');
-                    window.Livewire?.dispatch('payment-failed', {
-                        error: 'Payment initiation failed: No data provided',
-                        orderId: null,
-                        appointmentId: null
-                    });
-                    return;
-                }
-
-                window.lastPaymentData = data;
-
-                let retries = 0;
-                const maxRetries = 1;
-                const retryDelay = 200;
-
-                function attemptOpen() {
-                    loadRazorpaySDK(() => {
-                        if (typeof Razorpay === 'undefined') {
-                            console.error('Razorpay SDK not loaded after dynamic load attempt');
-                            if (retries < maxRetries) {
-                                retries++;
-                                setTimeout(attemptOpen, retryDelay);
-                            } else {
-                                window.Livewire?.dispatch('payment-failed', {
-                                    error: 'Razorpay SDK failed to load',
-                                    orderId: data.orderId ?? null,
-                                    appointmentId: data.appointmentId ?? null
-                                });
-                            }
-                            return;
+            function fixSvgAutoAttributes(root = document) {
+                try {
+                    const svgs = root.querySelectorAll ? root.querySelectorAll('svg') : [];
+                    svgs.forEach(svg => {
+                        const w = svg.getAttribute('width');
+                        const h = svg.getAttribute('height');
+                        if (w && String(w).toLowerCase() === 'auto') {
+                            svg.setAttribute('width', svg.classList.contains('h-5') ? '20' : '16');
                         }
+                        if (h && String(h).toLowerCase() === 'auto') {
+                            svg.setAttribute('height', svg.classList.contains('h-5') ? '20' : '16');
+                        }
+                    });
+                } catch (e) {
+                    console.debug('SVG auto-attr fix skipped:', e);
+                }
+            }
 
-                        setTimeout(() => {
-                            const options = {
-                                key: data.key || "{{ config('services.razorpay.key') }}",
-                                amount: String(data.amount),
-                                currency: "INR",
-                                name: "Medbuzzy",
-                                description: "Appointment Booking",
-                                image: "{{ asset('logo/logo1.png') }}",
-                                order_id: data.orderId,
-                                handler: function (response) {
-                                    window.Livewire?.dispatch('payment-success', {
-                                        paymentId: response.razorpay_payment_id,
-                                        orderId: response.razorpay_order_id,
-                                        signature: response.razorpay_signature,
-                                        allData: data,
-                                        appointmentData: data.appointmentData,
-                                        appointmentId: data.appointmentId
-                                    });
-                                    try {
-                                        window.dispatchEvent(new CustomEvent('payment-success', {
-                                            detail: {
-                                                paymentId: response.razorpay_payment_id,
-                                                orderId: response.razorpay_order_id,
-                                                signature: response.razorpay_signature,
-                                                allData: data,
-                                                appointmentData: data.appointmentData,
-                                                appointmentId: data.appointmentId
-                                            }
-                                        }));
-                                    } catch (e) {
-                                        console.debug('CustomEvent dispatch failed', e);
-                                    }
-                                    document.body.style.overflow = '';
-                                },
-                                prefill: {
-                                    name: data?.patientData?.name || "{{ auth()->user()?->name ?? 'Customer' }}",
-                                    email: data?.patientData?.email || "{{ auth()->user()?->email ?? 'customer@example.com' }}",
-                                    contact: data?.patientData?.phone || "{{ auth()->user()?->phone ?? '9999999999' }}"
-                                },
-                                theme: { color: "#3399cc" },
-                                modal: {
-                                    ondismiss: function () {
-                                        document.body.style.overflow = '';
-                                        window.Livewire?.dispatch('payment-failed', {
-                                            error: 'Payment was cancelled by user',
-                                            orderId: data.orderId ?? null,
-                                            appointmentId: data.appointmentId ?? null
-                                        });
-                                    }
-                                }
-                            };
-
-                            try {
-                                const rzp = new Razorpay(options);
-                                rzp.on('payment.failed', function (resp) {
-                                    console.error('Payment failed - dispatching payment-failed:', resp);
-                                    document.body.style.overflow = '';
-                                    window.Livewire?.dispatch('payment-failed', {
-                                        appointmentId: data.appointmentId ?? null,
-                                        orderId: data.orderId ?? data.order_id ?? null,
-                                        error: resp?.error?.description || 'Payment failed'
-                                    });
-                                });
-                                rzp.open();
-                            } catch (error) {
-                                console.error('Error initializing Razorpay checkout:', error);
-                                document.body.style.overflow = '';
-                                if (retries < maxRetries) {
-                                    retries++;
-                                    setTimeout(attemptOpen, retryDelay);
-                                } else {
-                                    window.Livewire?.dispatch('payment-failed', {
-                                        error: 'Failed to initialize payment after multiple attempts',
-                                        orderId: data.orderId ?? null,
-                                        appointmentId: data.appointmentId ?? null
-                                    });
-                                }
-                            }
-                        }, 200);
+            const observer = new MutationObserver(mutations => {
+                for (const m of mutations) {
+                    m.addedNodes.forEach(node => {
+                        if (node && node.nodeType === 1) fixSvgAutoAttributes(node);
                     });
                 }
+            });
 
-                attemptOpen();
+            function initSvgFix() {
+                fixSvgAutoAttributes();
+                try {
+                    observer.observe(document.documentElement, { childList: true, subtree: true });
+                } catch (_) {}
             }
 
-            function setupRazorpayListeners() {
-                // Store listener functions to prevent duplicates
-                if (!window.__rzpListeners) {
-                    window.__rzpListeners = {
-                        razorpayOpen: (data) => openRazorpayCheckout(data),
-                        showPaymentFailed: (data) => {
-                            showPaymentFailedOverlay(data?.message || 'Payment failed', () => {
-                                window.Livewire?.dispatch('retry-payment');
-                            });
-                        },
-                        redirectToConfirmation: (url) => {
-                            document.body.style.overflow = '';
-                            window.location.href = url;
-                        }
-                    };
-
-                    // Attach window event listener
-                    window.__rzpOpenHandler = (e) => openRazorpayCheckout(e.detail);
-                    window.addEventListener('razorpay:open', window.__rzpOpenHandler);
-                }
-
-                // Attach Livewire listeners (safe for both Livewire 2 and 3)
-                if (window.Livewire) {
-                    // Use a flag to prevent duplicate Livewire listeners
-                    if (!window.__rzpLivewireListenersSetup) {
-                        window.__rzpLivewireListenersSetup = true;
-
-                        // Use Livewire.on or Livewire.dispatch based on version
-                        const livewireOn = window.Livewire.on || window.Livewire.listen;
-                        if (livewireOn) {
-                            livewireOn.call(window.Livewire, 'razorpay:open', window.__rzpListeners.razorpayOpen);
-                            livewireOn.call(window.Livewire, 'show-payment-failed', window.__rzpListeners.showPaymentFailed);
-                            livewireOn.call(window.Livewire, 'redirect-to-confirmation', window.__rzpListeners.redirectToConfirmation);
-                        }
-                    }
-                }
-            }
-
-            function initialize() {
-                setupRazorpayListeners();
-                if (window.__svgAutoFixInstalled) {
-                    fixSvgAutoAttributes();
-                }
-            }
-
-            // Attach initialization listeners
-            document.addEventListener('livewire:init', initialize);
-            document.addEventListener('livewire:navigated', initialize);
-
-            // Run initialization immediately if Livewire is loaded
-            if (window.Livewire) {
-                initialize();
-            }
+            document.addEventListener('DOMContentLoaded', initSvgFix);
+            document.addEventListener('livewire:init', initSvgFix);
+            document.addEventListener('livewire:navigated', initSvgFix);
         })();
     </script>
 @endpush

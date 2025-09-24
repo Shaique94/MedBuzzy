@@ -36,7 +36,7 @@ class Update extends Component
         $this->appointment_id = $appointment->id;
         $this->name = $appointment->patient->name;
         $this->email = $appointment->patient->email;
-        $this->phone = $appointment->patient->phone;
+        $this->phone = $appointment->patient->user->phone;
         $this->gender = $appointment->patient->gender;
         $this->doctor_id = $appointment->doctor_id;
         $this->doctor_name = $appointment->doctor->user->name . ' - ' . $appointment->doctor->department->name;

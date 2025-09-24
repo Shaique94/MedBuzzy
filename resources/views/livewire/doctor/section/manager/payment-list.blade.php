@@ -227,7 +227,7 @@
                                         <div class="text-xs sm:text-sm font-medium text-gray-900 truncate max-w-[100px] sm:max-w-none">
                                             {{ $payment->patient->name }}
                                         </div>
-                                        <div class="text-xs text-gray-500">{{ $payment->patient->phone }}</div>
+                                        <div class="text-xs text-gray-500">{{ $payment->patient->user->phone }}</div>
                                     </td>
                                     <td class="px-3 sm:px-6 py-3 whitespace-nowrap text-xs sm:text-sm text-gray-500 hidden sm:table-cell">
                                         @if($payment->appointment && $payment->appointment->appointment_date)

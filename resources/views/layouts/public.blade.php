@@ -212,7 +212,11 @@
         <!-- Page Content -->
         <main class="flex-1 overflow-x-hidden md:mt-15 mt-12 overflow-y-auto bg-gray-100 lg:pb-0">
             <div class="mx-auto px-0">
-                {{ $slot }}
+                @if(isset($slot))
+                    {{ $slot }}
+                @else
+                    @yield('content')
+                @endif
             </div>
         </main>
 

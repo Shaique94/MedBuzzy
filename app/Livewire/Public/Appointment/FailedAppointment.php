@@ -9,11 +9,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
-use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Component;
-use Razorpay\Api\Api;
-use Razorpay\Api\Utility;
 
 #[Title('Payment Failed')]
 #[Layout('layouts.public')]
@@ -21,10 +18,8 @@ class FailedAppointment extends Component
 {
     public Appointment $appointment;
     public $formattedTime;
-    public $orderId;
-    public $isProcessing = false;
-    public $amount = 5000; // ₹50 in paise
     public $contactDetails;
+    public $orderId;
 
     public function mount($id)
     {
@@ -47,18 +42,24 @@ class FailedAppointment extends Component
             $this->appointment->appointment_time
         )->format('h:i A');
 
-        // Get the order ID from the most recent payment (could be multiple retries)
-        $payment = $this->appointment->payments()->latest()->first();
-        $this->orderId = $payment ? $payment->razorpay_order_id : null;
-
         // Get contact details using ContactService
         $this->contactDetails = ContactService::getContactDetails();
+        
+        // Get order ID from the latest payment if available
+        $latestPayment = $this->appointment->payments()->latest()->first();
+        $this->orderId = $latestPayment ? $latestPayment->order_id : null;
     }
+
+    public function retryPayment()
+    {
+        // Redirect back to payment page for retry
+        return redirect()->route('appointment.payment', ['appointment' => $this->appointment->id]);
+    }
+
     public function cancelAndGoHome()
     {
-        // Only update appointment status to failed when user explicitly cancels
-        // This is different from payment failure - user is giving up on the appointment
-        $this->appointment->update(['status' => 'pending']);
+        // Update appointment status to cancelled when user explicitly cancels
+        $this->appointment->update(['status' => 'cancelled']);
         
         // Update payment status to failed if exists
         $payment = $this->appointment->payments()->latest()->first();
