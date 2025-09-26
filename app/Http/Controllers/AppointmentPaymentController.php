@@ -69,7 +69,7 @@ class AppointmentPaymentController extends Controller
                 'appointment_id' => $appointment->id,
                 'payment_id' => $existingPayment->id
             ]);
-            return redirect()->route('appointment.confirmation', ['appointment' => $appointment->id]);
+            return redirect()->route('appointment.confirmation', ['id' => $appointment->id]);
         }
 
         // Check Razorpay configuration
@@ -332,23 +332,5 @@ class AppointmentPaymentController extends Controller
 
             return redirect()->route('hero')->with('error', 'An error occurred. Please contact support.');
         }
-    }
-
-    /**
-     * Show appointment confirmation page
-     */
-    public function confirmation(Appointment $appointment)
-    {
-        // Check if appointment exists and payment is completed
-        $payment = Payment::where('appointment_id', $appointment->id)
-            ->where('status', 'paid')
-            ->first();
-
-        if (!$payment) {
-            return redirect()->route('appointment.payment', ['appointment' => $appointment->id])
-                ->with('error', 'Please complete the payment first.');
-        }
-
-        return redirect()->route('appointment.confirmation', ['id' => $appointment->id]);
     }
 }
