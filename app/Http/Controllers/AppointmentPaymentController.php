@@ -20,7 +20,7 @@ class AppointmentPaymentController extends Controller
         try {
             $key = config('services.razorpay.key');
             $secret = config('services.razorpay.secret');
-            
+
             if (!$key || !$secret) {
                 Log::error('Razorpay configuration missing in constructor', [
                     'has_key' => !empty($key),
@@ -28,9 +28,9 @@ class AppointmentPaymentController extends Controller
                 ]);
                 throw new \Exception('Razorpay configuration is missing');
             }
-            
+
             $this->api = new Api($key, $secret);
-            
+
         } catch (\Exception $e) {
             Log::error('Failed to initialize Razorpay API: ' . $e->getMessage());
             // Don't throw exception here to allow error handling in individual methods
@@ -140,7 +140,7 @@ class AppointmentPaymentController extends Controller
                     'has_secret' => !empty(config('services.razorpay.secret'))
                 ]
             ]);
-            
+
             return redirect()->route('hero')->with('error', 'Unable to process payment. Please try again. Error: ' . $e->getMessage());
         }
     }
@@ -211,7 +211,7 @@ class AppointmentPaymentController extends Controller
                 'appointment_id' => $appointment->id,
                 'trace' => $e->getTraceAsString(),
             ]);
-            
+
             return response()->json(['error' => 'Failed to create payment order: ' . $e->getMessage()], 500);
         }
     }
@@ -236,8 +236,9 @@ class AppointmentPaymentController extends Controller
             ];
 
             // Create the signature verification string
-            $expectedSignature = hash_hmac('sha256', 
-                $request->razorpay_order_id . '|' . $request->razorpay_payment_id, 
+            $expectedSignature = hash_hmac(
+                'sha256',
+                $request->razorpay_order_id . '|' . $request->razorpay_payment_id,
                 config('services.razorpay.secret')
             );
 
@@ -332,5 +333,44 @@ class AppointmentPaymentController extends Controller
 
             return redirect()->route('hero')->with('error', 'An error occurred. Please contact support.');
         }
+    }
+    public function appointmentCancle(Request $request, $appointment)
+    {
+        $paymentDetail = Payment::where('appointment_id', $appointment)->first();
+        $appointmentDetail = Appointment::findOrFail($appointment);
+
+        if ($paymentDetail && $paymentDetail->status === "paid") {
+            try {
+                $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
+                $payment = $api->payment->fetch($paymentDetail->transaction_id);
+
+                $refund = $payment->refund();
+
+                $appointmentDetail->status = "cancelled";
+                $appointmentDetail->is_cancelled = 1;
+                $appointmentDetail->cancel_reason = $request->cancel_reason ?? null;
+                $appointmentDetail->save();
+
+                $paymentDetail->status = "refunded"; 
+                $paymentDetail->refund_id = $refund['id'] ?? null;
+                $paymentDetail->refund_amount = isset($refund['amount'])
+                    ? $refund['amount'] / 100   // Razorpay amount in paise
+                    : null;
+                $paymentDetail->save();
+
+                return back()->with('success', 'Appointment cancelled & payment refunded successfully.');
+
+            } catch (\Exception $e) {
+                return back()->with('error', 'Refund failed: ' . $e->getMessage());
+            }
+        }
+
+        // If no payment or not paid
+        $appointmentDetail->status = "cancelled";
+        $appointmentDetail->is_cancelled = 1;
+        $appointmentDetail->cancel_reason = $request->cancel_reason ?? null;
+        $appointmentDetail->save();
+
+        return back()->with('success', 'Appointment cancelled ');
     }
 }

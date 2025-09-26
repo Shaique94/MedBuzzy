@@ -73,6 +73,7 @@ Route::prefix('appointment')->name('appointment.')->group(function () {
     Route::post('{appointment}/payment/create-order', [AppointmentPaymentController::class, 'createOrder'])->name('payment.create-order');
     Route::post('{appointment}/payment/verify', [AppointmentPaymentController::class, 'verifyPayment'])->name('payment.verify');
     Route::get('{appointment}/payment/failed', [AppointmentPaymentController::class, 'paymentFailed'])->name('payment.failed');
+    Route::post('{appointment}/payment/cancle', [AppointmentPaymentController::class, 'appointmentCancle'])->name('payment.cancle');
 });
 Route::get('/doctors/{department?}', OurDoctors::class)->name('our-doctors');
 Route::get('/terms-conditions', TermsCondition::class)->name('terms-conditons');

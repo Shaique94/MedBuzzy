@@ -2,7 +2,11 @@
      <div class="mb-6 p-4 bg-white rounded-lg shadow-sm mt-2">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 ">
             <div>
+                @if ($appointment->status == "cancelled")
+                <h1 class="text-2xl font-bold text-gray-800">Appointment Cancelled</h1>
+                @else
                 <h1 class="text-2xl font-bold text-gray-800">Appointment Confirmed</h1>
+                @endif
                 <p class="text-green-600 font-medium flex items-center mt-1">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
@@ -27,6 +31,7 @@
 
            
 
+             @if ($appointment->status != "cancelled")
              <div class="mt-4 bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100">
                 <div class="bg-green-50 p-3 border-b border-green-100">
                     <h3 class="font-medium text-green-800 flex items-center">
@@ -64,6 +69,7 @@
                     </ul>
                 </div>
             </div>
+             @endif
         </div>
 
         <!-- Right Column - Confirmation Details -->
@@ -122,30 +128,83 @@
                 </div>
 
                 <!-- Action Buttons -->
+                
                 <div class="px-6 pb-6 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+                    @if ($appointment->status == "cancelled")
+                    <button 
+                        class="flex-1 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition"
+                    >
+                        Reschedule
+                    </button>
+                    <!-- Cancel Button -->
+                    
+                    <button 
+                        class="flex-1 py-2 border border-red-500 text-red-500 rounded hover:bg-red-50 transition"
+                    > 
+                        Cancelled
+                    </button>
+                    @else
                     <button 
                         class="flex-1 py-2 bg-brand-blue-600 text-white rounded hover:bg-brand-blue-700 transition"
                     >
                         Reschedule
                     </button>
+                    <!-- Cancel Button -->
+                    
                     <button 
+                        onclick="document.getElementById('cancelModal').classList.remove('hidden')"
                         class="flex-1 py-2 border border-red-500 text-red-500 rounded hover:bg-red-50 transition"
-                    >
+                    > 
                         Cancel
                     </button>
+                    @endif
+                    
+                    
+                    <!-- Modal -->
+                    <form action="{{ route('appointment.payment.cancle',$appointment->id) }}" method="post">
+                        @csrf
+                        <div id="cancelModal" class="hidden">
+                        <div  class=" fixed inset-0 flex items-center justify-center bg-black bg-opacity-20">
+                        <div class="bg-white rounded-lg p-6 w-96 shadow-lg">
+                            <h2 class="text-lg font-semibold mb-4">Cancel Appointment</h2>
+                            <textarea name="cancel_reason" class="w-full border rounded p-2 mb-4" rows="3" placeholder="Enter reason..." required ></textarea>
+                            <div class="flex justify-end gap-2">
+                                <button onclick="document.getElementById('cancelModal').classList.add('hidden')" 
+                                    class="px-4 py-2 bg-gray-200 rounded">
+                                    Close
+                                </button>
+                                <button type="submit"
+                                    class="px-4 py-2 bg-red-500 text-white rounded">
+                                    Submit
+                                </button>
+                            </div>
+                            </div>
+                        </div>
+                    </form>
+                     </div>
+                    
                 </div>
             </div>
-
             <!-- Help Text -->
             <div class="mt-6 text-center text-sm text-gray-500">
                    <!-- SMS Notification -->
             <div class="mt-4 bg-blue-50 rounded-lg p-4 border border-blue-100">
+                @if ($appointment->status == "cancelled")
+                <p class="text-sm text-red-700 flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mt-0.5 mr-2 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd" />
+                    </svg>
+                    Your refund has been processed. Please allow a few business days for the amount to reflect in your account.
+                </p>
+                @else
                 <p class="text-sm text-blue-700 flex items-start">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mt-0.5 mr-2 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd" />
                     </svg>
                     We have sent you an SMS with the details.Please arrive 10 minutes early.
                 </p>
+                @endif
+                
             </div>
                
             </div>
