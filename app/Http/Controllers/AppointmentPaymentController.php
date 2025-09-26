@@ -17,7 +17,25 @@ class AppointmentPaymentController extends Controller
 
     public function __construct()
     {
-        $this->api = new Api(config('services.razorpay.key'), config('services.razorpay.secret'));
+        try {
+            $key = config('services.razorpay.key');
+            $secret = config('services.razorpay.secret');
+            
+            if (!$key || !$secret) {
+                Log::error('Razorpay configuration missing in constructor', [
+                    'has_key' => !empty($key),
+                    'has_secret' => !empty($secret)
+                ]);
+                throw new \Exception('Razorpay configuration is missing');
+            }
+            
+            $this->api = new Api($key, $secret);
+            
+        } catch (\Exception $e) {
+            Log::error('Failed to initialize Razorpay API: ' . $e->getMessage());
+            // Don't throw exception here to allow error handling in individual methods
+            $this->api = null;
+        }
     }
 
     /**
@@ -25,8 +43,19 @@ class AppointmentPaymentController extends Controller
      */
     public function show(Appointment $appointment)
     {
+        Log::info('Payment page access attempt', [
+            'appointment_id' => $appointment->id,
+            'appointment_status' => $appointment->status,
+            'user_id' => auth()->id()
+        ]);
+
         // Check if appointment exists and is pending
         if (!$appointment || $appointment->status !== 'pending') {
+            Log::warning('Payment page redirect - Invalid appointment or status', [
+                'appointment_id' => $appointment->id ?? 'null',
+                'status' => $appointment->status ?? 'null',
+                'expected_status' => 'pending'
+            ]);
             return redirect()->route('hero')->with('error', 'Invalid appointment or payment already completed.');
         }
 
@@ -36,7 +65,20 @@ class AppointmentPaymentController extends Controller
             ->first();
 
         if ($existingPayment) {
+            Log::info('Payment already completed, redirecting to confirmation', [
+                'appointment_id' => $appointment->id,
+                'payment_id' => $existingPayment->id
+            ]);
             return redirect()->route('appointment.confirmation', ['appointment' => $appointment->id]);
+        }
+
+        // Check Razorpay configuration
+        if (!config('services.razorpay.key') || !config('services.razorpay.secret')) {
+            Log::error('Razorpay configuration missing', [
+                'has_key' => !empty(config('services.razorpay.key')),
+                'has_secret' => !empty(config('services.razorpay.secret'))
+            ]);
+            return redirect()->route('hero')->with('error', 'Payment service is not configured. Please contact support.');
         }
 
         try {
@@ -48,6 +90,12 @@ class AppointmentPaymentController extends Controller
                 'currency' => 'INR',
                 'receipt' => 'appointment_' . $appointment->id . '_' . time(),
                 'payment_capture' => 1
+            ]);
+
+            Log::info('Razorpay order created successfully', [
+                'order_id' => $order['id'],
+                'appointment_id' => $appointment->id,
+                'amount' => $this->amount
             ]);
 
             // Create or update payment record
@@ -64,6 +112,11 @@ class AppointmentPaymentController extends Controller
             );
 
             DB::commit();
+
+            Log::info('Payment page loaded successfully', [
+                'appointment_id' => $appointment->id,
+                'order_id' => $order['id']
+            ]);
 
             return view('payment.show', [
                 'order_id' => $order['id'],
@@ -82,9 +135,13 @@ class AppointmentPaymentController extends Controller
             Log::error('Payment order creation failed: ' . $e->getMessage(), [
                 'appointment_id' => $appointment->id,
                 'trace' => $e->getTraceAsString(),
+                'razorpay_config' => [
+                    'has_key' => !empty(config('services.razorpay.key')),
+                    'has_secret' => !empty(config('services.razorpay.secret'))
+                ]
             ]);
             
-            return redirect()->route('hero')->with('error', 'Unable to process payment. Please try again.');
+            return redirect()->route('hero')->with('error', 'Unable to process payment. Please try again. Error: ' . $e->getMessage());
         }
     }
 

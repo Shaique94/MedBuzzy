@@ -429,6 +429,14 @@ class ManageAppointment extends Component
         $this->validate();
 
         try {
+            \Log::info('Starting appointment creation', [
+                'doctor_id' => $this->doctor_id,
+                'appointment_date' => $this->appointment_date,
+                'appointment_time' => $this->appointment_time,
+                'patient_name' => $this->newPatient['name'],
+                'patient_phone' => $this->newPatient['phone']
+            ]);
+
             // Check slot availability
             $bookedCount = Appointment::where([
                 'doctor_id' => $this->doctor_id,
@@ -438,6 +446,13 @@ class ManageAppointment extends Component
 
             $maxPatientsPerSlot = $this->selectedDoctor->patients_per_slot ?? 1;
             if ($bookedCount >= $maxPatientsPerSlot) {
+                \Log::warning('Slot fully booked', [
+                    'doctor_id' => $this->doctor_id,
+                    'appointment_date' => $this->appointment_date,
+                    'appointment_time' => $this->appointment_time,
+                    'booked_count' => $bookedCount,
+                    'max_patients' => $maxPatientsPerSlot
+                ]);
                 $this->addError('appointment_time', 'This time slot is fully booked. Please select another slot.');
                 return;
             }
@@ -457,6 +472,8 @@ class ManageAppointment extends Component
                 ]
             );
 
+            \Log::info('User created/found', ['user_id' => $user->id, 'phone' => $user->phone]);
+
             // Ensure Patient exists
             $patient = Patient::updateOrCreate(
                 ['user_id' => $user->id],
@@ -466,6 +483,8 @@ class ManageAppointment extends Component
                     'gender' => $this->newPatient['gender']
                 ]
             );
+
+            \Log::info('Patient created/updated', ['patient_id' => $patient->id]);
 
             $appointment = Appointment::create([
                 'patient_id' => $patient->id,
@@ -477,6 +496,13 @@ class ManageAppointment extends Component
                 'created_by' => Auth::id(),
                 'is_rescheduled' => false,
             ]);
+
+            \Log::info('Appointment created successfully', [
+                'appointment_id' => $appointment->id,
+                'status' => $appointment->status,
+                'patient_id' => $appointment->patient_id,
+                'doctor_id' => $appointment->doctor_id
+            ]);
                 
             // Dispatch the email job
             SendBookingConfirmationEmail::dispatch($patient, $appointment);
@@ -485,6 +511,11 @@ class ManageAppointment extends Component
 
             DB::commit();
 
+            \Log::info('Redirecting to payment page', [
+                'appointment_id' => $appointment->id,
+                'payment_route' => route('appointment.payment', ['appointment' => $appointment->id])
+            ]);
+
             // Redirect to payment page directly
             return redirect()->route('appointment.payment', ['appointment' => $appointment->id]);
 
@@ -492,6 +523,9 @@ class ManageAppointment extends Component
             DB::rollBack();
             \Log::error('Appointment creation failed: ' . $e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
+                'doctor_id' => $this->doctor_id ?? 'null',
+                'appointment_date' => $this->appointment_date ?? 'null',
+                'appointment_time' => $this->appointment_time ?? 'null'
             ]);
             $this->addError('appointment_error', 'Failed to create appointment: ' . $e->getMessage());
         }
