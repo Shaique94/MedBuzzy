@@ -74,11 +74,14 @@
 
         <!-- Right Column - Confirmation Details -->
         <div class="lg:w-2/3">
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div class=" rounded-lg shadow-sm overflow-hidden bg-white">
                 
-
                 <!-- Appointment Details -->
-                <div class="p-6 space-y-5">
+                 @if ($appointment->status == "cancelled")
+                 <div class="p-6 space-y-5 bg-[url(https://www.dma-solutions.com/wp-content/uploads/2023/06/Header_What-it-Means-to-be-Cancelled-1024x512.jpg)] bg-opacity-80 bg-contain bg-no-repeat bg-center">
+                 @else
+                 <div class="p-6 space-y-5 ">
+                 @endif
                     <!-- Appointment Info -->
                     <div class="space-y-1">
                         <h2 class="text-lg font-semibold text-gray-800">Appointment Details</h2>
